@@ -1,0 +1,41 @@
+# Phase 0 Configuration — Fast Directional Capability Check
+# Budget: ~$3 | Pairs: 20 | Purpose: go/no-go signal before Tier A investment
+
+phase: 0
+description: "20-pair directional benchmark for MedGemma 1.5 4B vs Gemini 3 Pro"
+
+data:
+  source: trec2021
+  year: 2021
+  n_pairs: 20
+  sampling: stratified  # Stratify across qrel relevance levels (0, 1, 2)
+  seed: 42
+
+models:
+  - name: medgemma-1.5-4b
+    provider: huggingface
+    model_id: google/medgemma-1-5-4b-it-hae
+    max_concurrent: 5
+  - name: gemini-3-pro
+    provider: google
+    model_id: gemini-3-pro-preview
+    max_concurrent: 10
+
+evaluation:
+  tier: phase0
+  criteria_mode: whole_block  # ADR-005: no atomization in spike
+  ingest_source: gold         # ADR-002: use gold SoT for component isolation
+  metrics:
+    - accuracy
+    - f1_macro
+    - cohens_kappa
+    - confusion_matrix
+
+budget:
+  max_cost_usd: 5.0
+  warn_at_usd: 3.0
+
+output:
+  run_dir: "runs/"  # Each run gets runs/<run_id>/
+  save_reasoning_chains: true  # PRD: log full reasoning for qualitative analysis
+  save_raw_responses: true

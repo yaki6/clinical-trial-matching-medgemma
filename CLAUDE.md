@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **trialmatch** — CLI-first Python benchmark comparing MedGemma 1.5 4B vs Gemini 3 Pro on clinical trial criterion-level matching. Uses TREC 2021 qrels directly (no full retrieval pipeline). Three-component pipeline: INGEST → PRESCREEN → VALIDATE. Spike phase uses whole inclusion/exclusion criteria blocks (no atomization).
 
+Frontend integration planned for next phase
+
 ## Commands
 
 ```bash
@@ -65,9 +67,6 @@ src/trialmatch/
 3. **Run determinism**: Every run writes to `runs/<run_id>/` containing: config YAML, all inputs, all model responses, traces, computed metrics. Runs must be fully reproducible.
 4. **Cost tracking**: Every LLM call must log `model, input_tokens, output_tokens, estimated_cost, latency_ms`. Aggregated per run. Budget guards in e2e tests.
 
-### Model Adapters
-
-Both models implement a common interface: `generate(prompt, **kwargs) → ModelResponse` where ModelResponse includes text, token counts, latency, and cost. MedGemma 1.5 4B routes through HuggingFace Inference API (5 concurrent max); Gemini 3 Pro through Google AI Studio with GOOGLE_API_KEY (10 concurrent max).
 
 ### Trial Data Sources (Preference Order)
 
@@ -125,3 +124,57 @@ data/
 | HuggingFace Inference | 5 concurrent | MedGemma 1.5 4B |
 | Google AI Studio | 10 concurrent | Gemini 3 Pro |
 | CT.gov API v2 | 40 req/min | `trialmatch data prepare`, PRESCREEN extrinsic eval |
+
+## Agent Session Protocol
+
+### Session Start
+1. Read `docs/status/DASHBOARD.md` — situational awareness (phase, blockers, sprint goals)
+2. Check freshness: if `<!-- Last updated: ... -->` timestamp is > 48h old, validate against `git log --oneline -10` and update
+3. Read deeper docs as needed for your task (see Document Map below)
+4. If "Open Questions for Human" has unanswered items > 3 sessions old, flag to user at session start
+
+### Session End
+1. Update `docs/status/DASHBOARD.md`: check off completed goals, add session row to Recent Sessions, update Component Readiness if changed
+2. If DASHBOARD.md was modified since your session started (check `git diff`), re-read before updating to avoid overwriting concurrent changes
+3. If you made an architectural decision, create ADR in `docs/adr/` and update `docs/decisions/README.md`
+
+### Decision Authority
+
+| Level | When | Examples |
+|-------|------|---------|
+| **DECIDE** | Reversible, local, no user impact | Variable naming, test structure, import ordering, internal refactors |
+| **DECIDE+RECORD** | Affects architecture or future sessions | New dependency, data format choice, API design, caching strategy → create ADR |
+| **ASK** | Irreversible, budget-impacting, scope-changing | Dropping a requirement, changing evaluation tiers, spending > $5 on API calls, modifying PRD targets |
+
+## Document Map
+
+| I need to... | Read this |
+|-------------|-----------|
+| Understand the project | `CLAUDE.md` (this file) |
+| Know what's done / what's next | `docs/status/DASHBOARD.md` |
+| Understand requirements | `docs/prd/v3.1-criterion-matching-benchmark.md` |
+| Check architectural decisions | `docs/decisions/README.md` → `docs/adr/NNN-*.md` |
+| Understand system design | `docs/architecture/README.md` |
+| Know test strategy | `docs/test-strategy/README.md` |
+| Write BDD feature files | `docs/bdd/README.md` |
+| Understand annotation rules | `docs/sot-annotation-requirements.md` |
+| Run Phase 0 | `configs/phase0.yaml` |
+
+## BDD Commands
+
+```bash
+# Run all BDD tests
+uv run pytest tests/bdd/ -m bdd -v
+
+# Run BDD for a specific component
+uv run pytest tests/bdd/ -m component_validate -v
+
+# Run only implemented (passing) scenarios
+uv run pytest tests/bdd/ -m "implemented and not wip" -v
+
+# Run WIP scenarios to see what needs implementation
+uv run pytest tests/bdd/ -m wip -v --no-header
+
+# Count scenario status
+uv run pytest tests/bdd/ --collect-only -q 2>/dev/null | grep -c "scenario"
+```
