@@ -91,13 +91,11 @@ def parse_criterion_verdict(raw_text: str) -> tuple[CriterionVerdict, str, list[
         except (json.JSONDecodeError, KeyError, ValueError):
             pass
 
-    # Fallback: keyword extraction
-    upper = raw_text.upper()
-    if "NOT_MET" in upper:
+    # Fallback: keyword extraction using word boundaries to avoid false positives
+    # (e.g., "COMMITTED" contains "MET" but is not a verdict)
+    if re.search(r"\bNOT_MET\b", raw_text, re.IGNORECASE):
         return CriterionVerdict.NOT_MET, raw_text, []
-    if "MET" in upper and "MEET" not in upper:
-        return CriterionVerdict.MET, raw_text, []
-    if "MEETS" in upper:
+    if re.search(r"\bMET\b|\bMEETS\b", raw_text, re.IGNORECASE):
         return CriterionVerdict.MET, raw_text, []
 
     return CriterionVerdict.UNKNOWN, raw_text, []

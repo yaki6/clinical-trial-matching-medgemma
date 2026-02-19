@@ -110,6 +110,18 @@ def test_parse_verdict_fallback_unknown():
     assert v == CriterionVerdict.UNKNOWN
 
 
+def test_parse_verdict_no_false_positive_committed():
+    """Words like COMMITTED should not trigger MET verdict."""
+    v, r, e = parse_criterion_verdict("The patient is committed to treatment but data is unclear.")
+    assert v == CriterionVerdict.UNKNOWN
+
+
+def test_parse_verdict_no_false_positive_submitted():
+    """Words like SUBMITTED should not trigger MET verdict."""
+    v, r, e = parse_criterion_verdict("The lab results were submitted but inconclusive.")
+    assert v == CriterionVerdict.UNKNOWN
+
+
 # --- End-to-end evaluation (reusable interface) ---
 
 
