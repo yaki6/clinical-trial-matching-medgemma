@@ -74,6 +74,7 @@ class MedGemmaAdapter(ModelAdapter):
                     output_tokens=output_tokens,
                     latency_ms=elapsed,
                     estimated_cost=cost,
+                    token_count_estimated=True,
                 )
             except Exception as e:
                 if "503" in str(e) or "Service Unavailable" in str(e):

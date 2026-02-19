@@ -71,6 +71,7 @@ class RunManager:
             len(run_result.results), 1
         )
 
+        any_estimated = any(r.model_response.token_count_estimated for r in run_result.results)
         cost_summary = {
             "model": run_result.model_name,
             "total_pairs": len(run_result.results),
@@ -78,6 +79,7 @@ class RunManager:
             "total_input_tokens": total_input,
             "total_output_tokens": total_output,
             "avg_latency_ms": avg_latency,
+            "token_counts_estimated": any_estimated,
         }
         with open(run_dir / "cost_summary.json", "w") as f:
             json.dump(cost_summary, f, indent=2)

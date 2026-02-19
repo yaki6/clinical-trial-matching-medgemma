@@ -54,6 +54,7 @@ class ModelResponse(BaseModel):
     output_tokens: int
     latency_ms: float
     estimated_cost: float
+    token_count_estimated: bool = False
 
 
 class CriterionResult(BaseModel):
