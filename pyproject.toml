@@ -42,6 +42,9 @@ markers = [
     "bdd: marks BDD tests",
     "component_validate: validate module BDD tests",
     "component_data: data module BDD tests",
+    "implemented: marks implemented BDD scenarios",
+    "phase0: marks Phase 0 related tests",
+    "wip: marks work-in-progress scenarios",
 ]
 addopts = "-v --tb=short"
 

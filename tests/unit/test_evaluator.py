@@ -85,9 +85,7 @@ def test_parse_verdict_not_met():
 
 
 def test_parse_verdict_unknown():
-    v, r, e = parse_criterion_verdict(
-        '{"verdict": "UNKNOWN", "reasoning": "insufficient info"}'
-    )
+    v, r, e = parse_criterion_verdict('{"verdict": "UNKNOWN", "reasoning": "insufficient info"}')
     assert v == CriterionVerdict.UNKNOWN
 
 

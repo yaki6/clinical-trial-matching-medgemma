@@ -49,9 +49,7 @@ def test_model_response():
 
 
 def test_criterion_result():
-    mr = ModelResponse(
-        text="test", input_tokens=0, output_tokens=0, latency_ms=0, estimated_cost=0
-    )
+    mr = ModelResponse(text="test", input_tokens=0, output_tokens=0, latency_ms=0, estimated_cost=0)
     cr = CriterionResult(
         verdict=CriterionVerdict.MET,
         reasoning="Patient meets criterion",
@@ -64,9 +62,7 @@ def test_criterion_result():
 
 def test_criterion_result_without_evidence():
     """Evidence sentences are optional."""
-    mr = ModelResponse(
-        text="test", input_tokens=0, output_tokens=0, latency_ms=0, estimated_cost=0
-    )
+    mr = ModelResponse(text="test", input_tokens=0, output_tokens=0, latency_ms=0, estimated_cost=0)
     cr = CriterionResult(
         verdict=CriterionVerdict.NOT_MET,
         reasoning="Patient does not meet criterion",

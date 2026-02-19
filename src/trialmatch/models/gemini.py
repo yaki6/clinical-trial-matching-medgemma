@@ -77,7 +77,7 @@ class GeminiAdapter(ModelAdapter):
             response = await asyncio.to_thread(
                 self._client.models.generate_content,
                 model=self._model,
-                contents="Return JSON: {\"status\": \"ok\"}",
+                contents='Return JSON: {"status": "ok"}',
                 config={"response_mime_type": "application/json", "max_output_tokens": 50},
             )
             return response.text is not None

@@ -66,7 +66,7 @@ class MedGemmaAdapter(ModelAdapter):
                 # Estimate tokens (rough: 4 chars per token)
                 input_tokens = len(formatted) // 4
                 output_tokens = len(result) // 4
-                cost = (input_tokens * 0.00001 + output_tokens * 0.00003)
+                cost = input_tokens * 0.00001 + output_tokens * 0.00003
 
                 return ModelResponse(
                     text=result,
@@ -77,7 +77,7 @@ class MedGemmaAdapter(ModelAdapter):
                 )
             except Exception as e:
                 if "503" in str(e) or "Service Unavailable" in str(e):
-                    wait = min(self._retry_backoff ** attempt, self._max_wait)
+                    wait = min(self._retry_backoff**attempt, self._max_wait)
                     logger.warning(
                         "medgemma_cold_start",
                         attempt=attempt + 1,

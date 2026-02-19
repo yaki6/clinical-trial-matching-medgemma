@@ -48,15 +48,17 @@ class RunManager:
         # Save per-pair results
         results_data = []
         for r in run_result.results:
-            results_data.append({
-                "verdict": r.verdict.value,
-                "reasoning": r.reasoning,
-                "evidence_sentences": r.evidence_sentences,
-                "input_tokens": r.model_response.input_tokens,
-                "output_tokens": r.model_response.output_tokens,
-                "latency_ms": r.model_response.latency_ms,
-                "estimated_cost": r.model_response.estimated_cost,
-            })
+            results_data.append(
+                {
+                    "verdict": r.verdict.value,
+                    "reasoning": r.reasoning,
+                    "evidence_sentences": r.evidence_sentences,
+                    "input_tokens": r.model_response.input_tokens,
+                    "output_tokens": r.model_response.output_tokens,
+                    "latency_ms": r.model_response.latency_ms,
+                    "estimated_cost": r.model_response.estimated_cost,
+                }
+            )
 
         with open(run_dir / "results.json", "w") as f:
             json.dump(results_data, f, indent=2)
@@ -65,9 +67,8 @@ class RunManager:
         total_cost = sum(r.model_response.estimated_cost for r in run_result.results)
         total_input = sum(r.model_response.input_tokens for r in run_result.results)
         total_output = sum(r.model_response.output_tokens for r in run_result.results)
-        avg_latency = (
-            sum(r.model_response.latency_ms for r in run_result.results)
-            / max(len(run_result.results), 1)
+        avg_latency = sum(r.model_response.latency_ms for r in run_result.results) / max(
+            len(run_result.results), 1
         )
 
         cost_summary = {
