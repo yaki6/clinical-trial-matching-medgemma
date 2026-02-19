@@ -30,38 +30,70 @@ from trialmatch.validate.evaluator import evaluate_criterion
 logger = structlog.get_logger()
 
 
-async def run_model_benchmark(adapter, sample, budget_max: float = 5.0):
+async def run_model_benchmark(
+    adapter,
+    sample,
+    budget_max: float = 5.0,
+    max_concurrent: int = 1,
+) -> list:
     """Run all sampled criterion pairs through one model.
 
     Calls the REUSABLE evaluate_criterion() for each pair,
     passing raw text extracted from the HF annotations.
+
+    Args:
+        max_concurrent: Max parallel API calls. Use 1 for Phase 0,
+                        5+ for Tier A to speed up 1024-pair runs.
     """
+    semaphore = asyncio.Semaphore(max_concurrent)
     results = []
     total_cost = 0.0
+    budget_exceeded = False
 
-    for i, annotation in enumerate(sample.pairs):
-        logger.info(
-            "evaluating",
-            pair=f"{i + 1}/{len(sample.pairs)}",
-            patient=annotation.patient_id,
-            trial=annotation.trial_id,
-            criterion_type=annotation.criterion_type,
-            model=adapter.name,
-        )
+    async def _evaluate_one(i: int, annotation):
+        nonlocal total_cost, budget_exceeded
+        if budget_exceeded:
+            return None
 
-        result = await evaluate_criterion(
-            patient_note=annotation.note,
-            criterion_text=annotation.criterion_text,
-            criterion_type=annotation.criterion_type,
-            adapter=adapter,
-        )
+        async with semaphore:
+            if budget_exceeded:
+                return None
 
-        total_cost += result.model_response.estimated_cost
-        if total_cost > budget_max:
-            logger.warning("budget_exceeded", total_cost=total_cost, max=budget_max)
-            break
+            logger.info(
+                "evaluating",
+                pair=f"{i + 1}/{len(sample.pairs)}",
+                patient=annotation.patient_id,
+                trial=annotation.trial_id,
+                criterion_type=annotation.criterion_type,
+                model=adapter.name,
+            )
 
-        results.append(result)
+            result = await evaluate_criterion(
+                patient_note=annotation.note,
+                criterion_text=annotation.criterion_text,
+                criterion_type=annotation.criterion_type,
+                adapter=adapter,
+            )
+
+            total_cost += result.model_response.estimated_cost
+            if total_cost > budget_max:
+                logger.warning("budget_exceeded", total_cost=total_cost, max=budget_max)
+                budget_exceeded = True
+
+            return result
+
+    if max_concurrent == 1:
+        # Sequential path: simple, deterministic ordering
+        for i, annotation in enumerate(sample.pairs):
+            result = await _evaluate_one(i, annotation)
+            if result is None:
+                break
+            results.append(result)
+    else:
+        # Concurrent path for Tier A scale
+        tasks = [_evaluate_one(i, a) for i, a in enumerate(sample.pairs)]
+        raw_results = await asyncio.gather(*tasks)
+        results = [r for r in raw_results if r is not None]
 
     return results
 
@@ -98,15 +130,26 @@ async def run_phase0(config: dict, dry_run: bool = False):
 
     for model_cfg in config.get("models", []):
         if model_cfg["provider"] == "huggingface":
-            adapter = MedGemmaAdapter(hf_token=os.environ.get("HF_TOKEN", ""))
+            hf_token = os.environ.get("HF_TOKEN", "")
+            if not hf_token:
+                click.echo("ERROR: HF_TOKEN env var required for MedGemma. Skipping.", err=True)
+                continue
+            adapter = MedGemmaAdapter(hf_token=hf_token)
         elif model_cfg["provider"] == "google":
-            adapter = GeminiAdapter(api_key=os.environ.get("GOOGLE_API_KEY", ""))
+            api_key = os.environ.get("GOOGLE_API_KEY", "")
+            if not api_key:
+                click.echo("ERROR: GOOGLE_API_KEY env var required for Gemini. Skipping.", err=True)
+                continue
+            adapter = GeminiAdapter(api_key=api_key)
         else:
             logger.error("unknown_provider", provider=model_cfg["provider"])
             continue
 
-        logger.info("running_model", model=adapter.name)
-        results = await run_model_benchmark(adapter, sample, budget_max=budget_max)
+        max_concurrent = config.get("budget", {}).get("max_concurrent", 1)
+        logger.info("running_model", model=adapter.name, max_concurrent=max_concurrent)
+        results = await run_model_benchmark(
+            adapter, sample, budget_max=budget_max, max_concurrent=max_concurrent
+        )
 
         predicted = [r.verdict for r in results]
         actual = [a.expert_label for a in sample.pairs[: len(results)]]
