@@ -60,6 +60,13 @@ src/trialmatch/
 └── tracing/       # Run artifact persistence to runs/<run_id>/, cost tracking per LLM call
 ```
 
+### Git Commit Rules
+
+- **Atomic commits**: Each commit addresses exactly one concern (one bug fix, one feature, one refactor). Never bundle unrelated changes.
+- **Intent-first messages**: Commit message must explain WHY the change was made, not just WHAT changed. Lead with the problem or goal, then the solution.
+- **Format**: `<type>: <intent summary>` on the first line, then a blank line, then bullet points describing what was done. Types: `fix`, `feat`, `refactor`, `docs`, `test`, `chore`.
+- **Future-readable**: Write messages as if a teammate 6 months from now needs to understand the change from `git log` alone.
+
 ### Critical Design Rules
 
 1. **Component isolation**: When evaluating PRESCREEN or VALIDATE, feed gold INGEST SoT as input (not model output). This isolates component-specific errors. E2E runs test error propagation separately.
