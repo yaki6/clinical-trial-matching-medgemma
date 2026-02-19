@@ -1,6 +1,6 @@
 # ADR-001: Qrels-Only Evaluation (No Full Retrieval Pipeline)
 
-**Status:** Accepted
+**Status:** Accepted (amended by ADR-006)
 **Date:** 2026-02-17
 **Decision Makers:** CTO
 
@@ -30,6 +30,10 @@ TREC 2021 qrels provide 35,832 (topic_id, NCT_ID, relevance) triples across 75 t
 - **Pro:** TREC 2021 natively supported in ir_datasets (topics + qrels + docs)
 - **Con:** Cannot compute NDCG@10 or ranking metrics
 - **Con:** Cannot evaluate retrieval recall
+
+## Amendment (2026-02-19, ADR-006)
+
+Phase 0 and Tier A now use TrialGPT HF criterion-level annotations instead of TREC 2021 trial-level qrels. TREC qrels deferred to Tier B for trial-level ranking evaluation. The qrels-only approach (no retrieval pipeline) still holds — ADR-006 changes the ground truth source, not the evaluation strategy.
 
 ## Revisit When
 

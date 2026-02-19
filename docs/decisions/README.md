@@ -9,13 +9,15 @@ Quick-reference table of all architectural and strategic decisions. Full details
 | 003 | Two-model ablation (MedGemma 1.5 4B + Gemini 3 Pro) | Accepted (amended) | Phase 0 exit criteria |
 | 004 | Tiered evaluation budget (A+B = ~$330) | Accepted (amended) | If results are paper-worthy → Tier C |
 | 005 | Whole criteria blocks for spike (no atomization) | Accepted | Phase 0 too coarse to differentiate models |
+| 006 | Switch to TrialGPT HF criterion-level annotations | Accepted | Need trial-level eval (Tier B) or broader coverage |
 
 ## From CTO Review (2026-02-17)
 
 | Decision | Rationale | Revisit When |
 |----------|-----------|-------------|
 | Drop MedGemma 1.0 27B | A100 GPU unavailable; spike answered by 4B vs Gemini | Never (unless 27B becomes easily available) |
-| TREC 2021 only (not 2022) | Full ir_datasets support; 75 topics vs 50; no manual download | Need 2022 for separate eval set |
+| ~~TREC 2021 only (not 2022)~~ | ~~Full ir_datasets support; 75 topics vs 50~~ | Superseded by ADR-006: TrialGPT HF |
+| TrialGPT HF criterion-level data (ADR-006) | Criterion-level granularity; self-contained; GPT-4 baseline built-in; < 5 MB | Need trial-level eval for Tier B |
 | Whole criteria blocks (no atomization) | Isolates medical reasoning from parsing; reduces annotation burden | Need per-criterion granularity |
 | Phase 0 = directional + qualitative | n=20 too small for statistical significance; log full reasoning chains | Phase 1 for statistical power |
 | Gemini via Google AI Studio | GOOGLE_API_KEY auth; simpler than Vertex AI | Need batch pricing or higher rate limits |

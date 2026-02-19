@@ -1,15 +1,24 @@
 # Phase 0 Configuration — Fast Directional Capability Check
-# Budget: ~$3 | Pairs: 20 | Purpose: go/no-go signal before Tier A investment
+# Budget: ~$1 | Pairs: 20 | Purpose: go/no-go signal before Tier A investment
+# Updated: 2026-02-19 — switched to TrialGPT HF criterion-level data (ADR-006)
 
 phase: 0
-description: "20-pair directional benchmark for MedGemma 1.5 4B vs Gemini 3 Pro"
+description: "20-pair criterion-level benchmark for MedGemma 1.5 4B vs Gemini 3 Pro"
 
 data:
-  source: trec2021
-  year: 2021
+  source: huggingface
+  dataset_id: "ncbi/TrialGPT-Criterion-Annotations"
+  split: train
   n_pairs: 20
-  sampling: stratified  # Stratify across qrel relevance levels (0, 1, 2)
+  sampling: stratified  # Stratify across mapped labels (MET, NOT_MET, UNKNOWN)
   seed: 42
+  label_mapping:
+    included: MET
+    not_excluded: MET
+    excluded: NOT_MET
+    not_included: NOT_MET
+    not_enough_information: UNKNOWN
+    not_applicable: UNKNOWN
 
 models:
   - name: medgemma-1.5-4b
@@ -21,15 +30,21 @@ models:
     model_id: gemini-3-pro-preview
     max_concurrent: 10
 
+baselines:
+  - name: gpt4-precomputed
+    source: dataset  # gpt4_eligibility column, no API call needed
+
 evaluation:
   tier: phase0
-  criteria_mode: whole_block  # ADR-005: no atomization in spike
-  ingest_source: gold         # ADR-002: use gold SoT for component isolation
+  granularity: criterion_level  # ADR-006: criterion-level, not trial-level
+  ingest_source: gold           # ADR-002: use gold SoT for component isolation
   metrics:
     - accuracy
     - f1_macro
+    - f1_met_not_met    # core metric: medical reasoning quality
     - cohens_kappa
     - confusion_matrix
+    - evidence_overlap  # Jaccard of model sentences vs expert_sentences
 
 budget:
   max_cost_usd: 5.0
@@ -39,3 +54,4 @@ output:
   run_dir: "runs/"  # Each run gets runs/<run_id>/
   save_reasoning_chains: true  # PRD: log full reasoning for qualitative analysis
   save_raw_responses: true
+  save_evidence_sentences: true  # Compare against expert_sentences

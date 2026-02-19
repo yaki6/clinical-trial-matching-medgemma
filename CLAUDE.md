@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**trialmatch** — CLI-first Python benchmark comparing MedGemma 1.5 4B vs Gemini 3 Pro on clinical trial criterion-level matching. Uses TREC 2021 qrels directly (no full retrieval pipeline). Three-component pipeline: INGEST → PRESCREEN → VALIDATE. Spike phase uses whole inclusion/exclusion criteria blocks (no atomization).
+**trialmatch** — CLI-first Python benchmark comparing MedGemma 1.5 4B vs Gemini 3 Pro on clinical trial criterion-level matching. Uses TrialGPT HF criterion-level annotations (ADR-006) as primary data source. Three-component pipeline: INGEST → PRESCREEN → VALIDATE. Spike phase evaluates individual eligibility criteria (not atomized sub-criteria).
 
 Frontend integration planned for next phase
 
@@ -40,7 +40,7 @@ uv run ruff format src/ tests/
 uv run ty check src/
 
 # CLI usage
-uv run trialmatch data prepare --year 2021 --source api
+uv run trialmatch data prepare --source huggingface
 uv run trialmatch phase0 --config configs/phase0.yaml
 uv run trialmatch eval validate --pairs <path> --model gemini --tier A
 uv run trialmatch compare --runs <run_ids>
@@ -54,7 +54,7 @@ src/trialmatch/
 ├── ingest/        # understand() — patient text → PatientProfileText + KeyFacts
 ├── prescreen/     # generate_search_terms() — PatientProfile → SearchAnchors
 ├── validate/      # evaluate_criterion() — (Patient, Criterion) → MET/NOT_MET/UNKNOWN
-├── data/          # TREC topics/qrels loading, CT.gov API v2 client, TrialGPT dataset parser
+├── data/          # HF dataset loading (TrialGPT criterion annotations), label mapping, sampling
 ├── models/        # Model adapters: MedGemma (HF Inference) + Gemini (AI Studio/Vertex)
 ├── evaluation/    # scikit-learn metrics: accuracy, F1, Cohen's κ, confusion matrices
 └── tracing/       # Run artifact persistence to runs/<run_id>/, cost tracking per LLM call
@@ -68,11 +68,11 @@ src/trialmatch/
 4. **Cost tracking**: Every LLM call must log `model, input_tokens, output_tokens, estimated_cost, latency_ms`. Aggregated per run. Budget guards in e2e tests.
 
 
-### Trial Data Sources (Preference Order)
+### Data Sources (Preference Order)
 
-1. **TrialGPT published dataset** (preferred) — pre-parsed trials from April 2021 era, no temporal drift
-2. **CT.gov API v2** (fallback) — live data, 40 req/min rate limit, flag trials updated after 2021-04-30
-3. **Hybrid** — TrialGPT for covered NCT IDs, API for gaps
+1. **TrialGPT HF criterion annotations** (primary, ADR-006) — `ncbi/TrialGPT-Criterion-Annotations` on HuggingFace. 1,024 criterion-level pairs with expert labels, GPT-4 baseline, evidence sentences. Self-contained, < 5 MB.
+2. **TREC 2021+2022 qrels** (Tier B, deferred) — trial-level labels for ranking evaluation. Only needed after Phase 0 / Tier A criterion-level eval is complete.
+3. **CT.gov API v2** (fallback) — live data, 40 req/min rate limit. Only needed if supplementing with trials not in HF dataset.
 
 ## Memory System (docs/)
 
@@ -88,13 +88,13 @@ When making architectural decisions, create a new ADR in `docs/adr/NNN-<slug>.md
 
 ## Evaluation Tiers
 
-| Tier | Pairs | Purpose | Budget |
-|------|-------|---------|--------|
-| A | 100 (stratified) | Criterion-level accuracy against human SoT | ~$30 |
-| B | 1,000 (stratified) | Trial-level accuracy with statistical power | ~$300 |
-| C | All ~35K (optional) | Comprehensive metrics if results warrant | ~$4,000 |
+| Tier | Pairs | Data Source | Purpose | Budget |
+|------|-------|-------------|---------|--------|
+| A | All 1,024 | TrialGPT HF | Full criterion-level evaluation | ~$25 |
+| B | TREC 2021+2022 trial-level | TREC qrels | Trial-level ranking with statistical power | ~$300 |
+| C | All ~35K (optional) | TREC qrels | Comprehensive metrics if results warrant | ~$4,000 |
 
-Phase 0 uses 20 pairs from TREC 2021 as a fast directional capability check (~$3).
+Phase 0 uses 20 criterion-level pairs from TrialGPT HF dataset as a fast directional capability check (~$1).
 
 ## Key Evaluation Targets
 
@@ -107,15 +107,15 @@ Phase 0 uses 20 pairs from TREC 2021 as a fast directional capability check (~$3
 
 ```
 data/
-├── trec2021/
-│   ├── topics/        # TREC 2021 topics (75 topics, loaded via ir_datasets)
-│   ├── qrels/         # TREC 2021 qrels (35,832 triples, loaded via ir_datasets)
-│   └── trials/        # {NCT_ID}.json per trial (fetched from CT.gov API)
-└── sot/               # Human expert source-of-truth annotations
-    ├── ingest/        # Gold PatientProfile + KeyFacts per topic
-    ├── prescreen/     # Gold SearchAnchors per topic
-    └── validate/      # Gold block-level MET/NOT_MET/UNKNOWN labels
+├── hf_cache/              # HuggingFace datasets cache (auto-managed)
+│   └── ncbi___trial_gpt-criterion-annotations/  # 1,024 criterion-level pairs
+└── sot/                   # Human expert source-of-truth annotations
+    ├── ingest/            # Gold PatientProfile + KeyFacts per topic
+    ├── prescreen/         # Gold SearchAnchors per topic
+    └── validate/          # Gold criterion-level MET/NOT_MET/UNKNOWN labels
 ```
+
+Note: TrialGPT HF dataset (ADR-006) is the primary data source. Expert labels (`expert_eligibility`) serve as ground truth. GPT-4 predictions (`gpt4_eligibility`) serve as built-in baseline.
 
 ## Rate Limits
 
@@ -123,7 +123,7 @@ data/
 |---------|-------|---------|
 | HuggingFace Inference | 5 concurrent | MedGemma 1.5 4B |
 | Google AI Studio | 10 concurrent | Gemini 3 Pro |
-| CT.gov API v2 | 40 req/min | `trialmatch data prepare`, PRESCREEN extrinsic eval |
+| CT.gov API v2 | 40 req/min | Tier B trial-level eval (deferred) |
 
 ## Agent Session Protocol
 
