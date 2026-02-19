@@ -14,7 +14,6 @@ from trialmatch.validate.evaluator import (
     parse_criterion_verdict,
 )
 
-
 # --- Prompt building tests (reusable interface) ---
 
 

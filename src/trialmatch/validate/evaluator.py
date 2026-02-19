@@ -13,9 +13,12 @@ from __future__ import annotations
 
 import json
 import re
+from typing import TYPE_CHECKING
 
-from trialmatch.models.base import ModelAdapter
 from trialmatch.models.schema import CriterionResult, CriterionVerdict, ModelResponse
+
+if TYPE_CHECKING:
+    from trialmatch.models.base import ModelAdapter
 
 PROMPT_TEMPLATE = """You are a clinical trial eligibility assessment expert.
 
@@ -31,7 +34,11 @@ Patient Note:
 {patient_note}
 
 Respond in JSON format:
-{{"verdict": "MET" | "NOT_MET" | "UNKNOWN", "reasoning": "Step-by-step explanation citing specific evidence from the patient note", "evidence_sentences": "Comma-separated indices of sentences from the patient note that support your verdict"}}
+{{
+  "verdict": "MET" | "NOT_MET" | "UNKNOWN",
+  "reasoning": "Step-by-step explanation citing specific evidence from the patient note",
+  "evidence_sentences": "Comma-separated indices of sentences that support your verdict"
+}}
 
 Definitions:
 - MET: The patient clearly satisfies this criterion based on the available information

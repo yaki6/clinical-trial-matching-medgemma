@@ -1,0 +1,807 @@
+# PRD — MedGemma vs Gemini 3 Pro: Criterion Matching Benchmark v3.0
+
+> **Changelog from v2.0:**
+> - **Scoped down to a spike.** Removed full-pipeline TREC evaluation (NDCG@10, corpus download, PyTerrier index). Those are deferred until criterion-matching results justify the investment.
+> - **Qrels-only evaluation.** Benchmark uses TREC 2022 qrels patient-trial pairs directly — no retrieval pipeline needed.
+> - **Added human expert SoT requirements.** Specifies exactly what annotations domain experts must produce to evaluate INGEST and PRESCREEN components independently, not just end-to-end.
+> - **Two-phase plan:** Phase 0 (20 pairs, fast capability check) → Phase 1 (all qrel pairs, full criterion-level benchmark).
+
+---
+
+## 0) CTO Assessment — What Changed and Why
+
+### Strategic reframe
+
+v2.0 tried to do two things at once: (1) benchmark MedGemma's medical reasoning against Gemini 3 Pro, and (2) build a full retrieval-to-ranking pipeline competitive with TrialGPT. These are different bets with different costs.
+
+The retrieval pipeline (corpus download, PyTerrier + MedCPT dense index, Recall@K tuning, NDCG@10 evaluation) is ~2 weeks of eng effort and ~$500 in compute. It only pays off if MedGemma's criterion-level reasoning actually beats Gemini 3 Pro. If it doesn't, the entire pipeline ablation is wasted work.
+
+**This version inverts the order:** prove the reasoning hypothesis first (cheap, fast), then invest in the pipeline only if the hypothesis holds.
+
+### What's deferred (not deleted)
+
+| Deferred item | Why | Bring back when |
+|---------------|-----|-----------------|
+| Full TREC corpus download (375K trials) | Not needed for criterion-matching eval | Phase 1 results justify pipeline investment |
+| PyTerrier + MedCPT dense index | Retrieval infrastructure for NDCG@10 | Same |
+| NDCG@10 / P@10 / RR ranking metrics | Require end-to-end retrieval pipeline | Same |
+| BioMCP integration for real-world mode | Downstream of benchmark validation | Post-benchmark, for demo build |
+| RRF fusion across query variants | Retrieval-stage optimization | Same |
+
+### Flaws carried forward from v2.0 (still relevant)
+
+| # | Flaw | Status |
+|---|------|--------|
+| 1 | MedGemma 1.5 is 4B-only (27B is v1.0) | Fixed in v2.0, carried forward |
+| 3 | MedGemma has no tool-use capability | Fixed in v2.0, carried forward |
+| 4 | No TrialGPT baseline for criterion accuracy | Now primary comparison target: 87.3% (GPT-4) |
+| 8 | Atomization disabled by default | Carried forward |
+| 11 | MedGemma MedQA = 69% (4B) | Phase 0 will directly test this concern |
+| 13 | MedGemma is prompt-sensitive | Prompt tuning phase retained |
+
+### New risk: human annotation bottleneck
+
+This version adds a dependency on clinician annotations for INGEST and PRESCREEN SoT. If annotation velocity is slow (typical: 5–10 patients/hour for a physician), the SoT creation itself becomes the critical path. Mitigation: start with TREC topics (which are already semi-structured clinical vignettes) to reduce annotation burden.
+
+---
+
+## 1) Goal
+
+**Spike question:** Does MedGemma add measurable value over Gemini 3 Pro on clinical trial criterion-level matching, and on upstream patient understanding and search term generation?
+
+**What "measurable value" means concretely:**
+
+| Component | Signal we're looking for | Minimum bar to proceed |
+|-----------|------------------------|----------------------|
+| VALIDATE (criterion matching) | Higher accuracy on MET/NOT_MET/UNKNOWN classification | MedGemma ≥ 5pp accuracy improvement over Gemini 3 Pro on ≥ 1 variant |
+| INGEST (patient understanding) | More accurate key_fact extraction from clinical text | MedGemma extracts ≥ 90% of gold-standard key_facts vs Gemini's rate |
+| PRESCREEN (search term generation) | More medically precise search anchors | MedGemma search terms achieve higher expert relevance scores |
+
+If none of these hold → MedGemma adds cost and complexity without benefit. Report the negative result and proceed with Gemini-only architecture.
+
+If VALIDATE holds but INGEST/PRESCREEN don't → use MedGemma only for criterion evaluation, Gemini for everything else.
+
+---
+
+## 2) Architecture (Simplified for Benchmark)
+
+```
+TREC Topic (patient text)
+    |
+    v
+[INGEST] understand()                    ← Evaluate against INGEST SoT
+    Model: MedGemma 1.5 4B / 1.0 27B / Gemini 3 Pro
+    -> PatientProfileText + KeyFacts
+    |
+    v
+[PRESCREEN] generate_search_terms()      ← Evaluate against PRESCREEN SoT
+    Model: MedGemma 1.5 4B / 1.0 27B / Gemini 3 Pro
+    -> SearchAnchors
+    |
+    v
+[VALIDATE] evaluate_criterion()          ← Evaluate against TREC qrels
+    Model: MedGemma 1.5 4B / 1.0 27B / Gemini 3 Pro
+    Input: PatientProfile + Trial criterion (from qrels pairs)
+    -> EligibilityLedger
+```
+
+**Key simplification:** No retrieval pipeline. The qrels tell us which patient-trial pairs to evaluate. We fetch those specific trials (not 375K), run criterion matching, and score against the qrel labels.
+
+---
+
+## 3) Scope
+
+### In scope
+
+- CLI-first Python pipeline (INGEST → PRESCREEN → VALIDATE).
+- **Phase 0:** 20 hand-curated patient-trial-criterion triples from TREC 2021. Fast model capability check.
+- **Phase 1:** All ~3,000–5,000 unique patient-trial pairs from TREC 2022 qrels. Full criterion-level benchmark.
+- **Ablation** of MedGemma 1.5 4B / MedGemma 1.0 27B / Gemini 3 Pro at each component.
+- **Human expert SoT creation** for INGEST and PRESCREEN evaluation (see § 6).
+- Full run tracing, artifact persistence, cost tracking.
+
+### Out of scope (deferred)
+
+- Full TREC corpus download and local index (PyTerrier, MedCPT).
+- End-to-end retrieval pipeline and NDCG@10 evaluation.
+- Real-world mode / BioMCP integration.
+- RRF retrieval fusion.
+- UI/FE, EHR integration, GDPR compliance.
+- Model fine-tuning.
+
+---
+
+## 4) Tech Stack
+
+| Component | Technology | Notes |
+|-----------|-----------|-------|
+| Language | Python 3.11+ | `uv`, `ty`, `ruff` |
+| MedGemma 1.5 4B | HF Inference / local GPU | Multimodal (text + images). 128K input, 8K output. |
+| MedGemma 1.0 27B | HF Inference | Text-only. Requires A100 GPU. |
+| Gemini 3 Pro | Google AI Studio / Vertex AI | 1M context, 64K output. Tool-use capable. |
+| Trial data source | ClinicalTrials.gov API v2 (fetch by NCT ID) OR TrialGPT published dataset | Only fetching qrel-referenced trials, not full corpus. |
+| TREC evaluation data | `ir_datasets` for topics + qrels | `clinicaltrials/2021/trec-ct-2021` (dev), `clinicaltrials/2022/trec-ct-2022` (eval) |
+| Evaluation | `scikit-learn` (classification metrics) | Accuracy, F1, confusion matrix, Cohen's κ |
+
+**Removed from v2.0 stack:** PyTerrier, MedCPT, BioMCP, `trec_eval` (NDCG not computed in this phase).
+
+---
+
+## 5) Trial Data Acquisition (Qrels-Only Strategy)
+
+### Why this works
+
+TREC 2022 qrels contain ~35,832 `(topic_id, NCT_ID, relevance)` triples covering ~3,000–5,000 unique NCT IDs. These are the trials that TREC assessors actually judged. For criterion-level evaluation, we only need these trials — not the full 375K corpus.
+
+### Data sources (in preference order)
+
+**Option A: TrialGPT published dataset (preferred)**
+
+The NLM team published parsed trial data at `ftp.ncbi.nlm.nih.gov/pub/lu/TrialGPT/`. This includes trial eligibility criteria from the era the qrels were judged against, minimizing temporal drift.
+
+- Pros: No API calls. Closer to the April 2021 snapshot the qrels were judged on. TrialGPT's criterion-level annotations may be available as additional SoT.
+- Cons: May not cover all NCT IDs in the 2022 qrels. Need to verify coverage.
+- Action: Download and check coverage against TREC 2022 qrel NCT IDs first.
+
+**Option B: Live CT.gov API v2 (fallback)**
+
+Fetch current trial details for each unique NCT ID in the qrels.
+
+- Pros: Complete coverage (all registered NCT IDs are in the API).
+- Cons: Some eligibility criteria may have changed since April 2021. ~3,000–5,000 API calls at 40/min = ~75–125 min.
+- Mitigation: Flag trials where `LastUpdatePostDate > 2021-04-30` as potentially drifted. Exclude from primary analysis, include in sensitivity analysis.
+
+**Option C: Hybrid**
+
+Use TrialGPT dataset for covered NCT IDs, fill gaps from live API.
+
+### Implementation
+
+```
+trialmatch data prepare --year 2022 --source trialGPT|api|hybrid
+```
+
+Output: `data/trec2022/trials/{NCT_ID}.json` — one file per trial with at minimum:
+- `nct_id`
+- `brief_title`
+- `eligibility_criteria` (raw text)
+- `inclusion_criteria[]` (parsed)
+- `exclusion_criteria[]` (parsed)
+- `phase`, `status`, `conditions[]`, `interventions[]`
+- `data_source`: `trialGPT|api_current|api_snapshot`
+- `last_update_date` (for drift flagging)
+
+---
+
+## 6) Human Expert Source-of-Truth (SoT) Requirements
+
+This is the most critical new section. Without component-level ground truth, we can only evaluate end-to-end (criterion matching against qrels). That's necessary but insufficient — if the system gets a trial-level label wrong, we need to diagnose whether INGEST misunderstood the patient, PRESCREEN generated bad search terms, or VALIDATE misreasoned about a criterion.
+
+### 6.1 INGEST SoT — Patient Profile Gold Standard
+
+**What:** For each TREC topic, a clinician produces a gold-standard structured patient profile with annotated key_facts.
+
+**Who annotates:** Board-certified physician (oncologist preferred given TREC's cancer-heavy topic distribution). Minimum 2 annotators for inter-rater reliability on a 20% subset.
+
+**Annotation scope:**
+
+| Phase | Topics to annotate | Purpose |
+|-------|-------------------|---------|
+| Phase 0 | 10 topics from TREC 2021 (dev) | Prompt tuning + initial capability check |
+| Phase 1 | All 50 topics from TREC 2022 | Full benchmark |
+
+**Annotation schema per topic:**
+
+```json
+{
+  "topic_id": "...",
+  "annotator_id": "...",
+  "annotation_date": "...",
+  "gold_key_facts": [
+    {
+      "field": "primary_diagnosis",
+      "value": "Stage IIIA non-small cell lung cancer, adenocarcinoma",
+      "evidence_span": "exact substring from topic text",
+      "required": true,
+      "notes": "optional clarification"
+    },
+    {
+      "field": "biomarker",
+      "value": "EGFR L858R mutation",
+      "evidence_span": "...",
+      "required": true,
+      "notes": null
+    }
+  ],
+  "gold_profile_text": "Free-text structured summary following INGEST template headings",
+  "ambiguities": [
+    {
+      "field": "ecog_status",
+      "note": "Topic mentions 'ambulatory' but does not state explicit ECOG score. Reasonable to infer ECOG 0-1 but not definitively stated."
+    }
+  ]
+}
+```
+
+**Required fields (exhaustive list):**
+
+| Field | Type | Description | Evaluation criteria |
+|-------|------|-------------|-------------------|
+| `primary_diagnosis` | string | Canonical disease name + subtype | Exact match or clinically equivalent synonym |
+| `stage_grade` | string | TNM stage, grade, or severity | Exact match |
+| `biomarkers` | list[string] | Gene mutations, receptor status, molecular markers | Set match (order-insensitive) |
+| `demographics` | object | Age, sex, ethnicity (if stated) | Exact match on stated values |
+| `prior_therapies` | list[string] | Treatments received, lines of therapy | Set match with partial credit for incomplete lists |
+| `comorbidities` | list[string] | Co-existing conditions | Set match |
+| `labs_organ_function` | list[object] | Lab values with units | Value + unit match |
+| `ecog_kps` | string | Performance status if stated | Exact match; null if not stated |
+| `missing_info` | list[string] | Clinically relevant info NOT in the topic | Set overlap — model should identify at least 50% of expert-identified gaps |
+
+**Evaluation metrics for INGEST:**
+
+| Metric | Definition | Target |
+|--------|-----------|--------|
+| Key fact recall | % of gold key_facts correctly extracted by model | ≥ 90% |
+| Key fact precision | % of model-extracted key_facts that match gold | ≥ 85% |
+| Key fact F1 | Harmonic mean | ≥ 87% |
+| Hallucination rate | % of model key_facts with no evidence in source text | ≤ 2% |
+| Missing info recall | % of gold missing_info items identified by model | ≥ 50% |
+
+**Matching rules:** Exact string match is too strict for medical text. Use a two-tier matching approach:
+1. **Automatic:** Normalize whitespace, case, common abbreviations (NSCLC = non-small cell lung cancer). Check string containment and UMLS CUI match.
+2. **Clinician adjudication:** For ambiguous matches, a clinician reviews and marks as match/no-match/partial. This is needed for ~10–20% of comparisons.
+
+**Estimated annotation effort:**
+- 10 topics (Phase 0): ~2–3 hours for an experienced oncologist
+- 50 topics (Phase 1): ~10–15 hours total
+- Inter-rater subset (10 topics × 2 annotators): +3 hours
+
+### 6.2 PRESCREEN SoT — Search Anchor Gold Standard
+
+**What:** For each TREC topic, a clinician + information specialist produce gold-standard search anchors that an ideal system should generate.
+
+**Why this is tricky:** Unlike INGEST (where ground truth is extractive — facts are in the text) and VALIDATE (where ground truth is the qrels), PRESCREEN ground truth is **generative** — there are many valid sets of search terms. Two oncologists might generate different but equally effective search strategies.
+
+**Solution: Dual evaluation approach.**
+
+#### 6.2.1 Intrinsic evaluation — Search anchor quality
+
+**Who annotates:** Clinician + clinical trial search specialist (CRA or trial navigator). The clinician provides medical reasoning; the search specialist provides CT.gov query expertise.
+
+**Annotation scope:**
+
+| Phase | Topics | Purpose |
+|-------|--------|---------|
+| Phase 0 | 10 topics (TREC 2021) | Calibrate expectations |
+| Phase 1 | 50 topics (TREC 2022) | Full benchmark |
+
+**Annotation schema per topic:**
+
+```json
+{
+  "topic_id": "...",
+  "annotator_ids": ["clinician_id", "search_specialist_id"],
+  "gold_search_anchors": {
+    "conditions": [
+      {
+        "term": "non-small cell lung cancer",
+        "priority": "MUST",
+        "synonyms": ["NSCLC", "lung adenocarcinoma"],
+        "notes": null
+      }
+    ],
+    "biomarkers": [
+      {
+        "term": "EGFR L858R",
+        "priority": "MUST",
+        "normalized_form": "EGFR exon 21 L858R",
+        "notes": "Critical for targeted therapy trial matching"
+      }
+    ],
+    "interventions": [
+      {
+        "term": "osimertinib",
+        "priority": "SHOULD",
+        "notes": "Patient previously received; search for next-line options"
+      }
+    ],
+    "constraints": {
+      "age": {"value": "62", "source": "topic text"},
+      "sex": {"value": "female", "source": "topic text"},
+      "phase": {"value": ["PHASE2", "PHASE3"], "notes": "Restrict to late-stage for clinical relevance"},
+      "status": {"value": ["RECRUITING"], "notes": null}
+    },
+    "negative_anchors": [
+      {
+        "term": "first-line",
+        "reason": "Patient has had prior therapy; first-line trials would exclude"
+      }
+    ]
+  },
+  "search_strategy_notes": "This patient's EGFR L858R after osimertinib progression suggests searching for resistance-mechanism trials (T790M, C797S) and combination strategies."
+}
+```
+
+**Priority levels:**
+- `MUST`: Missing this anchor means the search is fundamentally broken (e.g., wrong disease)
+- `SHOULD`: Missing this significantly degrades search quality (e.g., missing key biomarker)
+- `NICE_TO_HAVE`: Would improve precision but not critical (e.g., specific drug class)
+
+**New concept — Negative anchors:** Terms that a sophisticated search system should avoid or explicitly filter against. Example: a patient who has already progressed on first-line therapy should NOT trigger first-line treatment trials. This tests whether the model understands the patient's treatment trajectory, not just static facts.
+
+**Evaluation metrics for PRESCREEN:**
+
+| Metric | Definition | Target |
+|--------|-----------|--------|
+| MUST-anchor recall | % of MUST-priority gold anchors covered by model output | 100% (any miss is a critical failure) |
+| SHOULD-anchor recall | % of SHOULD-priority gold anchors covered | ≥ 80% |
+| Anchor precision | % of model anchors rated as relevant by expert | ≥ 75% |
+| Negative anchor compliance | % of negative anchors correctly avoided | ≥ 70% |
+| Constraint accuracy | % of gold constraints correctly specified | ≥ 90% |
+
+**Matching rules:**
+- Condition matching: UMLS CUI normalization. "NSCLC" matches "non-small cell lung cancer."
+- Biomarker matching: Normalize gene names (HUGO), mutation notation. "EGFR L858R" matches "EGFR exon 21 L858R."
+- Intervention matching: Map to MeSH or RxNorm. "osimertinib" matches "Tagrisso."
+
+#### 6.2.2 Extrinsic evaluation — Retrieval coverage (lightweight)
+
+Even without a full retrieval pipeline, we can do a lightweight check: **do the model's search anchors, when used as CT.gov API queries, retrieve the trials in the qrels?**
+
+**Method:**
+1. Take model-generated search anchors for each topic.
+2. Execute simple CT.gov API queries (condition + biomarker, condition + intervention, etc.) — max 6 queries per topic.
+3. Collect returned NCT IDs.
+4. Compute coverage: what % of qrel-positive (eligible + excluded) trials appear in the results?
+
+This isn't a full retrieval evaluation (no ranking, no index), but it answers: "Would these search terms have found the right trials?"
+
+**Metric:** `qrel_coverage@50` — what fraction of eligible/excluded trials from qrels appear in the top 50 API results across all queries for that topic.
+
+**Note:** This metric is approximate because the live API returns current trials, not the April 2021 snapshot. Some qrel trials may no longer be in the API (completed, withdrawn). Flag and exclude these.
+
+**Estimated annotation effort:**
+- 10 topics (Phase 0): ~3–4 hours (clinician + search specialist)
+- 50 topics (Phase 1): ~15–20 hours total
+- This is the highest annotation cost. Consider: annotate 25 topics in Phase 1, extend to 50 only if signal is promising.
+
+### 6.3 VALIDATE SoT — TREC Qrels (Already Exists)
+
+**What:** TREC 2022 qrels provide trial-level labels: 0 = not relevant, 1 = excluded, 2 = eligible.
+
+**This is the only component with pre-existing ground truth.** No additional human annotation needed for trial-level evaluation.
+
+**However:** Qrels are trial-level, not criterion-level. To evaluate criterion-level reasoning (which is the real value-add of this benchmark), we need:
+
+#### 6.3.1 Criterion-level SoT (NEW — small-scale)
+
+**What:** For a subset of patient-trial pairs, a clinician annotates each individual criterion with MET/NOT_MET/UNKNOWN + rationale.
+
+**Scope:**
+
+| Phase | Pairs | Criteria per pair | Total annotations |
+|-------|-------|------------------|-------------------|
+| Phase 0 | 20 pairs (from TREC 2021) | ~10–15 | ~200–300 criterion annotations |
+| Phase 1 | 100 pairs (stratified sample from TREC 2022 qrels) | ~10–15 | ~1,000–1,500 criterion annotations |
+
+**Stratified sampling for Phase 1:**
+- 35 eligible pairs (qrel = 2)
+- 35 excluded pairs (qrel = 1)
+- 30 not-relevant pairs (qrel = 0)
+- Balance across cancer vs non-cancer topics
+- Prioritize trials with complex/ambiguous criteria
+
+**Annotation schema per criterion:**
+
+```json
+{
+  "topic_id": "...",
+  "nct_id": "...",
+  "criterion_index": 3,
+  "criterion_type": "INCLUSION",
+  "criterion_text": "Patients must have EGFR-activating mutation (exon 19 deletion or L858R)",
+  "annotator_id": "...",
+  "gold_decision": "MET",
+  "gold_confidence": 0.95,
+  "gold_hardness": "HARD",
+  "gold_evidence": {
+    "patient_span": "EGFR L858R mutation detected on molecular testing",
+    "trial_span": "EGFR-activating mutation (exon 19 deletion or L858R)",
+    "reasoning": "Patient has L858R, which is explicitly listed as qualifying."
+  },
+  "ambiguity_flag": false,
+  "ambiguity_notes": null
+}
+```
+
+**Evaluation metrics for VALIDATE (criterion-level):**
+
+| Metric | Definition | Target |
+|--------|-----------|--------|
+| Criterion accuracy | % of criterion decisions matching gold | ≥ 85% (TrialGPT with GPT-4: 87.3%) |
+| Criterion F1 (per class) | F1 for MET, NOT_MET, UNKNOWN separately | Report all three |
+| Hardness classification accuracy | % of HARD/SOFT labels matching gold | ≥ 80% |
+| Evidence grounding rate | % of decisions with valid evidence spans | ≥ 90% |
+| Hallucination rate | % of evidence spans not found in source text | ≤ 5% |
+| UNKNOWN calibration | When model says UNKNOWN, how often is gold also UNKNOWN? | ≥ 70% |
+
+**Evaluation metrics for VALIDATE (trial-level, against qrels):**
+
+| Metric | Definition | Target |
+|--------|-----------|--------|
+| Trial-level accuracy | 3-class accuracy (eligible/excluded/not-relevant) | ≥ 75% |
+| Trial-level F1 (macro) | Macro-averaged F1 across 3 classes | ≥ 70% |
+| Eligible recall | % of qrel-eligible trials correctly classified | ≥ 80% |
+| Excluded precision | When model says EXCLUDED, how often is qrel = excluded? | ≥ 70% |
+
+**Estimated annotation effort:**
+- Phase 0 (200–300 criteria): ~6–8 hours for a physician
+- Phase 1 (1,000–1,500 criteria): ~30–40 hours total. Consider 2 annotators splitting the load.
+- Inter-rater reliability subset: 20 pairs × 2 annotators = ~4–6 hours additional
+
+### 6.4 SoT Creation Timeline and Dependencies
+
+```
+Week 1:   Recruit annotators. Prepare annotation tool (spreadsheet or Prodigy).
+          Download TREC 2021 topics. Prepare 10 topics for Phase 0 annotation.
+          
+Week 2:   Phase 0 annotation (INGEST SoT: 10 topics, PRESCREEN SoT: 10 topics,
+          VALIDATE criterion SoT: 20 pairs).
+          In parallel: build pipeline scaffolding, set up model access.
+          
+Week 3:   Run Phase 0 benchmark. Analyze results. Go/no-go decision.
+          Begin Phase 1 annotation if go.
+          
+Week 4-5: Phase 1 annotation (INGEST: 50 topics, PRESCREEN: 25-50 topics,
+          VALIDATE criterion: 100 pairs).
+          In parallel: run Phase 1 benchmark as annotations complete.
+          
+Week 6:   Final analysis and report.
+```
+
+**Critical path:** Annotator availability. If physician annotators are part-time (10 hrs/week), Phase 1 annotations take ~3 weeks. Budget accordingly.
+
+### 6.5 Annotation Quality Assurance
+
+**Inter-annotator agreement (IAA):**
+- Compute Cohen's κ on the 20% dual-annotated subset for each SoT type.
+- Minimum acceptable κ: ≥ 0.7 for criterion decisions, ≥ 0.6 for key_fact extraction.
+- If κ < threshold: review annotation guidelines, adjudicate disagreements, re-annotate.
+
+**Adjudication process:**
+- Disagreements resolved by a third senior clinician.
+- Adjudicated labels become the final gold standard.
+- Track disagreement types (ambiguous patient info vs. annotator error vs. genuine medical disagreement).
+
+---
+
+## 7) Component Technical Design
+
+### 7.0 Phase 0 — Model Capability Check
+
+**Purpose:** Fast validation that MedGemma adds signal before committing to full benchmark.
+
+**Data:**
+- 10 TREC 2021 topics (dev set)
+- 20 patient-trial-criterion triples (from Phase 0 SoT, § 6.3.1)
+- Must include mix: 5 oncology biomarker, 5 demographic/lab, 5 exclusion, 5 complex multi-condition
+
+**Models under test:**
+- MedGemma 1.5 4B
+- MedGemma 1.0 27B
+- Gemini 3 Pro
+
+**Evaluation per component:**
+
+| Component | Test | Against |
+|-----------|------|---------|
+| INGEST | Extract key_facts from 10 topics | INGEST SoT (§ 6.1) |
+| PRESCREEN | Generate search anchors for 10 topics | PRESCREEN SoT (§ 6.2) |
+| VALIDATE | Evaluate 20 criterion triples | Criterion SoT (§ 6.3.1) + qrel labels |
+
+**Prompt tuning:** Test 3 prompt variants per component on Phase 0 data. Lock best variant before Phase 1.
+
+**Exit criteria:**
+
+| Outcome | Decision |
+|---------|----------|
+| MedGemma beats Gemini 3 Pro by ≥ 5pp on criterion accuracy | Proceed to Phase 1. MedGemma is the hypothesis model. |
+| MedGemma ties Gemini 3 Pro (< 5pp difference) | Proceed to Phase 1 with all 3 models. Look for component-specific advantages. |
+| MedGemma loses to Gemini 3 Pro by > 5pp | Report negative result. Phase 1 optional — run only if INGEST or PRESCREEN shows MedGemma advantage. |
+| MedGemma shows qualitative advantage on image inputs | Proceed to Phase 1 with image-augmented test cases (requires image-bearing patient data, out of TREC scope). |
+
+---
+
+### 7.1 INGEST — `understand()`
+
+**Purpose:** Convert TREC topic text into structured PatientProfileText + KeyFacts.
+
+**Model assignment:** All three models run on every topic (ablation).
+
+**Input:** Raw TREC topic text (1–2 paragraphs of clinical narrative).
+
+**Output:** PatientProfileText + KeyFacts (schema unchanged from v2.0 § 6.1).
+
+**Evaluation:** Against INGEST SoT (§ 6.1). Metrics: key_fact recall, precision, F1, hallucination rate.
+
+**Prompt design:**
+- Single-turn only.
+- Explicitly require "Unknown" for unstated facts.
+- Evidence spans: exact substrings from topic text.
+- 3 variants tested in Phase 0, best locked for Phase 1.
+
+(Full prompt templates in Appendix A, unchanged from v2.0.)
+
+---
+
+### 7.2 PRESCREEN — `generate_search_terms()`
+
+**Purpose:** Generate clinically appropriate search anchors from patient profile.
+
+**Model assignment:** All three models run on every topic (ablation).
+
+**Input:** PatientProfileText + KeyFacts (from INGEST output — use gold INGEST SoT to isolate PRESCREEN errors from INGEST errors).
+
+**Important design decision:** For PRESCREEN evaluation, feed the **gold-standard INGEST SoT** as input, not the model's own INGEST output. This isolates PRESCREEN quality from INGEST quality. If you feed model INGEST output, a bad extraction poisons the search terms, and you can't tell which component failed.
+
+For end-to-end evaluation (optional, Phase 1), also run with model INGEST output to measure error propagation.
+
+**Output:** SearchAnchors (conditions, biomarkers, interventions, constraints).
+
+**Evaluation:**
+- Intrinsic: against PRESCREEN SoT (§ 6.2.1). Metrics: MUST-anchor recall, SHOULD-anchor recall, anchor precision, negative anchor compliance.
+- Extrinsic (optional): qrel_coverage@50 using live CT.gov API queries (§ 6.2.2).
+
+**Prompt design:**
+- Single-turn.
+- Output structured JSON.
+- Include negative anchor generation: "List any search terms that should be AVOIDED for this patient and explain why."
+- 3 variants tested in Phase 0.
+
+(Full prompt templates in Appendix B, updated from v2.0 to include negative anchors.)
+
+---
+
+### 7.3 VALIDATE — `evaluate_criterion()`
+
+**Purpose:** For each patient-trial pair in the qrels, evaluate each eligibility criterion.
+
+**This is the core benchmark component.**
+
+**Model assignment:** All three models run on every criterion (ablation).
+
+**Input per criterion:**
+- PatientProfileText + KeyFacts (use gold INGEST SoT to isolate VALIDATE errors)
+- criterion_text (from trial eligibility criteria)
+- criterion_type (INCLUSION / EXCLUSION)
+
+**Output per criterion:** decision, confidence, criterion_hardness, evidence, rationale, data_need (schema unchanged from v2.0 § 6.3).
+
+**Aggregation to trial-level label:** Two-tier aggregation (unchanged from v2.0 § 7.3.5):
+1. Linear aggregation with HARD/SOFT criterion distinction
+2. LLM aggregation via Gemini 3 Pro (or best-performing model)
+
+**Label mapping to TREC qrels:**
+
+| Pipeline label | TREC qrel |
+|----------------|-----------|
+| ELIGIBLE | 2 |
+| EXCLUDED | 1 |
+| IRRELEVANT | 0 |
+| UNCERTAIN | 0 (for scoring) but flagged separately |
+
+**Evaluation:**
+- Criterion-level: against criterion SoT (§ 6.3.1) on annotated subset. Metrics: accuracy, per-class F1, evidence grounding.
+- Trial-level: against TREC 2022 qrels on all pairs. Metrics: 3-class accuracy, macro F1, eligible recall.
+
+**Prompt design:** Unchanged from v2.0 Appendix C.
+
+**Phase 1 scale estimate:**
+
+| Item | Count |
+|------|-------|
+| Unique topics in TREC 2022 | 50 |
+| Unique NCT IDs in qrels | ~3,000–5,000 |
+| Unique (topic, NCT) pairs | ~35,832 |
+| Criteria per trial (avg) | ~10–15 |
+| Total criterion evaluations per model | ~350K–540K |
+| At 3 models | ~1M–1.6M LLM calls |
+
+**This is too expensive to run on all qrel pairs per model.** Cost at Gemini 3 Pro pricing (~$0.01 per criterion eval): ~$10K–$16K.
+
+**Practical scoping for Phase 1:**
+
+| Tier | Pairs | Strategy | Purpose |
+|------|-------|----------|---------|
+| Tier A: Full criterion eval | 100 pairs (stratified) | All 3 models × all criteria | Criterion-level accuracy against SoT |
+| Tier B: Trial-level eval | 1,000 pairs (stratified sample) | All 3 models × all criteria | Trial-level accuracy against qrels with statistical power |
+| Tier C: Full qrels (optional) | All ~35K pairs | Best model only | Comprehensive trial-level metrics if budget allows |
+
+**Cost estimate:**
+
+| Tier | Criterion evals | Cost per model | Total (3 models) |
+|------|----------------|----------------|-------------------|
+| A | ~1,500 | ~$15 | ~$45 |
+| B | ~15,000 | ~$150 | ~$450 |
+| C | ~400,000 | ~$4,000 | ~$4,000 (1 model) |
+
+**Recommendation:** Tier A + Tier B = ~$500 total. This gives criterion-level SoT comparison AND statistically powered trial-level accuracy. Tier C only if results are strong and paper-worthy.
+
+---
+
+## 8) Evaluation Plan
+
+### 8.1 Phase 0 (Week 3)
+
+| Component | Data | Models | Primary metric | Go/no-go threshold |
+|-----------|------|--------|---------------|-------------------|
+| INGEST | 10 TREC 2021 topics | MedGemma 1.5 4B, 1.0 27B, Gemini 3 Pro | Key fact F1 | Any MedGemma ≥ 90% recall |
+| PRESCREEN | 10 topics (gold INGEST input) | Same 3 | MUST-anchor recall | Any MedGemma = 100% MUST recall |
+| VALIDATE | 20 criterion triples | Same 3 | Criterion accuracy | Any MedGemma ≥ 5pp over Gemini |
+
+### 8.2 Phase 1 (Weeks 4–6)
+
+**Ablation matrix:**
+
+| Run | INGEST input | PRESCREEN input | VALIDATE model | Purpose |
+|-----|-------------|----------------|----------------|---------|
+| V-Gemini | Gold SoT | n/a | Gemini 3 Pro | VALIDATE baseline |
+| V-MG4B | Gold SoT | n/a | MedGemma 1.5 4B | VALIDATE test (4B) |
+| V-MG27B | Gold SoT | n/a | MedGemma 1.0 27B | VALIDATE test (27B) |
+| I-Gemini | (model output) | n/a | n/a | INGEST baseline |
+| I-MG4B | (model output) | n/a | n/a | INGEST test (4B) |
+| I-MG27B | (model output) | n/a | n/a | INGEST test (27B) |
+| P-Gemini | Gold SoT | (model output) | n/a | PRESCREEN baseline |
+| P-MG4B | Gold SoT | (model output) | n/a | PRESCREEN test (4B) |
+| P-MG27B | Gold SoT | (model output) | n/a | PRESCREEN test (27B) |
+| E2E-best | Best INGEST | Best PRESCREEN → VALIDATE | Best VALIDATE | End-to-end best combo |
+
+**Key principle:** Each component tested with gold upstream inputs to isolate errors. End-to-end run (E2E-best) shows real-world error propagation.
+
+### 8.3 Metrics summary
+
+| Component | Metric | Against | Scale |
+|-----------|--------|---------|-------|
+| INGEST | Key fact recall, precision, F1, hallucination rate | INGEST SoT | 50 topics |
+| PRESCREEN | MUST-recall, SHOULD-recall, precision, negative anchor compliance | PRESCREEN SoT | 25–50 topics |
+| VALIDATE (criterion) | Accuracy, per-class F1, evidence grounding, hallucination rate | Criterion SoT | 100 pairs (~1,500 criteria) |
+| VALIDATE (trial) | 3-class accuracy, macro F1, eligible recall | TREC qrels | 1,000 pairs |
+| End-to-end | Trial-level accuracy with model INGEST + PRESCREEN | TREC qrels | 1,000 pairs |
+
+### 8.4 Statistical significance
+
+- McNemar's test for pairwise model comparison on criterion accuracy (paired, binary).
+- Bootstrap 95% CIs for F1 and accuracy differences.
+- 1,000 pairs at trial level gives adequate power to detect ≥ 3pp accuracy differences (α=0.05, power=0.80).
+
+### 8.5 Baselines
+
+| Baseline | Source | Expected criterion accuracy |
+|----------|--------|---------------------------|
+| TrialGPT (GPT-4) | Published (Nature Comms 2024) | 87.3% |
+| TrialGPT (GPT-3.5) | Published | ~75–80% (estimated from paper) |
+| Gemini 3 Pro (this project) | Measured | TBD (our own baseline) |
+| Random | Calculated | ~33% (3-class) |
+
+---
+
+## 9) CLI Deliverables
+
+```
+# Data preparation
+trialmatch data prepare --year 2021|2022 --source trialGPT|api|hybrid
+
+# Phase 0
+trialmatch phase0 --config <yaml>
+
+# Phase 1 — component evaluation
+trialmatch eval ingest   --topics <list> --model <model> --sot <path>
+trialmatch eval prescreen --topics <list> --model <model> --sot <path> --ingest-input gold|model
+trialmatch eval validate  --pairs <path> --model <model> --tier A|B|C
+
+# Phase 1 — end-to-end
+trialmatch eval e2e --topics <list> --config <yaml> --tier B
+
+# Comparison
+trialmatch compare --runs <run_ids> --output report.md
+```
+
+---
+
+## 10) Engineering Requirements
+
+### 10.1 Determinism, caching, traceability
+
+Unchanged from v2.0 § 5.1. Every run writes to `runs/<run_id>/` with config, inputs, artifacts, traces, metrics.
+
+**Cache isolation for component evaluation:** When evaluating PRESCREEN with gold INGEST input, the cache key must include `ingest_source=gold` to prevent contamination from model INGEST runs.
+
+### 10.2 Budgets
+
+| Parameter | Default | Notes |
+|-----------|---------|-------|
+| Max concurrent model calls | 5 (HF) / 10 (Gemini) | Rate-limited |
+| CT.gov API rate limit | 40 req/min | Only for data preparation + extrinsic PRESCREEN eval |
+| Phase 0 budget | ~$5 | 3 models × 10 topics × ~20 criteria |
+| Phase 1 Tier A+B budget | ~$500 | 3 models × (100 + 1,000) pairs |
+| Annotation budget | ~60–80 physician-hours | Across all SoT types |
+
+### 10.3 Cost tracking
+
+Every LLM call logs: model, input_tokens, output_tokens, estimated_cost, latency_ms. Aggregated per run.
+
+---
+
+## 11) Open Items
+
+1. **TrialGPT dataset coverage check.** Download `ftp.ncbi.nlm.nih.gov/pub/lu/TrialGPT/` and verify overlap with TREC 2022 qrel NCT IDs. If < 80% coverage → fall back to API.
+2. **Annotator recruitment.** Need 1–2 board-certified physicians (oncology preferred). Budget ~60–80 hours total.
+3. **Annotation tooling.** Prodigy, Label Studio, or structured spreadsheet? Decision by Week 1.
+4. **MedGemma HF Inference GPU quota.** A100 required for 27B. Confirm availability.
+5. **TrialGPT criterion-level annotations.** Check if NLM released criterion-level labels (not just trial-level). If yes → reduces annotation burden for VALIDATE SoT.
+6. **Gemini 3 Pro batch pricing.** Vertex AI batch prediction may reduce Tier B/C costs.
+
+---
+
+## 12) Decision Log
+
+| Decision | Rationale | Revisit when |
+|----------|-----------|-------------|
+| Qrels-only, no full corpus | Criterion matching is the hypothesis; retrieval pipeline is premature investment | Phase 1 results justify pipeline |
+| Gold INGEST input for PRESCREEN/VALIDATE eval | Isolate component errors; prevents INGEST mistakes from masking downstream quality | End-to-end run (E2E-best) tests propagation |
+| 100 pairs for criterion SoT | Balances annotation cost vs. statistical power | If inter-annotator κ < 0.7, may need more |
+| 1,000 pairs for trial-level eval | Adequate power for 3pp accuracy detection | Tier C if results are paper-worthy |
+| Deferred: PyTerrier index, BioMCP, NDCG@10 | These are retrieval-pipeline concerns, premature for a reasoning spike | Phase 1 shows MedGemma advantage |
+
+---
+
+## Appendix A — Prompt Templates (INGEST)
+
+Unchanged from v2.0. See v2.0 Appendix A.
+
+## Appendix B — Prompt Templates (PRESCREEN)
+
+### B1) generate_search_terms() — UPDATED
+
+**System:**
+```
+Generate clinical trial search anchors for the given patient.
+Output structured JSON with conditions, biomarkers, interventions, constraints, and negative_anchors.
+
+Rules:
+- Prefer precision over recall.
+- Include 1 synonym per condition.
+- Normalize biomarker notation (HUGO gene names, standard mutation format).
+- negative_anchors: terms that should be EXCLUDED from searches for this patient. Explain why.
+```
+
+**User:**
+```
+Patient profile: <<PROFILE_TEXT>>
+Key facts: <<KEY_FACTS>>
+
+Output JSON:
+- conditions[] (1–2, include 1 synonym each)
+- biomarkers[] (0–4, normalized: "GENE MUTATION")
+- interventions[] (0–3, drug class or regimen)
+- constraints: {age, sex, status, phase, geo}
+- negative_anchors[] (0–3): {term, reason}
+```
+
+## Appendix C — Prompt Templates (VALIDATE)
+
+Unchanged from v2.0. See v2.0 Appendix C.
+
+## Appendix D — TrialGPT Comparison Notes
+
+Updated from v2.0:
+
+| Aspect | TrialGPT | This Benchmark |
+|--------|----------|---------------|
+| Scope | Full retrieval + matching pipeline | **Criterion matching focus** (retrieval deferred) |
+| Evaluation | NDCG@10 (ranking) + criterion accuracy | **Criterion accuracy (primary)** + trial-level classification |
+| Backbone LLM | GPT-4 / GPT-3.5 | MedGemma 1.5 4B / 1.0 27B / Gemini 3 Pro |
+| Criterion accuracy (GPT-4) | 87.3% | Target: match or exceed |
+| Component-level SoT | Not reported | **INGEST + PRESCREEN + VALIDATE** (new contribution) |
+| Image input | None | Supported (MedGemma 1.5 4B) |
+| Open-weight option | None (GPT-4 only) | MedGemma (open-weight) |

@@ -12,7 +12,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
-class CriterionVerdict(str, enum.Enum):
+class CriterionVerdict(enum.StrEnum):
     """Criterion-level eligibility verdict.
 
     Used by both the benchmark evaluator and the e2e pipeline.

@@ -15,7 +15,9 @@ def test_generate_run_id():
 def test_save_run(tmp_path):
     mgr = RunManager(runs_dir=tmp_path)
 
-    mr = ModelResponse(text="t", input_tokens=100, output_tokens=20, latency_ms=500, estimated_cost=0.01)
+    mr = ModelResponse(
+        text="t", input_tokens=100, output_tokens=20, latency_ms=500, estimated_cost=0.01
+    )
     result = CriterionResult(
         verdict=CriterionVerdict.MET,
         reasoning="meets",

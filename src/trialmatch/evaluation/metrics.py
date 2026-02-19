@@ -44,7 +44,7 @@ def compute_metrics(
         "cohens_kappa": float(kappa),
         "confusion_matrix": cm.tolist(),
         "confusion_matrix_labels": LABEL_NAMES,
-        "f1_per_class": {name: float(f1) for name, f1 in zip(LABEL_NAMES, f1_per)},
+        "f1_per_class": {name: float(f1) for name, f1 in zip(LABEL_NAMES, f1_per, strict=True)},
     }
 
 

@@ -14,9 +14,12 @@ Usage:
 from __future__ import annotations
 
 import json
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import structlog
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 from trialmatch.models.schema import CriterionAnnotation, CriterionVerdict
 

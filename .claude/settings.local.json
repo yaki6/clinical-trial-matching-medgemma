@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Clinical_Trials__search_trials",
+      "mcp__claude_ai_Clinical_Trials__get_trial_details",
+      "WebFetch(domain:clinicaltrials.gov)",
+      "WebFetch(domain:www.nlm.nih.gov)",
+      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:biomcp.org)",
+      "WebFetch(domain:www.nature.com)",
+      "WebFetch(domain:arxiv.org)",
+      "WebFetch(domain:zitniklab.hms.harvard.edu)",
+      "WebFetch(domain:www.trec-cds.org)",
+      "WebFetch(domain:trec.nist.gov)",
+      "WebFetch(domain:www.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:ftp.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:datasets-server.huggingface.co)"
+    ]
+  }
+}

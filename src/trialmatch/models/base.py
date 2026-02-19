@@ -6,8 +6,10 @@ This interface is shared by both benchmark and e2e pipeline model usage.
 from __future__ import annotations
 
 import abc
+from typing import TYPE_CHECKING
 
-from trialmatch.models.schema import ModelResponse
+if TYPE_CHECKING:
+    from trialmatch.models.schema import ModelResponse
 
 
 class ModelAdapter(abc.ABC):

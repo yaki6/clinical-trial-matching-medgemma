@@ -6,12 +6,14 @@ Each run saves to runs/<run_id>/ with config, results, and metrics.
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import structlog
 
-from trialmatch.models.schema import RunResult
+if TYPE_CHECKING:
+    from trialmatch.models.schema import RunResult
 
 logger = structlog.get_logger()
 
@@ -26,7 +28,7 @@ class RunManager:
 
     def generate_run_id(self, model_name: str) -> str:
         """Generate a unique run ID."""
-        ts = datetime.now(tz=timezone.utc).strftime("%Y%m%d-%H%M%S")
+        ts = datetime.now(tz=UTC).strftime("%Y%m%d-%H%M%S")
         return f"phase0-{model_name}-{ts}"
 
     def save_run(self, run_result: RunResult, config: dict | None = None) -> Path:
