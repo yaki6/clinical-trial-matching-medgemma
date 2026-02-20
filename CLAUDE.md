@@ -4,9 +4,54 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**trialmatch** — CLI-first Python benchmark comparing MedGemma 1.5 4B vs Gemini 3 Pro on clinical trial criterion-level matching. Uses TrialGPT HF criterion-level annotations (ADR-006) as primary data source. Three-component pipeline: INGEST → PRESCREEN → VALIDATE. Spike phase evaluates individual eligibility criteria (not atomized sub-criteria).
+**trialmatch** — Clinical trial matching tool using MedGemma (4B multimodal + 27B text) and Gemini 3 Pro. Three-component pipeline: INGEST → PRESCREEN → VALIDATE. Benchmarked on TrialGPT HF criterion-level annotations (ADR-006). Preparing for MedGemma Impact Challenge submission (Kaggle, deadline Feb 24 2026).
 
-Frontend integration planned for next phase
+## TODO — MedGemma Challenge Demo (Due Feb 24)
+
+Design doc: `docs/plans/2026-02-21-medgemma-challenge-demo-design.md`
+
+### Day 1 — Backend API + Benchmark Run (Feb 21)
+- [ ] Create FastAPI backend (`src/trialmatch/api/`) with SSE streaming
+  - [ ] `POST /api/pipeline/run` — accepts patient_id, streams pipeline steps via SSE
+  - [ ] `GET /api/benchmark/results` — returns Phase 0 metrics
+  - [ ] `GET /api/health` — health check for all 3 model endpoints
+- [ ] Create 3 sample patient JSON fixtures (`data/samples/`)
+  - [ ] Patient 1: text-only EHR (→ MedGemma 27B)
+  - [ ] Patient 2: EHR + medical image (→ MedGemma 4B multimodal)
+  - [ ] Patient 3: complex multi-condition (→ both models)
+- [ ] Run Phase 0 benchmark in background (3-way: 4B vs 27B vs Gemini)
+  - `uv run trialmatch phase0 --config configs/phase0_three_way.yaml`
+
+### Day 2 — Frontend Core (Feb 22)
+- [ ] Scaffold Next.js 15 + Tailwind + shadcn/ui app (`frontend/`)
+- [ ] Patient Selector page — load 3 sample cases with preview cards
+- [ ] Pipeline Viewer — real-time SSE log rendering per step (INGEST → PRESCREEN → VALIDATE)
+  - [ ] Collapsible step cards with status indicators (spinner/check/error)
+  - [ ] Expandable log detail for each step
+- [ ] Results Panel — show criterion verdicts + reasoning chains
+- [ ] Wire frontend to FastAPI backend (localhost:8000)
+
+### Day 3 — Polish + Multimodal (Feb 23)
+- [ ] MedGemma 4B multimodal INGEST — image extraction for Patient 2
+- [ ] 3-model comparison view (side-by-side verdicts for same criterion)
+- [ ] Benchmark Dashboard page — accuracy, F1, confusion matrix charts (from Phase 0 results)
+- [ ] PRESCREEN agent visualization — show CT.gov search queries + results in real-time
+- [ ] UI polish: loading states, error handling, responsive layout
+- [ ] Playwright e2e tests for demo flow
+
+### Day 4 — Documentation + Recording (Feb 24)
+- [ ] Draft 3-page technical document (approach, architecture, results)
+- [ ] Record 3-min demo video using Playwright
+- [ ] Final code cleanup, README update for reproducibility
+- [ ] Kaggle submission: video + doc + source code
+
+### Models Available
+
+| Model | Endpoint | Use Case |
+|-------|----------|----------|
+| MedGemma 4B | `https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud` | Multimodal (EHR + images) |
+| MedGemma 27B | `https://wu5nclwms3ctrwd1.us-east-1.aws.endpoints.huggingface.cloud` | Text-only (higher accuracy) |
+| Gemini 3 Pro | Google AI Studio API | General-purpose baseline |
 
 ## Commands
 
@@ -162,6 +207,8 @@ Note: TrialGPT HF dataset (ADR-006) is the primary data source. Expert labels (`
 | Understand requirements | `docs/prd/v3.1-criterion-matching-benchmark.md` |
 | Check architectural decisions | `docs/decisions/README.md` → `docs/adr/NNN-*.md` |
 | Understand system design | `docs/architecture/README.md` |
+| Understand pipeline data flow | `docs/architecture/pipeline-overview.md` |
+| Understand PRESCREEN agent interactions | `docs/architecture/prescreen-sequence-diagrams.md` |
 | Know test strategy | `docs/test-strategy/README.md` |
 | Write BDD feature files | `docs/bdd/README.md` |
 | Understand annotation rules | `docs/sot-annotation-requirements.md` |
