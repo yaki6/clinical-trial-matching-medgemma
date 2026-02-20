@@ -12,17 +12,28 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import time
 from pathlib import Path
 
 import click
 import structlog
 import yaml
+from dotenv import load_dotenv
+
+load_dotenv()
+
+from collections import defaultdict
 
 from trialmatch.data.hf_loader import load_annotations, load_annotations_from_file
-from trialmatch.data.sampler import stratified_sample
-from trialmatch.evaluation.metrics import compute_evidence_overlap, compute_metrics
+from trialmatch.data.sampler import filter_by_keywords, stratified_sample
+from trialmatch.evaluation.metrics import (
+    TrialVerdict,
+    aggregate_to_trial_verdict,
+    compute_evidence_overlap,
+    compute_metrics,
+)
 from trialmatch.models.gemini import GeminiAdapter
-from trialmatch.models.medgemma import MedGemmaAdapter
+from trialmatch.models.medgemma import ENDPOINT_URL as _MEDGEMMA_DEFAULT_URL, MedGemmaAdapter
 from trialmatch.models.schema import RunResult
 from trialmatch.tracing.run_manager import RunManager
 from trialmatch.validate.evaluator import evaluate_criterion
@@ -35,15 +46,12 @@ async def run_model_benchmark(
     sample,
     budget_max: float = 5.0,
     max_concurrent: int = 1,
+    timeout_seconds: float = 300.0,
 ) -> list:
     """Run all sampled criterion pairs through one model.
 
     Calls the REUSABLE evaluate_criterion() for each pair,
     passing raw text extracted from the HF annotations.
-
-    Args:
-        max_concurrent: Max parallel API calls. Use 1 for Phase 0,
-                        5+ for Tier A to speed up 1024-pair runs.
     """
     semaphore = asyncio.Semaphore(max_concurrent)
     results = []
@@ -73,9 +81,22 @@ async def run_model_benchmark(
                 criterion_text=annotation.criterion_text,
                 criterion_type=annotation.criterion_type,
                 adapter=adapter,
+                timeout_seconds=timeout_seconds,
             )
 
             total_cost += result.model_response.estimated_cost
+
+            logger.info(
+                "pair_completed",
+                pair=f"{i + 1}/{len(sample.pairs)}",
+                model=adapter.name,
+                verdict=result.verdict.value,
+                correct=(result.verdict == annotation.expert_label),
+                latency_ms=round(result.model_response.latency_ms),
+                cost_usd=round(result.model_response.estimated_cost, 4),
+                cumulative_cost_usd=round(total_cost, 4),
+            )
+
             if total_cost > budget_max:
                 logger.warning("budget_exceeded", total_cost=total_cost, max=budget_max)
                 budget_exceeded = True
@@ -83,7 +104,7 @@ async def run_model_benchmark(
             return result
 
     if max_concurrent == 1:
-        # Sequential path: simple, deterministic ordering
+        # Sequential path: simple, deterministic ordering, clear logging
         for i, annotation in enumerate(sample.pairs):
             result = await _evaluate_one(i, annotation)
             if result is None:
@@ -103,17 +124,30 @@ async def run_phase0(config: dict, dry_run: bool = False):
     data_cfg = config.get("data", {})
     fixture_path = data_cfg.get("fixture_path")
 
+    # --- STAGE: INGEST ---
+    logger.info("stage_ingest_start")
     if fixture_path:
         annotations = load_annotations_from_file(Path(fixture_path))
     else:
         annotations = load_annotations()
+    logger.info("stage_ingest_complete", annotations=len(annotations))
 
-    logger.info("data_loaded", annotations=len(annotations))
+    # --- STAGE: FILTER (optional keyword filter) ---
+    keyword_filter = data_cfg.get("keyword_filter", [])
+    if keyword_filter:
+        annotations = filter_by_keywords(annotations, keyword_filter)
+        logger.info("stage_filter_applied", keywords=keyword_filter, remaining=len(annotations))
+        if len(annotations) == 0:
+            logger.error("no_annotations_after_filter", keywords=keyword_filter)
+            click.echo(f"ERROR: No annotations match keywords {keyword_filter}", err=True)
+            return
 
+    # --- STAGE: SAMPLE ---
+    logger.info("stage_sample_start", total_annotations=len(annotations))
     n_pairs = data_cfg.get("n_pairs", 20)
     seed = data_cfg.get("seed", 42)
     sample = stratified_sample(annotations, n_pairs=n_pairs, seed=seed)
-    logger.info("sampled", n_pairs=len(sample.pairs))
+    logger.info("stage_sample_complete", n_pairs=len(sample.pairs))
 
     if dry_run:
         click.echo(f"Dry run: would evaluate {len(sample.pairs)} pairs with models")
@@ -126,6 +160,8 @@ async def run_phase0(config: dict, dry_run: bool = False):
         return
 
     budget_max = config.get("budget", {}).get("max_cost_usd", 5.0)
+    budget_warn = config.get("budget", {}).get("warn_at_usd", budget_max * 0.6)
+    timeout_seconds = config.get("evaluation", {}).get("timeout_seconds", 300.0)
     run_mgr = RunManager()
 
     for model_cfg in config.get("models", []):
@@ -134,7 +170,11 @@ async def run_phase0(config: dict, dry_run: bool = False):
             if not hf_token:
                 click.echo("ERROR: HF_TOKEN env var required for MedGemma. Skipping.", err=True)
                 continue
-            adapter = MedGemmaAdapter(hf_token=hf_token)
+            adapter = MedGemmaAdapter(
+                hf_token=hf_token,
+                endpoint_url=model_cfg.get("endpoint_url", _MEDGEMMA_DEFAULT_URL),
+                model_name=model_cfg["name"],
+            )
         elif model_cfg["provider"] == "google":
             api_key = os.environ.get("GOOGLE_API_KEY", "")
             if not api_key:
@@ -145,12 +185,47 @@ async def run_phase0(config: dict, dry_run: bool = False):
             logger.error("unknown_provider", provider=model_cfg["provider"])
             continue
 
-        max_concurrent = config.get("budget", {}).get("max_concurrent", 1)
-        logger.info("running_model", model=adapter.name, max_concurrent=max_concurrent)
-        results = await run_model_benchmark(
-            adapter, sample, budget_max=budget_max, max_concurrent=max_concurrent
+        max_concurrent = model_cfg.get("max_concurrent", 1)
+        logger.info(
+            "stage_eval_start",
+            model=adapter.name,
+            pairs=len(sample.pairs),
+            max_concurrent=max_concurrent,
+            timeout_seconds=timeout_seconds,
+            budget_max_usd=budget_max,
         )
 
+        eval_start = time.perf_counter()
+        results = await run_model_benchmark(
+            adapter,
+            sample,
+            budget_max=budget_max,
+            max_concurrent=max_concurrent,
+            timeout_seconds=timeout_seconds,
+        )
+        eval_elapsed = time.perf_counter() - eval_start
+        total_run_cost = sum(r.model_response.estimated_cost for r in results)
+
+        logger.info(
+            "stage_eval_complete",
+            model=adapter.name,
+            completed_pairs=len(results),
+            total_pairs=len(sample.pairs),
+            total_cost_usd=round(total_run_cost, 4),
+            elapsed_sec=round(eval_elapsed, 1),
+        )
+
+        if total_run_cost >= budget_warn:
+            logger.warning(
+                "budget_warning",
+                model=adapter.name,
+                spent_usd=round(total_run_cost, 4),
+                warn_at_usd=budget_warn,
+                budget_max_usd=budget_max,
+            )
+
+        # --- STAGE: METRICS ---
+        logger.info("stage_metrics_start", model=adapter.name, pairs=len(results))
         predicted = [r.verdict for r in results]
         actual = [a.expert_label for a in sample.pairs[: len(results)]]
         metrics = compute_metrics(predicted, actual)
@@ -166,6 +241,37 @@ async def run_phase0(config: dict, dry_run: bool = False):
         metrics["gpt4_baseline_accuracy"] = gpt4_metrics["accuracy"]
         metrics["gpt4_baseline_f1_macro"] = gpt4_metrics["f1_macro"]
 
+        # --- Trial-level aggregation ---
+        trial_groups: dict[tuple, list] = defaultdict(list)
+        for result, annotation in zip(results, sample.pairs[: len(results)], strict=False):
+            key = (annotation.patient_id, annotation.trial_id)
+            trial_groups[key].append((result.verdict, annotation.criterion_type))
+
+        trial_verdicts = {k: aggregate_to_trial_verdict(v) for k, v in trial_groups.items()}
+        n_eligible = sum(1 for v in trial_verdicts.values() if v == TrialVerdict.ELIGIBLE)
+        n_excluded = sum(1 for v in trial_verdicts.values() if v == TrialVerdict.EXCLUDED)
+        n_not_relevant = sum(1 for v in trial_verdicts.values() if v == TrialVerdict.NOT_RELEVANT)
+        n_uncertain = sum(1 for v in trial_verdicts.values() if v == TrialVerdict.UNCERTAIN)
+
+        metrics["trial_level"] = {
+            "n_unique_trials": len(trial_verdicts),
+            "ELIGIBLE": n_eligible,
+            "EXCLUDED": n_excluded,
+            "NOT_RELEVANT": n_not_relevant,
+            "UNCERTAIN": n_uncertain,
+        }
+
+        logger.info(
+            "stage_metrics_complete",
+            model=adapter.name,
+            accuracy=round(metrics["accuracy"], 3),
+            f1_macro=round(metrics["f1_macro"], 3),
+            cohens_kappa=round(metrics["cohens_kappa"], 3),
+            gpt4_accuracy=round(metrics["gpt4_baseline_accuracy"], 3),
+            trial_level_n_unique=len(trial_verdicts),
+        )
+
+        # --- STAGE: SAVE ---
         run_id = run_mgr.generate_run_id(adapter.name)
         run_result = RunResult(
             run_id=run_id,
@@ -173,7 +279,13 @@ async def run_phase0(config: dict, dry_run: bool = False):
             results=results,
             metrics=metrics,
         )
-        run_dir = run_mgr.save_run(run_result, config=config)
+        logger.info("stage_save_start", run_id=run_id, model=adapter.name)
+        run_dir = run_mgr.save_run(
+            run_result,
+            config=config,
+            annotations=sample.pairs[: len(results)],
+        )
+        logger.info("stage_save_complete", run_id=run_id, run_dir=str(run_dir))
 
         click.echo(f"\n{'=' * 60}")
         click.echo(f"Model: {adapter.name}")
@@ -184,6 +296,14 @@ async def run_phase0(config: dict, dry_run: bool = False):
         click.echo(f"MET/NOT_MET F1: {metrics['f1_met_not_met']:.2%}")
         click.echo(f"Cohen's kappa: {metrics['cohens_kappa']:.3f}")
         click.echo(f"Evidence Overlap: {metrics['mean_evidence_overlap']:.2%}")
+        tl = metrics["trial_level"]
+        click.echo(
+            f"Trial-level (partial coverage, {tl['n_unique_trials']} unique trials):"
+        )
+        click.echo(
+            f"  ELIGIBLE={tl['ELIGIBLE']} EXCLUDED={tl['EXCLUDED']} "
+            f"NOT_RELEVANT={tl['NOT_RELEVANT']} UNCERTAIN={tl['UNCERTAIN']}"
+        )
         click.echo("--- GPT-4 Baseline ---")
         click.echo(f"GPT-4 Accuracy: {metrics['gpt4_baseline_accuracy']:.2%}")
         click.echo(f"GPT-4 Macro-F1: {metrics['gpt4_baseline_f1_macro']:.2%}")
@@ -202,10 +322,11 @@ def phase0_cmd(config_path: str | None, dry_run: bool):
         config = {
             "data": {"n_pairs": 20, "seed": 42},
             "models": [
-                {"name": "medgemma-1.5-4b", "provider": "huggingface"},
-                {"name": "gemini-3-pro", "provider": "google"},
+                {"name": "medgemma-1.5-4b", "provider": "huggingface", "max_concurrent": 1},
+                {"name": "gemini-3-pro", "provider": "google", "max_concurrent": 1},
             ],
             "budget": {"max_cost_usd": 5.0},
+            "evaluation": {"timeout_seconds": 300},
         }
 
     if dry_run:

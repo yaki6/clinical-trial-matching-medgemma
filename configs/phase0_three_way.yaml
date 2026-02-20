@@ -1,0 +1,51 @@
+phase: 0
+description: "Phase 0 — 3-way: MedGemma 4B vs 27B vs Gemini 3 Pro"
+
+data:
+  source: huggingface
+  dataset_id: "ncbi/TrialGPT-Criterion-Annotations"
+  split: train
+  n_pairs: 20
+  sampling: stratified
+  seed: 42
+  label_mapping:
+    included: MET
+    not_excluded: MET
+    excluded: NOT_MET
+    not_included: NOT_MET
+    not_enough_information: UNKNOWN
+    not_applicable: UNKNOWN
+
+models:
+  - name: medgemma-1.5-4b
+    provider: huggingface
+    model_id: google/medgemma-1-5-4b-it-hae
+    endpoint_url: "https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud"
+    max_concurrent: 1
+
+  - name: medgemma-27b
+    provider: huggingface
+    model_id: google/medgemma-27b-text-it
+    endpoint_url: "REPLACE_WITH_27B_ENDPOINT_URL"
+    max_concurrent: 1
+
+  - name: gemini-3-pro
+    provider: google
+    model_id: gemini-3-pro-preview
+    max_concurrent: 1
+
+evaluation:
+  tier: phase0
+  granularity: criterion_level
+  ingest_source: gold
+  timeout_seconds: 600
+
+budget:
+  max_cost_usd: 10.0
+  warn_at_usd: 7.0
+
+output:
+  run_dir: "runs/"
+  save_reasoning_chains: true
+  save_raw_responses: true
+  save_evidence_sentences: true

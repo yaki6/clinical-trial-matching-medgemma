@@ -24,11 +24,11 @@ models:
   - name: medgemma-1.5-4b
     provider: huggingface
     model_id: google/medgemma-1-5-4b-it-hae
-    max_concurrent: 5
+    max_concurrent: 1  # Phase 0: sequential for deterministic logging
   - name: gemini-3-pro
     provider: google
     model_id: gemini-3-pro-preview
-    max_concurrent: 10
+    max_concurrent: 1  # Phase 0: sequential for deterministic logging
 
 baselines:
   - name: gpt4-precomputed
@@ -38,6 +38,7 @@ evaluation:
   tier: phase0
   granularity: criterion_level  # ADR-006: criterion-level, not trial-level
   ingest_source: gold           # ADR-002: use gold SoT for component isolation
+  timeout_seconds: 300          # Per-call timeout; returns UNKNOWN on breach
   metrics:
     - accuracy
     - f1_macro

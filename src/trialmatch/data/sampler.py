@@ -7,8 +7,26 @@ Samples from CriterionAnnotation list, stratified by expert_label
 from __future__ import annotations
 
 import random
+import re
 
 from trialmatch.models.schema import CriterionAnnotation, CriterionVerdict, Phase0Sample
+
+
+def filter_by_keywords(
+    annotations: list[CriterionAnnotation],
+    keywords: list[str],
+    case_sensitive: bool = False,
+) -> list[CriterionAnnotation]:
+    """Return annotations whose patient note contains at least one keyword.
+
+    Used for disease-specific benchmark slices (e.g. NSCLC, COPD).
+    Searches patient note text only (not criterion text).
+    """
+    if not keywords:
+        return annotations
+    flags = 0 if case_sensitive else re.IGNORECASE
+    patterns = [re.compile(re.escape(kw), flags) for kw in keywords]
+    return [a for a in annotations if any(p.search(a.note) for p in patterns)]
 
 
 def stratified_sample(

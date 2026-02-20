@@ -1,4 +1,4 @@
-<!-- Last updated: 2026-02-19T12:00:00Z -->
+<!-- Last updated: 2026-02-20T21:00:00Z -->
 
 # Project Dashboard
 
@@ -38,16 +38,16 @@
 | data/ | CriterionAnnotation | hf_loader + sampler | 19 tests | none | Ready |
 | models/ | ModelResponse, CriterionVerdict | base + medgemma + gemini | 10 tests | none | Ready |
 | ingest/ | not started | not started | none | none | Not started (deferred) |
-| prescreen/ | not started | not started | none | none | Not started (deferred) |
+| prescreen/ | ToolCallRecord, TrialCandidate, PresearchResult | CTGovClient, ToolExecutor, agent loop | 31 tests | none | Ready |
 | validate/ | CriterionResult | evaluator (REUSABLE) | 14 tests | 4 scenarios | Ready |
 | evaluation/ | - | metrics + evidence overlap | 10 tests | none | Ready |
 | tracing/ | RunResult | run_manager | 2 tests | none | Ready |
 
 ## Test Summary
 
-- **64 unit tests** passing across 10 test files
+- **123 unit tests** passing across 11 test files
 - **4 BDD scenarios** passing for validate module
-- **68 total tests**, zero lint errors, zero format issues
+- **132 total tests**, zero lint errors, zero format issues
 
 ## Blockers
 
@@ -77,6 +77,9 @@ _Space for human to communicate intent changes without updating the PRD. Agents:
 
 | Date | Agent | What Was Done | What's Next |
 |------|-------|--------------|-------------|
+| 2026-02-20 | Claude | Phase 0 prompt fix + trial aggregation: (1) PROMPT_TEMPLATE now criterion-type-aware (inclusion vs exclusion instructions), (2) fixed bare `thought` token leak in clean_model_response(), (3) Gemini timeout 120s→300s, (4) TrialVerdict + aggregate_to_trial_verdict() added to metrics.py, (5) trial-level aggregation wired into CLI, (6) filter_by_keywords() added to sampler, (7) NSCLC config + keyword filter CLI support. 123 unit tests passing (was 99). NSCLC dry-run: 0 matches — HF dataset has no NSCLC patients. | Re-run Phase 0 benchmark with API keys; exclusion criterion accuracy should improve |
+| 2026-02-20 | Claude | Implemented PRESCREEN module (agentic architecture): schema.py (ToolCallRecord/TrialCandidate/PresearchResult), ctgov_client.py (async CT.gov API v2, rate-limited), tools.py (Gemini FunctionDeclarations + ToolExecutor with MedGemma integration), agent.py (Gemini multi-turn agentic loop). 31 new unit tests, 108 total passing. | Run live Phase 0 benchmark with API keys |
+| 2026-02-20 | Claude (3-agent team) | Deep PRESCREEN module assessment: multi-agent gap analysis + direct CT.gov API validation (5 query strategies on NSCLC EGFR L858R patient). Found biomarker-first strategy fails for NCT05456256; phenotype-first (never smoker) is correct. Produced complete revised design with 4D SearchAnchors model, 5-layer query architecture, corrected SoT Harness. See `docs/plans/2026-02-20-prescreen-module-assessment.md` | Implement PRESCREEN module |
 | 2026-02-19 | Claude | Implemented full Phase 0 vertical slice: domain models, HF loader, sampler, MedGemma + Gemini adapters, reusable evaluator, metrics, run manager, CLI phase0 command, 4 BDD scenarios. 68 tests passing, zero lint. | Run live Phase 0 benchmark with API keys |
 | 2026-02-19 | Claude | Researched TREC 2022 vs TrialGPT HF dataset (agent team); updated Phase 0 plan to use HF criterion-level data (ADR-006); updated CLAUDE.md, phase0.yaml, DASHBOARD, decision log | Implement data/ module: hf_loader.py + sampler.py with TDD |
 | 2026-02-18 | Claude | Validated MedGemma + Gemini 3 Pro connectivity; ran diagnostic comparison on 2 patients; created model-connectivity-report.md | Implement models/ adapters with TDD (base.py, medgemma.py, gemini.py, factory.py) |

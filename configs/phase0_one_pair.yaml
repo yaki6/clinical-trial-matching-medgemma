@@ -1,0 +1,44 @@
+# Single-pair smoke test — verifies full pipeline with real API
+# Uses Gemini only (fast, reliable) to validate output format before full run
+
+phase: 0
+description: "1-pair smoke test — verify audit table, enriched results, logging"
+
+data:
+  source: huggingface
+  dataset_id: "ncbi/TrialGPT-Criterion-Annotations"
+  split: train
+  n_pairs: 1
+  sampling: stratified
+  seed: 42
+
+models:
+  - name: gemini-3-pro
+    provider: google
+    model_id: gemini-3-pro-preview
+    max_concurrent: 1
+
+baselines:
+  - name: gpt4-precomputed
+    source: dataset
+
+evaluation:
+  tier: phase0
+  granularity: criterion_level
+  ingest_source: gold
+  timeout_seconds: 120
+  metrics:
+    - accuracy
+    - f1_macro
+    - cohens_kappa
+    - evidence_overlap
+
+budget:
+  max_cost_usd: 0.50
+  warn_at_usd: 0.30
+
+output:
+  run_dir: "runs/"
+  save_reasoning_chains: true
+  save_raw_responses: true
+  save_evidence_sentences: true

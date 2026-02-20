@@ -79,12 +79,21 @@ def load_annotations() -> list[CriterionAnnotation]:
 
     Requires: `pip install datasets`
     Downloads ~5 MB on first call, cached thereafter.
+    Rows with null criterion_text are skipped (data quality filter).
     """
     from datasets import load_dataset
 
     logger.info("loading_hf_dataset", dataset_id=DATASET_ID, split=DATASET_SPLIT)
     ds = load_dataset(DATASET_ID, split=DATASET_SPLIT)
-    annotations = [_row_to_annotation(row) for row in ds]
+    annotations = []
+    skipped = 0
+    for row in ds:
+        if not row.get("criterion_text"):
+            skipped += 1
+            continue
+        annotations.append(_row_to_annotation(row))
+    if skipped:
+        logger.warning("skipped_null_criterion_text", count=skipped)
     logger.info("loaded_annotations", count=len(annotations))
     return annotations
 

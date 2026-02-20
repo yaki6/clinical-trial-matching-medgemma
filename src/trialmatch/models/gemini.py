@@ -30,46 +30,77 @@ class GeminiAdapter(ModelAdapter):
         self,
         api_key: str = "",
         model: str = DEFAULT_MODEL,
+        max_retries: int = 8,
+        retry_backoff: float = 2.0,
+        max_wait: float = 30.0,
     ):
         self._client = genai.Client(api_key=api_key)
         self._model = model
+        self._max_retries = max_retries
+        self._retry_backoff = retry_backoff
+        self._max_wait = max_wait
 
     @property
     def name(self) -> str:
         return self._model
 
     async def generate(self, prompt: str, max_tokens: int = 2048) -> ModelResponse:
-        """Generate with Gemini, tracking cost."""
+        """Generate with Gemini, tracking cost. Retries on transient 503/429 errors."""
         start = time.perf_counter()
 
-        response = await asyncio.to_thread(
-            self._client.models.generate_content,
-            model=self._model,
-            contents=prompt,
-            config={
-                "response_mime_type": "application/json",
-                "max_output_tokens": max_tokens,
-            },
-        )
-        elapsed = (time.perf_counter() - start) * 1000
+        for attempt in range(self._max_retries):
+            try:
+                response = await asyncio.to_thread(
+                    self._client.models.generate_content,
+                    model=self._model,
+                    contents=prompt,
+                    config={
+                        "response_mime_type": "application/json",
+                        "max_output_tokens": max_tokens,
+                    },
+                )
+                elapsed = (time.perf_counter() - start) * 1000
 
-        text = response.text or ""
-        input_tokens = 0
-        output_tokens = 0
+                text = response.text or ""
+                input_tokens = 0
+                output_tokens = 0
 
-        if hasattr(response, "usage_metadata") and response.usage_metadata:
-            input_tokens = getattr(response.usage_metadata, "prompt_token_count", 0) or 0
-            output_tokens = getattr(response.usage_metadata, "candidates_token_count", 0) or 0
+                if hasattr(response, "usage_metadata") and response.usage_metadata:
+                    input_tokens = getattr(response.usage_metadata, "prompt_token_count", 0) or 0
+                    output_tokens = getattr(response.usage_metadata, "candidates_token_count", 0) or 0
 
-        cost = (input_tokens * COST_PER_1M_INPUT + output_tokens * COST_PER_1M_OUTPUT) / 1_000_000
+                cost = (input_tokens * COST_PER_1M_INPUT + output_tokens * COST_PER_1M_OUTPUT) / 1_000_000
 
-        return ModelResponse(
-            text=text,
-            input_tokens=input_tokens,
-            output_tokens=output_tokens,
-            latency_ms=elapsed,
-            estimated_cost=cost,
-        )
+                return ModelResponse(
+                    text=text,
+                    input_tokens=input_tokens,
+                    output_tokens=output_tokens,
+                    latency_ms=elapsed,
+                    estimated_cost=cost,
+                )
+            except Exception as e:
+                err_str = str(e)
+                is_transient = (
+                    "503" in err_str
+                    or "UNAVAILABLE" in err_str
+                    or "429" in err_str
+                    or "RESOURCE_EXHAUSTED" in err_str
+                    or "high demand" in err_str
+                )
+                if is_transient and attempt < self._max_retries - 1:
+                    wait = min(self._retry_backoff**attempt, self._max_wait)
+                    logger.warning(
+                        "gemini_api_transient_error",
+                        attempt=attempt + 1,
+                        wait_seconds=wait,
+                        error=err_str[:120],
+                    )
+                    await asyncio.sleep(wait)
+                    continue
+                raise
+
+        msg = f"Gemini failed after {self._max_retries} retries"
+        raise RuntimeError(msg)
 
     async def health_check(self) -> bool:
         """Check if Gemini API is reachable."""

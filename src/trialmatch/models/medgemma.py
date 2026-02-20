@@ -29,24 +29,26 @@ def format_gemma_prompt(system: str, user: str) -> str:
 
 
 class MedGemmaAdapter(ModelAdapter):
-    """Adapter for MedGemma 1.5 4B on HF Inference Endpoint."""
+    """Adapter for MedGemma on HF Inference Endpoint."""
 
     def __init__(
         self,
         hf_token: str = "",
         endpoint_url: str = ENDPOINT_URL,
-        max_retries: int = 5,
+        model_name: str = "medgemma-1.5-4b",
+        max_retries: int = 12,
         retry_backoff: float = 2.0,
-        max_wait: float = 60.0,
+        max_wait: float = 30.0,
     ):
         self._client = InferenceClient(model=endpoint_url, token=hf_token or None)
+        self._model_name = model_name
         self._max_retries = max_retries
         self._retry_backoff = retry_backoff
         self._max_wait = max_wait
 
     @property
     def name(self) -> str:
-        return "medgemma-1.5-4b"
+        return self._model_name
 
     async def generate(self, prompt: str, max_tokens: int = 2048) -> ModelResponse:
         """Generate text with retry for cold-start 503."""
@@ -77,12 +79,19 @@ class MedGemmaAdapter(ModelAdapter):
                     token_count_estimated=True,
                 )
             except Exception as e:
-                if "503" in str(e) or "Service Unavailable" in str(e):
+                err_str = str(e)
+                is_transient = (
+                    "503" in err_str
+                    or "Service Unavailable" in err_str
+                    or "workload is not stopped" in err_str
+                )
+                if is_transient and attempt < self._max_retries - 1:
                     wait = min(self._retry_backoff**attempt, self._max_wait)
                     logger.warning(
-                        "medgemma_cold_start",
+                        "medgemma_endpoint_not_ready",
                         attempt=attempt + 1,
                         wait_seconds=wait,
+                        error=err_str[:120],
                     )
                     await asyncio.sleep(wait)
                     continue

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import enum
 from typing import Any
 
 from sklearn.metrics import (
@@ -12,6 +13,50 @@ from sklearn.metrics import (
 )
 
 from trialmatch.models.schema import CriterionVerdict
+
+
+class TrialVerdict(enum.StrEnum):
+    ELIGIBLE = "ELIGIBLE"          # inclusion MET + all exclusions NOT_MET → qrel 2
+    EXCLUDED = "EXCLUDED"          # inclusion MET + any exclusion MET → qrel 1
+    NOT_RELEVANT = "NOT_RELEVANT"  # any inclusion NOT_MET → qrel 0
+    UNCERTAIN = "UNCERTAIN"        # UNKNOWN in critical path → qrel 0 (flagged)
+
+
+def aggregate_to_trial_verdict(
+    criterion_results: list[tuple[CriterionVerdict, str]],
+) -> TrialVerdict:
+    """Aggregate criterion-level verdicts to trial-level per sot-annotation-requirements.
+
+    Args:
+        criterion_results: List of (verdict, criterion_type) tuples for one (patient, trial).
+            criterion_type is "inclusion" or "exclusion".
+
+    Priority: NOT_RELEVANT > EXCLUDED > UNCERTAIN > ELIGIBLE.
+    """
+    inclusion_verdicts = [v for v, t in criterion_results if t == "inclusion"]
+    exclusion_verdicts = [v for v, t in criterion_results if t == "exclusion"]
+
+    # Definitive ineligibility: any inclusion fails
+    if CriterionVerdict.NOT_MET in inclusion_verdicts:
+        return TrialVerdict.NOT_RELEVANT
+
+    # Definitive exclusion: any exclusion criterion met
+    if CriterionVerdict.MET in exclusion_verdicts:
+        return TrialVerdict.EXCLUDED
+
+    # Cannot confirm eligibility: unknown inclusions
+    if CriterionVerdict.UNKNOWN in inclusion_verdicts:
+        return TrialVerdict.UNCERTAIN
+
+    # Cannot rule out exclusion: unknown exclusions
+    if CriterionVerdict.UNKNOWN in exclusion_verdicts:
+        return TrialVerdict.UNCERTAIN
+
+    # All inclusions MET + all exclusions NOT_MET
+    if inclusion_verdicts and all(v == CriterionVerdict.MET for v in inclusion_verdicts):
+        return TrialVerdict.ELIGIBLE
+
+    return TrialVerdict.UNCERTAIN
 
 LABELS = [CriterionVerdict.MET, CriterionVerdict.NOT_MET, CriterionVerdict.UNKNOWN]
 LABEL_NAMES = [v.value for v in LABELS]
