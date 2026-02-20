@@ -63,7 +63,7 @@ def test_criterion_evaluation_smoke(adapter_27b: MedGemmaAdapter) -> None:
     """One real criterion pair must return a valid MET/NOT_MET/UNKNOWN verdict."""
     import asyncio
 
-    from trialmatch.validate.schema import Verdict
+    from trialmatch.models.schema import CriterionVerdict
 
     patient_note = (
         "Patient is a 65-year-old male with type 2 diabetes mellitus, "
@@ -83,7 +83,7 @@ def test_criterion_evaluation_smoke(adapter_27b: MedGemmaAdapter) -> None:
         )
     )
 
-    assert result.verdict in (Verdict.MET, Verdict.NOT_MET, Verdict.UNKNOWN), (
+    assert result.verdict in (CriterionVerdict.MET, CriterionVerdict.NOT_MET, CriterionVerdict.UNKNOWN), (
         f"Expected a valid verdict, got: {result.verdict!r}"
     )
     assert result.model_response is not None

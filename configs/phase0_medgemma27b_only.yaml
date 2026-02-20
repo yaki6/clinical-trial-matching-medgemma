@@ -20,7 +20,7 @@ models:
   - name: medgemma-27b
     provider: huggingface
     model_id: google/medgemma-27b-text-it
-    endpoint_url: "REPLACE_WITH_27B_ENDPOINT_URL"
+    endpoint_url: "https://wu5nclwms3ctrwd1.us-east-1.aws.endpoints.huggingface.cloud"
     max_concurrent: 1
 
 evaluation:

@@ -31,7 +31,9 @@ MODEL_REPO = "google/medgemma-27b-text-it"
 
 ENDPOINT_CONFIG = {
     "repository": MODEL_REPO,
-    "framework": "pytorch",
+    # "custom" framework + TGI docker loads directly in bf16 (~54GB).
+    # "pytorch" would load float32 first (~108GB) → OOM on A100 80GB.
+    "framework": "custom",
     "task": "text-generation",
     "accelerator": "gpu",
     "instance_type": "nvidia-a100",
@@ -42,6 +44,18 @@ ENDPOINT_CONFIG = {
     "max_replica": 1,
     "scale_to_zero_timeout": 15,
     "type": "protected",
+}
+
+# TGI docker image — loads model directly in bf16 with paged attention
+CUSTOM_IMAGE = {
+    "health_route": "/health",
+    "url": "ghcr.io/huggingface/text-generation-inference:3.0.0",
+    "env": {
+        "DTYPE": "bfloat16",
+        "MAX_INPUT_LENGTH": "4096",
+        "MAX_TOTAL_TOKENS": "8192",
+        "MAX_BATCH_PREFILL_TOKENS": "4096",
+    },
 }
 
 
@@ -70,6 +84,7 @@ def deploy(token: str) -> str:
         max_replica=ENDPOINT_CONFIG["max_replica"],
         scale_to_zero_timeout=ENDPOINT_CONFIG["scale_to_zero_timeout"],
         type=ENDPOINT_CONFIG["type"],
+        custom_image=CUSTOM_IMAGE,
     )
     print("Endpoint created. Waiting for 'running' status (up to 15 min)...")
     endpoint.wait(timeout=900)
