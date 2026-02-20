@@ -14,7 +14,7 @@ models:
   - name: gemini-3-pro
     provider: google
     model_id: gemini-3-pro-preview
-    max_concurrent: 1
+    max_concurrent: 3
 
 baselines:
   - name: gpt4-precomputed

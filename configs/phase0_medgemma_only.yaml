@@ -14,7 +14,7 @@ models:
   - name: medgemma-1.5-4b
     provider: huggingface
     model_id: google/medgemma-1-5-4b-it-hae
-    max_concurrent: 1
+    max_concurrent: 3
 
 baselines:
   - name: gpt4-precomputed
