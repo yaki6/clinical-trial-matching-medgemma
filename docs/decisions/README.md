@@ -6,7 +6,7 @@ Quick-reference table of all architectural and strategic decisions. Full details
 |---|----------|--------|-------------|
 | 001 | Qrels-only eval, TREC 2021 (not 2022) | Accepted (amended) | Phase 1 results justify pipeline |
 | 002 | Gold SoT inputs for component isolation | Accepted | E2E-best run tests propagation |
-| 003 | Two-model ablation (MedGemma 1.5 4B + Gemini 3 Pro) | Accepted (amended) | Phase 0 exit criteria |
+| 003 | Three-model ablation (MedGemma 4B + 27B + Gemini 3 Pro) | Accepted (amended) | Phase 0 exit criteria |
 | 004 | Tiered evaluation budget (A+B = ~$330) | Accepted (amended) | If results are paper-worthy → Tier C |
 | 005 | Whole criteria blocks for spike (no atomization) | Accepted | Phase 0 too coarse to differentiate models |
 | 006 | Switch to TrialGPT HF criterion-level annotations | Accepted | Need trial-level eval (Tier B) or broader coverage |
@@ -15,7 +15,7 @@ Quick-reference table of all architectural and strategic decisions. Full details
 
 | Decision | Rationale | Revisit When |
 |----------|-----------|-------------|
-| Drop MedGemma 1.0 27B | A100 GPU unavailable; spike answered by 4B vs Gemini | Never (unless 27B becomes easily available) |
+| ~~Drop MedGemma 1.0 27B~~ | ~~A100 GPU unavailable~~ | Reversed 2026-02-20: deployed MedGemma 27B via HF Inference Endpoint (TGI on A100 80GB). Now 3-way comparison. |
 | ~~TREC 2021 only (not 2022)~~ | ~~Full ir_datasets support; 75 topics vs 50~~ | Superseded by ADR-006: TrialGPT HF |
 | TrialGPT HF criterion-level data (ADR-006) | Criterion-level granularity; self-contained; GPT-4 baseline built-in; < 5 MB | Need trial-level eval for Tier B |
 | Whole criteria blocks (no atomization) | Isolates medical reasoning from parsing; reduces annotation burden | Need per-criterion granularity |
