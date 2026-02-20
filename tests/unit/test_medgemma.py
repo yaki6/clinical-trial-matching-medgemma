@@ -45,3 +45,18 @@ def test_medgemma_health_check(mock_client_cls):
     adapter._client = mock_instance
 
     assert asyncio.run(adapter.health_check()) is True
+
+
+def test_medgemma_sets_scale_up_timeout_header():
+    """X-Scale-Up-Timeout header must be passed to InferenceClient."""
+    with patch("trialmatch.models.medgemma.InferenceClient") as mock_cls:
+        MedGemmaAdapter(hf_token="fake")
+        call_kwargs = mock_cls.call_args[1]  # keyword args
+        assert "headers" in call_kwargs
+        assert call_kwargs["headers"]["X-Scale-Up-Timeout"] == "300"
+
+
+def test_medgemma_default_max_retries_is_5():
+    """Default retries reduced from 12 to 5 (server handles cold start)."""
+    adapter = MedGemmaAdapter(hf_token="fake")
+    assert adapter._max_retries == 5

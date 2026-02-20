@@ -36,11 +36,15 @@ class MedGemmaAdapter(ModelAdapter):
         hf_token: str = "",
         endpoint_url: str = ENDPOINT_URL,
         model_name: str = "medgemma-1.5-4b",
-        max_retries: int = 12,
+        max_retries: int = 5,  # server-side scale-up handles cold starts
         retry_backoff: float = 2.0,
         max_wait: float = 30.0,
     ):
-        self._client = InferenceClient(model=endpoint_url, token=hf_token or None)
+        self._client = InferenceClient(
+            model=endpoint_url,
+            token=hf_token or None,
+            headers={"X-Scale-Up-Timeout": "300"},  # HF proxy holds conn during GPU warmup
+        )
         self._model_name = model_name
         self._max_retries = max_retries
         self._retry_backoff = retry_backoff
