@@ -244,6 +244,42 @@ class TestCTGovClientHttp:
 
         asyncio.run(_run())
 
+    def test_429_retry_updates_last_call_time(self):
+        """After a 429 backoff sleep, _last_call_time must be reset so the
+        subsequent _get call does not double-wait the full _MIN_INTERVAL again."""
+
+        async def _run():
+            client = CTGovClient(max_retries=2)
+
+            resp_429 = MagicMock()
+            resp_429.status_code = 429
+            resp_429.raise_for_status = MagicMock()
+
+            resp_200 = MagicMock()
+            resp_200.status_code = 200
+            resp_200.json.return_value = {"studies": []}
+            resp_200.raise_for_status = MagicMock()
+
+            call_count = 0
+
+            async def mock_get(path, *, params):
+                nonlocal call_count
+                call_count += 1
+                return resp_429 if call_count == 1 else resp_200
+
+            with (
+                patch.object(client._http, "get", side_effect=mock_get),
+                patch("trialmatch.prescreen.ctgov_client.asyncio.sleep", new=AsyncMock()),
+            ):
+                await client.search(condition="cancer")
+                # After 429 + sleep, _last_call_time should have been updated
+                # (i.e. it should NOT still be the value set before the retry loop)
+                assert client._last_call_time > 0
+
+            await client.aclose()
+
+        asyncio.run(_run())
+
 
 # ---------------------------------------------------------------------------
 # ToolExecutor tests (async via asyncio.run)
@@ -641,6 +677,82 @@ class TestRunPresearchAgent:
             )
 
         assert result.total_api_calls <= 3
+
+    def test_budget_guard_sends_function_response_not_text(self, sample_search_response):
+        """Budget guard must close pending function_calls with function_response parts,
+        not a plain text user message — otherwise the conversation structure is invalid."""
+        from google.genai import types as genai_types
+
+        many_turns = [
+            {"function_calls": [{"name": "search_trials", "args": {"condition": "cancer"}}]}
+            for _ in range(5)
+        ]
+        many_turns.append({"text": "Budget reached, stopping.", "function_calls": []})
+        adapter = _make_gemini_adapter(many_turns)
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.search = AsyncMock(return_value=sample_search_response)
+        mock_ctgov.aclose = AsyncMock()
+        mock_medgemma = MagicMock()
+
+        # Capture a shallow copy of the contents list on each generate_content call.
+        # Shallow copy is essential: the agent mutates the same list in-place by appending
+        # model responses after each call, so a reference would be stale by assertion time.
+        captured_contents = []
+        original_side_effect = adapter._client.models.generate_content.side_effect
+
+        def capturing_side_effect(*args, **kwargs):
+            contents = kwargs.get("contents", args[1] if len(args) > 1 else [])
+            captured_contents.append(list(contents))  # shallow copy to freeze the list
+            return original_side_effect(*args, **kwargs)
+
+        adapter._client.models.generate_content.side_effect = capturing_side_effect
+
+        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+            result = asyncio.run(
+                run_prescreen_agent(
+                    patient_note="Patient",
+                    key_facts={},
+                    ingest_source="gold",
+                    gemini_adapter=adapter,
+                    medgemma_adapter=mock_medgemma,
+                    max_tool_calls=2,
+                )
+            )
+
+        assert result.total_api_calls <= 2
+
+        # The budget guard Content is injected right before the next generate_content call.
+        # In the last such call, the final element of captured_contents is our injected
+        # function_response Content (a real genai_types.Content, not a MagicMock).
+        # Verify it has function_response parts and NOT a plain text part.
+        assert len(captured_contents) >= 3, "Expected at least 3 generate_content calls"
+
+        # Find a Content with function_response parts — that's our budget guard.
+        # Skip the initial prompt Content (which is also a real genai_types.Content but has text).
+        budget_guard_found = False
+        for call_contents in captured_contents:
+            for item in call_contents:
+                if not isinstance(item, genai_types.Content):
+                    continue
+                # Check if ANY part has function_response set
+                has_fr = any(
+                    getattr(p, "function_response", None) is not None for p in item.parts
+                )
+                if has_fr:
+                    budget_guard_found = True
+                    for part in item.parts:
+                        assert part.function_response is not None, (
+                            "Budget guard part must have function_response set"
+                        )
+                        assert not part.text, (
+                            "Budget guard must not inject plain text — use function_response"
+                        )
+                    break
+            if budget_guard_found:
+                break
+
+        assert budget_guard_found, "Budget guard Content with function_response was never found"
 
     def test_agent_tool_error_recorded_not_raised(self):
         """A CT.gov API error should be recorded in trace but not crash the agent."""

@@ -55,6 +55,7 @@ class CTGovClient:
                     wait = 2.0**attempt
                     logger.warning("ctgov_rate_limited", wait=wait, attempt=attempt)
                     await asyncio.sleep(wait)
+                    self._last_call_time = time.monotonic()  # prevent double-wait
                     continue
                 resp.raise_for_status()
                 return resp.json()

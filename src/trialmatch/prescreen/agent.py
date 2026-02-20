@@ -193,23 +193,30 @@ async def run_prescreen_agent(
                 # Gemini has stopped calling tools — done
                 break
 
-            # Budget guard: inject stop instruction without executing more tools
+            # Budget guard: close all pending function_calls with error responses so
+            # the conversation remains structurally valid (function_call must always be
+            # answered by a function_response before any subsequent user turn).
             if call_index >= max_tool_calls:
                 logger.warning(
                     "prescreen_tool_budget_exceeded",
                     topic_id=topic_id,
                     max_tool_calls=max_tool_calls,
                 )
+                budget_msg = (
+                    f"Tool budget of {max_tool_calls} calls exhausted. "
+                    "Stop searching and summarise findings so far."
+                )
                 contents.append(
                     genai_types.Content(
                         role="user",
                         parts=[
                             genai_types.Part(
-                                text=(
-                                    f"You have reached the maximum of {max_tool_calls} tool calls. "
-                                    "Stop searching and summarise the candidates found so far."
+                                function_response=genai_types.FunctionResponse(
+                                    name=fc.name,
+                                    response={"error": budget_msg},
                                 )
                             )
+                            for fc in function_calls
                         ],
                     )
                 )
