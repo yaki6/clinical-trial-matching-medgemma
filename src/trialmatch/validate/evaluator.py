@@ -27,20 +27,40 @@ if TYPE_CHECKING:
 logger = structlog.get_logger()
 
 INCLUSION_INSTRUCTIONS = (
-    "For INCLUSION criteria: MET = patient meets this requirement. "
-    "NOT_MET = patient fails to meet this requirement."
+    'For this INCLUSION criterion, respond with one of: "included", "not included", '
+    'or "not enough information".\n'
+    "- included: the patient meets this inclusion requirement based on the note.\n"
+    "- not included: the patient does NOT meet this inclusion requirement.\n"
+    '- not enough information: cannot determine from the note.'
 )
 
 EXCLUSION_INSTRUCTIONS = (
-    "For EXCLUSION criteria: MET = patient HAS this characteristic and WOULD BE EXCLUDED "
-    "from the trial. NOT_MET = patient does NOT have this characteristic and is NOT excluded "
-    "by this criterion."
+    'For this EXCLUSION criterion, respond with one of: "excluded", "not excluded", '
+    'or "not enough information".\n'
+    "- excluded: the patient HAS this characteristic and would be excluded from the trial.\n"
+    "- not excluded: the patient does NOT have this characteristic.\n"
+    '- not enough information: cannot determine from the note.'
 )
+
+# Maps TrialGPT-native labels to internal CriterionVerdict.
+# Mirrors hf_loader.LABEL_MAP so model output and ground-truth use the same semantics.
+NATIVE_LABEL_TO_VERDICT: dict[str, CriterionVerdict] = {
+    "included": CriterionVerdict.MET,
+    "not excluded": CriterionVerdict.MET,
+    "excluded": CriterionVerdict.NOT_MET,
+    "not included": CriterionVerdict.NOT_MET,
+    "not enough information": CriterionVerdict.UNKNOWN,
+    "not applicable": CriterionVerdict.UNKNOWN,
+}
 
 PROMPT_TEMPLATE = """You are a clinical trial eligibility assessment expert.
 
-Given a patient's clinical note and a single eligibility criterion, determine whether
-the patient meets this criterion.
+Given a patient's clinical note and a single eligibility criterion, determine the
+patient's eligibility status for this criterion.
+
+Important: if the patient note does not mention a medically important fact, you can
+assume that the fact is not true for the patient (e.g., if the note does not mention
+any allergies, assume the patient has no known allergies).
 
 Criterion Type: {criterion_type}
 {criterion_type_instructions}
@@ -53,20 +73,15 @@ Patient Note:
 
 Think step by step:
 1. What does this criterion specifically require?
-2. What does the patient note explicitly state about this?
-3. Is the evidence clear enough to conclude MET or NOT_MET, or is information missing?
+2. What does the patient note state about this? Consider both explicit statements and reasonable inferences from the absence of information.
+3. Based on the evidence, determine the label.
 
 Respond ONLY with valid JSON (no prose before or after):
 {{
-  "verdict": "MET" | "NOT_MET" | "UNKNOWN",
+  "label": "<your label>",
   "reasoning": "Step-by-step explanation citing specific sentence indices",
   "evidence_sentences": [0, 1, 2]
 }}
-
-Definitions:
-- MET: Patient clearly satisfies this criterion based on explicit evidence
-- NOT_MET: Patient clearly does not satisfy this criterion
-- UNKNOWN: Insufficient information — do NOT guess; use this only when evidence is truly absent
 
 evidence_sentences: JSON array of integer sentence indices from the patient note (e.g. [0, 2])."""
 
@@ -116,21 +131,36 @@ def clean_model_response(raw_text: str) -> str:
     return raw_text.strip()
 
 
+def _extract_verdict_from_json(data: dict) -> tuple[CriterionVerdict, str, list[int]]:
+    """Extract verdict from parsed JSON dict, trying 'label' then 'verdict' keys."""
+    reasoning = data.get("reasoning", "")
+    evidence = _parse_evidence(data.get("evidence_sentences", []))
+
+    # Prefer "label" key (TrialGPT-native format)
+    if "label" in data:
+        label = data["label"].strip().lower()
+        if label in NATIVE_LABEL_TO_VERDICT:
+            return NATIVE_LABEL_TO_VERDICT[label], reasoning, evidence
+
+    # Fallback: "verdict" key (legacy MET/NOT_MET/UNKNOWN format)
+    if "verdict" in data:
+        return CriterionVerdict(data["verdict"]), reasoning, evidence
+
+    raise KeyError("No 'label' or 'verdict' key found")
+
+
 def parse_criterion_verdict(raw_text: str) -> tuple[CriterionVerdict, str, list[int]]:
     """Parse model output into (verdict, reasoning, evidence_sentences).
 
-    Tries JSON first, then markdown-wrapped JSON, then keyword extraction.
+    Tries JSON first (with 'label' then 'verdict' key), then markdown-wrapped
+    JSON, then keyword extraction for native labels, then MET/NOT_MET keywords.
     """
     cleaned = clean_model_response(raw_text)
 
     # Try direct JSON parse
     try:
         data = json.loads(cleaned)
-        return (
-            CriterionVerdict(data["verdict"]),
-            data.get("reasoning", ""),
-            _parse_evidence(data.get("evidence_sentences", [])),
-        )
+        return _extract_verdict_from_json(data)
     except (json.JSONDecodeError, KeyError, ValueError):
         pass
 
@@ -139,11 +169,7 @@ def parse_criterion_verdict(raw_text: str) -> tuple[CriterionVerdict, str, list[
     if json_match:
         try:
             data = json.loads(json_match.group(1))
-            return (
-                CriterionVerdict(data["verdict"]),
-                data.get("reasoning", ""),
-                _parse_evidence(data.get("evidence_sentences", [])),
-            )
+            return _extract_verdict_from_json(data)
         except (json.JSONDecodeError, KeyError, ValueError):
             pass
 
@@ -152,16 +178,24 @@ def parse_criterion_verdict(raw_text: str) -> tuple[CriterionVerdict, str, list[
     if brace_match:
         try:
             data = json.loads(brace_match.group(0))
-            return (
-                CriterionVerdict(data["verdict"]),
-                data.get("reasoning", ""),
-                _parse_evidence(data.get("evidence_sentences", [])),
-            )
+            return _extract_verdict_from_json(data)
         except (json.JSONDecodeError, KeyError, ValueError):
             pass
 
-    # Fallback: keyword extraction using word boundaries to avoid false positives
-    # (e.g., "COMMITTED" contains "MET" but is not a verdict)
+    # Fallback: keyword extraction for native TrialGPT labels
+    cleaned_lower = cleaned.lower()
+    if "not included" in cleaned_lower:
+        return CriterionVerdict.NOT_MET, cleaned, []
+    if "not excluded" in cleaned_lower:
+        return CriterionVerdict.MET, cleaned, []
+    if "excluded" in cleaned_lower:
+        return CriterionVerdict.NOT_MET, cleaned, []
+    if "included" in cleaned_lower:
+        return CriterionVerdict.MET, cleaned, []
+    if "not enough information" in cleaned_lower:
+        return CriterionVerdict.UNKNOWN, cleaned, []
+
+    # Last resort: legacy MET/NOT_MET keyword extraction
     if re.search(r"\bNOT_MET\b", cleaned, re.IGNORECASE):
         return CriterionVerdict.NOT_MET, cleaned, []
     if re.search(r"\bMET\b|\bMEETS\b", cleaned, re.IGNORECASE):

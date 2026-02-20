@@ -13,6 +13,7 @@ from trialmatch.models.schema import CriterionVerdict, ModelResponse
 from trialmatch.validate.evaluator import (
     EXCLUSION_INSTRUCTIONS,
     INCLUSION_INSTRUCTIONS,
+    NATIVE_LABEL_TO_VERDICT,
     build_criterion_prompt,
     clean_model_response,
     evaluate_criterion,
@@ -49,15 +50,38 @@ def test_build_prompt_contains_criterion_type():
     assert "exclusion" in prompt.lower()
 
 
-def test_build_prompt_asks_for_met_not_met_unknown():
+def test_build_prompt_asks_for_native_labels_inclusion():
+    """Inclusion prompt uses TrialGPT-native labels: included / not included."""
     prompt = build_criterion_prompt(
         patient_note="Patient note",
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
-    assert "MET" in prompt
-    assert "NOT_MET" in prompt
-    assert "UNKNOWN" in prompt
+    assert "included" in prompt
+    assert "not included" in prompt
+    assert "not enough information" in prompt
+
+
+def test_build_prompt_asks_for_native_labels_exclusion():
+    """Exclusion prompt uses TrialGPT-native labels: excluded / not excluded."""
+    prompt = build_criterion_prompt(
+        patient_note="Patient note",
+        criterion_text="Criterion",
+        criterion_type="exclusion",
+    )
+    assert "excluded" in prompt
+    assert "not excluded" in prompt
+    assert "not enough information" in prompt
+
+
+def test_build_prompt_uses_label_key_not_verdict():
+    """Prompt asks model to output 'label' key, not 'verdict'."""
+    prompt = build_criterion_prompt(
+        patient_note="Patient note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert '"label"' in prompt
 
 
 def test_build_prompt_asks_for_evidence_sentences():
@@ -67,6 +91,17 @@ def test_build_prompt_asks_for_evidence_sentences():
         criterion_type="inclusion",
     )
     assert "evidence_sentences" in prompt
+
+
+def test_build_prompt_contains_cwa_instruction():
+    """Prompt contains Closed World Assumption instruction."""
+    prompt = build_criterion_prompt(
+        patient_note="Patient note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "does not mention" in prompt
+    assert "assume" in prompt
 
 
 def test_build_prompt_inclusion_has_inclusion_instructions():
@@ -153,10 +188,77 @@ def test_clean_model_response_strips_bare_thought_case_insensitive():
     assert not cleaned.lower().startswith("thought")
 
 
-# --- Verdict parsing tests ---
+# --- Verdict parsing tests (native label format) ---
 
 
-def test_parse_verdict_met():
+def test_parse_native_label_included():
+    """JSON with 'label': 'included' → MET."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "included", "reasoning": "meets criterion", "evidence_sentences": [0, 2]}'
+    )
+    assert v == CriterionVerdict.MET
+    assert r == "meets criterion"
+    assert e == [0, 2]
+
+
+def test_parse_native_label_not_included():
+    """JSON with 'label': 'not included' → NOT_MET."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "not included", "reasoning": "does not meet", "evidence_sentences": []}'
+    )
+    assert v == CriterionVerdict.NOT_MET
+    assert e == []
+
+
+def test_parse_native_label_excluded():
+    """JSON with 'label': 'excluded' → NOT_MET."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "excluded", "reasoning": "patient has condition", "evidence_sentences": [1]}'
+    )
+    assert v == CriterionVerdict.NOT_MET
+    assert e == [1]
+
+
+def test_parse_native_label_not_excluded():
+    """JSON with 'label': 'not excluded' → MET."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "not excluded", "reasoning": "no evidence", "evidence_sentences": []}'
+    )
+    assert v == CriterionVerdict.MET
+
+
+def test_parse_native_label_not_enough_info():
+    """JSON with 'label': 'not enough information' → UNKNOWN."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "not enough information", "reasoning": "insufficient info"}'
+    )
+    assert v == CriterionVerdict.UNKNOWN
+
+
+def test_parse_native_label_case_insensitive():
+    """Native labels are case-insensitive."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "Excluded", "reasoning": "ok"}'
+    )
+    assert v == CriterionVerdict.NOT_MET
+
+
+def test_native_label_to_verdict_matches_hf_loader():
+    """NATIVE_LABEL_TO_VERDICT must mirror hf_loader.LABEL_MAP exactly."""
+    from trialmatch.data.hf_loader import LABEL_MAP
+
+    for label, verdict in LABEL_MAP.items():
+        assert NATIVE_LABEL_TO_VERDICT[label] == verdict, (
+            f"Mismatch for '{label}': evaluator={NATIVE_LABEL_TO_VERDICT[label]}, "
+            f"hf_loader={verdict}"
+        )
+
+
+# --- Legacy verdict format (backwards compat) ---
+
+
+def test_parse_verdict_legacy_met():
+    """Legacy JSON with 'verdict' key still works."""
     v, r, e = parse_criterion_verdict(
         '{"verdict": "MET", "reasoning": "meets criterion", "evidence_sentences": "0, 2"}'
     )
@@ -165,16 +267,7 @@ def test_parse_verdict_met():
     assert e == [0, 2]
 
 
-def test_parse_verdict_met_array_evidence():
-    """evidence_sentences as JSON array of ints."""
-    v, r, e = parse_criterion_verdict(
-        '{"verdict": "MET", "reasoning": "ok", "evidence_sentences": [0, 2]}'
-    )
-    assert v == CriterionVerdict.MET
-    assert e == [0, 2]
-
-
-def test_parse_verdict_not_met():
+def test_parse_verdict_legacy_not_met():
     v, r, e = parse_criterion_verdict(
         '{"verdict": "NOT_MET", "reasoning": "does not meet", "evidence_sentences": ""}'
     )
@@ -182,13 +275,21 @@ def test_parse_verdict_not_met():
     assert e == []
 
 
-def test_parse_verdict_unknown():
+def test_parse_verdict_legacy_unknown():
     v, r, e = parse_criterion_verdict('{"verdict": "UNKNOWN", "reasoning": "insufficient info"}')
     assert v == CriterionVerdict.UNKNOWN
 
 
+def test_parse_verdict_label_takes_precedence_over_verdict():
+    """When both 'label' and 'verdict' are present, 'label' wins."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "excluded", "verdict": "MET", "reasoning": "label should win"}'
+    )
+    assert v == CriterionVerdict.NOT_MET
+
+
 def test_parse_verdict_markdown_wrapped():
-    raw = '```json\n{"verdict": "MET", "reasoning": "ok"}\n```'
+    raw = '```json\n{"label": "included", "reasoning": "ok"}\n```'
     v, r, e = parse_criterion_verdict(raw)
     assert v == CriterionVerdict.MET
 
@@ -198,19 +299,42 @@ def test_parse_verdict_medgemma_prompt_echo():
     raw = (
         "<start_of_turn>user\nYou are a clinical expert...<end_of_turn>\n"
         "<start_of_turn>model\n"
-        '```json\n{"verdict": "NOT_MET", "reasoning": "patient is 25", "evidence_sentences": [0]}\n```'
+        '```json\n{"label": "not excluded", "reasoning": "patient is 25", "evidence_sentences": [0]}\n```'
     )
     v, r, e = parse_criterion_verdict(raw)
-    assert v == CriterionVerdict.NOT_MET
+    assert v == CriterionVerdict.MET
     assert e == [0]
 
 
-def test_parse_verdict_fallback_met():
+# --- Keyword fallback tests ---
+
+
+def test_parse_verdict_fallback_native_included():
+    v, r, e = parse_criterion_verdict("The patient is clearly included in this criterion.")
+    assert v == CriterionVerdict.MET
+
+
+def test_parse_verdict_fallback_native_excluded():
+    v, r, e = parse_criterion_verdict("The patient should be excluded from this trial.")
+    assert v == CriterionVerdict.NOT_MET
+
+
+def test_parse_verdict_fallback_native_not_excluded():
+    v, r, e = parse_criterion_verdict("The patient is not excluded by this criterion.")
+    assert v == CriterionVerdict.MET
+
+
+def test_parse_verdict_fallback_native_not_included():
+    v, r, e = parse_criterion_verdict("The patient is not included based on available data.")
+    assert v == CriterionVerdict.NOT_MET
+
+
+def test_parse_verdict_fallback_legacy_met():
     v, r, e = parse_criterion_verdict("The patient MEETS this criterion clearly.")
     assert v == CriterionVerdict.MET
 
 
-def test_parse_verdict_fallback_not_met():
+def test_parse_verdict_fallback_legacy_not_met():
     v, r, e = parse_criterion_verdict("The patient does NOT_MET this criterion.")
     assert v == CriterionVerdict.NOT_MET
 
@@ -240,7 +364,7 @@ def test_evaluate_criterion_returns_result():
     mock_adapter = AsyncMock()
     mock_adapter.name = "test-model"
     mock_adapter.generate.return_value = ModelResponse(
-        text='{"verdict": "NOT_MET", "reasoning": "age exclusion", "evidence_sentences": [0]}',
+        text='{"label": "not included", "reasoning": "age exclusion", "evidence_sentences": [0]}',
         input_tokens=200,
         output_tokens=30,
         latency_ms=500.0,
