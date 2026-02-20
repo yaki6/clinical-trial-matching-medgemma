@@ -52,11 +52,17 @@ def adapter_27b(endpoint_url: str, hf_token: str) -> MedGemmaAdapter:
 
 
 def test_endpoint_health_check(endpoint_url: str, hf_token: str) -> None:
-    """Endpoint must respond to a minimal text_generation call."""
-    client = InferenceClient(model=endpoint_url, token=hf_token)
-    prompt = "<start_of_turn>user\nHello<end_of_turn>\n<start_of_turn>model\n"
-    result = client.text_generation(prompt, max_new_tokens=5)
-    assert result, "Expected non-empty response from health check"
+    """Endpoint must respond to a /v1/chat/completions call."""
+    client = InferenceClient(
+        model=endpoint_url,
+        token=hf_token,
+        headers={"X-Scale-Up-Timeout": "300"},
+    )
+    response = client.chat_completion(
+        messages=[{"role": "user", "content": "Hello"}],
+        max_tokens=5,
+    )
+    assert response.choices[0].message.content, "Expected non-empty response from health check"
 
 
 def test_criterion_evaluation_smoke(adapter_27b: MedGemmaAdapter) -> None:
@@ -83,26 +89,42 @@ def test_criterion_evaluation_smoke(adapter_27b: MedGemmaAdapter) -> None:
         )
     )
 
-    assert result.verdict in (CriterionVerdict.MET, CriterionVerdict.NOT_MET, CriterionVerdict.UNKNOWN), (
-        f"Expected a valid verdict, got: {result.verdict!r}"
+    valid_verdicts = (
+        CriterionVerdict.MET,
+        CriterionVerdict.NOT_MET,
+        CriterionVerdict.UNKNOWN,
     )
+    assert result.verdict in valid_verdicts, f"Expected a valid verdict, got: {result.verdict!r}"
     assert result.model_response is not None
     assert result.model_response.text, "Expected non-empty model response text"
-
-
-def test_gemma_template_format(endpoint_url: str, hf_token: str) -> None:
-    """Gemma chat template format must be accepted without 404/400 errors."""
-    client = InferenceClient(model=endpoint_url, token=hf_token)
-    # Full Gemma chat template prompt
-    prompt = (
-        "<start_of_turn>user\n"
-        "You are a clinical trial matching assistant.\n\n"
-        "Does this patient meet the criterion?\n"
-        "Patient: 65yo male with type 2 diabetes.\n"
-        "Criterion: Diagnosis of type 2 diabetes mellitus (inclusion)\n"
-        "Respond with MET, NOT_MET, or UNKNOWN."
-        "<end_of_turn>\n"
-        "<start_of_turn>model\n"
+    assert result.model_response.token_count_estimated is False, (
+        "Expected exact token counts from chat_completion"
     )
-    result = client.text_generation(prompt, max_new_tokens=20)
-    assert result, "Expected non-empty response for Gemma template format"
+
+
+def test_chat_completion_format(endpoint_url: str, hf_token: str) -> None:
+    """The /v1/chat/completions endpoint must accept message-format requests
+    and return exact token counts in usage."""
+    client = InferenceClient(
+        model=endpoint_url,
+        token=hf_token,
+        headers={"X-Scale-Up-Timeout": "300"},
+    )
+    response = client.chat_completion(
+        messages=[
+            {
+                "role": "user",
+                "content": (
+                    "You are a clinical trial matching assistant.\n\n"
+                    "Does this patient meet the criterion?\n"
+                    "Patient: 65yo male with type 2 diabetes.\n"
+                    "Criterion: Diagnosis of type 2 diabetes mellitus (inclusion)\n"
+                    "Respond with MET, NOT_MET, or UNKNOWN."
+                ),
+            }
+        ],
+        max_tokens=20,
+    )
+    assert response.choices[0].message.content, "Expected non-empty chat completion response"
+    assert response.usage.prompt_tokens > 0, "Expected exact prompt token count in usage"
+    assert response.usage.completion_tokens > 0, "Expected exact completion token count in usage"

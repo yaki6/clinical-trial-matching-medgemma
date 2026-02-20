@@ -1,7 +1,8 @@
 """MedGemma adapter for HuggingFace Inference Endpoint.
 
-Uses the Gemma chat template (no /v1/chat/completions — raw text generation).
-Handles cold-start 503 with exponential backoff.
+Uses the OpenAI-compatible /v1/chat/completions endpoint exposed by TGI.
+Server-side chat template application ensures correct Gemma 3 turn tokens.
+Handles cold-start via X-Scale-Up-Timeout header with fallback retry.
 """
 
 from __future__ import annotations
@@ -19,17 +20,28 @@ logger = structlog.get_logger()
 
 ENDPOINT_URL = "https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud"
 
+# HF Inference Endpoint cost (amortized per-token from compute-hour pricing)
+COST_PER_1M_INPUT = 0.10
+COST_PER_1M_OUTPUT = 0.30
+
 
 def format_gemma_prompt(system: str, user: str) -> str:
     """Format prompt using Gemma chat template.
 
-    Gemma folds system prompt into first user turn.
+    Deprecated: MedGemmaAdapter now uses chat_completion() which applies the
+    Gemma chat template server-side via TGI. Retained for external callers
+    (e.g., standalone scripts, smoke tests that bypass the adapter).
     """
     return f"<start_of_turn>user\n{system}\n\n{user}<end_of_turn>\n<start_of_turn>model\n"
 
 
 class MedGemmaAdapter(ModelAdapter):
-    """Adapter for MedGemma on HF Inference Endpoint."""
+    """Adapter for MedGemma on HF Inference Endpoint.
+
+    Uses /v1/chat/completions (OpenAI-compatible) for:
+    - Correct server-side chat template application (Gemma 3 turn tokens)
+    - Exact token counts from response.usage (no heuristic estimation)
+    """
 
     def __init__(
         self,
@@ -55,32 +67,38 @@ class MedGemmaAdapter(ModelAdapter):
         return self._model_name
 
     async def generate(self, prompt: str, max_tokens: int = 2048) -> ModelResponse:
-        """Generate text with retry for cold-start 503."""
-        formatted = format_gemma_prompt("", prompt)
+        """Generate via /v1/chat/completions with retry for transient errors.
+
+        The prompt string is wrapped in a single user message. TGI applies
+        the Gemma 3 chat template server-side, ensuring correct turn tokens.
+        """
+        messages = [{"role": "user", "content": prompt}]
         start = time.perf_counter()
 
         for attempt in range(self._max_retries):
             try:
-                result = await asyncio.to_thread(
-                    self._client.text_generation,
-                    formatted,
-                    max_new_tokens=max_tokens,
+                response = await asyncio.to_thread(
+                    self._client.chat_completion,
+                    messages=messages,
+                    max_tokens=max_tokens,
                     temperature=0.1,
                 )
                 elapsed = (time.perf_counter() - start) * 1000
 
-                # Estimate tokens (rough: 4 chars per token)
-                input_tokens = len(formatted) // 4
-                output_tokens = len(result) // 4
-                cost = input_tokens * 0.00001 + output_tokens * 0.00003
+                result_text = response.choices[0].message.content or ""
+                input_tokens = response.usage.prompt_tokens
+                output_tokens = response.usage.completion_tokens
+                cost = (
+                    input_tokens * COST_PER_1M_INPUT + output_tokens * COST_PER_1M_OUTPUT
+                ) / 1_000_000
 
                 return ModelResponse(
-                    text=result,
+                    text=result_text,
                     input_tokens=input_tokens,
                     output_tokens=output_tokens,
                     latency_ms=elapsed,
                     estimated_cost=cost,
-                    token_count_estimated=True,
+                    token_count_estimated=False,
                 )
             except Exception as e:
                 err_str = str(e)
@@ -105,12 +123,12 @@ class MedGemmaAdapter(ModelAdapter):
         raise RuntimeError(msg)
 
     async def health_check(self) -> bool:
-        """Check if endpoint is reachable."""
+        """Check if endpoint is reachable via /v1/chat/completions."""
         try:
             await asyncio.to_thread(
-                self._client.text_generation,
-                "<start_of_turn>user\nhi<end_of_turn>\n<start_of_turn>model\n",
-                max_new_tokens=5,
+                self._client.chat_completion,
+                messages=[{"role": "user", "content": "hi"}],
+                max_tokens=5,
             )
             return True
         except Exception:
