@@ -11,6 +11,7 @@ import pytest
 
 from trialmatch.models.schema import CriterionVerdict, ModelResponse
 from trialmatch.validate.evaluator import (
+    ELIGIBLE_LABEL_TO_VERDICT,
     EXCLUSION_INSTRUCTIONS,
     INCLUSION_INSTRUCTIONS,
     NATIVE_LABEL_TO_VERDICT,
@@ -51,27 +52,27 @@ def test_build_prompt_contains_criterion_type():
 
 
 def test_build_prompt_asks_for_native_labels_inclusion():
-    """Inclusion prompt uses TrialGPT-native labels: included / not included."""
+    """Inclusion prompt uses simplified eligibility labels: eligible / not eligible."""
     prompt = build_criterion_prompt(
         patient_note="Patient note",
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
-    assert "included" in prompt
-    assert "not included" in prompt
-    assert "not enough information" in prompt
+    assert "eligible" in prompt
+    assert "not eligible" in prompt
+    assert "unknown" in prompt
 
 
 def test_build_prompt_asks_for_native_labels_exclusion():
-    """Exclusion prompt uses TrialGPT-native labels: excluded / not excluded."""
+    """Exclusion prompt uses simplified eligibility labels: eligible / not eligible."""
     prompt = build_criterion_prompt(
         patient_note="Patient note",
         criterion_text="Criterion",
         criterion_type="exclusion",
     )
-    assert "excluded" in prompt
-    assert "not excluded" in prompt
-    assert "not enough information" in prompt
+    assert "eligible" in prompt
+    assert "not eligible" in prompt
+    assert "unknown" in prompt
 
 
 def test_build_prompt_uses_label_key_not_verdict():
@@ -289,7 +290,7 @@ def test_parse_verdict_label_takes_precedence_over_verdict():
 
 
 def test_parse_verdict_markdown_wrapped():
-    raw = '```json\n{"label": "included", "reasoning": "ok"}\n```'
+    raw = '```json\n{"label": "eligible", "reasoning": "ok"}\n```'
     v, r, e = parse_criterion_verdict(raw)
     assert v == CriterionVerdict.MET
 
@@ -299,7 +300,8 @@ def test_parse_verdict_medgemma_prompt_echo():
     raw = (
         "<start_of_turn>user\nYou are a clinical expert...<end_of_turn>\n"
         "<start_of_turn>model\n"
-        '```json\n{"label": "not excluded", "reasoning": "patient is 25", "evidence_sentences": [0]}\n```'
+        '```json\n{"label": "eligible", "reasoning": "patient is 25",'
+        ' "evidence_sentences": [0]}\n```'
     )
     v, r, e = parse_criterion_verdict(raw)
     assert v == CriterionVerdict.MET
@@ -364,7 +366,7 @@ def test_evaluate_criterion_returns_result():
     mock_adapter = AsyncMock()
     mock_adapter.name = "test-model"
     mock_adapter.generate.return_value = ModelResponse(
-        text='{"label": "not included", "reasoning": "age exclusion", "evidence_sentences": [0]}',
+        text='{"label": "not eligible", "reasoning": "age exclusion", "evidence_sentences": [0]}',
         input_tokens=200,
         output_tokens=30,
         latency_ms=500.0,
@@ -415,3 +417,91 @@ def test_evaluate_criterion_no_benchmark_coupling():
     assert "from trialmatch.cli" not in source
     assert "CriterionAnnotation" not in source
     assert "Phase0Sample" not in source
+
+
+# --- Simplified eligibility label tests ---
+
+
+def test_parse_eligible_label():
+    """JSON with 'label': 'eligible' → MET."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "eligible", "reasoning": "patient qualifies", "evidence_sentences": [1]}'
+    )
+    assert v == CriterionVerdict.MET
+    assert r == "patient qualifies"
+    assert e == [1]
+
+
+def test_parse_not_eligible_label():
+    """JSON with 'label': 'not eligible' → NOT_MET."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "not eligible", "reasoning": "does not qualify", "evidence_sentences": [0]}'
+    )
+    assert v == CriterionVerdict.NOT_MET
+    assert r == "does not qualify"
+    assert e == [0]
+
+
+def test_parse_unknown_label():
+    """JSON with 'label': 'unknown' → UNKNOWN."""
+    v, r, e = parse_criterion_verdict(
+        '{"label": "unknown", "reasoning": "insufficient data", "evidence_sentences": []}'
+    )
+    assert v == CriterionVerdict.UNKNOWN
+    assert r == "insufficient data"
+
+
+def test_parse_eligible_label_case_insensitive():
+    """Eligibility labels are case-insensitive."""
+    v, _, _ = parse_criterion_verdict('{"label": "Eligible", "reasoning": "ok"}')
+    assert v == CriterionVerdict.MET
+    v2, _, _ = parse_criterion_verdict('{"label": "Not Eligible", "reasoning": "ok"}')
+    assert v2 == CriterionVerdict.NOT_MET
+    v3, _, _ = parse_criterion_verdict('{"label": "UNKNOWN", "reasoning": "ok"}')
+    assert v3 == CriterionVerdict.UNKNOWN
+
+
+def test_parse_legacy_native_labels_still_work():
+    """Old TrialGPT-native labels still parse correctly (backward compat)."""
+    v1, _, _ = parse_criterion_verdict('{"label": "included", "reasoning": "ok"}')
+    assert v1 == CriterionVerdict.MET
+    v2, _, _ = parse_criterion_verdict('{"label": "not included", "reasoning": "ok"}')
+    assert v2 == CriterionVerdict.NOT_MET
+    v3, _, _ = parse_criterion_verdict('{"label": "excluded", "reasoning": "ok"}')
+    assert v3 == CriterionVerdict.NOT_MET
+    v4, _, _ = parse_criterion_verdict('{"label": "not excluded", "reasoning": "ok"}')
+    assert v4 == CriterionVerdict.MET
+    v5, _, _ = parse_criterion_verdict('{"label": "not enough information", "reasoning": "ok"}')
+    assert v5 == CriterionVerdict.UNKNOWN
+
+
+def test_parse_verdict_fallback_eligible_keyword():
+    """Keyword fallback: 'eligible' in text → MET."""
+    v, _, _ = parse_criterion_verdict("The patient is eligible for this criterion.")
+    assert v == CriterionVerdict.MET
+
+
+def test_parse_verdict_fallback_not_eligible_keyword():
+    """Keyword fallback: 'not eligible' in text → NOT_MET."""
+    v, _, _ = parse_criterion_verdict("The patient is not eligible for this criterion.")
+    assert v == CriterionVerdict.NOT_MET
+
+
+def test_eligible_label_to_verdict_complete():
+    """ELIGIBLE_LABEL_TO_VERDICT covers all 3 verdict classes."""
+    verdicts = set(ELIGIBLE_LABEL_TO_VERDICT.values())
+    assert CriterionVerdict.MET in verdicts
+    assert CriterionVerdict.NOT_MET in verdicts
+    assert CriterionVerdict.UNKNOWN in verdicts
+    assert len(ELIGIBLE_LABEL_TO_VERDICT) == 3
+
+
+def test_build_prompt_exclusion_explains_eligibility_mapping():
+    """Exclusion prompt explains that having the condition means NOT eligible."""
+    prompt = build_criterion_prompt(
+        patient_note="Patient note",
+        criterion_text="Active hepatitis B",
+        criterion_type="exclusion",
+    )
+    assert "HAS" in prompt
+    assert "NOT eligible" in prompt or "not eligible" in prompt.lower()

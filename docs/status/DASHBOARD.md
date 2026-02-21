@@ -1,4 +1,4 @@
-<!-- Last updated: 2026-02-21T20:00:00Z -->
+<!-- Last updated: 2026-02-22T03:05:00Z -->
 
 # Project Dashboard
 
@@ -35,6 +35,8 @@
 - [x] Pivot to Streamlit demo (from Next.js + FastAPI)
 - [x] Build Streamlit scaffold: app.py, Pipeline Demo, Benchmark Dashboard
 - [x] Add Vertex AI MedGemma adapter + deploy configs
+- [x] Deploy MedGemma 27B on Vertex AI (int8 quantization, 2x L4)
+- [x] Run Phase 0 benchmark for 27B on Vertex AI (70% accuracy, close to GPT-4 75%)
 - [x] Add profile_adapter for nsclc_trial_profiles.json
 - [x] Enhance CTGov client: aggFilters, location/sex/age params
 - [x] Fix 4 critical demo bugs (set_page_config, connection leak, async, token counting)
@@ -91,6 +93,7 @@ _Space for human to communicate intent changes without updating the PRD. Agents:
 
 | Date | Agent | What Was Done | What's Next |
 |------|-------|--------------|-------------|
+| 2026-02-22 | Claude | Deployed MedGemma 27B on Vertex AI + Phase 0 benchmark: (1) Deployed 27B with int8 quantization (bitsandbytes) on 2x L4 GPUs (g2-standard-24) — bypassed L4 quota limit of 2 by halving VRAM with int8, (2) Wired max_tokens from YAML config through CLI to evaluator — Vertex has no TGI CUDA bug so 2048 tokens available, (3) Smoke test passed (5.5s latency), (4) Phase 0 benchmark: 70% accuracy / 72.2% F1 / 0.538 kappa — massive improvement over 4B (35%) and close to GPT-4 baseline (75%), (5) Updated vertex-ai-deploy skill with benchmark results, teardown procedure, and gotchas, (6) Tore down endpoint to avoid cost. Run: phase0-medgemma-27b-vertex-20260221-020334 | Wire VALIDATE into Streamlit; Playwright QA; Kaggle writeup |
 | 2026-02-21 | Claude | MedGemma 4B Phase 0 benchmark + TGI CUDA bug investigation: (1) Deleted failed 27B vLLM endpoint, (2) Discovered TGI CUDA CUBLAS_STATUS_EXECUTION_FAILED bug — systematic isolation proved NOT hardware (L4=L40S), NOT memory leak (first request crashes), NOT prompt length; binary search found max_new_tokens threshold at ~500-1024, (3) Applied max_tokens=512 workaround — 20/20 pairs complete, (4) Result: 35% accuracy (down from 55% pre-fix) due to thinking token truncation, (5) Created ADR-007, (6) Updated CLAUDE.md with full deployment learnings, HF endpoint operations guide, model behavior notes. | Vertex AI deployment may bypass TGI bug; Streamlit demo wiring; Kaggle submission |
 | 2026-02-21 | Claude | Demo build + critical bug fixes: (1) Built Streamlit demo scaffold (app.py, Pipeline Demo, Benchmark Dashboard, cache_manager, components), (2) Fixed 4 critical bugs: duplicate set_page_config crashes, CTGovClient connection leak in VALIDATE loop, deprecated asyncio event loop API, MedGemma 27B token double-division, (3) Added Vertex AI MedGemma adapter with auth + retry + GPU-hour costing, (4) Enhanced CTGov client: phase aggFilters fix, location/sex/age params, 400 error handling, (5) Added profile_adapter for nsclc_trial_profiles.json, (6) 176 unit tests passing. | Wire VALIDATE into Streamlit, Playwright QA, demo video, Kaggle submission |
 | 2026-02-20 | Claude | Deployed MedGemma 27B as third benchmark model: (1) created deploy script using HF Python API — discovered `pytorch` framework OOM'd on A100 80GB (27B x fp32 = 108GB), fixed by using `framework="custom"` + TGI docker (loads bf16 directly, ~54GB), (2) added `model_name` param to MedGemmaAdapter (backward-compatible), (3) wired `endpoint_url` + `model_name` from YAML config into phase0.py, (4) created 27B-only + 3-way config YAMLs, (5) 3/3 smoke tests passing on live endpoint, (6) 108 unit tests still passing. Endpoint: `https://wu5nclwms3ctrwd1.us-east-1.aws.endpoints.huggingface.cloud` (A100 80GB, scale-to-zero 15min). | Run 3-way Phase 0 benchmark: `uv run trialmatch phase0 --config configs/phase0_three_way.yaml` |

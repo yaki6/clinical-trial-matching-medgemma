@@ -27,22 +27,30 @@ if TYPE_CHECKING:
 logger = structlog.get_logger()
 
 INCLUSION_INSTRUCTIONS = (
-    'For this INCLUSION criterion, respond with one of: "included", "not included", '
-    'or "not enough information".\n'
-    "- included: the patient meets this inclusion requirement based on the note.\n"
-    "- not included: the patient does NOT meet this inclusion requirement.\n"
-    '- not enough information: cannot determine from the note.'
+    'For this INCLUSION criterion, determine if the patient is eligible.\n'
+    '- "eligible": the patient satisfies this inclusion requirement based on the note.\n'
+    '- "not eligible": the patient does NOT satisfy this inclusion requirement.\n'
+    '- "unknown": cannot determine from the note.'
 )
 
 EXCLUSION_INSTRUCTIONS = (
-    'For this EXCLUSION criterion, respond with one of: "excluded", "not excluded", '
-    'or "not enough information".\n'
-    "- excluded: the patient HAS this characteristic and would be excluded from the trial.\n"
-    "- not excluded: the patient does NOT have this characteristic.\n"
-    '- not enough information: cannot determine from the note.'
+    'For this EXCLUSION criterion, determine if the patient is eligible.\n'
+    'A patient who HAS the excluded condition is NOT eligible.\n'
+    'A patient who does NOT have the excluded condition IS eligible.\n'
+    '- "eligible": the patient does NOT have this exclusion condition and can participate.\n'
+    '- "not eligible": the patient HAS this exclusion condition and cannot participate.\n'
+    '- "unknown": cannot determine from the note.'
 )
 
-# Maps TrialGPT-native labels to internal CriterionVerdict.
+# Maps simplified eligibility labels to CriterionVerdict.
+# These are the primary labels used in prompts (eligible / not eligible / unknown).
+ELIGIBLE_LABEL_TO_VERDICT: dict[str, CriterionVerdict] = {
+    "eligible": CriterionVerdict.MET,
+    "not eligible": CriterionVerdict.NOT_MET,
+    "unknown": CriterionVerdict.UNKNOWN,
+}
+
+# Maps TrialGPT-native labels to internal CriterionVerdict (backward-compatible fallback).
 # Mirrors hf_loader.LABEL_MAP so model output and ground-truth use the same semantics.
 NATIVE_LABEL_TO_VERDICT: dict[str, CriterionVerdict] = {
     "included": CriterionVerdict.MET,
@@ -74,11 +82,11 @@ Patient Note:
 Think step by step:
 1. What does this criterion specifically require?
 2. What does the patient note state about this? Consider both explicit statements and reasonable inferences from the absence of information.
-3. Based on the evidence, determine the label.
+3. Based on the evidence, is the patient eligible or not eligible for this criterion?
 
 Respond ONLY with valid JSON (no prose before or after):
 {{
-  "label": "<your label>",
+  "label": "<eligible|not eligible|unknown>",
   "reasoning": "Step-by-step explanation citing specific sentence indices",
   "evidence_sentences": [0, 1, 2]
 }}
@@ -136,9 +144,11 @@ def _extract_verdict_from_json(data: dict) -> tuple[CriterionVerdict, str, list[
     reasoning = data.get("reasoning", "")
     evidence = _parse_evidence(data.get("evidence_sentences", []))
 
-    # Prefer "label" key (TrialGPT-native format)
+    # Prefer "label" key — try simplified eligibility labels first, then native fallback
     if "label" in data:
         label = data["label"].strip().lower()
+        if label in ELIGIBLE_LABEL_TO_VERDICT:
+            return ELIGIBLE_LABEL_TO_VERDICT[label], reasoning, evidence
         if label in NATIVE_LABEL_TO_VERDICT:
             return NATIVE_LABEL_TO_VERDICT[label], reasoning, evidence
 
@@ -182,8 +192,16 @@ def parse_criterion_verdict(raw_text: str) -> tuple[CriterionVerdict, str, list[
         except (json.JSONDecodeError, KeyError, ValueError):
             pass
 
-    # Fallback: keyword extraction for native TrialGPT labels
+    # Fallback: keyword extraction for eligibility labels (primary)
     cleaned_lower = cleaned.lower()
+    if "not eligible" in cleaned_lower:
+        return CriterionVerdict.NOT_MET, cleaned, []
+    if "eligible" in cleaned_lower:
+        return CriterionVerdict.MET, cleaned, []
+    if "unknown" in cleaned_lower:
+        return CriterionVerdict.UNKNOWN, cleaned, []
+
+    # Fallback: keyword extraction for native TrialGPT labels (backward compat)
     if "not included" in cleaned_lower:
         return CriterionVerdict.NOT_MET, cleaned, []
     if "not excluded" in cleaned_lower:

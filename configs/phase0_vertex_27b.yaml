@@ -15,7 +15,7 @@ models:
     provider: vertex
     endpoint_id: "6588061467889631232"
     region: us-central1
-    # dedicated_endpoint_dns will be set once deployment completes
+    dedicated_endpoint_dns: "6588061467889631232.us-central1-189529605434.prediction.vertexai.goog"
     max_concurrent: 1
     max_tokens: 2048
 

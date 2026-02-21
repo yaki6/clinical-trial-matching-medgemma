@@ -47,6 +47,7 @@ async def run_model_benchmark(
     budget_max: float = 5.0,
     max_concurrent: int = 1,
     timeout_seconds: float = 300.0,
+    max_tokens: int = 512,
 ) -> list:
     """Run all sampled criterion pairs through one model.
 
@@ -82,6 +83,7 @@ async def run_model_benchmark(
                     criterion_text=annotation.criterion_text,
                     criterion_type=annotation.criterion_type,
                     adapter=adapter,
+                    max_tokens=max_tokens,
                     timeout_seconds=timeout_seconds,
                 )
             except Exception as exc:
@@ -234,11 +236,13 @@ async def run_phase0(config: dict, dry_run: bool = False):
             continue
 
         max_concurrent = model_cfg.get("max_concurrent", 1)
+        max_tokens = model_cfg.get("max_tokens", 512)
         logger.info(
             "stage_eval_start",
             model=adapter.name,
             pairs=len(sample.pairs),
             max_concurrent=max_concurrent,
+            max_tokens=max_tokens,
             timeout_seconds=timeout_seconds,
             budget_max_usd=budget_max,
         )
@@ -250,6 +254,7 @@ async def run_phase0(config: dict, dry_run: bool = False):
             budget_max=budget_max,
             max_concurrent=max_concurrent,
             timeout_seconds=timeout_seconds,
+            max_tokens=max_tokens,
         )
         eval_elapsed = time.perf_counter() - eval_start
         total_run_cost = sum(r.model_response.estimated_cost for r in results)

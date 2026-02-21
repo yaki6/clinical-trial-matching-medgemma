@@ -41,23 +41,25 @@ UI: **Streamlit** (no separate backend). Narrative: multi-model orchestration (n
 | MedGemma 4B | HF Inference (`pcmy7bkqtqesrrzd`) | Multimodal (EHR + images) | Working (max_tokens=512 limit) |
 | MedGemma 27B | HF Inference (`wu5nclwms3ctrwd1`) | Text-only (higher accuracy) | Failed — TGI 3.0 chat template incompatible |
 | MedGemma 4B | Vertex AI Model Garden | Multimodal (EHR + images) | Configured, untested |
-| MedGemma 27B | Vertex AI Model Garden | Text-only (higher accuracy) | Configured, untested |
+| MedGemma 27B | Vertex AI Model Garden (int8) | Text-only (higher accuracy) | **Benchmarked** — 70% accuracy, endpoint torn down |
 | Gemini 3 Pro | Google AI Studio API | General-purpose baseline | Working |
 
-### Phase 0 Benchmark Results (Feb 21, 2026)
+### Phase 0 Benchmark Results (Feb 21-22, 2026)
 
 | Model | Accuracy | Macro-F1 | Cohen's κ | Evidence Overlap | Notes |
 |-------|----------|----------|-----------|------------------|-------|
 | GPT-4 (baseline) | 75.0% | 74.6% | — | — | Built into HF dataset |
 | Gemini 3 Pro | 75.0% | — | — | — | Post prompt fix (was 60%) |
+| **MedGemma 27B (Vertex int8)** | **70.0%** | **72.2%** | **0.538** | **15.0%** | Vertex AI, max_tokens=2048, ~8s/pair |
 | MedGemma 4B (HF) | 35.0% | 31.5% | 0.030 | 5.0% | max_tokens=512 workaround; was 55% with max_tokens=2048 |
-| MedGemma 27B | — | — | — | — | Deployment failed (TGI chat template) |
 
 **Key findings**:
-1. MedGemma 4B has a **systematic MET bias**: model reasoning is often correct ("patient does NOT meet criterion") but the JSON `label` field contradicts the reasoning and outputs MET anyway. This is an instruction-following failure, not a reasoning failure.
-2. The model confuses "criterion is met" with "patient is eligible" — it says MET when the exclusion condition IS present (should be "excluded" → NOT_MET).
-3. Accuracy dropped from 55% → 35% after prompt fix. The TrialGPT-native labels ("included"/"excluded") may be harder for 4B to follow than the simpler MET/NOT_MET labels.
-4. The max_tokens=512 workaround (for TGI CUDA bug) occasionally truncates thinking chains but is NOT the primary cause of errors — most wrong answers have complete, correct reasoning with wrong labels.
+1. **MedGemma 27B is competitive with GPT-4** on criterion-level matching (70% vs 75% accuracy). The 5% gap may narrow with prompt tuning.
+2. **27B dramatically outperforms 4B** (70% vs 35%) — larger model has much better instruction-following for structured JSON output.
+3. **Vertex AI vLLM path has no TGI CUDA bug** — max_tokens=2048 works reliably, enabling full reasoning chains.
+4. MedGemma 4B has a **systematic MET bias**: model reasoning is often correct ("patient does NOT meet criterion") but the JSON `label` field contradicts the reasoning and outputs MET anyway. This is an instruction-following failure, not a reasoning failure.
+5. The 4B model confuses "criterion is met" with "patient is eligible" — it says MET when the exclusion condition IS present (should be "excluded" → NOT_MET).
+6. The max_tokens=512 workaround (for TGI CUDA bug on 4B) truncates thinking chains, degrading accuracy from 55% → 35%.
 
 ## Commands
 
@@ -343,7 +345,8 @@ Two deployment approaches failed for MedGemma 27B:
 - **JSON truncation**: When output budget is exhausted mid-JSON, `parse_criterion_verdict()` falls back to keyword extraction, which loses structured reasoning and evidence sentences
 - **CWA (Closed World Assumption)**: Prompt instructs model to assume unmentioned facts are negative (e.g., no mention of allergies = no allergies). This is critical for exclusion criteria accuracy.
 
-## Rules
+## IMPORTANT Rules
 you MUST run ALL script, especially bash,python scripts in background so you can do other tasks
 API keys are already stored in .env
 MUST check the tail log in real time when running benchmark; do not use timeout or sleep
+you MUST teardown Vertex medgemma endpoints after using to avoice extra cost
