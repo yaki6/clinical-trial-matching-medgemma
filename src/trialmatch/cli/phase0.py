@@ -76,13 +76,35 @@ async def run_model_benchmark(
                 model=adapter.name,
             )
 
-            result = await evaluate_criterion(
-                patient_note=annotation.note,
-                criterion_text=annotation.criterion_text,
-                criterion_type=annotation.criterion_type,
-                adapter=adapter,
-                timeout_seconds=timeout_seconds,
-            )
+            try:
+                result = await evaluate_criterion(
+                    patient_note=annotation.note,
+                    criterion_text=annotation.criterion_text,
+                    criterion_type=annotation.criterion_type,
+                    adapter=adapter,
+                    timeout_seconds=timeout_seconds,
+                )
+            except Exception as exc:
+                logger.error(
+                    "pair_error",
+                    pair=f"{i + 1}/{len(sample.pairs)}",
+                    model=adapter.name,
+                    error=str(exc)[:200],
+                )
+                from trialmatch.models.schema import CriterionResult, CriterionVerdict, ModelResponse
+                result = CriterionResult(
+                    verdict=CriterionVerdict.UNKNOWN,
+                    reasoning=f"Error: {str(exc)[:200]}",
+                    evidence_sentences=[],
+                    model_response=ModelResponse(
+                        text=f"ERROR: {str(exc)[:200]}",
+                        input_tokens=0,
+                        output_tokens=0,
+                        latency_ms=0.0,
+                        estimated_cost=0.0,
+                        token_count_estimated=True,
+                    ),
+                )
 
             total_cost += result.model_response.estimated_cost
 
@@ -174,6 +196,7 @@ async def run_phase0(config: dict, dry_run: bool = False):
                 hf_token=hf_token,
                 endpoint_url=model_cfg.get("endpoint_url", _MEDGEMMA_DEFAULT_URL),
                 model_name=model_cfg["name"],
+                use_chat_api=model_cfg.get("use_chat_api", False),
             )
         elif model_cfg["provider"] == "google":
             api_key = os.environ.get("GOOGLE_API_KEY", "")
@@ -181,6 +204,27 @@ async def run_phase0(config: dict, dry_run: bool = False):
                 click.echo("ERROR: GOOGLE_API_KEY env var required for Gemini. Skipping.", err=True)
                 continue
             adapter = GeminiAdapter(api_key=api_key)
+        elif model_cfg["provider"] == "vertex":
+            from trialmatch.models.vertex_medgemma import VertexMedGemmaAdapter
+
+            project_id = model_cfg.get("project_id") or os.environ.get("GCP_PROJECT_ID", "")
+            region = model_cfg.get("region") or os.environ.get("GCP_REGION", "us-central1")
+            endpoint_id = model_cfg.get("endpoint_id") or os.environ.get(
+                "VERTEX_ENDPOINT_ID", ""
+            )
+            if not project_id or not endpoint_id:
+                click.echo(
+                    "ERROR: project_id and endpoint_id required for Vertex AI. "
+                    "Set GCP_PROJECT_ID and VERTEX_ENDPOINT_ID env vars or in config. Skipping.",
+                    err=True,
+                )
+                continue
+            adapter = VertexMedGemmaAdapter(
+                project_id=project_id,
+                region=region,
+                endpoint_id=endpoint_id,
+                model_name=model_cfg["name"],
+            )
         else:
             logger.error("unknown_provider", provider=model_cfg["provider"])
             continue

@@ -1,6 +1,6 @@
-# MedGemma-only Phase 0 run — 20 pairs
+# MedGemma 4B on Vertex AI Model Garden — Phase 0 benchmark
 phase: 0
-description: "20-pair MedGemma-only benchmark"
+description: "20-pair MedGemma 4B (Vertex AI) benchmark"
 
 data:
   source: huggingface
@@ -11,9 +11,11 @@ data:
   seed: 42
 
 models:
-  - name: medgemma-1.5-4b
-    provider: huggingface
-    model_id: google/medgemma-1-5-4b-it-hae
+  - name: medgemma-4b-vertex
+    provider: vertex
+    # project_id, region, endpoint_id come from env vars:
+    # GCP_PROJECT_ID, GCP_REGION, VERTEX_ENDPOINT_ID
+    region: us-central1
     max_concurrent: 1
 
 baselines:

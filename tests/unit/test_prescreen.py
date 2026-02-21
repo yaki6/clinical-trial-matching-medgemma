@@ -179,7 +179,7 @@ class TestCTGovClientHttp:
             assert called_params["query.cond"] == "lung cancer"
             assert called_params["query.intr"] == "pembrolizumab"
             assert called_params["filter.overallStatus"] == "RECRUITING"
-            assert called_params["filter.phase"] == "PHASE2,PHASE3"
+            assert called_params["aggFilters"] == "phase:2,phase:3"
             assert called_params["pageSize"] == 10
             assert result == sample_search_response
             await client.aclose()
@@ -276,6 +276,184 @@ class TestCTGovClientHttp:
                 # (i.e. it should NOT still be the value set before the retry loop)
                 assert client._last_call_time > 0
 
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_phase_filter_uses_aggfilters_not_filter_phase(self):
+        """Phase filtering must use aggFilters param (not the invalid filter.phase)."""
+
+        async def _run():
+            client = CTGovClient()
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {"studies": []}
+            mock_resp.raise_for_status = MagicMock()
+
+            with patch.object(
+                client._http, "get", new=AsyncMock(return_value=mock_resp)
+            ) as mock_get:
+                await client.search(
+                    condition="cancer", phase=["EARLY_PHASE1", "PHASE1", "PHASE3"]
+                )
+
+            called_params = mock_get.call_args[1]["params"]
+            assert "filter.phase" not in called_params
+            assert called_params["aggFilters"] == "phase:early1,phase:1,phase:3"
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_location_maps_to_query_locn(self):
+        """location param should map to query.locn in the API call."""
+
+        async def _run():
+            client = CTGovClient()
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {"studies": []}
+            mock_resp.raise_for_status = MagicMock()
+
+            with patch.object(
+                client._http, "get", new=AsyncMock(return_value=mock_resp)
+            ) as mock_get:
+                await client.search(condition="cancer", location="Boston")
+
+            called_params = mock_get.call_args[1]["params"]
+            assert called_params["query.locn"] == "Boston"
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_sex_filter_uses_aggfilters(self):
+        """sex='FEMALE' should produce aggFilters containing 'sex:f'."""
+
+        async def _run():
+            client = CTGovClient()
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {"studies": []}
+            mock_resp.raise_for_status = MagicMock()
+
+            with patch.object(
+                client._http, "get", new=AsyncMock(return_value=mock_resp)
+            ) as mock_get:
+                await client.search(condition="cancer", sex="FEMALE")
+
+            called_params = mock_get.call_args[1]["params"]
+            assert called_params["aggFilters"] == "sex:f"
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_phase_and_sex_compose_in_aggfilters(self):
+        """Phase and sex values should be comma-joined in a single aggFilters param."""
+
+        async def _run():
+            client = CTGovClient()
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {"studies": []}
+            mock_resp.raise_for_status = MagicMock()
+
+            with patch.object(
+                client._http, "get", new=AsyncMock(return_value=mock_resp)
+            ) as mock_get:
+                await client.search(condition="cancer", phase=["PHASE2"], sex="MALE")
+
+            called_params = mock_get.call_args[1]["params"]
+            assert called_params["aggFilters"] == "phase:2,sex:m"
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_age_filter_builds_advanced_query(self):
+        """min_age and max_age should produce Essie AREA expressions in query.term."""
+
+        async def _run():
+            client = CTGovClient()
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {"studies": []}
+            mock_resp.raise_for_status = MagicMock()
+
+            with patch.object(
+                client._http, "get", new=AsyncMock(return_value=mock_resp)
+            ) as mock_get:
+                await client.search(
+                    condition="cancer", min_age="18 Years", max_age="75 Years"
+                )
+
+            called_params = mock_get.call_args[1]["params"]
+            term = called_params["query.term"]
+            assert "AREA[MinimumAge]RANGE[MIN, 18 Years]" in term
+            assert "AREA[MaximumAge]RANGE[75 Years, MAX]" in term
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_age_and_eligibility_keywords_compose(self):
+        """Age Essie expressions should AND-compose with eligibility_keywords."""
+
+        async def _run():
+            client = CTGovClient()
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {"studies": []}
+            mock_resp.raise_for_status = MagicMock()
+
+            with patch.object(
+                client._http, "get", new=AsyncMock(return_value=mock_resp)
+            ) as mock_get:
+                await client.search(
+                    eligibility_keywords="never smoker", min_age="65 Years"
+                )
+
+            called_params = mock_get.call_args[1]["params"]
+            term = called_params["query.term"]
+            assert "never smoker" in term
+            assert "AREA[MinimumAge]RANGE[MIN, 65 Years]" in term
+            assert " AND " in term
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_sex_all_omitted_from_aggfilters(self):
+        """sex='ALL' should not add anything to aggFilters."""
+
+        async def _run():
+            client = CTGovClient()
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {"studies": []}
+            mock_resp.raise_for_status = MagicMock()
+
+            with patch.object(
+                client._http, "get", new=AsyncMock(return_value=mock_resp)
+            ) as mock_get:
+                await client.search(condition="cancer", sex="ALL")
+
+            called_params = mock_get.call_args[1]["params"]
+            assert "aggFilters" not in called_params
+            await client.aclose()
+
+        asyncio.run(_run())
+
+    def test_400_raises_value_error(self):
+        """A 400 Bad Request should raise ValueError immediately (no retry)."""
+
+        async def _run():
+            client = CTGovClient(max_retries=3)
+            mock_resp = MagicMock()
+            mock_resp.status_code = 400
+            mock_resp.text = "filter.phase is unknown parameter"
+            mock_resp.raise_for_status = MagicMock()
+
+            with (
+                patch.object(client._http, "get", new=AsyncMock(return_value=mock_resp)),
+                pytest.raises(ValueError, match="400 Bad Request"),
+            ):
+                await client.search(condition="cancer")
             await client.aclose()
 
         asyncio.run(_run())

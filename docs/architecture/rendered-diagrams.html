@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrialMatch Architecture Diagrams</title>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    securityLevel: 'loose',
+    sequence: { mirrorActors: false, actorMargin: 50, messageMargin: 40 },
+    flowchart: { htmlLabels: true, curve: 'basis' }
+  });
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #1a1a1a; padding: 24px; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  h2 { font-size: 22px; font-weight: 600; margin: 40px 0 8px; color: #333; border-bottom: 2px solid #e0e0e0; padding-bottom: 6px; }
+  h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; color: #555; }
+  p, li { font-size: 14px; line-height: 1.6; color: #444; }
+  .subtitle { font-size: 14px; color: #777; margin-bottom: 32px; }
+  .diagram-card { background: #fff; border-radius: 8px; padding: 24px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+  .diagram-card .mermaid { display: flex; justify-content: center; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
+  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+  th { background: #f0f0f0; font-weight: 600; }
+  tr:nth-child(even) { background: #fafafa; }
+  code { background: #eef; padding: 2px 5px; border-radius: 3px; font-size: 13px; }
+  .toc { background: #fff; border-radius: 8px; padding: 20px 28px; margin: 0 0 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .toc a { color: #2563eb; text-decoration: none; font-size: 14px; }
+  .toc a:hover { text-decoration: underline; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 4px 0; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 6px; }
+  .badge-flow { background: #dbeafe; color: #1e40af; }
+  .badge-seq { background: #fce7f3; color: #9d174d; }
+</style>
+</head>
+<body>
+
+<h1>TrialMatch Architecture Diagrams</h1>
+<p class="subtitle">Pipeline data contracts, flowcharts, and sequence diagrams &mdash; rendered from <code>docs/architecture/</code></p>
+
+<div class="toc">
+  <strong>Table of Contents</strong>
+  <ol>
+    <li><a href="#pipeline-flowchart">High-Level Pipeline Flowchart</a> <span class="badge badge-flow">flowchart</span></li>
+    <li><a href="#isolation-vs-e2e">Component Isolation vs E2E</a> <span class="badge badge-flow">flowchart</span></li>
+    <li><a href="#data-contracts">Data Contract Summary</a></li>
+    <li><a href="#tool-schema">PRESCREEN Tool Schema &amp; CT.gov Mapping</a></li>
+    <li><a href="#agent-loop">PRESCREEN Agent Loop</a> <span class="badge badge-seq">sequence</span></li>
+    <li><a href="#param-mapping">CT.gov Parameter Mapping</a> <span class="badge badge-seq">sequence</span></li>
+    <li><a href="#phase0-benchmark">Phase 0 Benchmark</a> <span class="badge badge-seq">sequence</span></li>
+    <li><a href="#e2e-pipeline">Future E2E Pipeline</a> <span class="badge badge-seq">sequence</span></li>
+    <li><a href="#run-artifacts">Run Artifacts Structure</a></li>
+  </ol>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="pipeline-flowchart">1. High-Level Pipeline Flowchart</h2>
+<p>INGEST &rarr; PRESCREEN &rarr; VALIDATE with data model names on edges and external service connections.</p>
+
+<div class="diagram-card">
+<pre class="mermaid">
+graph TD
+    HF["HuggingFace Dataset\nncbi/TrialGPT-Criterion-Annotations"]
+    INGEST["INGEST\ndata/hf_loader.py"]
+    PRESCREEN["PRESCREEN\nprescreen/agent.py"]
+    VALIDATE["VALIDATE\nvalidate/evaluator.py"]
+    METRICS["EVALUATION\nevaluation/"]
+    RUNS["RUN ARTIFACTS\nruns/run_id/"]
+
+    HF -- "raw dataset rows" --> INGEST
+    INGEST -- "list[CriterionAnnotation]" --> PRESCREEN
+    INGEST -- "list[CriterionAnnotation]" --> VALIDATE
+    PRESCREEN -- "PresearchResult\n(TrialCandidate[])" --> VALIDATE
+    VALIDATE -- "list[CriterionResult]" --> METRICS
+    METRICS -- "RunResult" --> RUNS
+
+    CTGOV["CT.gov API v2"]
+    MEDGEMMA["MedGemma 4B"]
+    GEMINI["Gemini 3 Pro"]
+
+    PRESCREEN <-. "search_trials\nget_trial_details" .-> CTGOV
+    PRESCREEN <-. "normalize_medical_terms" .-> MEDGEMMA
+    PRESCREEN <-. "agentic loop\nfunction calling" .-> GEMINI
+    VALIDATE <-. "evaluate_criterion()" .-> GEMINI
+    VALIDATE <-. "evaluate_criterion()" .-> MEDGEMMA
+</pre>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="isolation-vs-e2e">2. Component Isolation vs E2E</h2>
+<p>Phase 0 isolation feeds gold data directly to VALIDATE. The future E2E path chains all three components.</p>
+
+<div class="diagram-card">
+<pre class="mermaid">
+graph TD
+    subgraph "Phase 0: Isolated Evaluation"
+        HF1["HF Dataset"]
+        ANN1["CriterionAnnotation\n(gold fields)"]
+        EVAL1["evaluate_criterion()\nVALIDATE"]
+        CR1["CriterionResult"]
+        MET1["Metrics\n(accuracy, F1, kappa)"]
+
+        HF1 -- "hf_loader.load_annotations()" --> ANN1
+        ANN1 -- "ann.note (patient_note)\nann.criterion_text\nann.criterion_type" --> EVAL1
+        EVAL1 --> CR1
+        CR1 -- "compare vs ann.expert_label" --> MET1
+    end
+
+    subgraph "E2E Pipeline (Future)"
+        HF2["HF Dataset / Live Patient"]
+        ING2["INGEST\nunderstand()"]
+        PRE2["PRESCREEN\nrun_prescreen_agent()"]
+        DET2["get_trial_details\nper candidate"]
+        VAL2["VALIDATE\nevaluate_criterion()"]
+        CR2["CriterionResult[]"]
+
+        HF2 -- "patient_note" --> ING2
+        ING2 -- "PatientProfile +\nkey_facts" --> PRE2
+        PRE2 -- "TrialCandidate[]" --> DET2
+        DET2 -- "eligibility criteria text\nper criterion" --> VAL2
+        VAL2 --> CR2
+    end
+
+    style HF1 fill:#e8f5e9
+    style ANN1 fill:#e8f5e9
+    style EVAL1 fill:#e8f5e9
+    style HF2 fill:#fff3e0
+    style ING2 fill:#fff3e0
+    style PRE2 fill:#fff3e0
+</pre>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="data-contracts">3. Data Contract Summary</h2>
+
+<table>
+  <tr><th>Component</th><th>Input</th><th>Output</th><th>Key Model</th></tr>
+  <tr><td><strong>INGEST</strong></td><td>HF dataset rows (dict)</td><td><code>list[CriterionAnnotation]</code></td><td><code>CriterionAnnotation</code></td></tr>
+  <tr><td><strong>PRESCREEN</strong></td><td>patient_note, key_facts, adapters</td><td><code>PresearchResult</code></td><td><code>TrialCandidate</code>, <code>ToolCallRecord</code></td></tr>
+  <tr><td><strong>VALIDATE</strong></td><td>patient_note, criterion_text, criterion_type, adapter</td><td><code>CriterionResult</code></td><td><code>CriterionVerdict</code>, <code>ModelResponse</code></td></tr>
+  <tr><td><strong>EVALUATION</strong></td><td><code>list[CriterionResult]</code> + annotations</td><td><code>RunResult</code></td><td>accuracy, F1, Cohen's kappa</td></tr>
+  <tr><td><strong>TRACING</strong></td><td><code>RunResult</code> + config</td><td><code>runs/&lt;run_id&gt;/</code></td><td><code>RunManager</code></td></tr>
+</table>
+
+<h3>TrialCandidate fields</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>nct_id</code></td><td>str</td><td>ClinicalTrials.gov NCT identifier</td></tr>
+  <tr><td><code>title</code></td><td>str</td><td>Official or brief trial title</td></tr>
+  <tr><td><code>status</code></td><td>str</td><td>Recruitment status (e.g. RECRUITING)</td></tr>
+  <tr><td><code>phase</code></td><td>list[str]</td><td>Trial phases (e.g. [PHASE1, PHASE2])</td></tr>
+  <tr><td><code>conditions</code></td><td>list[str]</td><td>Target conditions</td></tr>
+  <tr><td><code>interventions</code></td><td>list[str]</td><td>Drug/device/procedure names</td></tr>
+  <tr><td><code>sponsor</code></td><td>str</td><td>Lead sponsor organization</td></tr>
+  <tr><td><code>enrollment</code></td><td>int | None</td><td>Target enrollment count</td></tr>
+  <tr><td><code>locations_count</code></td><td>int | None</td><td>Number of study sites</td></tr>
+  <tr><td><code>found_by_queries</code></td><td>list[str]</td><td>Which agent queries discovered this trial</td></tr>
+</table>
+
+<h3>PresearchResult fields</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>topic_id</code></td><td>str</td><td>Patient/topic identifier</td></tr>
+  <tr><td><code>ingest_source</code></td><td>str</td><td>"gold" / "model_medgemma" / "model_gemini"</td></tr>
+  <tr><td><code>candidates</code></td><td>list[TrialCandidate]</td><td>Deduplicated, ranked by found_by_queries count</td></tr>
+  <tr><td><code>agent_reasoning</code></td><td>str</td><td>Gemini's final summary of search strategy</td></tr>
+  <tr><td><code>tool_call_trace</code></td><td>list[ToolCallRecord]</td><td>Full trace of all tool calls</td></tr>
+  <tr><td><code>total_api_calls</code></td><td>int</td><td>Total tool invocations</td></tr>
+  <tr><td><code>gemini_estimated_cost</code></td><td>float</td><td>Gemini cost in USD</td></tr>
+  <tr><td><code>medgemma_estimated_cost</code></td><td>float</td><td>MedGemma cost in USD</td></tr>
+  <tr><td><code>latency_ms</code></td><td>float</td><td>Total wall-clock time</td></tr>
+</table>
+
+<h3>CriterionResult fields</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>verdict</code></td><td>CriterionVerdict</td><td>MET / NOT_MET / UNKNOWN</td></tr>
+  <tr><td><code>reasoning</code></td><td>str</td><td>Step-by-step explanation from model</td></tr>
+  <tr><td><code>evidence_sentences</code></td><td>list[int]</td><td>Sentence indices cited as evidence</td></tr>
+  <tr><td><code>model_response</code></td><td>ModelResponse</td><td>text, input_tokens, output_tokens, latency_ms, estimated_cost</td></tr>
+</table>
+
+<!-- ================================================================== -->
+<h2 id="tool-schema">4. PRESCREEN Tool Schema &amp; CT.gov Mapping</h2>
+
+<h3>search_trials &rarr; CT.gov GET /studies</h3>
+<table>
+  <tr><th>Parameter</th><th>Type</th><th>CT.gov API Mapping</th><th>Description</th></tr>
+  <tr><td><code>condition</code></td><td>str</td><td><code>query.cond</code></td><td>Disease/condition search</td></tr>
+  <tr><td><code>intervention</code></td><td>str</td><td><code>query.intr</code></td><td>Drug/device/procedure</td></tr>
+  <tr><td><code>eligibility_keywords</code></td><td>str</td><td><code>query.term</code></td><td>Free-text in eligibility criteria</td></tr>
+  <tr><td><code>location</code></td><td>str</td><td><code>query.locn</code></td><td>Geographic location (city/state/country)</td></tr>
+  <tr><td><code>status</code></td><td>list[str]</td><td><code>filter.overallStatus</code></td><td>Default: ["RECRUITING"]</td></tr>
+  <tr><td><code>phase</code></td><td>list[str]</td><td><code>aggFilters</code> (phase:N)</td><td>Trial phase filter</td></tr>
+  <tr><td><code>sex</code></td><td>str enum</td><td><code>aggFilters</code> (sex:m/f)</td><td>Composed with phase via comma-join</td></tr>
+  <tr><td><code>min_age</code></td><td>str</td><td><code>query.term</code> via Essie AREA[]RANGE[]</td><td>AREA[MinimumAge]RANGE[MIN, X]</td></tr>
+  <tr><td><code>max_age</code></td><td>str</td><td><code>query.term</code> via Essie AREA[]RANGE[]</td><td>AREA[MaximumAge]RANGE[X, MAX]</td></tr>
+  <tr><td><code>page_size</code></td><td>int</td><td><code>pageSize</code> (max 100)</td><td>Number of results</td></tr>
+</table>
+
+<h3>get_trial_details &rarr; CT.gov GET /studies/{nct_id}</h3>
+<p>Returns: <code>nct_id</code>, <code>title</code>, <code>eligibility_criteria</code> (full text), <code>minimum_age</code>, <code>maximum_age</code>, <code>sex</code>, <code>healthy_volunteers</code>.</p>
+
+<h3>normalize_medical_terms &rarr; MedGemma (no CT.gov call)</h3>
+<p>Returns: <code>normalized</code>, <code>search_variants[]</code>, <code>disambiguation</code>, <code>avoid[]</code>.</p>
+
+<!-- ================================================================== -->
+<h2 id="agent-loop">5. PRESCREEN Agent Loop</h2>
+<p>Multi-turn Gemini agentic loop with tool execution, budget guard, and candidate accumulation.</p>
+
+<div class="diagram-card">
+<pre class="mermaid">
+sequenceDiagram
+    participant CLI
+    participant Agent as Agent(run_prescreen_agent)
+    participant Gemini as Gemini 3 Pro
+    participant TE as ToolExecutor
+    participant CTGov as CTGovClient
+    participant API as CT.gov API v2
+    participant MG as MedGemma
+
+    CLI->>Agent: run_prescreen_agent(patient_note, key_facts, ...)
+    activate Agent
+
+    Agent->>Agent: Create CTGovClient + ToolExecutor
+    Agent->>Agent: Format user message via PRESCREEN_USER_TEMPLATE
+    Agent->>Agent: Build contents[] with system prompt + user message
+
+    Agent->>Gemini: generate_content(contents, tools, config)
+    activate Gemini
+    Gemini-->>Agent: response with function_calls[normalize_medical_terms]
+    deactivate Gemini
+
+    Note over Agent: call_index = 0
+
+    Agent->>TE: execute("normalize_medical_terms", args)
+    activate TE
+    TE->>MG: generate(MEDGEMMA_NORMALIZE_SYSTEM + user prompt)
+    activate MG
+    MG-->>TE: JSON {normalized, search_variants, disambiguation, avoid}
+    deactivate MG
+    TE-->>Agent: (result, summary)
+    deactivate TE
+
+    Agent->>Agent: Append FunctionResponse to contents[]
+
+    loop Agentic Loop (max_tool_calls + 5 iterations)
+        Agent->>Gemini: generate_content(contents with tool results)
+        activate Gemini
+        Gemini-->>Agent: response with function_calls[] and/or text
+        deactivate Gemini
+
+        alt No function_calls in response
+            Note over Agent: Gemini finished - break loop
+        else call_index >= max_tool_calls (Budget Guard)
+            Agent->>Agent: Build FunctionResponse with error for each pending FC
+            Note over Agent: Tool budget exhausted. Stop and summarise.
+            Agent->>Agent: Append error FunctionResponses to contents[]
+        else Normal tool execution
+            Agent->>TE: execute("search_trials", {condition, ...})
+            activate TE
+            TE->>CTGov: search(condition, intervention, ...)
+            activate CTGov
+            CTGov->>API: GET /studies?query.cond=...
+            activate API
+            API-->>CTGov: {studies[], totalCount}
+            deactivate API
+            CTGov-->>TE: raw response dict
+            deactivate CTGov
+            TE->>TE: parse + build compact dicts
+            TE-->>Agent: ({count, total_available, trials[]}, summary)
+            deactivate TE
+
+            Agent->>Agent: Merge trials into candidates_by_nct
+
+            opt get_trial_details (promising trials only)
+                Agent->>TE: execute("get_trial_details", {nct_id})
+                activate TE
+                TE->>CTGov: get_details(nct_id)
+                activate CTGov
+                CTGov->>API: GET /studies/{nct_id}
+                activate API
+                API-->>CTGov: full study record
+                deactivate API
+                CTGov-->>TE: raw response
+                deactivate CTGov
+                TE-->>Agent: ({nct_id, eligibility_criteria, ...}, summary)
+                deactivate TE
+            end
+
+            Agent->>Agent: Record ToolCallRecord, increment call_index
+            Agent->>Agent: Append FunctionResponse parts to contents[]
+        end
+    end
+
+    Agent->>Agent: _build_candidates() sort by found_by_queries desc
+    Agent->>Agent: Compute gemini_cost from token counts
+    Agent->>CTGov: aclose()
+
+    Agent-->>CLI: PresearchResult
+    deactivate Agent
+</pre>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="param-mapping">6. CT.gov Parameter Mapping (Single search_trials Call)</h2>
+<p>How tool schema params compose into HTTP query params: phase+sex &rarr; aggFilters, age &rarr; Essie AREA[]RANGE[] in query.term.</p>
+
+<div class="diagram-card">
+<pre class="mermaid">
+sequenceDiagram
+    participant Gemini as Gemini 3 Pro
+    participant TE as ToolExecutor
+    participant Client as CTGovClient
+    participant API as CT.gov API v2
+
+    Gemini->>TE: search_trials({condition, intervention, eligibility_keywords, phase, sex, min_age, max_age, location, status, page_size})
+    activate TE
+
+    TE->>TE: Cap page_size at 100
+    TE->>TE: Default status to ["RECRUITING"]
+
+    TE->>Client: search(all params)
+    activate Client
+
+    Note over Client: query.cond = condition
+    Note over Client: query.intr = intervention
+    Note over Client: query.locn = location
+
+    Note over Client: Build age Essie clauses: min_age to AREA[MinimumAge]RANGE[MIN, X] max_age to AREA[MaximumAge]RANGE[X, MAX]
+
+    Note over Client: Compose query.term: eligibility_keywords AND (age_essie)
+
+    Note over Client: Build aggFilters (comma-joined): PHASE2 to phase:2, FEMALE to sex:f Example: phase:2,phase:3,sex:f
+
+    Note over Client: filter.overallStatus = joined status[] pageSize = capped at 100
+
+    Client->>Client: Rate limit enforce _MIN_INTERVAL (1.5s)
+
+    Client->>API: GET /studies with composed params
+    activate API
+
+    alt HTTP 200 OK
+        API-->>Client: {studies[], totalCount}
+    else HTTP 429 Rate Limited
+        API-->>Client: 429
+        Client->>Client: Exponential backoff sleep(2^attempt)
+        Client->>Client: Reset _last_call_time
+        Client->>API: Retry GET /studies
+        API-->>Client: {studies[], totalCount}
+    else HTTP 400 Bad Request
+        API-->>Client: 400 + error body
+        Client-->>TE: Raise ValueError
+    end
+    deactivate API
+
+    Client-->>TE: raw response dict
+    deactivate Client
+
+    TE->>TE: parse_search_results -> studies[]
+    TE->>TE: parse_study_summary per study
+    TE->>TE: Build compact dicts (conditions[:3], interventions[:4])
+
+    TE-->>Gemini: {count, total_available, trials[]}
+    deactivate TE
+</pre>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="phase0-benchmark">7. Phase 0 Benchmark</h2>
+<p>Full Phase 0 harness: load annotations &rarr; sample &rarr; evaluate per model &rarr; compute metrics &rarr; persist run.</p>
+
+<div class="diagram-card">
+<pre class="mermaid">
+sequenceDiagram
+    participant CLI as CLI (phase0_cmd)
+    participant P0 as run_phase0()
+    participant HF as HFLoader
+    participant Samp as Sampler
+    participant Eval as run_model_benchmark()
+    participant VE as evaluate_criterion()
+    participant Model as Model Adapter
+    participant Metrics as compute_metrics()
+    participant RM as RunManager
+
+    CLI->>P0: phase0_cmd(config_path, dry_run)
+    activate P0
+
+    P0->>P0: Load + parse YAML config
+
+    P0->>HF: load_annotations()
+    activate HF
+    HF-->>P0: CriterionAnnotation[] (1024 pairs)
+    deactivate HF
+
+    opt keyword_filter in config
+        P0->>P0: filter_by_keywords(annotations, keywords)
+    end
+
+    P0->>Samp: stratified_sample(annotations, n_pairs=20, seed=42)
+    activate Samp
+    Samp-->>P0: Phase0Sample
+    deactivate Samp
+
+    loop For each model in config.models[]
+        P0->>P0: Instantiate adapter
+
+        P0->>Eval: run_model_benchmark(adapter, sample, budget, concurrency)
+        activate Eval
+
+        loop For each pair in sample.pairs
+            Eval->>VE: evaluate_criterion(note, criterion_text, type, adapter)
+            activate VE
+            VE->>Model: generate(prompt)
+            activate Model
+            Model-->>VE: ModelResponse
+            deactivate Model
+            VE-->>Eval: CriterionResult
+            deactivate VE
+            Eval->>Eval: Accumulate cost, check budget guard
+        end
+
+        Eval-->>P0: CriterionResult[]
+        deactivate Eval
+
+        P0->>Metrics: compute_metrics(predicted, expert_labels)
+        activate Metrics
+        Metrics-->>P0: {accuracy, f1_macro, cohens_kappa, confusion_matrix}
+        deactivate Metrics
+
+        P0->>P0: compute_evidence_overlap() per pair
+        P0->>P0: aggregate_to_trial_verdict() per (patient, trial)
+
+        P0->>RM: save_run(RunResult, config, annotations)
+        activate RM
+        RM->>RM: Write config.json, results.json, metrics.json, cost_summary.json
+        RM-->>P0: run_dir path
+        deactivate RM
+
+        P0->>CLI: Echo results table
+    end
+
+    deactivate P0
+</pre>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="e2e-pipeline">8. Future E2E Pipeline</h2>
+<p>Planned end-to-end flow: INGEST &rarr; PRESCREEN &rarr; VALIDATE &rarr; trial-level aggregation.</p>
+
+<div class="diagram-card">
+<pre class="mermaid">
+sequenceDiagram
+    participant CLI
+    participant Ingest as INGEST
+    participant PS as PRESCREEN Agent
+    participant CTGov as CT.gov API v2
+    participant Val as VALIDATE
+    participant Agg as Aggregator
+
+    CLI->>Ingest: understand(patient_note)
+    activate Ingest
+    Ingest-->>CLI: PatientProfile + KeyFacts
+    deactivate Ingest
+
+    CLI->>PS: run_prescreen_agent(patient_note, key_facts, ...)
+    activate PS
+
+    loop Agentic search (Gemini-driven)
+        PS->>CTGov: search_trials(condition, intervention, ...)
+        CTGov-->>PS: trial summaries[]
+    end
+
+    opt Promising candidates
+        PS->>CTGov: get_trial_details(nct_id)
+        CTGov-->>PS: full eligibility criteria text
+    end
+
+    PS-->>CLI: PresearchResult{TrialCandidate[]}
+    deactivate PS
+
+    loop For each TrialCandidate
+        CLI->>CTGov: get_trial_details(nct_id)
+        CTGov-->>CLI: eligibility criteria text
+
+        CLI->>CLI: Parse eligibility into individual criteria[]
+
+        loop For each criterion
+            CLI->>Val: evaluate_criterion(patient_note, criterion_text, type, adapter)
+            activate Val
+            Val-->>CLI: CriterionResult{MET / NOT_MET / UNKNOWN}
+            deactivate Val
+        end
+
+        CLI->>Agg: aggregate_to_trial_verdict(criterion_results[])
+        activate Agg
+        Note over Agg: NOT_MET inclusion -> EXCLUDED | MET exclusion -> EXCLUDED | All MET + no exclusion -> ELIGIBLE | Otherwise -> UNCERTAIN
+        Agg-->>CLI: TrialVerdict
+        deactivate Agg
+    end
+
+    CLI->>CLI: Rank trials by verdict + confidence
+    CLI->>CLI: Save to runs/{run_id}/ with full trace
+</pre>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="run-artifacts">9. Run Artifacts Structure</h2>
+
+<pre style="background:#fff;padding:16px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);font-size:14px;line-height:1.5;">
+runs/
+ └── phase0-&lt;model&gt;-&lt;YYYYMMDD-HHMMSS&gt;/
+      ├── config.json           # Frozen pipeline configuration
+      ├── results.json          # Per-pair predictions + audit fields
+      ├── metrics.json          # accuracy, F1, kappa, confusion matrix
+      ├── cost_summary.json     # Aggregate cost/token/latency stats
+      └── audit_table.md        # Human-readable verdict comparison
+</pre>
+
+<h3>Cache Key Isolation</h3>
+<table>
+  <tr><th><code>ingest_source</code></th><th>Meaning</th></tr>
+  <tr><td><code>"gold"</code></td><td>Gold human-annotated data (Phase 0 isolated eval)</td></tr>
+  <tr><td><code>"model_medgemma"</code></td><td>MedGemma INGEST output as input</td></tr>
+  <tr><td><code>"model_gemini"</code></td><td>Gemini INGEST output as input</td></tr>
+</table>
+
+<br/>
+<p style="color:#999;font-size:12px;">Generated from <code>docs/architecture/pipeline-overview.md</code> and <code>docs/architecture/prescreen-sequence-diagrams.md</code></p>
+
+</body>
+</html>

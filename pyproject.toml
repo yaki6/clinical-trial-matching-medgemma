@@ -13,8 +13,11 @@ dependencies = [
     "structlog>=23.1",
     "pyyaml>=6.0",
     "google-genai>=1.0",
-    "huggingface-hub>=0.20",
+    "huggingface-hub[cli]>=0.20",
     "python-dotenv>=1.0",
+    "google-auth>=2.0",
+    "streamlit>=1.54.0",
+    "plotly>=6.5.2",
 ]
 
 [project.scripts]

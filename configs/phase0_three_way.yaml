@@ -26,7 +26,8 @@ models:
   - name: medgemma-27b
     provider: huggingface
     model_id: google/medgemma-27b-text-it
-    endpoint_url: "https://wu5nclwms3ctrwd1.us-east-1.aws.endpoints.huggingface.cloud"
+    endpoint_url: "https://kuvn3eevqf12pnya.us-east-1.aws.endpoints.huggingface.cloud"
+    use_chat_api: true
     max_concurrent: 1
 
   - name: gemini-3-pro

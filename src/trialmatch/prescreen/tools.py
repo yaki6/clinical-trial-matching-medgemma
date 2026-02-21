@@ -96,9 +96,37 @@ _SEARCH_TRIALS_DECL = genai_types.FunctionDeclaration(
                     "pretreated patients."
                 ),
             ),
+            "location": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description=(
+                    "Geographic location to filter trial sites. "
+                    "City, state, or country. Examples: 'Boston', 'California', 'Germany'."
+                ),
+            ),
+            "min_age": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description=(
+                    "Patient's age as lower bound. Format: 'X Years'. "
+                    "Finds trials accepting patients this age or older. "
+                    "Example: '65 Years'."
+                ),
+            ),
+            "max_age": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description=(
+                    "Patient's age as upper bound. Format: 'X Years'. "
+                    "Finds trials accepting patients this age or younger. "
+                    "Example: '75 Years'."
+                ),
+            ),
+            "sex": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                enum=["MALE", "FEMALE", "ALL"],
+                description="Patient's sex for eligibility filtering. Default ALL.",
+            ),
             "page_size": genai_types.Schema(
                 type=genai_types.Type.INTEGER,
-                description="Number of results to return. Default 20. Max 50.",
+                description="Number of results to return. Default 20. Max 100.",
             ),
         },
     ),
@@ -226,6 +254,10 @@ class ToolExecutor:
         eligibility_keywords: str | None = None,
         status: list[str] | None = None,
         phase: list[str] | None = None,
+        location: str | None = None,
+        min_age: str | None = None,
+        max_age: str | None = None,
+        sex: str | None = None,
         page_size: int = 20,
         **_ignored: Any,
     ) -> tuple[dict, str]:
@@ -236,7 +268,11 @@ class ToolExecutor:
             eligibility_keywords=eligibility_keywords,
             status=status or ["RECRUITING"],
             phase=phase or None,
-            page_size=min(int(page_size), 50),
+            location=location,
+            sex=sex,
+            min_age=min_age,
+            max_age=max_age,
+            page_size=min(int(page_size), 100),
         )
         latency = (time.perf_counter() - start) * 1000
 

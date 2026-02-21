@@ -22,6 +22,22 @@ CTGOV_BASE = "https://clinicaltrials.gov/api/v2"
 RATE_LIMIT_RPM = 40
 _MIN_INTERVAL = 60.0 / RATE_LIMIT_RPM  # seconds between requests
 
+# CT.gov API v2 uses aggFilters for phase filtering, not filter.phase.
+# Values use "phase:<N>" format, not the enum names used in our interface.
+_PHASE_AGG_MAP: dict[str, str] = {
+    "EARLY_PHASE1": "phase:early1",
+    "PHASE1": "phase:1",
+    "PHASE2": "phase:2",
+    "PHASE3": "phase:3",
+    "PHASE4": "phase:4",
+}
+
+# CT.gov API v2 sex filtering also uses aggFilters (comma-joined with phase).
+_SEX_AGG_MAP: dict[str, str] = {
+    "MALE": "sex:m",
+    "FEMALE": "sex:f",
+}
+
 
 class CTGovClient:
     """Async HTTP client for ClinicalTrials.gov API v2.
@@ -57,6 +73,10 @@ class CTGovClient:
                     await asyncio.sleep(wait)
                     self._last_call_time = time.monotonic()  # prevent double-wait
                     continue
+                if resp.status_code == 400:
+                    body = resp.text
+                    logger.error("ctgov_bad_request", path=path, params=params, body=body)
+                    raise ValueError(f"CT.gov API 400 Bad Request: {body}")
                 resp.raise_for_status()
                 return resp.json()
             except (httpx.TimeoutException, httpx.NetworkError) as exc:
@@ -76,6 +96,10 @@ class CTGovClient:
         eligibility_keywords: str | None = None,
         status: list[str] | None = None,
         phase: list[str] | None = None,
+        location: str | None = None,
+        sex: str | None = None,
+        min_age: str | None = None,
+        max_age: str | None = None,
         advanced_query: str | None = None,
         page_size: int = 20,
         page_token: str | None = None,
@@ -91,19 +115,44 @@ class CTGovClient:
             params["query.cond"] = condition
         if intervention:
             params["query.intr"] = intervention
+        if location:
+            params["query.locn"] = location
         if eligibility_keywords:
             params["query.term"] = eligibility_keywords
-        if advanced_query:
-            # Essie syntax — supports AREA[FieldName] expressions
+
+        # Age filtering via Essie advanced query AREA expressions
+        age_clauses: list[str] = []
+        if min_age:
+            age_clauses.append(f"AREA[MinimumAge]RANGE[MIN, {min_age}]")
+        if max_age:
+            age_clauses.append(f"AREA[MaximumAge]RANGE[{max_age}, MAX]")
+        age_query = " AND ".join(age_clauses) if age_clauses else ""
+
+        # Compose advanced_query + age clauses into query.term
+        combined_advanced = " AND ".join(
+            part for part in [advanced_query or "", age_query] if part
+        )
+        if combined_advanced:
             existing_term = params.get("query.term", "")
             if existing_term:
-                params["query.term"] = f"{existing_term} AND ({advanced_query})"
+                params["query.term"] = f"{existing_term} AND ({combined_advanced})"
             else:
-                params["query.term"] = advanced_query
+                params["query.term"] = combined_advanced
+
         if status:
             params["filter.overallStatus"] = ",".join(status)
+
+        # aggFilters: compose phase + sex (comma-joined)
+        agg_parts: list[str] = []
         if phase:
-            params["filter.phase"] = ",".join(phase)
+            agg_parts.extend(_PHASE_AGG_MAP.get(p, f"phase:{p}") for p in phase)
+        if sex and sex != "ALL":
+            sex_val = _SEX_AGG_MAP.get(sex)
+            if sex_val:
+                agg_parts.append(sex_val)
+        if agg_parts:
+            params["aggFilters"] = ",".join(agg_parts)
+
         if page_token:
             params["pageToken"] = page_token
 
