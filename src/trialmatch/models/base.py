@@ -9,6 +9,8 @@ import abc
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from trialmatch.models.schema import ModelResponse
 
 
@@ -23,6 +25,15 @@ class ModelAdapter(abc.ABC):
     @abc.abstractmethod
     async def generate(self, prompt: str, max_tokens: int = 2048) -> ModelResponse:
         """Send prompt to model and return structured response."""
+
+    async def generate_with_image(
+        self, prompt: str, image_path: Path, max_tokens: int = 512
+    ) -> ModelResponse:
+        """Multimodal generation: image + text -> findings.
+
+        Override in subclasses that support images.
+        """
+        raise NotImplementedError(f"{self.name} does not support image input")
 
     @abc.abstractmethod
     async def health_check(self) -> bool:

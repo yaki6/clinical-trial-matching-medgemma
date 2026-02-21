@@ -1,0 +1,679 @@
+{
+  "version": "2.0",
+  "created_at": "2026-02-21T23:00:39Z",
+  "description": "5 curated NSCLC patients for MedGemma Impact Challenge demo",
+  "patients": [
+    {
+      "topic_id": "mpx1016",
+      "source_dataset": "MedPix",
+      "ingest_mode": "multimodal",
+      "ehr_text": "The patient is a 43-year-old female who presented with a 6-month history of progressively worsening shortness of breath with exertion during her 5-mile runs.  The patient also complained of wheezing but denied having a cough, fevers, chills, or weight loss.  This patient does not have a previous history of any chronic illnesses and does not have any history of tobacco use.\n\nPhysical Exam:  \nNo abnormalities.\n\nLabs:\n- Fungal, acid-fast, and Gram stains showed no  organisms.  \n- Pleural fluid analysis was suspicious for malignancy.\n- Histopathologic analysis of tissue samples of all three right lung lobes including mediastinal lymph nodes revealed extensive lymphovascular invasion, focal areas of necrosis, and several areas with signet-ring cells.\n\nChest PA/LAT revealed increased interstitial markings in the right lower lobe.\n\nContrast enhanced chest CT revealed diffuse increased interstitial markings involving the right middle and lower lobes, pleural thickening/scarring of the posterior right lower lobe, and a small right-sided pleural effusion.",
+      "profile_text": "## Clinical History\nA 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chronic illnesses or tobacco use.\n\n## Physical Exam\nThe physical examination revealed no abnormalities.\n\n## Imaging Findings\nAxial CT images of the chest demonstrate nodular and branching opacities in the right upper lobe, consistent with a tree-in-bud pattern. A large, well-circumscribed mass is present in the left lower lobe. Additionally, there is evidence of interstitial changes in the right lung, including honeycombing and pleural thickening, particularly in the right lower lobe, along with a small right-sided pleural effusion.\n\n## Assessment & Plan\nLaboratory analysis of fungal, acid-fast, and Gram stains showed no organisms. Pleural fluid analysis was suspicious for malignancy. Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\n\n## Demographics\nThe patient is a 43-year-old female.\n\n## Missing Info\nInformation not provided includes cancer stage, performance status, and prior treatment history.",
+      "key_facts": [
+        {
+          "field": "primary_diagnosis",
+          "value": "Lung adenocarcinoma with signet-ring cell features",
+          "evidence_span": "Histopathologic analysis of tissue samples of all three right lung lobes including mediastinal lymph nodes revealed extensive lymphovascular invasion, focal areas of necrosis, and several areas with signet-ring cells.",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "demographics",
+          "value": {
+            "age": "43",
+            "sex": "female"
+          },
+          "evidence_span": "The patient is a 43-year-old female",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "imaging_findings",
+          "value": {
+            "description": "Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.",
+            "findings": [
+              "Nodular and branching opacities in right upper lobe (tree-in-bud pattern)",
+              "Large mass in left lower lobe",
+              "Interstitial changes in right lung",
+              "Right pleural thickening",
+              "Small right-sided pleural effusion"
+            ]
+          },
+          "evidence_span": null,
+          "required": true,
+          "notes": "imaging_source: direct_image_analysis"
+        },
+        {
+          "field": "key_findings",
+          "value": [
+            "Progressively worsening shortness of breath with exertion",
+            "Wheezing",
+            "Pleural fluid suspicious for malignancy",
+            "Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells",
+            "No history of tobacco use"
+          ],
+          "evidence_span": null,
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "missing_info",
+          "value": [
+            "Cancer stage",
+            "Performance status",
+            "Treatment history"
+          ],
+          "evidence_span": null,
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "symptoms",
+          "value": [
+            "shortness of breath with exertion",
+            "wheezing"
+          ],
+          "evidence_span": "progressively worsening shortness of breath with exertion during her 5-mile runs. The patient also complained of wheezing",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "histopathology",
+          "value": {
+            "lymphovascular_invasion": true,
+            "necrosis": "focal",
+            "cell_type": "signet-ring cells"
+          },
+          "evidence_span": "extensive lymphovascular invasion, focal areas of necrosis, and several areas with signet-ring cells",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "tobacco_use",
+          "value": "never smoker",
+          "evidence_span": "does not have any history of tobacco use",
+          "required": false,
+          "notes": null
+        }
+      ],
+      "image": {
+        "file_path": "ingest_design/MedPix-2-0/images/MPX1016_synpic34317.png",
+        "modality": "CT w/contrast (IV)",
+        "plane": "Axial",
+        "location": "Chest, Pulmonary",
+        "caption": "Contrast enhanced chest CT shows diffuse increased interstitial markings involving the right middle and lower lobes."
+      },
+      "medgemma_image_findings": null,
+      "diagnosis": "Adenocarcinoma of the Lung"
+    },
+    {
+      "topic_id": "mpx1575",
+      "source_dataset": "MedPix",
+      "ingest_mode": "multimodal",
+      "ehr_text": "86 y/o male with PMHX of HTN, Afib, hypothyroidism, idiopathic pulmonary fibrosis, dementia, and depression transferred by his assisted living facility for 3 week hx of decreased PO intake, dry cough, increased confusion, and more recently hypotension.  Admitted to the hospital for treatment of bilateral pneumonia and malnutrition.\n\n86 y/o well developed, but poorly nourished, demented male, who is a poor historian.  Does not appear to be in distress, however c/o of cough and poor apetite.  \n\nPulm:  Bilateral rales, and ronchi.  No wheezing, or stridor.\nCV:  Irregular Rate and rythm, no rubs, or gallops, equal pulses X4.  \nSkin:  Pale, warm and dry.\nAbd:  NT/ND, + BS throughout.\nExtremeties:  No edema noted, DTRs equal, strength and sensation equal and WNL.\n\nLabs:  WBC 17.7, HGB 13.4, HCT 40.7, Plt 417.\nChem:  Na 144, K 3.9, CL 106, CO2 27, BUN 17, Cr1.35, Gluc 92, Alb 2.8\nBC X2 Negative for organisms.\nResp Cx:  Candida \nBronchoscopy:  Cells consistent with metastatic Squamous Cell Non-small Cell Lung Cancer.\n\nCXR:  Diffuse opacities throughout bilateral lungs indicative of a fibrotic process.  Multiple pulmonary nodules found throughout bilateral lung fields.\n\nCT:  Multifocal nodular opacities throughout the bilateral lungs concerning for diffuse metastatic disease. Fibrotic changes with a lower lobe predominance at the representing idiopathic pulmonary fibrosis.",
+      "profile_text": "## Clinical History\nAn 86-year-old male with a past medical history of hypertension, atrial fibrillation, hypothyroidism, idiopathic pulmonary fibrosis, dementia, and depression was transferred from his assisted living facility for a three-week history of decreased oral intake, dry cough, increased confusion, and recent hypotension. He was admitted for bilateral pneumonia and malnutrition.\n\n## Physical Exam\nThe patient is an 86-year-old, well-developed but poorly nourished male with dementia, who is a poor historian. He complains of cough and poor appetite. Pulmonary exam reveals bilateral rales and rhonchi. The cardiovascular exam is notable for an irregular rate and rhythm. His skin is pale, warm, and dry. The abdomen is non-tender and non-distended with positive bowel sounds. Extremities are without edema.\n\n## Imaging Findings\nAxial CT of the chest demonstrates extensive bilateral pulmonary abnormalities. There are numerous, variably sized nodules and areas of consolidation throughout both lungs, more prominent on the right. These findings are superimposed on a background of severe fibrotic changes, including reticulation, traction bronchiectasis, and honeycombing, particularly in the lower lobes, consistent with a usual interstitial pneumonia (UIP) pattern. The combination is suggestive of metastatic disease in the setting of underlying idiopathic pulmonary fibrosis.\n\n## Assessment & Plan\nThe patient is an 86-year-old male with multiple comorbidities, including idiopathic pulmonary fibrosis, admitted for pneumonia and malnutrition. Labs were significant for leukocytosis (WBC 17.7) and hypoalbuminemia (Alb 2.8). Blood cultures were negative, but a respiratory culture grew Candida. A bronchoscopy confirmed a new diagnosis of metastatic Squamous Cell Non-small Cell Lung Cancer.\n\n## Demographics\nThe patient is an 86-year-old male.\n\n## Missing Info\nInformation not available in the provided record includes smoking history, cancer stage, and performance status (e.g., ECOG).",
+      "key_facts": [
+        {
+          "field": "primary_diagnosis",
+          "value": "metastatic Squamous Cell Non-small Cell Lung Cancer",
+          "evidence_span": "Bronchoscopy: Cells consistent with metastatic Squamous Cell Non-small Cell Lung Cancer.",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "demographics",
+          "value": {
+            "age": "86",
+            "sex": "male"
+          },
+          "evidence_span": "86 y/o male",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "imaging_findings",
+          "value": {
+            "description": "Axial CT of the chest shows extensive bilateral pulmonary abnormalities, including numerous variably sized nodules and areas of consolidation, more prominent in the right lung. These are superimposed on a background of severe fibrotic changes with a lower lobe predominance, featuring reticulation, traction bronchiectasis, and honeycombing, consistent with a usual interstitial pneumonia (UIP) pattern.",
+            "key_features": [
+              "Bilateral pulmonary nodules",
+              "Confluent opacities/consolidation",
+              "Reticulation",
+              "Traction bronchiectasis",
+              "Honeycombing",
+              "Lower lobe predominance of fibrotic changes"
+            ]
+          },
+          "evidence_span": null,
+          "required": true,
+          "notes": "imaging_source: direct_image_analysis"
+        },
+        {
+          "field": "key_findings",
+          "value": [
+            "History of idiopathic pulmonary fibrosis",
+            "Decreased PO intake",
+            "Dry cough",
+            "Increased confusion",
+            "Hypotension",
+            "Bilateral rales and ronchi",
+            "Leukocytosis (WBC 17.7)",
+            "Low albumin (2.8)",
+            "Bronchoscopy positive for metastatic Squamous Cell NSCLC"
+          ],
+          "evidence_span": "idiopathic pulmonary fibrosis",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "missing_info",
+          "value": [
+            "smoking_history",
+            "performance_status",
+            "cancer_stage"
+          ],
+          "evidence_span": null,
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "comorbidities",
+          "value": [
+            "HTN",
+            "Afib",
+            "hypothyroidism",
+            "idiopathic pulmonary fibrosis",
+            "dementia",
+            "depression",
+            "bilateral pneumonia",
+            "malnutrition"
+          ],
+          "evidence_span": "PMHX of HTN, Afib, hypothyroidism, idiopathic pulmonary fibrosis, dementia, and depression transferred by his assisted living facility for 3 week hx of decreased PO intake, dry cough, increased confusion, and more recently hypotension. Admitted to the hospital for treatment of bilateral pneumonia and malnutrition.",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "lab_results",
+          "value": {
+            "WBC": "17.7",
+            "HGB": "13.4",
+            "HCT": "40.7",
+            "Plt": "417",
+            "Na": "144",
+            "K": "3.9",
+            "CL": "106",
+            "CO2": "27",
+            "BUN": "17",
+            "Cr": "1.35",
+            "Gluc": "92",
+            "Alb": "2.8"
+          },
+          "evidence_span": "WBC 17.7, HGB 13.4, HCT 40.7, Plt 417. Chem: Na 144, K 3.9, CL 106, CO2 27, BUN 17, Cr1.35, Gluc 92, Alb 2.8",
+          "required": false,
+          "notes": null
+        }
+      ],
+      "image": {
+        "file_path": "ingest_design/MedPix-2-0/images/MPX1575_synpic39398.png",
+        "modality": "CT - noncontrast",
+        "plane": "Axial",
+        "location": "Chest, Pulmonary",
+        "caption": "There are too numerous to count multifocal nodular opacities throughout bilateral lung slices.  Diffuse interlobular septal thickening and peribronchial cuffing noted, predominantly in the lung bases.  Honeycombing and fibrotic changes are also present bilaterally.  There is a small left pleural effusion.   Mediastinal adenopathy is present to include the pretracheal, paratracheal, AP window and subcarinal chains"
+      },
+      "medgemma_image_findings": null,
+      "diagnosis": "Metastatic Squamous Cell Lung Cancer with Underlying Idiopathic Pulmonary Fibrosis"
+    },
+    {
+      "topic_id": "mpx1875",
+      "source_dataset": "MedPix",
+      "ingest_mode": "multimodal",
+      "ehr_text": "• Smoker\n• Cough\n• Shortness of breath\n\n• Cachectic\n• Normal vital signs\n\n•  CXR shows an ill defined mass in the RUL\n•  CT shows a lobulated 4 cm mass with spiculation in the RUL\n•  Histology shows abundant cytoplasm and prominent nucleoli",
+      "profile_text": "## Clinical History\nThe patient is a smoker presenting with cough and shortness of breath.\n\n## Physical Exam\nOn examination, the patient is cachectic with normal vital signs.\n\n## Imaging Findings\nDirect analysis of the provided axial chest CT scan reveals a large, irregularly shaped, spiculated soft tissue mass in the right upper lobe, which appears to abut the pleura. A metallic stent is also noted in the ascending aorta. The provided clinical notes state that a chest X-ray showed an ill-defined mass in the right upper lobe and a CT scan described a lobulated 4 cm mass with spiculation in the same location.\n\n## Assessment & Plan\nHistological analysis of a specimen shows abundant cytoplasm and prominent nucleoli, findings suspicious for malignancy. The primary diagnosis is a right upper lobe lung mass.\n\n## Demographics\nAge and sex are not provided.\n\n## Missing Info\nPatient age, sex, and a definitive final diagnosis are not available in the provided information.",
+      "key_facts": [
+        {
+          "field": "primary_diagnosis",
+          "value": "Right upper lobe lung mass",
+          "evidence_span": "CXR shows an ill defined mass in the RUL • CT shows a lobulated 4 cm mass with spiculation in the RUL",
+          "required": true,
+          "notes": "Diagnosis is inferred from imaging findings and clinical context; a specific histopathological diagnosis is not provided."
+        },
+        {
+          "field": "demographics",
+          "value": {
+            "age": null,
+            "sex": null
+          },
+          "evidence_span": null,
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "imaging_findings",
+          "value": {
+            "modality": "CT",
+            "view": "Axial",
+            "location": "Right upper lobe",
+            "description": "Large, irregularly shaped, spiculated soft tissue mass in the right upper lobe, abutting the pleura. A metallic stent is noted in the ascending aorta."
+          },
+          "evidence_span": null,
+          "required": true,
+          "notes": "imaging_source: direct_image_analysis"
+        },
+        {
+          "field": "key_findings",
+          "value": [
+            "Smoker",
+            "Cough and shortness of breath",
+            "Cachectic",
+            "Right upper lobe spiculated mass on CT",
+            "Histology with abundant cytoplasm and prominent nucleoli"
+          ],
+          "evidence_span": "Smoker • Cough • Shortness of breath • Cachectic • CT shows a lobulated 4 cm mass with spiculation in the RUL • Histology shows abundant cytoplasm and prominent nucleoli",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "missing_info",
+          "value": [
+            "age",
+            "sex"
+          ],
+          "evidence_span": null,
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "symptoms",
+          "value": [
+            "cough",
+            "shortness of breath"
+          ],
+          "evidence_span": "Cough • Shortness of breath",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "medical_history",
+          "value": [
+            "smoker"
+          ],
+          "evidence_span": "Smoker",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "physical_exam_findings",
+          "value": [
+            "cachectic",
+            "normal vital signs"
+          ],
+          "evidence_span": "Cachectic • Normal vital signs",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "histology",
+          "value": "abundant cytoplasm and prominent nucleoli",
+          "evidence_span": "Histology shows abundant cytoplasm and prominent nucleoli",
+          "required": false,
+          "notes": null
+        }
+      ],
+      "image": {
+        "file_path": "ingest_design/MedPix-2-0/images/MPX1875_synpic23054.png",
+        "modality": "CT - noncontrast",
+        "plane": "Axial",
+        "location": "Chest, Pulmonary",
+        "caption": "CT demonstrates a RUL mass"
+      },
+      "medgemma_image_findings": null,
+      "diagnosis": "Non-small Cell Lung Cancer\n(Large-cell/clear-cell variant)"
+    },
+    {
+      "topic_id": "6031552-1",
+      "source_dataset": "PMC-Patients",
+      "ingest_mode": "text",
+      "ehr_text": "A 63-year-old Japanese man, a current smoker of more than 45 pack-years, was revealed by routine examination’s chest X-ray to have an abnormal shadow in the left middle lung field. His past medical history was unremarkable. A chest computed tomography (CT) scan showed a 3.6 × 2.8 cm pulmonary lesion in the left upper lobe, with a clear boundary and heterogeneous contrast enhancement (Fig. ). Positron emission tomography (PET) showed an accumulation of 18F-fluorodexyglucose (FDG) with a maximum standardized uptake value (SUV max) of 4.95 in the early phase and 6.31 in the late phase in the nodule. No accumulation of FDG was noted in the pulmonary hilum, or mediastinal lymph nodes.\\nA trans-bronchial lung biopsy (TBLB) of the mass in the left upper lobe was performed; it revealed non-small cell carcinoma. Although the serum carcinoembryonic antigen (CEA) level was 52.1 ng/mL (normal range 0–5.0 ng/mL), there were no distant metastases or other cancer lesions. The preoperative clinical diagnosis of primary lung cancer, stage cT2aN0M0 stage IB was considered.\\nA left upper lobectomy and mediastinal lymph node dissection were performed by video-assisted thoracic surgery. The resected tumor measured 3.8 × 2.8 × 2.8 cm in diameter.\\nGrossly, the specimen showed a well-established boundary as a grayish lesion with areas of necrosis. The histopathological examination showed a solid proliferation of columnar atypical cells with cell cytoplasm and complex glandular structures with abundant desmoplastic stroma, a morphological resemblance to fetal lung and significant tumor necrosis (Fig. , ). Conventional lung adenocarcinoma, another histological component and morulae were not found. Periodic acid Schiff (PAS) staining demonstrated glycogen in the cytoplasm of the neoplastic cells. Stains for mucin were negative. The immunohistochemical analysis showed positivity for AE1/AE3, CEA, and alpha-fetoprotein (AFP) (focal) (Fig. ). Thyroid transcription factor-1 (TTF-1), chromogranin A, synaptophysin, CD56, and p40 were negative. The beta-catenin result was positive, predominantly in the cell membrane (Fig. ). The final histopathological diagnosis was H-FLAC.\\nBoth lymphatic and vascular invasion were detected. Microscopically, all margins were free and mediastinal lymph nodes (#5) showed metastasis. The final pathological staging was stage IIIA (pT2aN2M0). Both epidermal growth factor receptor (EGFR) mutations and anaplastic lymphoma kinase (ALK) gene rearrangements were negative. The expression of programmed cell death 1 ligand 1 (PD-L1) (Dako, clone 22C3) by resected specimen was negative.\\nThe patient received cisplatin plus vinorelbine as adjuvant chemotherapy, but it was canceled at two courses because of the dehydration and hyperglycemia induced by the chemotherapy. At 25 months after the surgery, the patient had relapsed pleural dissemination. Postoperative serum CEA and AFP was 1.5 and 3.7 ng/mL, respectively. But, serum CEA at the time of relapse was 132.4 ng/mL, and AFP was unfortunately not searched.\n\nAge: [[63.0, 'year']]\nGender: M\nPMID: 29974291",
+      "profile_text": "## Clinical History\nA 63-year-old Japanese man with a greater than 45 pack-year smoking history was found to have an abnormal shadow in the left middle lung field on a routine chest X-ray. His past medical history was unremarkable. A trans-bronchial lung biopsy of the mass, located in the left upper lobe, revealed non-small cell carcinoma. His serum carcinoembryonic antigen (CEA) level was elevated at 52.1 ng/mL. The preoperative clinical diagnosis was primary lung cancer, stage cT2aN0M0 (Stage IB).\n\n## Physical Exam\nNo physical examination findings were mentioned in the provided text.\n\n## Imaging Findings\nA chest X-ray revealed an abnormal shadow in the left middle lung field. A subsequent chest CT scan showed a 3.6 × 2.8 cm pulmonary lesion in the left upper lobe with a clear boundary and heterogeneous contrast enhancement. A PET scan demonstrated FDG accumulation in the nodule with an SUV max of 4.95 in the early phase and 6.31 in the late phase. No FDG accumulation was observed in the pulmonary hilum or mediastinal lymph nodes.\n\n## Assessment & Plan\nThe patient underwent a left upper lobectomy and mediastinal lymph node dissection. The final histopathological diagnosis was H-FLAC. Pathological examination revealed a resected tumor size of 3.8 × 2.8 × 2.8 cm, with lymphatic and vascular invasion present. Metastasis was found in mediastinal lymph nodes (#5), leading to a final pathological staging of pT2aN2M0 (Stage IIIA). Biomarker testing was negative for EGFR mutations, ALK gene rearrangements, and PD-L1 expression. The patient received two courses of adjuvant chemotherapy (cisplatin plus vinorelbine), which was discontinued due to side effects. He experienced a relapse with pleural dissemination 25 months after surgery.\n\n## Demographics\nThe patient is a 63-year-old Japanese man.\n\n## Missing Info\nAll required fields were populated from the provided text.",
+      "key_facts": [
+        {
+          "field": "primary_diagnosis",
+          "value": "H-FLAC",
+          "evidence_span": "The final histopathological diagnosis was H-FLAC.",
+          "required": true,
+          "notes": "Initially diagnosed as non-small cell carcinoma via biopsy."
+        },
+        {
+          "field": "demographics",
+          "value": {
+            "age": "63",
+            "sex": "male",
+            "race_ethnicity": "Japanese"
+          },
+          "evidence_span": "A 63-year-old Japanese man",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "imaging_findings",
+          "value": [
+            {
+              "modality": "Chest X-ray",
+              "finding": "abnormal shadow in the left middle lung field"
+            },
+            {
+              "modality": "CT",
+              "finding": "3.6 × 2.8 cm pulmonary lesion in the left upper lobe, with a clear boundary and heterogeneous contrast enhancement"
+            },
+            {
+              "modality": "PET",
+              "finding": "accumulation of 18F-fluorodexyglucose (FDG) with a maximum standardized uptake value (SUV max) of 4.95 in the early phase and 6.31 in the late phase in the nodule. No accumulation of FDG was noted in the pulmonary hilum, or mediastinal lymph nodes."
+            }
+          ],
+          "evidence_span": "chest X-ray to have an abnormal shadow in the left middle lung field. A chest computed tomography (CT) scan showed a 3.6 × 2.8 cm pulmonary lesion in the left upper lobe, with a clear boundary and heterogeneous contrast enhancement... Positron emission tomography (PET) showed an accumulation of 18F-fluorodexyglucose (FDG) with a maximum standardized uptake value (SUV max) of 4.95 in the early phase and 6.31 in the late phase in the nodule. No accumulation of FDG was noted in the pulmonary hilum, or mediastinal lymph nodes.",
+          "required": true,
+          "notes": "imaging_source: ehr_extracted"
+        },
+        {
+          "field": "key_findings",
+          "value": [
+            "Left upper lobe pulmonary lesion",
+            "Final diagnosis of H-FLAC",
+            "Pathological stage pT2aN2M0 (Stage IIIA)",
+            "Metastasis to mediastinal lymph nodes (#5)",
+            "Negative for EGFR mutations, ALK rearrangements, and PD-L1 expression",
+            "Relapsed with pleural dissemination at 25 months post-surgery"
+          ],
+          "evidence_span": "pulmonary lesion in the left upper lobe... The final histopathological diagnosis was H-FLAC... mediastinal lymph nodes (#5) showed metastasis. The final pathological staging was stage IIIA (pT2aN2M0)... Both epidermal growth factor receptor (EGFR) mutations and anaplastic lymphoma kinase (ALK) gene rearrangements were negative. The expression of programmed cell death 1 ligand 1 (PD-L1)... was negative... At 25 months after the surgery, the patient had relapsed pleural dissemination.",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "missing_info",
+          "value": [],
+          "evidence_span": null,
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "cancer_stage",
+          "value": {
+            "clinical": "cT2aN0M0, Stage IB",
+            "pathological": "pT2aN2M0, Stage IIIA"
+          },
+          "evidence_span": "The preoperative clinical diagnosis of primary lung cancer, stage cT2aN0M0 stage IB was considered... The final pathological staging was stage IIIA (pT2aN2M0).",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "tumor_size",
+          "value": "3.8 x 2.8 x 2.8 cm",
+          "evidence_span": "The resected tumor measured 3.8 × 2.8 × 2.8 cm in diameter.",
+          "required": false,
+          "notes": "Measured on resected specimen. CT scan measured it as 3.6 x 2.8 cm."
+        },
+        {
+          "field": "metastasis_sites",
+          "value": [
+            "mediastinal lymph nodes (#5)",
+            "pleural dissemination"
+          ],
+          "evidence_span": "mediastinal lymph nodes (#5) showed metastasis... At 25 months after the surgery, the patient had relapsed pleural dissemination.",
+          "required": false,
+          "notes": "Pleural dissemination was a site of relapse."
+        },
+        {
+          "field": "biomarkers",
+          "value": [
+            {
+              "name": "CEA",
+              "result": "52.1 ng/mL",
+              "notes": "Preoperative"
+            },
+            {
+              "name": "EGFR",
+              "result": "negative"
+            },
+            {
+              "name": "ALK",
+              "result": "negative"
+            },
+            {
+              "name": "PD-L1",
+              "result": "negative"
+            },
+            {
+              "name": "beta-catenin",
+              "result": "positive"
+            },
+            {
+              "name": "AFP",
+              "result": "positive (focal)"
+            }
+          ],
+          "evidence_span": "serum carcinoembryonic antigen (CEA) level was 52.1 ng/mL... Both epidermal growth factor receptor (EGFR) mutations and anaplastic lymphoma kinase (ALK) gene rearrangements were negative. The expression of programmed cell death 1 ligand 1 (PD-L1)... was negative... The beta-catenin result was positive... alpha-fetoprotein (AFP) (focal)",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "treatments",
+          "value": [
+            {
+              "type": "surgery",
+              "details": "left upper lobectomy and mediastinal lymph node dissection"
+            },
+            {
+              "type": "chemotherapy",
+              "details": "cisplatin plus vinorelbine",
+              "notes": "Adjuvant, canceled after two courses due to side effects."
+            }
+          ],
+          "evidence_span": "A left upper lobectomy and mediastinal lymph node dissection were performed... The patient received cisplatin plus vinorelbine as adjuvant chemotherapy, but it was canceled at two courses",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "smoking_status",
+          "value": "current smoker",
+          "evidence_span": "a current smoker of more than 45 pack-years",
+          "required": false,
+          "notes": ">45 pack-years"
+        }
+      ],
+      "image": null,
+      "medgemma_image_findings": null,
+      "diagnosis": "Pure high-grade fetal adenocarcinoma of the lung: a case report"
+    },
+    {
+      "topic_id": "6000873-1",
+      "source_dataset": "PMC-Patients",
+      "ingest_mode": "text",
+      "ehr_text": "A 64-year-old man with a medical history of micropapillary thyroid cancer and stage IIIb lung adenocarcinoma with no evidence of active disease for 3 years after chemotherapy and radiation presented with subjective complaints of new onset fatigue, nausea, scalp tenderness, and xeroderma. His medications included gabapentin 300 mg four times a day for chemotherapy-induced neuropathy, erlotinib 150 mg once daily for epidermal growth factor receptor- (EGFR-) positive lung adenocarcinoma, and omeprazole 40 mg once daily for subjective gastroesophageal reflux disease. A screening magnetic resonance image of the head revealed a new hypovascular pituitary mass measuring approximately 1 cm by 0.8 cm ().\\nOn examination, the patient's vital signs were within normal limits. On physical exam, xeroderma was appreciated in all extremities. Finger size was proportional and no prognathism, acromegaly, or Cushingoid features were appreciated. The cardiopulmonary exam was normal.\\nInitial lab values demonstrated normal free triiodothyronine (T3) of 2.4 pg/mL (normal range (NR) 1.8–4.2 pg/mL), normal T3 of 86 ng/dL (NR 70–172 ng/dL), and normal free thyroxine of 1.00 ng/dL (NR 0.84–1.68 ng/dL). Prolactin was elevated at 28.9 ng/mL (NR 2.5–17.0 ng/mL). The patient's morning cortisol was immeasurably low at <1.0 mcg/dL (NR > 10 mcg/dL) as was the patient's testosterone level at <20 ng/dL (280–1100 ng/dL). Luteinizing hormone was low at 0.05 mIU/mL (NR 1.8–12.0 mIU/L).\\nThe patient was started on prednisone 20 mg by mouth daily, at which point he noticed immediate improvement in his energy and appetite as well as decrease in his nausea. For chronic steroid replacement therapy, the patient's treatment was changed from prednisone to hydrocortisone 20 mg of hydrocortisone in the morning and 10 mg in the evening. The patient was additionally instructed about the dangers of adrenal crisis and told to increase his hydrocortisone to 90 mg daily if acutely ill.\\nWithin a month of initial diagnoses, the patient suffered acute visual bilateral field cut and loss of peripheral vision. A repeat MRI demonstrated rapid enlargement of his pituitary mass, nearly doubled in size and described as a 2.2 cm by 1.2 cm mass impinging on the overlying optic chiasm ().\\nThe patient subsequently underwent transsphenoidal resection of his pituitary mass. Gross histology characterized the mass as firm and fibrous. Macroscopic analysis revealed metastatic lung adenocarcinoma described as adenohypophysis fibrosis. Further histologic analysis revealed positive identification of cytokeratin 7, TTF-1, Ki-67, and epidermal growth factor receptor (EGFR) positive with EGFR gene nucleotide change demonstrating T790M and L858R positivity. This histopathology demonstrated further EGFR mutation of the patient's known history of lung adenocarcinoma which initially was only positive for EGFR mutation L585R.\\nAfter transsphenoidal resection and subsequent whole-brain radiation, further results demonstrated a continued low morning cortisol at <1.0 mcg/dL (NR > 10 mcg/dL) and testosterone level at <20 ng/dL (280–1100 ng/dL). Luteinizing hormone was low at <0.1 mIU/mL (NR 1.8–12.0 mIU/L) as was follicle-stimulating hormone 0.8 mIU/mL (NR 1.5–12.4 mIU/mL). Free T4 was low at 0.65 ng/dL (NR 0.84–1.68 ng/dL) and thyroid-stimulating hormone was low at 0.019 MCI/mL (NR 0.4–4.0 MCI/mL). Prolactin was lower than previous but still elevated at 14.9 ng/mL (NR 2.5–17.0 ng/mL).\n\nAge: [[64.0, 'year']]\nGender: M\nPMID: 29955407",
+      "profile_text": "## Clinical History\nA 64-year-old man with a history of micropapillary thyroid cancer and stage IIIb EGFR-positive lung adenocarcinoma (stable for 3 years) presented with new fatigue, nausea, scalp tenderness, and xeroderma. Initial workup revealed a pituitary mass and lab findings consistent with panhypopituitarism, including low cortisol, testosterone, and LH, with elevated prolactin. He was started on steroid replacement. Within a month, he developed acute bilateral visual field cuts and loss of peripheral vision, corresponding to a rapid enlargement of the pituitary mass.\n\n## Physical Exam\nOn examination, vital signs were within normal limits. Xeroderma was noted on all extremities. There were no signs of prognathism, acromegaly, or Cushingoid features. The cardiopulmonary exam was normal.\n\n## Imaging Findings\nAn initial screening MRI of the head revealed a new hypovascular pituitary mass measuring approximately 1 cm by 0.8 cm. A repeat MRI one month later, following acute visual changes, demonstrated rapid enlargement of the mass to 2.2 cm by 1.2 cm, with impingement on the overlying optic chiasm.\n\n## Assessment & Plan\nThe patient was diagnosed with a pituitary mass, later confirmed by pathology after transsphenoidal resection to be metastatic lung adenocarcinoma. The histology revealed a new EGFR T790M mutation in addition to the previously known L858R mutation. His lab results indicated adrenal insufficiency and hypogonadism, for which he was started on hydrocortisone replacement therapy. Following surgery, he underwent whole-brain radiation.\n\n## Demographics\nThe patient is a 64-year-old man.\n\n## Missing Info\nAll required information was available in the provided text.",
+      "key_facts": [
+        {
+          "field": "primary_diagnosis",
+          "value": {
+            "diagnosis": "Metastatic lung adenocarcinoma to the pituitary gland",
+            "details": "Histology from transsphenoidal resection confirmed metastatic lung adenocarcinoma with EGFR mutations T790M and L858R."
+          },
+          "evidence_span": "Macroscopic analysis revealed metastatic lung adenocarcinoma described as adenohypophysis fibrosis. Further histologic analysis revealed positive identification of...epidermal growth factor receptor (EGFR) positive with EGFR gene nucleotide change demonstrating T790M and L858R positivity.",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "demographics",
+          "value": {
+            "age": "64",
+            "sex": "male"
+          },
+          "evidence_span": "A 64-year-old man",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "imaging_findings",
+          "value": [
+            {
+              "modality": "MRI",
+              "location": "head",
+              "description": "A new hypovascular pituitary mass measuring approximately 1 cm by 0.8 cm.",
+              "evidence_span": "A screening magnetic resonance image of the head revealed a new hypovascular pituitary mass measuring approximately 1 cm by 0.8 cm"
+            },
+            {
+              "modality": "MRI",
+              "location": "head",
+              "description": "Rapid enlargement of pituitary mass to 2.2 cm by 1.2 cm, impinging on the overlying optic chiasm.",
+              "evidence_span": "A repeat MRI demonstrated rapid enlargement of his pituitary mass, nearly doubled in size and described as a 2.2 cm by 1.2 cm mass impinging on the overlying optic chiasm"
+            }
+          ],
+          "evidence_span": "A screening magnetic resonance image of the head revealed a new hypovascular pituitary mass measuring approximately 1 cm by 0.8 cm...A repeat MRI demonstrated rapid enlargement of his pituitary mass...described as a 2.2 cm by 1.2 cm mass impinging on the overlying optic chiasm",
+          "required": true,
+          "notes": "imaging_source: ehr_extracted"
+        },
+        {
+          "field": "key_findings",
+          "value": [
+            "History of stage IIIb lung adenocarcinoma (EGFR L858R positive)",
+            "Presenting symptoms of fatigue, nausea, scalp tenderness, and xeroderma",
+            "Lab findings of low cortisol, low testosterone, and low LH",
+            "Acute onset of bilateral visual field cuts and peripheral vision loss",
+            "Transsphenoidal resection confirmed metastatic lung adenocarcinoma",
+            "Pathology identified a new EGFR T790M mutation"
+          ],
+          "evidence_span": "stage IIIb lung adenocarcinoma...erlotinib 150 mg once daily for epidermal growth factor receptor- (EGFR-) positive lung adenocarcinoma...fatigue, nausea, scalp tenderness, and xeroderma...morning cortisol was immeasurably low at <1.0 mcg/dL...testosterone level at <20 ng/dL...Luteinizing hormone was low at 0.05 mIU/mL...acute visual bilateral field cut and loss of peripheral vision...underwent transsphenoidal resection of his pituitary mass...histopathology demonstrated further EGFR mutation of the patient's known history of lung adenocarcinoma which initially was only positive for EGFR mutation L585R.",
+          "required": true,
+          "notes": null
+        },
+        {
+          "field": "missing_info",
+          "value": [],
+          "evidence_span": null,
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "patient_history",
+          "value": [
+            "micropapillary thyroid cancer",
+            "stage IIIb lung adenocarcinoma with no evidence of active disease for 3 years"
+          ],
+          "evidence_span": "a medical history of micropapillary thyroid cancer and stage IIIb lung adenocarcinoma with no evidence of active disease for 3 years",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "symptoms",
+          "value": [
+            "fatigue",
+            "nausea",
+            "scalp tenderness",
+            "xeroderma",
+            "acute visual bilateral field cut",
+            "loss of peripheral vision"
+          ],
+          "evidence_span": "subjective complaints of new onset fatigue, nausea, scalp tenderness, and xeroderma...acute visual bilateral field cut and loss of peripheral vision",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "lab_results",
+          "value": [
+            {
+              "test": "Prolactin",
+              "value": "28.9 ng/mL",
+              "range": "2.5–17.0 ng/mL",
+              "interpretation": "elevated"
+            },
+            {
+              "test": "Morning Cortisol",
+              "value": "<1.0 mcg/dL",
+              "range": "> 10 mcg/dL",
+              "interpretation": "immeasurably low"
+            },
+            {
+              "test": "Testosterone",
+              "value": "<20 ng/dL",
+              "range": "280–1100 ng/dL",
+              "interpretation": "low"
+            },
+            {
+              "test": "Luteinizing hormone",
+              "value": "0.05 mIU/mL",
+              "range": "1.8–12.0 mIU/L",
+              "interpretation": "low"
+            }
+          ],
+          "evidence_span": "Prolactin was elevated at 28.9 ng/mL (NR 2.5–17.0 ng/mL). The patient's morning cortisol was immeasurably low at <1.0 mcg/dL (NR > 10 mcg/dL) as was the patient's testosterone level at <20 ng/dL (280–1100 ng/dL). Luteinizing hormone was low at 0.05 mIU/mL (NR 1.8–12.0 mIU/L).",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "procedures",
+          "value": [
+            "transsphenoidal resection of his pituitary mass",
+            "whole-brain radiation"
+          ],
+          "evidence_span": "The patient subsequently underwent transsphenoidal resection of his pituitary mass...After transsphenoidal resection and subsequent whole-brain radiation",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "medications",
+          "value": [
+            {
+              "drug": "gabapentin",
+              "dose": "300 mg",
+              "frequency": "four times a day"
+            },
+            {
+              "drug": "erlotinib",
+              "dose": "150 mg",
+              "frequency": "once daily"
+            },
+            {
+              "drug": "omeprazole",
+              "dose": "40 mg",
+              "frequency": "once daily"
+            },
+            {
+              "drug": "hydrocortisone",
+              "dose": "20 mg in the morning and 10 mg in the evening",
+              "frequency": "daily"
+            }
+          ],
+          "evidence_span": "His medications included gabapentin 300 mg four times a day for chemotherapy-induced neuropathy, erlotinib 150 mg once daily for epidermal growth factor receptor- (EGFR-) positive lung adenocarcinoma, and omeprazole 40 mg once daily for subjective gastroesophageal reflux disease...the patient's treatment was changed from prednisone to hydrocortisone 20 mg of hydrocortisone in the morning and 10 mg in the evening.",
+          "required": false,
+          "notes": null
+        },
+        {
+          "field": "biomarkers",
+          "value": [
+            {
+              "marker": "EGFR",
+              "result": "positive",
+              "details": "L858R and T790M mutations"
+            },
+            {
+              "marker": "cytokeratin 7",
+              "result": "positive"
+            },
+            {
+              "marker": "TTF-1",
+              "result": "positive"
+            },
+            {
+              "marker": "Ki-67",
+              "result": "positive"
+            }
+          ],
+          "evidence_span": "Further histologic analysis revealed positive identification of cytokeratin 7, TTF-1, Ki-67, and epidermal growth factor receptor (EGFR) positive with EGFR gene nucleotide change demonstrating T790M and L858R positivity.",
+          "required": false,
+          "notes": null
+        }
+      ],
+      "image": null,
+      "medgemma_image_findings": null,
+      "diagnosis": "EGFR T790M-Positive Lung Adenocarcinoma Metastases to the Pituitary Gland Causing Adrenal Insufficiency: A Case Report"
+    }
+  ]
+}

@@ -46,3 +46,54 @@ def load_profiles(path: Path | str | None = None) -> list[dict]:
     with open(p) as f:
         data = json.load(f)
     return data.get("profiles", data if isinstance(data, list) else [])
+
+
+# Default path for demo harness
+_DEFAULT_HARNESS_PATH = (
+    Path(__file__).resolve().parents[3] / "data" / "sot" / "ingest" / "nsclc_demo_harness.json"
+)
+
+
+def load_demo_harness(path: Path | str | None = None) -> list[dict]:
+    """Load nsclc_demo_harness.json — 5 curated patients."""
+    p = Path(path) if path else _DEFAULT_HARNESS_PATH
+    with open(p) as f:
+        data = json.load(f)
+    return data.get("patients", [])
+
+
+def get_image_path(patient: dict, base_dir: Path | str | None = None) -> Path | None:
+    """Return resolved image path for multimodal patients, None for text-only.
+
+    base_dir defaults to repo root (3 levels up from this file).
+    """
+    if not patient.get("image"):
+        return None
+    base = Path(base_dir) if base_dir else Path(__file__).resolve().parents[3]
+    return base / patient["image"]["file_path"]
+
+
+def merge_image_findings(key_facts: dict[str, Any], image_findings: dict) -> dict[str, Any]:
+    """Merge MedGemma image extraction results into key_facts dict.
+
+    Adds 'medgemma_imaging' key with findings, impression, modality.
+    Does not overwrite existing facts.
+    """
+    merged = dict(key_facts)
+    merged["medgemma_imaging"] = image_findings
+    return merged
+
+
+def adapt_harness_patient(
+    patient: dict, image_findings: dict | None = None
+) -> tuple[str, dict[str, Any]]:
+    """Adapt harness patient for PRESCREEN.
+
+    Returns (patient_note, key_facts).
+    Reuses adapt_profile_for_prescreen() internally.
+    If image_findings provided, merges into key_facts.
+    """
+    patient_note, key_facts = adapt_profile_for_prescreen(patient)
+    if image_findings:
+        key_facts = merge_image_findings(key_facts, image_findings)
+    return patient_note, key_facts
