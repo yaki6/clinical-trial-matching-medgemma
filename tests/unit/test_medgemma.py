@@ -56,7 +56,7 @@ def test_medgemma_sets_scale_up_timeout_header():
         assert call_kwargs["headers"]["X-Scale-Up-Timeout"] == "300"
 
 
-def test_medgemma_default_max_retries_is_5():
-    """Default retries reduced from 12 to 5 (server handles cold start)."""
+def test_medgemma_default_max_retries_is_8():
+    """Default retries set to 8 for cold-start tolerance with X-Scale-Up-Timeout."""
     adapter = MedGemmaAdapter(hf_token="fake")
-    assert adapter._max_retries == 5
+    assert adapter._max_retries == 8
