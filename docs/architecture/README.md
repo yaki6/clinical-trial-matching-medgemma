@@ -47,7 +47,7 @@ PresearchResult                       CriterionResult[]
 ```
 src/trialmatch/
 ├── cli/           # Click CLI entry points (trialmatch command)
-├── ingest/        # INGEST component — patient text → PatientProfile + KeyFacts (not started)
+├── ingest/        # INGEST component — profile_adapter converts nsclc JSON → PRESCREEN dict
 ├── prescreen/     # PRESCREEN component — Gemini agentic search → PresearchResult (TrialCandidate[])
 │   ├── agent.py       # Gemini multi-turn agentic loop
 │   ├── ctgov_client.py # Async CT.gov API v2 client (rate-limited, retry)
@@ -56,8 +56,10 @@ src/trialmatch/
 ├── validate/      # VALIDATE component — (Patient, Criterion) → MET/NOT_MET/UNKNOWN
 │   └── evaluator.py   # Reusable criterion evaluator (model-agnostic)
 ├── data/          # Data loading: HF dataset (TrialGPT criterion annotations), sampling
-├── models/        # Model adapters: MedGemma (HF Inference) + Gemini (AI Studio)
-│   └── schema.py      # CriterionAnnotation, CriterionVerdict, ModelResponse, CriterionResult
+├── models/        # Model adapters: MedGemma (HF Inference + Vertex AI) + Gemini (AI Studio)
+│   ├── schema.py      # CriterionAnnotation, CriterionVerdict, ModelResponse, CriterionResult
+│   ├── medgemma.py    # HF Inference adapter (TGI text_gen + vLLM chat_completion)
+│   └── vertex_medgemma.py  # Vertex AI Model Garden adapter (Google Auth, GPU-hour costing)
 ├── evaluation/    # Metrics: accuracy, F1, Cohen's κ, confusion matrix, trial-level aggregation
 └── tracing/       # Run artifact persistence to runs/<run_id>/, cost tracking
 ```
@@ -76,7 +78,13 @@ All models (MedGemma 4B, MedGemma 27B, Gemini 3 Pro) implement a common interfac
 - `generate(prompt, **kwargs) → ModelResponse`
 - `ModelResponse` includes: text, input_tokens, output_tokens, latency_ms, estimated_cost
 
-MedGemma uses HuggingFace Inference API (TGI); Gemini uses Google AI Studio.
+MedGemma supports two backends:
+- **TGI (4B)**: `text_generation` with manual Gemma chat template — token counts estimated (chars // 4)
+- **vLLM (27B)**: `chat_completion` (OpenAI-compatible API) — token counts from API usage stats
+
+Vertex AI adapter (`VertexMedGemmaAdapter`) available for Model Garden deployments with Google Auth + GPU-hour cost estimation.
+
+Gemini uses Google AI Studio (`google-genai` SDK).
 
 ## Data Flow
 

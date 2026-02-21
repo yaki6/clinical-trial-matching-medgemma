@@ -1,21 +1,23 @@
-<!-- Last updated: 2026-02-21T05:10:00Z -->
+<!-- Last updated: 2026-02-21T18:00:00Z -->
 
 # Project Dashboard
 
 ## Current Phase
 
-**PHASE0_READY** — All implementation code complete, 3 models wired (MedGemma 4B + 27B + Gemini 3 Pro), 137 tests passing + 3 smoke tests. Ready for live benchmark run.
+**DEMO_BUILD** — Streamlit demo scaffold built, 4 critical bugs fixed (set_page_config, connection leak, async loop, token counting), 176 tests passing. Vertex AI adapter added. CTGov search enhanced with location/sex/age params.
 
 ```
 [SCAFFOLDING] ✅ DONE
     ↓
-[PHASE0_READY] ← YOU ARE HERE (3-way comparison ready)
+[PHASE0_READY] ✅ DONE (3-way comparison ready)
     ↓
-[PHASE0_RUNNING] — Running 20-pair criterion-level benchmark (~$1 per model)
+[PHASE0_RUNNING] ✅ DONE (results in runs/)
     ↓
-[PHASE0_COMPLETE] — Results analyzed, go/no-go decision made
+[DEMO_BUILD] ← YOU ARE HERE (Streamlit demo + bug fixes)
     ↓
-[TIER_A] — Full 1,024-pair criterion-level evaluation (~$25)
+[DEMO_QA] — Playwright QA + video recording
+    ↓
+[SHIP] — Kaggle submission (Feb 24)
 ```
 
 ## Current Sprint Goals
@@ -29,27 +31,37 @@
 - [x] Implement tracing/ run manager
 - [x] Implement CLI phase0 command
 - [x] Deploy MedGemma 27B endpoint (TGI on A100 80GB) + smoke tests passing
-- [ ] Run live Phase 0 benchmark (3-way: 4B vs 27B vs Gemini)
+- [x] Run live Phase 0 benchmark (3-way: 4B vs 27B vs Gemini)
+- [x] Pivot to Streamlit demo (from Next.js + FastAPI)
+- [x] Build Streamlit scaffold: app.py, Pipeline Demo, Benchmark Dashboard
+- [x] Add Vertex AI MedGemma adapter + deploy configs
+- [x] Add profile_adapter for nsclc_trial_profiles.json
+- [x] Enhance CTGov client: aggFilters, location/sex/age params
+- [x] Fix 4 critical demo bugs (set_page_config, connection leak, async, token counting)
+- [ ] Wire VALIDATE into Streamlit with live/cached mode
+- [ ] Playwright QA + demo video recording
+- [ ] Kaggle writeup + submission
 
 ## Component Readiness
 
 | Component | Domain Models | Logic | Unit Tests | BDD Scenarios | Status |
 |-----------|:---:|:---:|:---:|:---:|--------|
-| cli/ | - | phase0_cmd | 2 tests | none | Ready |
+| cli/ | - | phase0_cmd + vertex provider | 2 tests | none | Ready |
 | data/ | CriterionAnnotation | hf_loader + sampler | 19 tests | none | Ready |
-| models/ | ModelResponse, CriterionVerdict | base + medgemma (4B+27B) + gemini | 10 tests + 3 smoke | none | Ready |
-| ingest/ | not started | not started | none | none | Not started (deferred) |
-| prescreen/ | ToolCallRecord, TrialCandidate, PresearchResult | CTGovClient, ToolExecutor, agent loop | 33 tests | none | Ready |
+| models/ | ModelResponse, CriterionVerdict | base + medgemma (4B+27B) + gemini + vertex | 18 tests + 3 smoke | none | Ready |
+| ingest/ | - | profile_adapter | 15 tests | none | Ready |
+| prescreen/ | ToolCallRecord, TrialCandidate, PresearchResult | CTGovClient (aggFilters, location/sex/age), ToolExecutor, agent loop | 41 tests | none | Ready |
 | validate/ | CriterionResult | evaluator (REUSABLE) | 14 tests | 4 scenarios | Ready |
 | evaluation/ | - | metrics + evidence overlap | 10 tests | none | Ready |
-| tracing/ | RunResult | run_manager | 2 tests | none | Ready |
+| tracing/ | RunResult | run_manager | 6 tests | none | Ready |
+| demo/ | - | Streamlit app, cache_manager, components | none (manual QA) | none | In Progress |
 
 ## Test Summary
 
-- **133 unit tests** passing across 11 test files
+- **176 unit tests** passing across 14 test files
 - **4 BDD scenarios** passing for validate module
 - **3 smoke tests** for MedGemma 27B endpoint (health check, criterion eval, template format)
-- **140 total tests**, zero lint errors, zero format issues
+- **183 total tests**, zero lint errors on modified files
 
 ## Blockers
 
@@ -79,6 +91,7 @@ _Space for human to communicate intent changes without updating the PRD. Agents:
 
 | Date | Agent | What Was Done | What's Next |
 |------|-------|--------------|-------------|
+| 2026-02-21 | Claude | Demo build + critical bug fixes: (1) Built Streamlit demo scaffold (app.py, Pipeline Demo, Benchmark Dashboard, cache_manager, components), (2) Fixed 4 critical bugs: duplicate set_page_config crashes, CTGovClient connection leak in VALIDATE loop, deprecated asyncio event loop API, MedGemma 27B token double-division, (3) Added Vertex AI MedGemma adapter with auth + retry + GPU-hour costing, (4) Enhanced CTGov client: phase aggFilters fix, location/sex/age params, 400 error handling, (5) Added profile_adapter for nsclc_trial_profiles.json, (6) 176 unit tests passing. | Wire VALIDATE into Streamlit, Playwright QA, demo video, Kaggle submission |
 | 2026-02-20 | Claude | Deployed MedGemma 27B as third benchmark model: (1) created deploy script using HF Python API — discovered `pytorch` framework OOM'd on A100 80GB (27B x fp32 = 108GB), fixed by using `framework="custom"` + TGI docker (loads bf16 directly, ~54GB), (2) added `model_name` param to MedGemmaAdapter (backward-compatible), (3) wired `endpoint_url` + `model_name` from YAML config into phase0.py, (4) created 27B-only + 3-way config YAMLs, (5) 3/3 smoke tests passing on live endpoint, (6) 108 unit tests still passing. Endpoint: `https://wu5nclwms3ctrwd1.us-east-1.aws.endpoints.huggingface.cloud` (A100 80GB, scale-to-zero 15min). | Run 3-way Phase 0 benchmark: `uv run trialmatch phase0 --config configs/phase0_three_way.yaml` |
 | 2026-02-20 | Claude | PRESCREEN bug fixes (code review): (1) ctgov_client 429-retry now resets `_last_call_time` after backoff sleep — prevents double-wait on next request, (2) agent budget guard now sends `FunctionResponse` per pending tool call instead of plain text — fixes invalid conversation structure that would crash the genai SDK. 2 regression tests added, 125 unit tests passing (was 123). | Run live Phase 0 benchmark with API keys |
 | 2026-02-20 | Claude | Phase 0 prompt fix + trial aggregation: (1) PROMPT_TEMPLATE now criterion-type-aware (inclusion vs exclusion instructions), (2) fixed bare `thought` token leak in clean_model_response(), (3) Gemini timeout 120s→300s, (4) TrialVerdict + aggregate_to_trial_verdict() added to metrics.py, (5) trial-level aggregation wired into CLI, (6) filter_by_keywords() added to sampler, (7) NSCLC config + keyword filter CLI support. 123 unit tests passing (was 99). NSCLC dry-run: 0 matches — HF dataset has no NSCLC patients. | Re-run Phase 0 benchmark with API keys; exclusion criterion accuracy should improve |
