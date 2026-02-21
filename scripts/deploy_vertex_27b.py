@@ -1,4 +1,4 @@
-"""Deploy / undeploy / status / smoke-test MedGemma 27B on Vertex AI.
+"""Deploy / undeploy / status / smoke-test / run MedGemma 27B on Vertex AI.
 
 Uses vLLM container with bitsandbytes int8 quantization on 2x NVIDIA L4.
 27B x 1 byte (int8) = 27GB, fits in 2x L4 (48GB VRAM total).
@@ -8,11 +8,13 @@ Usage:
     uv run python scripts/deploy_vertex_27b.py undeploy    # undeploy all models (stops billing)
     uv run python scripts/deploy_vertex_27b.py status      # list deployed models
     uv run python scripts/deploy_vertex_27b.py smoke-test  # poll until inference succeeds
+    uv run python scripts/deploy_vertex_27b.py run -- <cmd> # deploy → run cmd → undeploy
 """
 
 import argparse
 import asyncio
 import os
+import subprocess
 import sys
 import time
 
@@ -247,6 +249,63 @@ def cmd_smoke_test(_args):
     _run_smoke_test(dns, max_attempts=10, interval=30)
 
 
+def cmd_run(args):
+    """Deploy → run command → undeploy. Always undeploys, even on failure."""
+    if not args.cmd:
+        print("ERROR: No command provided. Usage: run -- <command>")
+        sys.exit(1)
+
+    cmd_str = " ".join(args.cmd)
+    print(f"=== RUN MODE: deploy → {cmd_str} → undeploy ===")
+    print()
+
+    # Step 1: Deploy (if not already deployed)
+    _init()
+    endpoint = _get_endpoint()
+    deployed = _get_deployed_models(endpoint)
+    already_deployed = bool(deployed)
+
+    if already_deployed:
+        print("Endpoint already has deployed model(s). Skipping deploy.")
+    else:
+        cmd_deploy(args)
+
+    # Step 2: Run the user command
+    print()
+    print("=" * 60)
+    print(f"Running: {cmd_str}")
+    print("=" * 60)
+
+    cmd_exit_code = 1
+    try:
+        result = subprocess.run(args.cmd, cwd=os.getcwd())
+        cmd_exit_code = result.returncode
+        if cmd_exit_code == 0:
+            print(f"\nCommand succeeded (exit {cmd_exit_code})")
+        else:
+            print(f"\nCommand failed (exit {cmd_exit_code})")
+    except KeyboardInterrupt:
+        print("\nCommand interrupted by user")
+    except Exception as e:
+        print(f"\nCommand error: {e}")
+
+    # Step 3: Always undeploy (unless it was already deployed before we started)
+    if not already_deployed:
+        print()
+        print("=" * 60)
+        print("Auto-undeploying to stop billing...")
+        print("=" * 60)
+        try:
+            cmd_undeploy(args)
+        except Exception as e:
+            print(f"WARNING: Undeploy failed: {e}")
+            print("MANUAL ACTION REQUIRED: run 'undeploy' to stop billing!")
+    else:
+        print("\nSkipping auto-undeploy (endpoint was already deployed before run).")
+
+    sys.exit(cmd_exit_code)
+
+
 def _run_smoke_test(dedicated_dns, max_attempts=10, interval=30):
     """Poll health_check until success or max attempts exhausted."""
     # Import adapter here to avoid circular deps at module level
@@ -293,14 +352,26 @@ def main():
     sub.add_parser("undeploy", help="Undeploy all models (stops billing, keeps endpoint)")
     sub.add_parser("status", help="Show endpoint status and deployed models")
     sub.add_parser("smoke-test", help="Poll until first successful inference")
+    run_parser = sub.add_parser(
+        "run", help="Deploy → run command → auto-undeploy (always undeploys)"
+    )
+    run_parser.add_argument(
+        "cmd", nargs=argparse.REMAINDER,
+        help="Command to run (after --). E.g.: run -- uv run trialmatch phase0 ..."
+    )
 
     args = parser.parse_args()
+
+    # Strip leading '--' from remainder args
+    if hasattr(args, "cmd") and args.cmd and args.cmd[0] == "--":
+        args.cmd = args.cmd[1:]
 
     commands = {
         "deploy": cmd_deploy,
         "undeploy": cmd_undeploy,
         "status": cmd_status,
         "smoke-test": cmd_smoke_test,
+        "run": cmd_run,
     }
     commands[args.command](args)
 
