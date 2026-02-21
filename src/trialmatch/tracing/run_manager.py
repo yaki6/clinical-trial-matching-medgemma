@@ -74,6 +74,7 @@ class RunManager:
                 row["criterion_type"] = ann.criterion_type
                 row["criterion_text"] = ann.criterion_text
                 row["expert_label"] = ann.expert_label.value
+                row["expert_label_raw"] = ann.expert_label_raw
                 row["gpt4_label"] = ann.gpt4_label.value
             # Model prediction
             row["model_verdict"] = r.verdict.value
@@ -81,6 +82,9 @@ class RunManager:
                 row["correct"] = r.verdict == ann.expert_label
             row["reasoning"] = r.reasoning
             row["evidence_sentences"] = r.evidence_sentences
+            # Two-stage metadata
+            if r.stage1_reasoning:
+                row["stage1_reasoning"] = r.stage1_reasoning
             # Cost/latency
             row["input_tokens"] = r.model_response.input_tokens
             row["output_tokens"] = r.model_response.output_tokens

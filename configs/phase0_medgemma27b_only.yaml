@@ -3,6 +3,7 @@ description: "Phase 0 — MedGemma 27B only (fill endpoint_url after deployment)
 
 data:
   source: huggingface
+  fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
   dataset_id: "ncbi/TrialGPT-Criterion-Annotations"
   split: train
   n_pairs: 20

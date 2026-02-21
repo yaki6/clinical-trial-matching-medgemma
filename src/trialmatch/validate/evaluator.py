@@ -37,6 +37,8 @@ EXCLUSION_INSTRUCTIONS = (
     'For this EXCLUSION criterion, determine if the patient is eligible.\n'
     'A patient who HAS the excluded condition is NOT eligible.\n'
     'A patient who does NOT have the excluded condition IS eligible.\n'
+    'If the note does not mention the excluded condition, '
+    'the patient does NOT have it → patient IS eligible.\n'
     '- "eligible": the patient does NOT have this exclusion condition and can participate.\n'
     '- "not eligible": the patient HAS this exclusion condition and cannot participate.\n'
     '- "unknown": cannot determine from the note.'
@@ -84,6 +86,9 @@ Think step by step:
 2. What does the patient note state about this? Consider both explicit statements and reasonable inferences from the absence of information.
 3. Based on the evidence, is the patient eligible or not eligible for this criterion?
 
+CRITICAL: Your JSON "label" field MUST be consistent with your reasoning.
+If your reasoning concludes the patient is not eligible, your label MUST be "not eligible".
+
 Respond ONLY with valid JSON (no prose before or after):
 {{
   "label": "<eligible|not eligible|unknown>",
@@ -92,6 +97,85 @@ Respond ONLY with valid JSON (no prose before or after):
 }}
 
 evidence_sentences: JSON array of integer sentence indices from the patient note (e.g. [0, 2])."""
+
+
+# --- Two-stage prompts ---
+
+STAGE1_REASONING_PROMPT = """You are a medical expert analyzing a patient's clinical note.
+
+Important: if the patient note does not mention a medically important fact, you can
+assume that the fact is not true for the patient (e.g., if the note does not mention
+any allergies, assume the patient has no known allergies).
+
+Criterion Type: {criterion_type}
+Criterion: {criterion_text}
+
+Patient Note:
+{patient_note}
+
+Analyze this criterion against the patient note. Answer these questions:
+1. What does this criterion specifically require?
+2. What does the patient note state about this? Cite specific sentences by index.
+3. Does the patient have or satisfy the condition described in this criterion?
+   Answer: YES / NO / INSUFFICIENT DATA
+4. How confident are you? HIGH / MEDIUM / LOW
+
+Respond in plain text (no JSON). Focus on clinical accuracy."""
+
+
+STAGE2_LABELING_PROMPT = """You are a clinical trial eligibility label assignment system.
+
+A medical AI analyzed a patient's clinical note against an eligibility criterion.
+Your task: assign the correct eligibility label based on the medical analysis.
+
+Criterion Type: {criterion_type}
+{criterion_type_instructions}
+
+Criterion: {criterion_text}
+
+Medical Analysis:
+{stage1_reasoning}
+
+Based on the medical analysis and criterion type, determine eligibility.
+
+CRITICAL: Your JSON "label" field MUST be consistent with the medical analysis.
+
+Respond ONLY with valid JSON:
+{{
+  "label": "<eligible|not eligible|unknown>",
+  "reasoning": "Brief explanation of how you mapped the clinical finding to eligibility",
+  "evidence_sentences": [0, 1, 2]
+}}"""
+
+
+def build_reasoning_prompt(
+    patient_note: str,
+    criterion_text: str,
+    criterion_type: str,
+) -> str:
+    """Build Stage 1 reasoning prompt (factual clinical analysis, no eligibility label)."""
+    return STAGE1_REASONING_PROMPT.format(
+        patient_note=patient_note,
+        criterion_text=criterion_text,
+        criterion_type=criterion_type,
+    )
+
+
+def build_labeling_prompt(
+    stage1_reasoning: str,
+    criterion_text: str,
+    criterion_type: str,
+) -> str:
+    """Build Stage 2 labeling prompt (Gemini assigns eligibility label from reasoning)."""
+    instructions = (
+        INCLUSION_INSTRUCTIONS if criterion_type == "inclusion" else EXCLUSION_INSTRUCTIONS
+    )
+    return STAGE2_LABELING_PROMPT.format(
+        stage1_reasoning=stage1_reasoning,
+        criterion_text=criterion_text,
+        criterion_type=criterion_type,
+        criterion_type_instructions=instructions,
+    )
 
 
 def build_criterion_prompt(
@@ -299,4 +383,101 @@ async def evaluate_criterion(
         reasoning=reasoning,
         evidence_sentences=evidence,
         model_response=response,
+    )
+
+
+async def evaluate_criterion_two_stage(
+    patient_note: str,
+    criterion_text: str,
+    criterion_type: str,
+    reasoning_adapter: ModelAdapter,
+    labeling_adapter: ModelAdapter,
+    max_tokens_reasoning: int = 2048,
+    max_tokens_labeling: int = 256,
+    timeout_seconds: float = 300.0,
+) -> CriterionResult:
+    """Two-stage evaluation: MedGemma reasons, Gemini labels.
+
+    Stage 1: MedGemma performs factual clinical analysis (plain text, no JSON).
+    Stage 2: Gemini reads the analysis and assigns an eligibility label (JSON).
+
+    This separates medical reasoning (MedGemma's strength) from label assignment
+    (Gemini's strength), fixing exclusion inversion and instruction-following errors.
+    """
+    # Stage 1: MedGemma medical reasoning
+    reasoning_prompt = build_reasoning_prompt(patient_note, criterion_text, criterion_type)
+    call_start = time.perf_counter()
+
+    try:
+        reasoning_response: ModelResponse = await asyncio.wait_for(
+            reasoning_adapter.generate(reasoning_prompt, max_tokens=max_tokens_reasoning),
+            timeout=timeout_seconds,
+        )
+    except TimeoutError:
+        elapsed_ms = (time.perf_counter() - call_start) * 1000
+        logger.warning(
+            "two_stage_reasoning_timeout",
+            adapter=reasoning_adapter.name,
+            timeout_seconds=timeout_seconds,
+        )
+        return CriterionResult(
+            verdict=CriterionVerdict.UNKNOWN,
+            reasoning=f"Stage 1 timeout: reasoning model did not respond within {timeout_seconds}s",
+            evidence_sentences=[],
+            model_response=ModelResponse(
+                text="TIMEOUT",
+                input_tokens=len(reasoning_prompt) // 4,
+                output_tokens=0,
+                latency_ms=elapsed_ms,
+                estimated_cost=0.0,
+                token_count_estimated=True,
+            ),
+        )
+
+    stage1_text = clean_model_response(reasoning_response.text)
+
+    # Stage 2: Gemini label assignment
+    labeling_prompt = build_labeling_prompt(
+        stage1_reasoning=stage1_text,
+        criterion_text=criterion_text,
+        criterion_type=criterion_type,
+    )
+
+    try:
+        labeling_response: ModelResponse = await asyncio.wait_for(
+            labeling_adapter.generate(labeling_prompt, max_tokens=max_tokens_labeling),
+            timeout=timeout_seconds,
+        )
+    except TimeoutError:
+        elapsed_ms = (time.perf_counter() - call_start) * 1000
+        logger.warning(
+            "two_stage_labeling_timeout",
+            adapter=labeling_adapter.name,
+            timeout_seconds=timeout_seconds,
+        )
+        return CriterionResult(
+            verdict=CriterionVerdict.UNKNOWN,
+            reasoning=f"Stage 2 timeout: labeling model did not respond within {timeout_seconds}s",
+            evidence_sentences=[],
+            model_response=ModelResponse(
+                text="TIMEOUT",
+                input_tokens=len(labeling_prompt) // 4,
+                output_tokens=0,
+                latency_ms=elapsed_ms,
+                estimated_cost=0.0,
+                token_count_estimated=True,
+            ),
+            stage1_reasoning=stage1_text,
+            stage1_response=reasoning_response,
+        )
+
+    verdict, reasoning, evidence = parse_criterion_verdict(labeling_response.text)
+
+    return CriterionResult(
+        verdict=verdict,
+        reasoning=reasoning,
+        evidence_sentences=evidence,
+        model_response=labeling_response,
+        stage1_reasoning=stage1_text,
+        stage1_response=reasoning_response,
     )

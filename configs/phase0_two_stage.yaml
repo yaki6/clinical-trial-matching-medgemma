@@ -1,6 +1,6 @@
-# Gemini-only Phase 0 run — 20 pairs
+# Two-stage evaluation: MedGemma 4B reasoning → Gemini 3 Pro labeling
 phase: 0
-description: "20-pair Gemini-only benchmark"
+description: "Two-stage: MedGemma 4B (HF) reasons, Gemini 3 Pro labels"
 
 data:
   source: huggingface
@@ -12,10 +12,17 @@ data:
   seed: 42
 
 models:
-  - name: gemini-3-pro-preview
-    provider: google
+  - name: medgemma-4b+gemini-two-stage
+    provider: two_stage
+    stage1:
+      name: medgemma-1.5-4b
+      provider: huggingface
+      max_tokens: 512
+    stage2:
+      name: gemini-3-pro
+      provider: google
+      max_tokens: 512
     max_concurrent: 1
-    max_tokens: 8192  # Gemini 3 Pro thinking tokens consume output budget
 
 baselines:
   - name: gpt4-precomputed

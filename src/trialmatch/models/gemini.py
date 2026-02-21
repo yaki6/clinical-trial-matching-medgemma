@@ -48,6 +48,12 @@ class GeminiAdapter(ModelAdapter):
         """Generate with Gemini, tracking cost. Retries on transient 503/429 errors."""
         start = time.perf_counter()
 
+        # Gemini 3 Pro is a thinking model — max_output_tokens includes both
+        # internal thinking tokens AND visible response tokens. With low budgets
+        # (e.g. 512), thinking can consume nearly all tokens, leaving only 3-9
+        # tokens for the actual JSON response. Floor at 8192 to prevent this.
+        effective_max_tokens = max(max_tokens, 8192)
+
         for attempt in range(self._max_retries):
             try:
                 response = await asyncio.to_thread(
@@ -56,7 +62,7 @@ class GeminiAdapter(ModelAdapter):
                     contents=prompt,
                     config={
                         "response_mime_type": "application/json",
-                        "max_output_tokens": max_tokens,
+                        "max_output_tokens": effective_max_tokens,
                     },
                 )
                 elapsed = (time.perf_counter() - start) * 1000

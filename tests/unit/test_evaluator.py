@@ -16,8 +16,11 @@ from trialmatch.validate.evaluator import (
     INCLUSION_INSTRUCTIONS,
     NATIVE_LABEL_TO_VERDICT,
     build_criterion_prompt,
+    build_labeling_prompt,
+    build_reasoning_prompt,
     clean_model_response,
     evaluate_criterion,
+    evaluate_criterion_two_stage,
     parse_criterion_verdict,
 )
 
@@ -505,3 +508,306 @@ def test_build_prompt_exclusion_explains_eligibility_mapping():
     )
     assert "HAS" in prompt
     assert "NOT eligible" in prompt or "not eligible" in prompt.lower()
+
+
+def test_build_prompt_contains_consistency_instruction():
+    """Prompt contains the label-reasoning consistency instruction."""
+    prompt = build_criterion_prompt(
+        patient_note="Patient note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "CRITICAL" in prompt
+    assert "consistent" in prompt.lower()
+
+
+def test_build_prompt_exclusion_cwa_strengthened():
+    """Exclusion prompt contains strengthened CWA instruction about unmentioned conditions."""
+    prompt = build_criterion_prompt(
+        patient_note="Patient note",
+        criterion_text="Active hepatitis B",
+        criterion_type="exclusion",
+    )
+    assert "does not mention the excluded condition" in prompt
+
+
+# --- Two-stage prompt tests ---
+
+
+def test_build_reasoning_prompt_contains_patient_note():
+    """Stage 1 prompt includes patient note."""
+    prompt = build_reasoning_prompt(
+        patient_note="45-year-old with NSCLC",
+        criterion_text="Age >= 18",
+        criterion_type="inclusion",
+    )
+    assert "45-year-old with NSCLC" in prompt
+
+
+def test_build_reasoning_prompt_contains_criterion():
+    """Stage 1 prompt includes criterion text."""
+    prompt = build_reasoning_prompt(
+        patient_note="Patient note",
+        criterion_text="Histologically confirmed NSCLC",
+        criterion_type="inclusion",
+    )
+    assert "Histologically confirmed NSCLC" in prompt
+
+
+def test_build_reasoning_prompt_asks_factual_question():
+    """Stage 1 asks factual YES/NO/INSUFFICIENT DATA, not eligibility labels."""
+    prompt = build_reasoning_prompt(
+        patient_note="Patient note",
+        criterion_text="Criterion",
+        criterion_type="exclusion",
+    )
+    assert "YES" in prompt
+    assert "NO" in prompt
+    assert "INSUFFICIENT DATA" in prompt
+    # Should NOT ask for eligible/not eligible JSON
+    assert '"label"' not in prompt
+
+
+def test_build_reasoning_prompt_requests_plain_text():
+    """Stage 1 requests plain text output, not JSON."""
+    prompt = build_reasoning_prompt(
+        patient_note="Note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "plain text" in prompt.lower()
+    assert "no JSON" in prompt
+
+
+def test_build_reasoning_prompt_contains_cwa():
+    """Stage 1 includes closed world assumption instruction."""
+    prompt = build_reasoning_prompt(
+        patient_note="Note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "does not mention" in prompt
+    assert "assume" in prompt
+
+
+def test_build_labeling_prompt_contains_reasoning():
+    """Stage 2 prompt includes Stage 1 reasoning text."""
+    prompt = build_labeling_prompt(
+        stage1_reasoning="The patient has dementia based on sentences 1, 2.",
+        criterion_text="Diagnosis of Dementia",
+        criterion_type="exclusion",
+    )
+    assert "The patient has dementia" in prompt
+
+
+def test_build_labeling_prompt_contains_criterion_type_instructions():
+    """Stage 2 includes criterion type instructions (inclusion or exclusion)."""
+    excl_prompt = build_labeling_prompt(
+        stage1_reasoning="Analysis text",
+        criterion_text="Active hepatitis",
+        criterion_type="exclusion",
+    )
+    assert EXCLUSION_INSTRUCTIONS in excl_prompt
+
+    incl_prompt = build_labeling_prompt(
+        stage1_reasoning="Analysis text",
+        criterion_text="Age >= 18",
+        criterion_type="inclusion",
+    )
+    assert INCLUSION_INSTRUCTIONS in incl_prompt
+
+
+def test_build_labeling_prompt_requests_json():
+    """Stage 2 requests JSON output with label key."""
+    prompt = build_labeling_prompt(
+        stage1_reasoning="Analysis",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert '"label"' in prompt
+    assert "JSON" in prompt
+
+
+def test_build_labeling_prompt_contains_consistency_instruction():
+    """Stage 2 prompt has the label-reasoning consistency instruction."""
+    prompt = build_labeling_prompt(
+        stage1_reasoning="Analysis",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "CRITICAL" in prompt
+    assert "consistent" in prompt.lower()
+
+
+# --- Two-stage evaluate function tests ---
+
+
+def test_evaluate_criterion_two_stage_returns_result():
+    """Two-stage evaluation produces correct verdict from both stages."""
+    mock_reasoning = AsyncMock()
+    mock_reasoning.name = "medgemma-27b"
+    mock_reasoning.generate.return_value = ModelResponse(
+        text=(
+            "The patient is 25 years old. The criterion requires "
+            "age >= 18. YES, the patient satisfies this."
+        ),
+        input_tokens=200,
+        output_tokens=50,
+        latency_ms=500.0,
+        estimated_cost=0.005,
+    )
+
+    mock_labeling = AsyncMock()
+    mock_labeling.name = "gemini-3-pro"
+    mock_labeling.generate.return_value = ModelResponse(
+        text=(
+            '{"label": "eligible", "reasoning": "patient is 25, '
+            'meets age requirement", "evidence_sentences": [0]}'
+        ),
+        input_tokens=100,
+        output_tokens=30,
+        latency_ms=200.0,
+        estimated_cost=0.001,
+    )
+
+    result = asyncio.run(
+        evaluate_criterion_two_stage(
+            patient_note="25-year-old male",
+            criterion_text="Age >= 18",
+            criterion_type="inclusion",
+            reasoning_adapter=mock_reasoning,
+            labeling_adapter=mock_labeling,
+        )
+    )
+
+    assert result.verdict == CriterionVerdict.MET
+    assert result.evidence_sentences == [0]
+    assert result.stage1_reasoning is not None
+    assert "25 years old" in result.stage1_reasoning
+    assert result.stage1_response is not None
+    assert result.stage1_response.estimated_cost == 0.005
+
+
+def test_evaluate_criterion_two_stage_exclusion_inversion_fix():
+    """Two-stage fixes exclusion inversion.
+
+    MedGemma identifies condition, Gemini labels correctly.
+    """
+    # MedGemma correctly identifies the patient has dementia
+    mock_reasoning = AsyncMock()
+    mock_reasoning.name = "medgemma-27b"
+    mock_reasoning.generate.return_value = ModelResponse(
+        text=(
+            "The patient has progressive memory loss and severe "
+            "cognitive deficits. YES, the patient has dementia."
+        ),
+        input_tokens=200,
+        output_tokens=50,
+        latency_ms=500.0,
+        estimated_cost=0.005,
+    )
+
+    # Gemini maps: exclusion + patient HAS condition → not eligible
+    mock_labeling = AsyncMock()
+    mock_labeling.name = "gemini-3-pro"
+    mock_labeling.generate.return_value = ModelResponse(
+        text=(
+            '{"label": "not eligible", '
+            '"reasoning": "patient has dementia, excluded", '
+            '"evidence_sentences": [1, 2]}'
+        ),
+        input_tokens=100,
+        output_tokens=30,
+        latency_ms=200.0,
+        estimated_cost=0.001,
+    )
+
+    result = asyncio.run(
+        evaluate_criterion_two_stage(
+            patient_note="62-year-old with progressive memory loss and cognitive deficits",
+            criterion_text="Diagnosis of Dementia",
+            criterion_type="exclusion",
+            reasoning_adapter=mock_reasoning,
+            labeling_adapter=mock_labeling,
+        )
+    )
+
+    assert result.verdict == CriterionVerdict.NOT_MET
+
+
+def test_evaluate_criterion_two_stage_reasoning_timeout():
+    """Stage 1 timeout returns UNKNOWN with no stage1_reasoning."""
+    mock_reasoning = AsyncMock()
+    mock_reasoning.name = "slow-model"
+    mock_reasoning.generate.side_effect = TimeoutError()
+
+    mock_labeling = AsyncMock()
+    mock_labeling.name = "gemini"
+
+    result = asyncio.run(
+        evaluate_criterion_two_stage(
+            patient_note="Note",
+            criterion_text="Criterion",
+            criterion_type="inclusion",
+            reasoning_adapter=mock_reasoning,
+            labeling_adapter=mock_labeling,
+            timeout_seconds=0.001,
+        )
+    )
+
+    assert result.verdict == CriterionVerdict.UNKNOWN
+    assert "Stage 1 timeout" in result.reasoning
+    # Labeling adapter should NOT have been called
+    mock_labeling.generate.assert_not_called()
+
+
+def test_evaluate_criterion_two_stage_labeling_timeout():
+    """Stage 2 timeout returns UNKNOWN but preserves stage1_reasoning."""
+    mock_reasoning = AsyncMock()
+    mock_reasoning.name = "medgemma"
+    mock_reasoning.generate.return_value = ModelResponse(
+        text="The patient meets the criterion. YES.",
+        input_tokens=100,
+        output_tokens=20,
+        latency_ms=300.0,
+        estimated_cost=0.002,
+    )
+
+    mock_labeling = AsyncMock()
+    mock_labeling.name = "gemini"
+    mock_labeling.generate.side_effect = TimeoutError()
+
+    result = asyncio.run(
+        evaluate_criterion_two_stage(
+            patient_note="Note",
+            criterion_text="Criterion",
+            criterion_type="inclusion",
+            reasoning_adapter=mock_reasoning,
+            labeling_adapter=mock_labeling,
+            timeout_seconds=0.001,
+        )
+    )
+
+    assert result.verdict == CriterionVerdict.UNKNOWN
+    assert "Stage 2 timeout" in result.reasoning
+    assert result.stage1_reasoning is not None
+    assert result.stage1_response is not None
+
+
+def test_criterion_result_backward_compatible():
+    """CriterionResult without two-stage fields works as before."""
+    from trialmatch.models.schema import CriterionResult
+
+    result = CriterionResult(
+        verdict=CriterionVerdict.MET,
+        reasoning="ok",
+        model_response=ModelResponse(
+            text="ok",
+            input_tokens=10,
+            output_tokens=5,
+            latency_ms=100.0,
+            estimated_cost=0.001,
+        ),
+    )
+    assert result.stage1_reasoning is None
+    assert result.stage1_response is None

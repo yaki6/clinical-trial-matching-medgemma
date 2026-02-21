@@ -68,6 +68,9 @@ class CriterionResult(BaseModel):
     reasoning: str
     evidence_sentences: list[int] = Field(default_factory=list)
     model_response: ModelResponse
+    # Two-stage metadata (optional, backward-compatible)
+    stage1_reasoning: str | None = None
+    stage1_response: ModelResponse | None = None
 
 
 class Phase0Sample(BaseModel):

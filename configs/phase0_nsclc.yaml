@@ -1,4 +1,5 @@
 data:
+  fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
   n_pairs: 20
   seed: 42
   keyword_filter:

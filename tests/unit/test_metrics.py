@@ -5,6 +5,7 @@ from trialmatch.evaluation.metrics import (
     aggregate_to_trial_verdict,
     compute_evidence_overlap,
     compute_metrics,
+    compute_stratified_metrics,
 )
 from trialmatch.models.schema import CriterionVerdict
 
@@ -135,3 +136,60 @@ def test_aggregate_not_relevant_takes_priority_over_excluded():
         (CriterionVerdict.MET, "exclusion"),
     ]
     assert aggregate_to_trial_verdict(results) == TrialVerdict.NOT_RELEVANT
+
+
+# --- Stratified metrics tests ---
+
+
+def test_stratified_metrics_includes_overall():
+    """Stratified metrics includes standard overall metrics."""
+    predicted = [CriterionVerdict.MET, CriterionVerdict.NOT_MET, CriterionVerdict.UNKNOWN]
+    actual = [CriterionVerdict.MET, CriterionVerdict.NOT_MET, CriterionVerdict.UNKNOWN]
+    types = ["inclusion", "exclusion", "inclusion"]
+    m = compute_stratified_metrics(predicted, actual, types)
+    assert m["accuracy"] == 1.0
+    assert "by_criterion_type" in m
+    assert "calibration" in m
+
+
+def test_stratified_metrics_by_criterion_type():
+    """Stratified metrics computes per-type accuracy."""
+    predicted = [
+        CriterionVerdict.MET, CriterionVerdict.MET,       # inclusion
+        CriterionVerdict.NOT_MET, CriterionVerdict.MET,    # exclusion
+    ]
+    actual = [
+        CriterionVerdict.MET, CriterionVerdict.NOT_MET,    # inclusion
+        CriterionVerdict.NOT_MET, CriterionVerdict.NOT_MET, # exclusion
+    ]
+    types = ["inclusion", "inclusion", "exclusion", "exclusion"]
+    m = compute_stratified_metrics(predicted, actual, types)
+
+    assert m["by_criterion_type"]["inclusion"]["accuracy"] == 0.5
+    assert m["by_criterion_type"]["exclusion"]["accuracy"] == 0.5
+
+
+def test_stratified_metrics_calibration():
+    """Calibration metrics measure MET bias and UNKNOWN rate difference."""
+    # Predict more MET than actual (MET bias)
+    predicted = [CriterionVerdict.MET, CriterionVerdict.MET, CriterionVerdict.MET]
+    actual = [CriterionVerdict.MET, CriterionVerdict.NOT_MET, CriterionVerdict.UNKNOWN]
+    types = ["inclusion", "inclusion", "exclusion"]
+    m = compute_stratified_metrics(predicted, actual, types)
+
+    cal = m["calibration"]
+    # Predicted MET rate = 3/3 = 1.0, actual MET rate = 1/3 = 0.333
+    assert cal["met_bias"] > 0
+    # Predicted UNKNOWN rate = 0/3 = 0, actual UNKNOWN rate = 1/3 = 0.333
+    assert cal["unknown_rate_diff"] < 0
+
+
+def test_stratified_metrics_missing_type():
+    """If no pairs of a type exist, that type shows None accuracy."""
+    predicted = [CriterionVerdict.MET]
+    actual = [CriterionVerdict.MET]
+    types = ["inclusion"]
+    m = compute_stratified_metrics(predicted, actual, types)
+
+    assert m["by_criterion_type"]["inclusion"]["accuracy"] == 1.0
+    assert m["by_criterion_type"]["exclusion"]["accuracy"] is None

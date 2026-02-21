@@ -6,6 +6,7 @@ description: "1-pair smoke test — verify audit table, enriched results, loggin
 
 data:
   source: huggingface
+  fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
   dataset_id: "ncbi/TrialGPT-Criterion-Annotations"
   split: train
   n_pairs: 1

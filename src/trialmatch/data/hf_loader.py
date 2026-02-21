@@ -102,4 +102,13 @@ def load_annotations_from_file(path: Path) -> list[CriterionAnnotation]:
     """Load annotations from a local JSON file (for testing / offline use)."""
     with open(path) as f:
         rows = json.load(f)
-    return [_row_to_annotation(row) for row in rows]
+    annotations = []
+    skipped = 0
+    for row in rows:
+        if not row.get("criterion_text"):
+            skipped += 1
+            continue
+        annotations.append(_row_to_annotation(row))
+    if skipped:
+        logger.warning("skipped_null_criterion_text", count=skipped, source=str(path))
+    return annotations

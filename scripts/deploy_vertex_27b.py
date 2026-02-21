@@ -1,11 +1,17 @@
-"""Deploy MedGemma 27B to Vertex AI Model Garden.
+"""Deploy / undeploy / status / smoke-test MedGemma 27B on Vertex AI.
 
 Uses vLLM container with bitsandbytes int8 quantization on 2x NVIDIA L4.
-27B × 1 byte (int8) = 27GB, fits in 2x L4 (48GB VRAM total).
+27B x 1 byte (int8) = 27GB, fits in 2x L4 (48GB VRAM total).
 
-Based on: https://github.com/google-health/medgemma/blob/main/notebooks/quick_start_with_model_garden.ipynb
+Usage:
+    uv run python scripts/deploy_vertex_27b.py deploy      # upload model + deploy + smoke test
+    uv run python scripts/deploy_vertex_27b.py undeploy    # undeploy all models (stops billing)
+    uv run python scripts/deploy_vertex_27b.py status      # list deployed models
+    uv run python scripts/deploy_vertex_27b.py smoke-test  # poll until inference succeeds
 """
 
+import argparse
+import asyncio
 import os
 import sys
 import time
@@ -22,8 +28,8 @@ REGION = "us-central1"
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 MODEL_ID = "google/medgemma-27b-it"
 DISPLAY_NAME = "medgemma-27b-it-int8"
-# Reuse existing endpoint
 ENDPOINT_ID = os.environ.get("VERTEX_ENDPOINT_ID_27B", "6588061467889631232")
+DEDICATED_DNS = os.environ.get("VERTEX_DEDICATED_DNS_27B", "")
 
 # vLLM container from Model Garden
 SERVE_DOCKER_URI = (
@@ -36,72 +42,142 @@ MACHINE_TYPE = "g2-standard-24"
 ACCELERATOR_TYPE = "NVIDIA_L4"
 ACCELERATOR_COUNT = 2
 
+VLLM_ARGS = [
+    "python", "-m", "vllm.entrypoints.api_server",
+    "--host=0.0.0.0",
+    "--port=8080",
+    f"--model={MODEL_ID}",
+    f"--tensor-parallel-size={ACCELERATOR_COUNT}",
+    "--swap-space=16",
+    "--gpu-memory-utilization=0.95",
+    "--max-model-len=8192",
+    "--max-num-seqs=4",
+    "--enable-chunked-prefill",
+    "--disable-log-stats",
+    "--quantization=bitsandbytes",
+    "--load-format=bitsandbytes",
+]
 
-def main():
+ENV_VARS = {
+    "MODEL_ID": MODEL_ID,
+    "DEPLOY_SOURCE": "script",
+    "VLLM_USE_V1": "0",
+    "HF_TOKEN": HF_TOKEN,
+}
+
+
+def _init():
+    aiplatform.init(project=PROJECT_ID, location=REGION)
+
+
+def _get_endpoint():
+    return aiplatform.Endpoint(ENDPOINT_ID)
+
+
+def _find_existing_model():
+    """Find existing model in registry by display name, skip re-upload."""
+    models = aiplatform.Model.list(filter=f'display_name="{DISPLAY_NAME}"')
+    if models:
+        # Sort by create_time descending, pick most recent
+        models.sort(key=lambda m: m.create_time, reverse=True)
+        return models[0]
+    return None
+
+
+def _get_deployed_models(endpoint):
+    """Return list of deployed model info dicts from endpoint."""
+    endpoint_resource = endpoint.gca_resource
+    return list(endpoint_resource.deployed_models)
+
+
+# ---- Subcommands ----
+
+
+def cmd_status(_args):
+    """Show endpoint status and deployed models."""
+    _init()
+    endpoint = _get_endpoint()
+
+    print(f"Endpoint ID:   {ENDPOINT_ID}")
+    print(f"Endpoint name: {endpoint.display_name}")
+
+    deployed = _get_deployed_models(endpoint)
+    if not deployed:
+        print("\nNo models deployed. Endpoint is idle ($0/hr).")
+        return
+
+    print(f"\nDeployed models ({len(deployed)}):")
+    for dm in deployed:
+        print(f"  - ID: {dm.id}")
+        print(f"    Model: {dm.model}")
+        print(f"    Display name: {dm.display_name}")
+        print(f"    Machine type: {dm.dedicated_resources.machine_spec.machine_type}")
+        accel = dm.dedicated_resources.machine_spec.accelerator_type
+        count = dm.dedicated_resources.machine_spec.accelerator_count
+        print(f"    Accelerator: {count}x {accel.name if hasattr(accel, 'name') else accel}")
+
+    dns = ""
+    try:
+        dns = endpoint.gca_resource.dedicated_endpoint_dns
+    except Exception:
+        pass
+    if dns:
+        print(f"\nDedicated DNS: {dns}")
+
+
+def cmd_deploy(_args):
+    """Upload model (if needed) + deploy to endpoint + smoke test."""
     if not HF_TOKEN:
         print("ERROR: HF_TOKEN not set. Required to download model from HuggingFace.")
         sys.exit(1)
 
-    print(f"Project: {PROJECT_ID}")
-    print(f"Region: {REGION}")
-    print(f"Model: {MODEL_ID}")
-    print(f"Machine: {MACHINE_TYPE} with {ACCELERATOR_COUNT}x {ACCELERATOR_TYPE}")
-    print(f"Quantization: bitsandbytes int8 (~27GB model weights)")
-    print(f"Container: {SERVE_DOCKER_URI}")
-    print(f"Reusing endpoint: {ENDPOINT_ID}")
+    _init()
+
+    print(f"Project:  {PROJECT_ID}")
+    print(f"Region:   {REGION}")
+    print(f"Model:    {MODEL_ID}")
+    print(f"Hardware: {MACHINE_TYPE} with {ACCELERATOR_COUNT}x {ACCELERATOR_TYPE}")
+    print(f"Endpoint: {ENDPOINT_ID}")
     print()
 
-    aiplatform.init(project=PROJECT_ID, location=REGION)
+    # Check if endpoint already has a deployed model
+    endpoint = _get_endpoint()
+    deployed = _get_deployed_models(endpoint)
+    if deployed:
+        print(f"Endpoint already has {len(deployed)} deployed model(s).")
+        print("Run 'undeploy' first if you want to redeploy.")
+        sys.exit(1)
 
-    # --- Step 1: Upload model with int8 quantization ---
+    # Step 1: Find or upload model
     print("=" * 60)
-    print("Step 1: Uploading model to Vertex AI (int8 quantized)...")
+    print("Step 1: Checking Model Registry for existing model...")
     print("=" * 60)
 
-    vllm_args = [
-        "python", "-m", "vllm.entrypoints.api_server",
-        "--host=0.0.0.0",
-        "--port=8080",
-        f"--model={MODEL_ID}",
-        f"--tensor-parallel-size={ACCELERATOR_COUNT}",
-        "--swap-space=16",
-        "--gpu-memory-utilization=0.95",
-        "--max-model-len=8192",
-        "--max-num-seqs=4",
-        "--enable-chunked-prefill",
-        "--disable-log-stats",
-        "--quantization=bitsandbytes",
-        "--load-format=bitsandbytes",
-    ]
-
-    env_vars = {
-        "MODEL_ID": MODEL_ID,
-        "DEPLOY_SOURCE": "script",
-        "VLLM_USE_V1": "0",
-        "HF_TOKEN": HF_TOKEN,
-    }
-
-    model = aiplatform.Model.upload(
-        display_name=DISPLAY_NAME,
-        serving_container_image_uri=SERVE_DOCKER_URI,
-        serving_container_args=vllm_args,
-        serving_container_ports=[8080],
-        serving_container_predict_route="/generate",
-        serving_container_health_route="/ping",
-        serving_container_environment_variables=env_vars,
-    )
-
-    print(f"Model uploaded: {model.resource_name}")
+    model = _find_existing_model()
+    if model:
+        print(f"Found existing model: {model.resource_name}")
+        print("Skipping re-upload.")
+    else:
+        print("No existing model found. Uploading...")
+        model = aiplatform.Model.upload(
+            display_name=DISPLAY_NAME,
+            serving_container_image_uri=SERVE_DOCKER_URI,
+            serving_container_args=VLLM_ARGS,
+            serving_container_ports=[8080],
+            serving_container_predict_route="/generate",
+            serving_container_health_route="/ping",
+            serving_container_environment_variables=ENV_VARS,
+        )
+        print(f"Model uploaded: {model.resource_name}")
     print()
 
-    # --- Step 2: Deploy to existing endpoint ---
+    # Step 2: Deploy to endpoint
     print("=" * 60)
-    print("Step 2: Deploying model to existing endpoint...")
+    print("Step 2: Deploying model to endpoint...")
     print(f"  Endpoint ID: {ENDPOINT_ID}")
     print("  This takes 15-30 minutes...")
     print("=" * 60)
 
-    endpoint = aiplatform.Endpoint(ENDPOINT_ID)
     deploy_start = time.time()
 
     model.deploy(
@@ -117,10 +193,10 @@ def main():
     print(f"Deployment complete in {deploy_elapsed/60:.1f} minutes")
     print()
 
-    # --- Step 3: Extract endpoint details ---
-    dedicated_dns = ""
+    # Extract endpoint details
+    dns = ""
     try:
-        dedicated_dns = endpoint.gca_resource.dedicated_endpoint_dns
+        dns = endpoint.gca_resource.dedicated_endpoint_dns
     except Exception:
         pass
 
@@ -128,19 +204,105 @@ def main():
     print("DEPLOYMENT SUCCESSFUL")
     print("=" * 60)
     print(f"Endpoint ID: {ENDPOINT_ID}")
-    print(f"Endpoint resource: {endpoint.resource_name}")
-    if dedicated_dns:
-        print(f"Dedicated DNS: {dedicated_dns}")
+    if dns:
+        print(f"Dedicated DNS: {dns}")
     print()
-    print("Add these to your .env:")
-    print(f"  GCP_PROJECT_ID={PROJECT_ID}")
-    print(f"  GCP_REGION={REGION}")
-    print(f"  VERTEX_ENDPOINT_ID_27B={ENDPOINT_ID}")
-    if dedicated_dns:
-        print(f"  VERTEX_DEDICATED_DNS_27B={dedicated_dns}")
-    print()
-    print("To run benchmark:")
-    print("  uv run trialmatch phase0 --config configs/phase0_vertex_27b.yaml")
+
+    # Step 3: Auto smoke test
+    print("Running smoke test...")
+    _run_smoke_test(dns or DEDICATED_DNS, max_attempts=30, interval=30)
+
+
+def cmd_undeploy(_args):
+    """Undeploy all models from endpoint. Stops GPU billing."""
+    _init()
+    endpoint = _get_endpoint()
+
+    deployed = _get_deployed_models(endpoint)
+    if not deployed:
+        print("No models deployed. Nothing to undeploy.")
+        return
+
+    print(f"Undeploying {len(deployed)} model(s) from endpoint {ENDPOINT_ID}...")
+    endpoint.undeploy_all()
+    print("Done. All models undeployed. Billing stopped ($0/hr).")
+
+
+def cmd_smoke_test(_args):
+    """Poll endpoint until first successful inference."""
+    _init()
+    endpoint = _get_endpoint()
+
+    deployed = _get_deployed_models(endpoint)
+    if not deployed:
+        print("ERROR: No models deployed. Run 'deploy' first.")
+        sys.exit(1)
+
+    dns = DEDICATED_DNS
+    try:
+        dns = endpoint.gca_resource.dedicated_endpoint_dns or dns
+    except Exception:
+        pass
+
+    _run_smoke_test(dns, max_attempts=10, interval=30)
+
+
+def _run_smoke_test(dedicated_dns, max_attempts=10, interval=30):
+    """Poll health_check until success or max attempts exhausted."""
+    # Import adapter here to avoid circular deps at module level
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+    from trialmatch.models.vertex_medgemma import VertexMedGemmaAdapter
+
+    adapter = VertexMedGemmaAdapter(
+        project_id=PROJECT_ID,
+        region=REGION,
+        endpoint_id=ENDPOINT_ID,
+        model_name="medgemma-27b-vertex",
+        dedicated_endpoint_dns=dedicated_dns or None,
+        gpu_hourly_rate=2.30,  # 2x L4
+    )
+
+    print(f"Polling endpoint (max {max_attempts} attempts, {interval}s interval)...")
+    for attempt in range(1, max_attempts + 1):
+        start = time.time()
+        ok = asyncio.run(adapter.health_check())
+        elapsed = (time.time() - start) * 1000
+
+        if ok:
+            print(f"  Attempt {attempt}: OK ({elapsed:.0f}ms)")
+            print(f"\nSmoke test passed! First inference latency: {elapsed:.0f}ms")
+            return
+        else:
+            print(f"  Attempt {attempt}: not ready ({elapsed:.0f}ms)")
+            if attempt < max_attempts:
+                time.sleep(interval)
+
+    print(f"\nSmoke test FAILED after {max_attempts} attempts.")
+    sys.exit(1)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Manage MedGemma 27B on Vertex AI",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=__doc__,
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    sub.add_parser("deploy", help="Upload model (if needed) + deploy + smoke test")
+    sub.add_parser("undeploy", help="Undeploy all models (stops billing, keeps endpoint)")
+    sub.add_parser("status", help="Show endpoint status and deployed models")
+    sub.add_parser("smoke-test", help="Poll until first successful inference")
+
+    args = parser.parse_args()
+
+    commands = {
+        "deploy": cmd_deploy,
+        "undeploy": cmd_undeploy,
+        "status": cmd_status,
+        "smoke-test": cmd_smoke_test,
+    }
+    commands[args.command](args)
 
 
 if __name__ == "__main__":

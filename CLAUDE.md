@@ -130,7 +130,7 @@ src/trialmatch/
 
 ### Data Sources (Preference Order)
 
-1. **TrialGPT HF criterion annotations** (primary, ADR-006) — `ncbi/TrialGPT-Criterion-Annotations` on HuggingFace. 1,024 criterion-level pairs with expert labels, GPT-4 baseline, evidence sentences. Self-contained, < 5 MB.
+1. **TrialGPT HF criterion annotations** (primary, ADR-006) — `ncbi/TrialGPT-Criterion-Annotations` on HuggingFace. 1,015 rows, expert labels, GPT-4 baseline, evidence sentences. **Local copy**: `data/hf_cache/trialgpt_criterion_annotations.json` (1.4 MB). All configs use `fixture_path` to load from local — no internet required for benchmarks.
 2. **TREC 2021+2022 qrels** (Tier B, deferred) — trial-level labels for ranking evaluation. Only needed after Phase 0 / Tier A criterion-level eval is complete.
 3. **CT.gov API v2** (fallback) — live data, 40 req/min rate limit. Only needed if supplementing with trials not in HF dataset.
 
@@ -167,8 +167,8 @@ Phase 0 uses 20 criterion-level pairs from TrialGPT HF dataset as a fast directi
 
 ```
 data/
-├── hf_cache/              # HuggingFace datasets cache (auto-managed)
-│   └── ncbi___trial_gpt-criterion-annotations/  # 1,024 criterion-level pairs
+├── hf_cache/              # Local copy of HuggingFace dataset (checked in)
+│   └── trialgpt_criterion_annotations.json  # 1,015 rows, 1.4 MB — primary data source
 └── sot/                   # Human expert source-of-truth annotations
     ├── ingest/            # Gold PatientProfile + KeyFacts per topic
     ├── prescreen/         # Gold SearchAnchors per topic

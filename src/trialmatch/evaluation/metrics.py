@@ -93,6 +93,45 @@ def compute_metrics(
     }
 
 
+def compute_stratified_metrics(
+    predicted: list[CriterionVerdict],
+    actual: list[CriterionVerdict],
+    criterion_types: list[str],
+) -> dict[str, Any]:
+    """Compute metrics stratified by criterion type (inclusion vs exclusion).
+
+    Returns overall metrics plus per-type breakdown and calibration stats.
+    """
+    overall = compute_metrics(predicted, actual)
+
+    # Per-type metrics
+    by_type: dict[str, Any] = {}
+    for ctype in ("inclusion", "exclusion"):
+        mask = [t == ctype for t in criterion_types]
+        pred_sub = [p for p, m in zip(predicted, mask, strict=True) if m]
+        actual_sub = [a for a, m in zip(actual, mask, strict=True) if m]
+        if pred_sub:
+            by_type[ctype] = compute_metrics(pred_sub, actual_sub)
+        else:
+            by_type[ctype] = {"accuracy": None, "note": "no pairs of this type"}
+
+    overall["by_criterion_type"] = by_type
+
+    # Calibration: MET bias and UNKNOWN rate difference
+    n = len(predicted) if predicted else 1
+    pred_met_rate = sum(1 for p in predicted if p == CriterionVerdict.MET) / n
+    actual_met_rate = sum(1 for a in actual if a == CriterionVerdict.MET) / n
+    pred_unk_rate = sum(1 for p in predicted if p == CriterionVerdict.UNKNOWN) / n
+    actual_unk_rate = sum(1 for a in actual if a == CriterionVerdict.UNKNOWN) / n
+
+    overall["calibration"] = {
+        "met_bias": float(pred_met_rate - actual_met_rate),
+        "unknown_rate_diff": float(pred_unk_rate - actual_unk_rate),
+    }
+
+    return overall
+
+
 def compute_evidence_overlap(
     predicted_sentences: list[int],
     expert_sentences: list[int],

@@ -520,7 +520,7 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                 if results:
                     validate_results[trial.nct_id] = results
 
-                    # Display per-criterion results
+                    # Display per-criterion results with inline metrics
                     for criterion, cr in results:
                         icon = CRITERION_ICONS.get(cr.verdict.value, "⚪")
                         ctype_label = criterion["type"].upper()
@@ -528,13 +528,34 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                         st.markdown(
                             f"{icon} **{cr.verdict.value}** [{ctype_label}] -- {text_preview}"
                         )
+                        # Per-criterion model call metrics
+                        mr = cr.model_response
+                        latency_s = mr.latency_ms / 1000
+                        st.caption(
+                            f"{validate_model} | "
+                            f"{mr.input_tokens}\u2192{mr.output_tokens} tokens | "
+                            f"{latency_s:.1f}s | "
+                            f"${mr.estimated_cost:.4f}"
+                        )
                         with st.expander("Reasoning", expanded=False):
                             st.write(cr.reasoning)
 
-                    # Compute trial-level verdict
+                    # Per-trial summary: totals across all criteria
+                    total_latency_ms = sum(
+                        cr.model_response.latency_ms for _, cr in results
+                    )
+                    total_cost = sum(
+                        cr.model_response.estimated_cost for _, cr in results
+                    )
                     verdict = _compute_trial_verdict(results)
                     trial_verdicts[trial.nct_id] = verdict
-                    st.markdown(f"**Trial verdict: {VERDICT_BADGES.get(verdict, verdict)}**")
+                    verdict_badge = VERDICT_BADGES.get(verdict, verdict)
+                    st.markdown(
+                        f"**Trial {trial.nct_id}:** {len(results)} criteria | "
+                        f"{total_latency_ms / 1000:.1f}s total | "
+                        f"${total_cost:.4f} | "
+                        f"Verdict: {verdict_badge}"
+                    )
 
                 st.divider()
 

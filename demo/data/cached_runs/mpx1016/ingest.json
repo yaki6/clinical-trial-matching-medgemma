@@ -1,0 +1,26 @@
+{
+  "patient_note": "## Clinical History\nA 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chronic illnesses or tobacco use.\n\n## Physical Exam\nThe physical examination revealed no abnormalities.\n\n## Imaging Findings\nAxial CT images of the chest demonstrate nodular and branching opacities in the right upper lobe, consistent with a tree-in-bud pattern. A large, well-circumscribed mass is present in the left lower lobe. Additionally, there is evidence of interstitial changes in the right lung, including honeycombing and pleural thickening, particularly in the right lower lobe, along with a small right-sided pleural effusion.\n\n## Assessment & Plan\nLaboratory analysis of fungal, acid-fast, and Gram stains showed no organisms. Pleural fluid analysis was suspicious for malignancy. Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\n\n## Demographics\nThe patient is a 43-year-old female.\n\n## Missing Info\nInformation not provided includes cancer stage, performance status, and prior treatment history.",
+  "key_facts": {
+    "primary_diagnosis": "Lung adenocarcinoma with signet-ring cell features",
+    "demographics": "age: 43; sex: female",
+    "imaging_findings": "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion",
+    "key_findings": [
+      "Progressively worsening shortness of breath with exertion",
+      "Wheezing",
+      "Pleural fluid suspicious for malignancy",
+      "Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells",
+      "No history of tobacco use"
+    ],
+    "missing_info": [
+      "Cancer stage",
+      "Performance status",
+      "Treatment history"
+    ],
+    "symptoms": [
+      "shortness of breath with exertion",
+      "wheezing"
+    ],
+    "histopathology": "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells",
+    "tobacco_use": "never smoker"
+  }
+}

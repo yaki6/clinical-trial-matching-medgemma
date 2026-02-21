@@ -7,6 +7,7 @@ description: "20-pair criterion-level benchmark for MedGemma 1.5 4B vs Gemini 3 
 
 data:
   source: huggingface
+  fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
   dataset_id: "ncbi/TrialGPT-Criterion-Annotations"
   split: train
   n_pairs: 20
@@ -29,6 +30,7 @@ models:
     provider: google
     model_id: gemini-3-pro-preview
     max_concurrent: 1  # Phase 0: sequential for deterministic logging
+    max_tokens: 8192  # Gemini 3 Pro thinking tokens consume output budget
 
 baselines:
   - name: gpt4-precomputed

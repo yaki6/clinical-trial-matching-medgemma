@@ -3,6 +3,7 @@ description: "Phase 0 — 3-way: MedGemma 4B vs 27B vs Gemini 3 Pro"
 
 data:
   source: huggingface
+  fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
   dataset_id: "ncbi/TrialGPT-Criterion-Annotations"
   split: train
   n_pairs: 20

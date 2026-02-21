@@ -139,17 +139,6 @@ for model_name, data in run_data.items():
         )
         gpt4_row_added = True
 
-# MedGemma 27B placeholder
-comparison_rows.append(
-    {
-        "Model": "Medgemma 27B",
-        "Accuracy": "Pending",
-        "F1 Macro": "Pending",
-        "F1 MET/NOT_MET": "Pending",
-        "Cohen's Kappa": "Pending",
-    }
-)
-
 comparison_df = pd.DataFrame(comparison_rows)
 st.dataframe(comparison_df, use_container_width=True, hide_index=True)
 
@@ -239,16 +228,17 @@ st.header("Key Findings")
 
 st.markdown(
     """
-- **Gemini 3 Pro significantly outperforms MedGemma 4B** on criterion evaluation
-  (75% vs 55% accuracy)
-- **MedGemma 4B struggles with UNKNOWN class** (F1=0.29) -- tends to over-commit
-  to MET/NOT_MET when evidence is insufficient
-- **Gemini matches GPT-4 baseline accuracy** but with lower F1 macro
-  (0.56 vs 0.75), indicating weaker performance on the UNKNOWN class
-- **Both models cost < $0.55** for 20-pair evaluation -- Gemini is 17x cheaper
-  than MedGemma 4B on HuggingFace Inference Endpoints
-- **MedGemma 27B results pending** -- expected to improve over 4B with better
-  calibration on ambiguous criteria
+- **MedGemma 27B is competitive with GPT-4** on criterion-level matching
+  (70% accuracy, F1 macro 0.722, Cohen's kappa 0.538 vs GPT-4 baseline 75%)
+- **27B dramatically outperforms 4B** (70% vs 35% accuracy) -- the larger model
+  has much better instruction-following for structured JSON output
+- **MedGemma 4B has systematic MET bias** on exclusion criteria -- model reasoning
+  is often correct but the JSON label contradicts it (instruction-following failure,
+  not a reasoning failure). Degraded further by max_tokens=512 TGI CUDA bug workaround
+- **Gemini 3 Pro matches GPT-4 baseline** at 75% accuracy, confirming it as a
+  strong general-purpose option for criterion evaluation
+- **Multi-model approach validated**: domain-specialized models (MedGemma 27B)
+  approach general model (GPT-4) accuracy, supporting the orchestration narrative
 """
 )
 

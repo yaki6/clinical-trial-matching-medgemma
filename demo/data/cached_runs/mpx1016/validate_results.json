@@ -1,0 +1,42 @@
+{
+  "NCT05885698": {
+    "verdict": "UNCERTAIN",
+    "criteria": [
+      {
+        "text": "Adult subjects (18 years and older) with newly diagnosed early stage, locally advanced or metastatic non-small cell lung cancer",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "{\n  \"",
+        "evidence_sentences": []
+      },
+      {
+        "text": "Must be eligible for systemic therapy based on the treating provider's assessment. If systemic therapy was recommended and documented by the treating provider but the patient declined, they can still be eligible for the study. Patients can be enrolled prior to start of treatment.",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "{\n  \"label\": \"",
+        "evidence_sentences": []
+      },
+      {
+        "text": "Subjects who developed locally advanced or metastatic disease after receiving adjuvant or neoadjuvant therapy are eligible if the adjuvant/neoadjuvant therapy was completed at least 12 months prior to the development of locally advanced or metastatic disease",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "{\n  \"label\":",
+        "evidence_sentences": []
+      },
+      {
+        "text": "Subjects must be enrolled within 30 days of initiation of systemic therapy",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "{\n  \"label\": \"unknown\",",
+        "evidence_sentences": []
+      },
+      {
+        "text": "Signed informed consent",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "{\n  \"label\": \"",
+        "evidence_sentences": []
+      }
+    ]
+  }
+}
