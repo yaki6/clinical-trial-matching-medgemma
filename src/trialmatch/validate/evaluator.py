@@ -224,7 +224,7 @@ async def evaluate_criterion(
     criterion_text: str,
     criterion_type: str,
     adapter: ModelAdapter,
-    max_tokens: int = 1024,
+    max_tokens: int = 512,
     timeout_seconds: float = 300.0,
 ) -> CriterionResult:
     """Evaluate a single criterion against a patient note.
