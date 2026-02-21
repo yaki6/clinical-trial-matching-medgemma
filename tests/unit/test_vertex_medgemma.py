@@ -60,6 +60,22 @@ def test_predict_url(adapter):
     assert adapter._predict_url == expected
 
 
+def test_predict_url_dedicated_endpoint():
+    """Dedicated endpoint DNS overrides the shared domain."""
+    a = VertexMedGemmaAdapter(
+        project_id="p",
+        region="us-central1",
+        endpoint_id="ep-123",
+        dedicated_endpoint_dns="ep-123.us-central1-12345.prediction.vertexai.goog",
+    )
+    expected = (
+        "https://ep-123.us-central1-12345.prediction.vertexai.goog/v1/"
+        "projects/p/locations/us-central1/"
+        "endpoints/ep-123:predict"
+    )
+    assert a._predict_url == expected
+
+
 @pytest.mark.asyncio
 async def test_generate_chat_completions_format(adapter):
     """Request payload uses chatCompletions format and response is parsed correctly."""

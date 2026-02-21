@@ -10,6 +10,8 @@ Quick-reference table of all architectural and strategic decisions. Full details
 | 004 | Tiered evaluation budget (A+B = ~$330) | Accepted (amended) | If results are paper-worthy → Tier C |
 | 005 | Whole criteria blocks for spike (no atomization) | Accepted | Phase 0 too coarse to differentiate models |
 | 006 | Switch to TrialGPT HF criterion-level annotations | Accepted | Need trial-level eval (Tier B) or broader coverage |
+| 007 | TGI CUDA bug workaround: max_tokens=512 for MedGemma 4B | Accepted | TGI bug fixed, or Vertex AI endpoint available |
+| 007 | TGI CUDA bug — max_tokens=512 workaround for MedGemma 4B | Accepted | Vertex AI tested, TGI bug fixed, or thinking tokens configurable |
 
 ## From CTO Review (2026-02-17)
 

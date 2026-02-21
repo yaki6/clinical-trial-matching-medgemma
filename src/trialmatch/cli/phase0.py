@@ -219,11 +219,15 @@ async def run_phase0(config: dict, dry_run: bool = False):
                     err=True,
                 )
                 continue
+            dedicated_dns = model_cfg.get("dedicated_endpoint_dns") or os.environ.get(
+                "VERTEX_DEDICATED_DNS", ""
+            ) or None
             adapter = VertexMedGemmaAdapter(
                 project_id=project_id,
                 region=region,
                 endpoint_id=endpoint_id,
                 model_name=model_cfg["name"],
+                dedicated_endpoint_dns=dedicated_dns,
             )
         else:
             logger.error("unknown_provider", provider=model_cfg["provider"])

@@ -13,9 +13,11 @@ data:
 models:
   - name: medgemma-27b-vertex
     provider: vertex
-    # project_id, region, endpoint_id come from env vars:
-    # GCP_PROJECT_ID, GCP_REGION, VERTEX_ENDPOINT_ID_27B
+    endpoint_id: "6588061467889631232"
+    region: us-central1
+    # dedicated_endpoint_dns will be set once deployment completes
     max_concurrent: 1
+    max_tokens: 2048
 
 baselines:
   - name: gpt4-precomputed

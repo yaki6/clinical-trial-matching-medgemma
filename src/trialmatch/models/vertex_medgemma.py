@@ -37,6 +37,7 @@ class VertexMedGemmaAdapter(ModelAdapter):
         retry_backoff: float = 2.0,
         max_wait: float = 30.0,
         gpu_hourly_rate: float = 1.15,  # L4 default
+        dedicated_endpoint_dns: str | None = None,
     ):
         self._project_id = project_id
         self._region = region
@@ -46,6 +47,7 @@ class VertexMedGemmaAdapter(ModelAdapter):
         self._retry_backoff = retry_backoff
         self._max_wait = max_wait
         self._gpu_hourly_rate = gpu_hourly_rate
+        self._dedicated_endpoint_dns = dedicated_endpoint_dns
         self._credentials = None
 
     @property
@@ -54,9 +56,17 @@ class VertexMedGemmaAdapter(ModelAdapter):
 
     @property
     def _predict_url(self) -> str:
-        """Vertex AI prediction endpoint URL."""
+        """Vertex AI prediction endpoint URL.
+
+        Dedicated endpoints (Model Garden) require their own DNS domain.
+        Shared endpoints use the regional aiplatform.googleapis.com domain.
+        """
+        if self._dedicated_endpoint_dns:
+            host = self._dedicated_endpoint_dns
+        else:
+            host = f"{self._region}-aiplatform.googleapis.com"
         return (
-            f"https://{self._region}-aiplatform.googleapis.com/v1/"
+            f"https://{host}/v1/"
             f"projects/{self._project_id}/locations/{self._region}/"
             f"endpoints/{self._endpoint_id}:predict"
         )
@@ -130,7 +140,14 @@ class VertexMedGemmaAdapter(ModelAdapter):
             # Parse successful response
             elapsed = (time.perf_counter() - start) * 1000
             data = response.json()
-            prediction = data["predictions"][0]
+            predictions = data["predictions"]
+
+            # Dedicated endpoints return predictions as a dict;
+            # shared endpoints return a list. Normalize to a single prediction.
+            if isinstance(predictions, list):
+                prediction = predictions[0]
+            else:
+                prediction = predictions
 
             # Try chatCompletions format first
             token_count_estimated = False

@@ -36,13 +36,28 @@ UI: **Streamlit** (no separate backend). Narrative: multi-model orchestration (n
 
 ### Models Available
 
-| Model | Endpoint | Use Case |
-|-------|----------|----------|
-| MedGemma 4B | Vertex AI Model Garden | Multimodal (EHR + images) |
-| MedGemma 27B | Vertex AI Model Garden | Text-only (higher accuracy) |
-| MedGemma 4B | HF Inference (fallback) | Legacy, unstable connections |
-| MedGemma 27B | HF Inference (fallback) | Legacy, deployment fails |
-| Gemini 3 Pro | Google AI Studio API | General-purpose baseline |
+| Model | Endpoint | Use Case | Status |
+|-------|----------|----------|--------|
+| MedGemma 4B | HF Inference (`pcmy7bkqtqesrrzd`) | Multimodal (EHR + images) | Working (max_tokens=512 limit) |
+| MedGemma 27B | HF Inference (`wu5nclwms3ctrwd1`) | Text-only (higher accuracy) | Failed — TGI 3.0 chat template incompatible |
+| MedGemma 4B | Vertex AI Model Garden | Multimodal (EHR + images) | Configured, untested |
+| MedGemma 27B | Vertex AI Model Garden | Text-only (higher accuracy) | Configured, untested |
+| Gemini 3 Pro | Google AI Studio API | General-purpose baseline | Working |
+
+### Phase 0 Benchmark Results (Feb 21, 2026)
+
+| Model | Accuracy | Macro-F1 | Cohen's κ | Evidence Overlap | Notes |
+|-------|----------|----------|-----------|------------------|-------|
+| GPT-4 (baseline) | 75.0% | 74.6% | — | — | Built into HF dataset |
+| Gemini 3 Pro | 75.0% | — | — | — | Post prompt fix (was 60%) |
+| MedGemma 4B (HF) | 35.0% | 31.5% | 0.030 | 5.0% | max_tokens=512 workaround; was 55% with max_tokens=2048 |
+| MedGemma 27B | — | — | — | — | Deployment failed (TGI chat template) |
+
+**Key findings**:
+1. MedGemma 4B has a **systematic MET bias**: model reasoning is often correct ("patient does NOT meet criterion") but the JSON `label` field contradicts the reasoning and outputs MET anyway. This is an instruction-following failure, not a reasoning failure.
+2. The model confuses "criterion is met" with "patient is eligible" — it says MET when the exclusion condition IS present (should be "excluded" → NOT_MET).
+3. Accuracy dropped from 55% → 35% after prompt fix. The TrialGPT-native labels ("included"/"excluded") may be harder for 4B to follow than the simpler MET/NOT_MET labels.
+4. The max_tokens=512 workaround (for TGI CUDA bug) occasionally truncates thinking chains but is NOT the primary cause of errors — most wrong answers have complete, correct reasoning with wrong labels.
 
 ## Commands
 
@@ -160,13 +175,62 @@ data/
 
 Note: TrialGPT HF dataset (ADR-006) is the primary data source. Expert labels (`expert_eligibility`) serve as ground truth. GPT-4 predictions (`gpt4_eligibility`) serve as built-in baseline.
 
+## HF Inference Endpoint Operations
+
+### Known Issues — TGI + MedGemma CUDA Bug
+
+**Problem**: TGI backend crashes with `CUDA CUBLAS_STATUS_EXECUTION_FAILED` on certain prompt + max_new_tokens combinations. After crash, GPU enters permanent "misaligned address" state — all subsequent requests fail until endpoint restart.
+
+**Evidence** (Feb 21, 2026):
+- Crash threshold: max_new_tokens between 500 and 1024 (binary search confirmed 500 OK, 1024 crash)
+- NOT hardware-related: identical crash on Nvidia L4 (24GB) and L40S (48GB)
+- NOT cumulative memory leak: crashes as first request on fresh GPU
+- NOT prompt length: all prompts ~500 tokens, similar sizes
+- Crash occurs during generation phase only (max_new_tokens=1 always works)
+- Specific prompts trigger it reproducibly; others never crash at same max_new_tokens
+
+**Workaround**: Set `max_tokens=512` in `evaluate_criterion()`. This avoids crashes but truncates MedGemma's thinking chain, degrading accuracy from 55% → 35%.
+
+**Recovery**: After CUDA crash, endpoint must scale-to-zero and restart. Use HF API to pause/resume or wait for scale-to-zero timeout.
+
+### Endpoint Management
+
+```bash
+# List endpoints
+curl -s https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME \
+  -H "Authorization: Bearer $HF_TOKEN" | python -m json.tool
+
+# Pause endpoint (triggers scale-to-zero)
+curl -X POST https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/$ENDPOINT_NAME/pause \
+  -H "Authorization: Bearer $HF_TOKEN"
+
+# Resume endpoint
+curl -X POST https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/$ENDPOINT_NAME/resume \
+  -H "Authorization: Bearer $HF_TOKEN"
+
+# Delete endpoint
+curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/$ENDPOINT_NAME \
+  -H "Authorization: Bearer $HF_TOKEN"
+```
+
+### MedGemma 27B Deployment Failures
+
+| Attempt | Method | Result |
+|---------|--------|--------|
+| TGI (pytorch framework) | HF Inference Endpoint | OOM — 27B x fp32 = 108GB > A100 80GB |
+| TGI (custom framework) | HF Inference Endpoint | Works for inference, but TGI 3.0 chat template breaks Gemma 3 format |
+| vLLM (custom Docker) | HF Inference Endpoint | Image build failed, custom container not supported |
+
+**Decision**: Abandon HF Inference for 27B. Use Vertex AI Model Garden instead (configured but untested).
+
 ## Rate Limits
 
-| Service | Limit | Used By |
-|---------|-------|---------|
-| HuggingFace Inference | 5 concurrent | MedGemma 1.5 4B |
-| Google AI Studio | 10 concurrent | Gemini 3 Pro |
-| CT.gov API v2 | 40 req/min | Tier B trial-level eval (deferred) |
+| Service | Limit | Used By | Notes |
+|---------|-------|---------|-------|
+| HuggingFace Inference | 1 concurrent | MedGemma 1.5 4B | Was 5; reduced to 1 due to CUDA bug at higher concurrency |
+| HuggingFace Inference | max_tokens=512 | MedGemma 1.5 4B | TGI CUDA bug at ≥1024; see HF Inference Endpoint Operations |
+| Google AI Studio | 10 concurrent | Gemini 3 Pro | |
+| CT.gov API v2 | 40 req/min | Tier B trial-level eval (deferred) | |
 
 ## Agent Session Protocol
 
@@ -225,6 +289,61 @@ uv run pytest tests/bdd/ --collect-only -q 2>/dev/null | grep -c "scenario"
 ```
 
 
-## Rules 
+## HF Inference Endpoint Operations
+
+### Known Issues — TGI + MedGemma CUDA Bug
+
+**Critical**: TGI (Text Generation Inference) + MedGemma 4B has a reproducible CUDA bug:
+
+- **Symptom**: `CUBLAS_STATUS_EXECUTION_FAILED` or `CUDA error: misaligned address` when `max_new_tokens` ≥ ~500-1024 on certain prompts
+- **NOT hardware-related**: Same crash on both Nvidia L4 (24GB) and L40S (48GB)
+- **NOT cumulative memory leak**: Crashes on first request to fresh GPU
+- **NOT prompt length**: All prompts are similar size (~500 tokens)
+- **Root cause**: Specific combination of full-length clinical prompt + large `max_new_tokens` triggers TGI kernel bug during generation phase
+- **Workaround**: Set `max_tokens=512` in `evaluator.py` (binary search confirmed 500 works, 1024 crashes)
+- **Side effect**: 512 token limit truncates MedGemma "thinking tokens" (`<unused94>thought...`), degrading accuracy from 55% to 35%
+
+### GPU State Corruption Recovery
+
+After a CUBLAS error, the GPU enters a permanent "misaligned address" state where ALL subsequent requests fail. Recovery requires:
+1. Scale endpoint to zero (or pause)
+2. Wait for full shutdown
+3. Resume endpoint (fresh GPU allocation)
+
+### Endpoint Management via API
+
+```bash
+# List endpoints
+curl -s https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME \
+  -H "Authorization: Bearer $HF_TOKEN" | jq '.[].name'
+
+# Delete failed endpoint
+curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/$ENDPOINT_NAME \
+  -H "Authorization: Bearer $HF_TOKEN"
+
+# Update hardware (e.g., L4 → L40S)
+curl -X PUT https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/$ENDPOINT_NAME \
+  -H "Authorization: Bearer $HF_TOKEN" \
+  -d '{"compute":{"instanceType":"nvidia-l40s-1"}}'
+```
+
+### MedGemma 27B Deployment Failures
+
+Two deployment approaches failed for MedGemma 27B:
+1. **TGI 3.0**: Does not support Gemma 3 chat template — generates garbled output with prompt echo
+2. **vLLM custom image**: Custom Docker image deployment on HF Inference failed to start
+
+**Recommendation**: Use Vertex AI Model Garden for 27B access instead of self-hosted HF endpoints.
+
+## MedGemma Model Behavior Notes
+
+- **Thinking tokens**: MedGemma uses `<unused94>thought...<unused95>` internal monologue tokens that consume output token budget before producing actual JSON response
+- **Prompt echo**: Raw TGI `text_generation` API echoes the full prompt + chat template markers; `clean_model_response()` handles stripping
+- **MET bias**: 4B model heavily biases toward MET predictions, especially on exclusion criteria where it should predict NOT_MET
+- **JSON truncation**: When output budget is exhausted mid-JSON, `parse_criterion_verdict()` falls back to keyword extraction, which loses structured reasoning and evidence sentences
+- **CWA (Closed World Assumption)**: Prompt instructs model to assume unmentioned facts are negative (e.g., no mention of allergies = no allergies). This is critical for exclusion criteria accuracy.
+
+## Rules
 you MUST run ALL script, especially bash,python scripts in background so you can do other tasks
-API keys are in .env 
+API keys are already stored in .env
+MUST check the tail log in real time when running benchmark; do not use timeout or sleep
