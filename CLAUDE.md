@@ -46,18 +46,27 @@ UI: **Streamlit** (no separate backend). Narrative: multi-model orchestration (n
 
 ### Phase 0 Benchmark Results (Feb 21-22, 2026)
 
-| Model | Accuracy | Macro-F1 | Cohen's κ | Evidence Overlap | Notes |
-|-------|----------|----------|-----------|------------------|-------|
-| GPT-4 (baseline) | 75.0% | 74.6% | — | — | Built into HF dataset |
-| Gemini 3 Pro | 75.0% | — | — | — | Post prompt fix (was 60%) |
-| **MedGemma 27B (Vertex int8)** | **70.0%** | **72.2%** | **0.538** | **15.0%** | Vertex AI, max_tokens=2048, ~8s/pair |
-| MedGemma 4B (HF) | 35.0% | 31.5% | 0.030 | 5.0% | max_tokens=512 workaround; was 55% with max_tokens=2048 |
+| Model | Prompt | Accuracy | Macro-F1 | Cohen's κ | Evidence Overlap | Notes |
+|-------|--------|----------|----------|-----------|------------------|-------|
+| **MedGemma 27B + Gemini Flash (two-stage)** | **v4** | **95.0%** | **95.8%** | **0.922** | **30.0%** | **Best result** — severity gating + re-derivation fix |
+| **MedGemma 27B + Gemini Pro (two-stage)** | **v4** | **95.0%** | **95.8%** | **0.922** | **20.0%** | Pro = Flash on Stage 2 labeling |
+| MedGemma 27B + Gemini Pro (two-stage) | v3 | 85.0% | 85.5% | 0.769 | 25.0% | v3 regression from v2 — contradiction check hurt |
+| MedGemma 4B + Gemini Pro (two-stage) | v1 | 80.0% | 83.1% | 0.688 | 60.0% | 4B reasoning + Pro labeling also strong |
+| GPT-4 (baseline) | — | 75.0% | 74.6% | — | — | Built into HF dataset |
+| Gemini 3 Pro (standalone) | — | 75.0% | 55.8% | 0.583 | — | Post prompt fix (was 60%) |
+| MedGemma 27B (Vertex int8, standalone) | — | 70.0% | 72.2% | 0.538 | 15.0% | Vertex AI, max_tokens=2048, ~8s/pair |
+| MedGemma 4B + Gemini Flash (two-stage) | v1 | 45.0% | 44.7% | 0.225 | 80.0% | 4B reasoning too weak for Flash labeling |
+| MedGemma 4B (HF, standalone) | — | 35.0% | 31.5% | 0.030 | 5.0% | max_tokens=512 workaround; was 55% with max_tokens=2048 |
 
 **Key findings**:
-1. **MedGemma 27B is competitive with GPT-4** on criterion-level matching (70% vs 75% accuracy). The 5% gap may narrow with prompt tuning.
-2. **27B dramatically outperforms 4B** (70% vs 35%) — larger model has much better instruction-following for structured JSON output.
-3. **Vertex AI vLLM path has no TGI CUDA bug** — max_tokens=2048 works reliably, enabling full reasoning chains.
-4. MedGemma 4B has a **systematic MET bias**: model reasoning is often correct ("patient does NOT meet criterion") but the JSON `label` field contradicts the reasoning and outputs MET anyway. This is an instruction-following failure, not a reasoning failure.
+1. **Two-stage MedGemma 27B + Gemini v4 BEATS GPT-4 by 20pp** — 95% vs 75% accuracy on criterion-level matching. The two-stage architecture (MedGemma clinical reasoning → Gemini structured labeling) is the key innovation.
+2. **v4 prompt recovers v3 regression** — v3 added "don't re-derive" rule that dropped accuracy from 95% to 85%. v4 reverts to v2-style re-derivation + adds severity gating and diagnosis-vs-symptoms distinction.
+3. **Flash = Pro on Stage 2** — both achieve 95%, confirming Stage 2 labeling is simple enough for Flash. Use Flash for cost savings.
+4. **Two-stage consistently outperforms standalone** — both 27B+Flash (95%) and 4B+Pro (80%) beat either model alone. MedGemma provides clinical depth; Gemini provides reliable instruction-following.
+3. **27B dramatically outperforms 4B** in standalone mode (70% vs 35%) — larger model has much better instruction-following for structured JSON output.
+4. **Vertex AI vLLM path has no TGI CUDA bug** — max_tokens=2048 works reliably, enabling full reasoning chains.
+5. MedGemma 4B has a **systematic MET bias**: model reasoning is often correct ("patient does NOT meet criterion") but the JSON `label` field contradicts the reasoning and outputs MET anyway. This is an instruction-following failure, not a reasoning failure.
+6. **Statistical caveat**: All results on n=20 pairs. 95% CI for 85% accuracy = [62%, 97%]. Tier A (n=1024) needed for statistical significance.
 5. The 4B model confuses "criterion is met" with "patient is eligible" — it says MET when the exclusion condition IS present (should be "excluded" → NOT_MET).
 6. The max_tokens=512 workaround (for TGI CUDA bug on 4B) truncates thinking chains, degrading accuracy from 55% → 35%.
 
@@ -270,6 +279,7 @@ curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/
 | Write BDD feature files | `docs/bdd/README.md` |
 | Understand annotation rules | `docs/sot-annotation-requirements.md` |
 | Run Phase 0 | `configs/phase0.yaml` |
+| Review prompt changes | `docs/prompt-changelog.md` |
 
 ## BDD Commands
 

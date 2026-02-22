@@ -640,7 +640,7 @@ def test_build_reasoning_prompt_enforces_exact_keywords():
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
-    assert "MUST use exactly" in prompt or "must use exactly" in prompt.lower()
+    assert "MUST use" in prompt or "must use" in prompt.lower()
 
 
 def test_build_labeling_prompt_contains_reasoning():
@@ -696,15 +696,15 @@ def test_build_labeling_prompt_contains_mapping_rules():
 
 
 def test_build_labeling_prompt_contains_contradiction_check():
-    """Stage 2 contradiction check flags inconsistencies without re-deriving."""
+    """Stage 2 contradiction check allows re-derivation from reasoning text."""
     prompt = build_labeling_prompt(
         stage1_reasoning="Analysis",
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
     assert "CONTRADICTION CHECK" in prompt
-    # Must NOT re-derive conclusions — only flag obvious inconsistencies
-    assert "Do NOT re-derive" in prompt or "do NOT re-derive" in prompt.lower()
+    # v4: rely on reasoning content to determine correct label (not just flag as unknown)
+    assert "REASONING" in prompt and "CONTENT" in prompt
 
 
 def test_build_labeling_prompt_exclusion_has_full_mapping():
@@ -726,8 +726,8 @@ def test_build_labeling_prompt_contains_abstention_guardrail():
         criterion_text="Criterion",
         criterion_type="exclusion",
     )
-    assert "do NOT downgrade" in prompt or "Do NOT downgrade" in prompt
-    assert "definitive" in prompt.lower() or "HIGH confidence" in prompt
+    assert "Do NOT" in prompt and "downgrade" in prompt
+    assert "HIGH confidence" in prompt or "specific error" in prompt
 
 
 # --- Two-stage evaluate function tests ---

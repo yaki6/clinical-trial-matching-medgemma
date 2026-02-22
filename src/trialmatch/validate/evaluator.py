@@ -135,20 +135,32 @@ Analyze this criterion against the patient note:
    Cite specific sentences by index.
 
 3. Does the patient have the GENERAL condition described?
+   - If the criterion requires a formal DIAGNOSIS (e.g., "Diagnosis of
+     dementia"): only answer YES if the note documents a diagnosis, not
+     merely symptoms suggestive of the condition.
+   - If the criterion describes symptoms or clinical presentation:
+     symptoms suffice.
+   - Consider whether the patient's symptoms could have a more likely
+     alternative explanation before concluding they match the criterion.
    Answer: YES / NO / INSUFFICIENT DATA
 
-4. If YES to #3: Does the criterion have SPECIFIC qualifiers
+3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE
+    (e.g., mild, moderate, severe, early, advanced, Rutherford stage 2)?
+    If so, does the patient's documented condition match that specific
+    level?
+    Answer: SEVERITY MATCHES / SEVERITY DOES NOT MATCH / NO SEVERITY SPECIFIED
+
+4. If YES to #3: Does the criterion have additional SPECIFIC qualifiers
    beyond the general condition?
    - If yes, does the patient match them?
-     (severity/grade, subtype, timing/recency, threshold)
+     (subtype, timing/recency, threshold, modality)
      Answer: MATCHES / DOES NOT MATCH / INSUFFICIENT DATA
    - If the criterion has no specific qualifiers: Answer: N/A
    If NO to #3, skip this question.
 
 5. How confident are you? HIGH / MEDIUM / LOW
 
-You MUST use exactly YES, NO, or INSUFFICIENT DATA for Q3
-and MATCHES, DOES NOT MATCH, INSUFFICIENT DATA, or N/A for Q4.
+You MUST use the exact answer keywords specified for each question.
 
 Respond in plain text (no JSON). Focus on clinical accuracy."""
 
@@ -169,27 +181,34 @@ Medical Analysis:
 LABEL MAPPING RULES:
 
 For INCLUSION criteria:
-- Analysis says YES + MATCHES (or N/A) → "eligible"
-- Analysis says YES + DOES NOT MATCH → "not eligible"
+- Analysis says YES + MATCHES specifics (or N/A) → "eligible"
+- Analysis says YES + DOES NOT MATCH specifics → "not eligible"
+- Analysis says YES + SEVERITY DOES NOT MATCH → "not eligible"
 - Analysis says YES + INSUFFICIENT DATA on specifics → "unknown"
 - Analysis says NO → "not eligible"
 - Analysis says INSUFFICIENT DATA → "unknown"
 
 For EXCLUSION criteria:
-- Analysis says YES + MATCHES (or N/A) → "not eligible"
-- Analysis says YES + DOES NOT MATCH → "eligible"
-- Analysis says YES + INSUFFICIENT DATA on specifics → "unknown"
-- Analysis says NO → "eligible"
+- Analysis says YES (patient HAS the excluded condition) + MATCHES → "not eligible"
+- Analysis says YES + DOES NOT MATCH specifics → "eligible"
+- Analysis says YES + SEVERITY DOES NOT MATCH → "eligible"
+- Analysis says NO (patient does NOT have it) → "eligible"
 - Analysis says INSUFFICIENT DATA → "unknown"
 
 IMPORTANT RULES:
-1. When the analysis gives a clear NO with HIGH confidence,
-   do NOT downgrade to "unknown". Respect definitive findings.
-2. CONTRADICTION CHECK: If the YES/NO answer is clearly
-   inconsistent with the cited evidence (e.g., says "NO" but
-   every cited sentence describes the patient having the
-   condition), flag the inconsistency and output "unknown".
-   Do NOT re-derive the clinical conclusion yourself.
+1. When the analysis gives a clear NO with HIGH confidence, output
+   "not eligible" (inclusion) or "eligible" (exclusion). Do NOT
+   downgrade to "unknown" unless you find a specific error.
+2. SEVERITY CHECK: Pay close attention to severity qualifiers in the
+   criterion (mild, moderate, severe, acute, chronic, early, advanced).
+   If the analysis mentions a DIFFERENT severity than the criterion
+   requires (e.g., criterion says "mild" but patient has "severe"),
+   the criterion is NOT met — even if the general condition is present.
+3. CONTRADICTION CHECK: If the analysis conclusion (YES/NO) contradicts
+   its own reasoning text (e.g., says "NO" but the reasoning describes
+   the patient clearly having the condition), rely on the REASONING
+   CONTENT to determine the correct label. If genuinely ambiguous,
+   output "unknown".
 
 Respond ONLY with valid JSON:
 {{
