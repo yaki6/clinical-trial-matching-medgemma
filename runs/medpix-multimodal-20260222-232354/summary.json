@@ -1,0 +1,26 @@
+{
+  "medgemma_4b": {
+    "n_cases": 10,
+    "diagnosis_exact_match": 0.0,
+    "diagnosis_substring_match": 0.0,
+    "diagnosis_llm_judge_correct": 0.1,
+    "diagnosis_llm_judge_partial": 0.1,
+    "findings_rouge_recall_mean": 0.20477774720035233,
+    "findings_rouge_precision_mean": 0.1280299587688162,
+    "findings_rouge_fmeasure_mean": 0.1264167276125166,
+    "avg_latency_ms": 15866.90208738437,
+    "total_cost_usd": 0.05068593722358896
+  },
+  "gemini_pro": {
+    "n_cases": 10,
+    "diagnosis_exact_match": 0.0,
+    "diagnosis_substring_match": 0.3,
+    "diagnosis_llm_judge_correct": 0.4,
+    "diagnosis_llm_judge_partial": 0.1,
+    "findings_rouge_recall_mean": 0.32022221868470985,
+    "findings_rouge_precision_mean": 0.10161020002435102,
+    "findings_rouge_fmeasure_mean": 0.13139754963536537,
+    "avg_latency_ms": 11830.289683619048,
+    "total_cost_usd": 0.055557499999999996
+  }
+}

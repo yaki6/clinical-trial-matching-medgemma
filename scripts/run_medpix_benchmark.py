@@ -335,12 +335,30 @@ async def main() -> None:
     provider = medgemma_cfg.get("provider", "huggingface")
 
     if provider == "vertex":
+        # Try to get dedicated DNS from config, env, or gcloud
+        dedicated_dns = medgemma_cfg.get("dedicated_endpoint_dns") or os.environ.get("VERTEX_DEDICATED_DNS_4B") or ""
+        if not dedicated_dns:
+            # Auto-discover dedicated DNS from endpoint
+            try:
+                import subprocess
+                result = subprocess.run(
+                    ["gcloud", "ai", "endpoints", "describe", medgemma_cfg["endpoint_id"],
+                     f"--region={medgemma_cfg['region']}", "--format=value(dedicatedEndpointDns)"],
+                    capture_output=True, text=True, timeout=30,
+                )
+                dedicated_dns = result.stdout.strip()
+                if dedicated_dns:
+                    logger.info("vertex_dns_discovered", dns=dedicated_dns)
+            except Exception as e:
+                logger.warning("vertex_dns_discovery_failed", error=str(e)[:100])
+
         medgemma = VertexMedGemmaAdapter(
             project_id=medgemma_cfg["project_id"],
             region=medgemma_cfg["region"],
             endpoint_id=medgemma_cfg["endpoint_id"],
             model_name=medgemma_cfg.get("model_name", "medgemma-4b-vertex"),
             gpu_hourly_rate=medgemma_cfg.get("gpu_hourly_rate", 1.15),
+            dedicated_endpoint_dns=dedicated_dns or None,
         )
     else:
         medgemma = MedGemmaAdapter(
