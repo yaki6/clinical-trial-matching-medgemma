@@ -30,8 +30,9 @@ from cache_manager import (
     save_prescreen_result,
     save_validate_results,
 )
-from components.patient_card import extract_friendly_label, render_patient_card
+from components.patient_card import extract_friendly_label, render_medical_image, render_patient_card
 from components.pipeline_viewer import (
+    render_image_findings,
     render_ingest_step,
     render_prescreen_placeholder,
     render_validate_placeholder,
@@ -68,9 +69,18 @@ _MEDICAL_DISCLAIMER = (
 # ---------------------------------------------------------------------------
 PROFILES_PATH = Path(__file__).resolve().parents[2] / "nsclc_trial_profiles.json"
 CACHED_RUNS_DIR = Path(__file__).resolve().parents[1] / "data" / "cached_runs"
+IMAGE_CACHE_DIR = (
+    Path(__file__).resolve().parents[2] / "data" / "sot" / "ingest" / "medgemma_image_cache"
+)
 
 try:
-    from trialmatch.ingest.profile_adapter import adapt_profile_for_prescreen, load_profiles
+    from trialmatch.ingest.profile_adapter import (
+        adapt_harness_patient,
+        adapt_profile_for_prescreen,
+        get_image_path,
+        load_demo_harness,
+        load_profiles,
+    )
 except ImportError:
 
     def load_profiles(path: str | Path | None = None) -> list[dict]:
@@ -79,6 +89,15 @@ except ImportError:
         with open(p) as f:
             data = json.load(f)
         return data.get("profiles", [])
+
+    def load_demo_harness(path=None) -> list[dict]:
+        """Fallback: load demo harness JSON."""
+        p = Path(path) if path else (
+            Path(__file__).resolve().parents[2] / "data" / "sot" / "ingest" / "nsclc_demo_harness.json"
+        )
+        with open(p) as f:
+            data = json.load(f)
+        return data.get("patients", [])
 
     def adapt_profile_for_prescreen(profile: dict) -> tuple[str, dict]:
         """Fallback adapter: flatten key_facts list-of-objects to dict."""
@@ -89,6 +108,20 @@ except ImportError:
             field = kf.get("field", "unknown")
             result[field] = kf.get("value")
         return patient_note, result
+
+    def adapt_harness_patient(profile: dict, image_findings=None) -> tuple[str, dict]:
+        """Fallback: adapt harness patient with optional image findings."""
+        patient_note, key_facts = adapt_profile_for_prescreen(profile)
+        if image_findings:
+            key_facts["medgemma_imaging"] = image_findings
+        return patient_note, key_facts
+
+    def get_image_path(patient: dict, base_dir=None):
+        """Fallback: resolve image path."""
+        if not patient.get("image"):
+            return None
+        base = Path(base_dir) if base_dir else Path(__file__).resolve().parents[2]
+        return base / patient["image"]["file_path"]
 
 
 # ---------------------------------------------------------------------------
@@ -109,6 +142,15 @@ def _friendly_patient_label(profile: dict) -> str:
     tid = profile.get("topic_id", "Unknown")
     suffix = extract_friendly_label(profile)  # e.g. " (43F, Lung Adenocarcinoma)"
     return f"{tid}{suffix}" if suffix else tid
+
+
+def _load_image_cache(topic_id: str) -> dict | None:
+    """Load cached MedGemma image extraction results for a patient."""
+    cache_file = IMAGE_CACHE_DIR / f"{topic_id}.json"
+    if cache_file.exists():
+        with open(cache_file) as f:
+            return json.load(f)
+    return None
 
 
 def _init_adapters():
@@ -252,6 +294,16 @@ CRITERION_ICONS = {
 # ---------------------------------------------------------------------------
 @st.cache_data
 def _load_profiles() -> list[dict]:
+    """Load demo harness patients (5 curated NSCLC cases).
+
+    Falls back to full nsclc_trial_profiles.json if harness is unavailable.
+    """
+    try:
+        patients = load_demo_harness()
+        if patients:
+            return patients
+    except Exception:
+        pass
     return load_profiles(str(PROFILES_PATH))
 
 
@@ -371,11 +423,26 @@ profile = profile_map[selected_topic]
 # -- Patient card --
 render_patient_card(profile, dev_mode=DEV_MODE)
 
+# -- Medical image for multimodal patients --
+is_multimodal = profile.get("ingest_mode") == "multimodal"
+image_cache = _load_image_cache(selected_topic) if is_multimodal else None
+
+if is_multimodal:
+    image_path = get_image_path(profile)
+    if image_path and image_path.exists():
+        render_medical_image(image_path, profile["image"], dev_mode=DEV_MODE)
+
 st.divider()
 
 # -- INGEST step --
-patient_note, key_facts = adapt_profile_for_prescreen(profile)
+# Don't merge image cache into display key_facts (shown separately below).
+# PRESCREEN live runs merge image context via adapt_harness_patient(profile, image_cache).
+patient_note, key_facts = adapt_harness_patient(profile)
 render_ingest_step(key_facts, dev_mode=DEV_MODE)
+
+# -- MedGemma image findings for multimodal patients --
+if image_cache:
+    render_image_findings(image_cache, dev_mode=DEV_MODE)
 
 # ---------------------------------------------------------------------------
 # PRESCREEN step
@@ -427,6 +494,7 @@ if run_button and pipeline_mode == "live":
                         key_facts=key_facts,
                         ingest_source="gold",
                         gemini_adapter=gemini_adapter,
+                        medgemma_adapter=medgemma_adapter,
                         topic_id=selected_topic,
                         on_tool_call=_on_tool_call,
                         on_agent_text=_on_agent_text,
@@ -495,6 +563,7 @@ if run_button and pipeline_mode == "live":
                         key_facts=key_facts,
                         ingest_source="gold",
                         gemini_adapter=gemini_adapter,
+                        medgemma_adapter=medgemma_adapter,
                         topic_id=selected_topic,
                     )
                 )

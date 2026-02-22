@@ -1,41 +1,246 @@
 {
-  "NCT05885698": {
-    "verdict": "UNCERTAIN",
+  "NCT06196424": {
+    "verdict": "EXCLUDED",
+    "mode": "two_stage",
     "criteria": [
       {
-        "text": "Adult subjects (18 years and older) with newly diagnosed early stage, locally advanced or metastatic non-small cell lung cancer",
+        "text": "Histopathological diagnosis of Non-Small Cell Lung Cancer (all stages)",
         "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "{\n  \"",
-        "evidence_sentences": []
+        "verdict": "MET",
+        "reasoning": "The medical analysis confirms that the patient has a histopathologic diagnosis of malignancy in the lung, which satisfies the inclusion requirement for Non-Small Cell Lung Cancer.",
+        "evidence_sentences": [
+          0
+        ],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires a histopathological diagnosis of Non-Small Cell Lung Cancer (NSCLC) of any stage.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\"\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: YES\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: HIGH"
       },
       {
-        "text": "Must be eligible for systemic therapy based on the treating provider's assessment. If systemic therapy was recommended and documented by the treating provider but the patient declined, they can still be eligible for the study. Patients can be enrolled prior to start of treatment.",
+        "text": "Age \u2265 18 years old",
         "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "{\n  \"label\": \"",
-        "evidence_sentences": []
-      },
-      {
-        "text": "Subjects who developed locally advanced or metastatic disease after receiving adjuvant or neoadjuvant therapy are eligible if the adjuvant/neoadjuvant therapy was completed at least 12 months prior to the development of locally advanced or metastatic disease",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "{\n  \"label\":",
-        "evidence_sentences": []
-      },
-      {
-        "text": "Subjects must be enrolled within 30 days of initiation of systemic therapy",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "{\n  \"label\": \"unknown\",",
-        "evidence_sentences": []
+        "verdict": "MET",
+        "reasoning": "The clinical note states the patient is 43 years old, which meets the inclusion criterion of being 18 years of age or older.",
+        "evidence_sentences": [
+          0
+        ],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to be at least 18 years old.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states: \"A 43-year-old female presents...\" This indicates the patient's age is 43 years old.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: YES\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: HIGH"
       },
       {
         "text": "Signed informed consent",
         "type": "inclusion",
         "verdict": "UNKNOWN",
-        "reasoning": "{\n  \"label\": \"",
-        "evidence_sentences": []
+        "reasoning": "The medical analysis confirms that the clinical note does not contain any information regarding the patient signing an informed consent form, which is a requirement for this inclusion criterion.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have signed informed consent for the procedure or treatment being discussed.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention anything about the patient signing informed consent.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
+      },
+      {
+        "text": "Availability of familiar and/or personal anamnestic data of cancer",
+        "type": "inclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The medical analysis concludes that the patient does not satisfy the inclusion criterion because the clinical note lacks documentation of any personal or family history of cancer, specifically stating that the patient has no history of chronic illnesses.",
+        "evidence_sentences": [
+          0
+        ],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the availability of familiar and/or personal anamnestic data of cancer. This means the patient's history of cancer, including any prior diagnoses, treatments, or family history of cancer, should be documented in the clinical note.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention any history of cancer. The note states: \"She has no history of chronic illnesses or tobacco use.\" This sentence does not mention any history of cancer.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
+      },
+      {
+        "text": "Unavailability of familiar and/or personal anamnestic data of cancer",
+        "type": "exclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The clinical analysis states that the patient does not satisfy the exclusion criterion regarding the unavailability of cancer history data, meaning history data is effectively available through the record of no chronic illnesses.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the availability of familiar and/or personal anamnestic data of cancer. This means the patient should have a history of cancer, or the clinician should be familiar with the patient's history of cancer.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention any history of cancer. The note states: \"She has no history of chronic illnesses or tobacco use.\" This indicates that the patient does not have a known history of cancer.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
+      },
+      {
+        "text": "Patient's refusal",
+        "type": "exclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The medical analysis indicates that there is no mention of patient refusal in the clinical note. As this is an exclusion criterion, the absence of the condition means the patient is eligible.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have refused a specific medical intervention or procedure.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention any patient refusal.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
+      }
+    ]
+  },
+  "NCT06074588": {
+    "verdict": "EXCLUDED",
+    "mode": "two_stage",
+    "criteria": [
+      {
+        "text": "Histologically- or cytologically-documented advanced (Stage III not eligible for resection or curative radiation) or metastatic non-squamous NSCLC with specific mutations.",
+        "type": "inclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The medical analysis concludes that the patient does not satisfy the criterion requiring documented advanced or metastatic non-squamous NSCLC with specific mutations, despite the histopathologic confirmation of malignancy.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have histologically or cytologically documented advanced (Stage III) non-small cell lung cancer (NSCLC) that is not eligible for resection or curative radiation, or metastatic non-squamous NSCLC with specific mutations.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states that \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\" This indicates the presence of malignancy.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Confidence: LOW"
+      },
+      {
+        "text": "Documentation of locally assessed radiological disease progression while on or after last treatment based on Response Evaluation Criteria in Solid Tumors Version (RECIST) 1.1.",
+        "type": "inclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The clinical note describes current radiological findings such as lung nodules and masses, but it does not provide documentation of disease progression over time or mention the use of RECIST 1.1 criteria, which are specific requirements for this inclusion criterion.",
+        "evidence_sentences": [
+          0
+        ],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires documentation of locally assessed radiological disease progression while on or after last treatment based on Response Evaluation Criteria in Solid Tumors Version 1.1 (RECIST 1.1). This means the note should describe how the patient's lung nodules or masses have changed in size or number, or if new lesions have appeared, compared to previous imaging, and that these changes were assessed by a radiologist.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note mentions \"Axial CT images of the chest demonstrate nodular and branching opacities in the right upper lobe, consistent with a tree-in-bud pattern. A large, well-circumscribed mass is present in the left lower lobe. Additionally, there is evidence of interstitial changes in the right lung, including honeycombing and pleural thickening, particularly in the right lower lobe, along with a small right-sided pleural effusion.\" This describes the patient's lung findings on CT.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n4.  **How confident are you?**\n    Confidence: LOW"
+      },
+      {
+        "text": "Participants with genome mutations must have received 1 or 2 prior lines of epidermal growth factor receptor tyrosine kinase inhibitor (EGFR TKI), including a third generation TKI for participants with a T790M mutation; and 1 platinum-based therapy after progression on or after EGFR TKI.",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The clinical note lacks any information regarding the patient's prior treatment history, including the specific use of EGFR TKIs or platinum-based therapies required for this inclusion criterion. Since the medical analysis confirms this information is not provided, the eligibility status cannot be determined.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    This criterion requires that patients with genome mutations must have received 1 or 2 prior lines of epidermal growth factor receptor tyrosine kinase inhibitor (EGFR TKI), including a third generation TKI for participants with a T790M mutation; and 1 platinum-based therapy after progression on or after EGFR TKI.\n\n2.  What does the patient note state about this? Cite specific sentences by index.\n    The patient note does not mention any prior treatment history, including EGFR TKIs or platinum-based therapies. The note states: \"Information not provided includes cancer stage, performance status, and prior treatment history.\"\n\n3.  Does the patient have or satisfy the condition described in this criterion?\n    Answer: NO\n4.  How confident are you? HIGH / MEDIUM / LOW\n    Answer: LOW"
+      },
+      {
+        "text": "Measurable disease per RECIST 1.1 as assessed by the local site investigator.",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The medical analysis states that while the patient has imaging findings like a mass and opacities, the note lacks the specific measurements or explicit investigator assessment required to determine if the disease is 'measurable' according to RECIST 1.1 criteria.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have a measurable disease per RECIST 1.1 as assessed by the local site investigator.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not explicitly state that the patient has a measurable disease per RECIST 1.1. The note mentions imaging findings, including a large mass in the left lower lobe and nodular/branching opacities in the right upper lobe, along with interstitial changes and a pleural effusion. However, it does not provide information on the size of these lesions or whether they meet the criteria for measurable disease according to RECIST 1.1.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    INSUFFICIENT DATA\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    LOW"
+      },
+      {
+        "text": "Archival tumor tissue sample or newly obtained core, incisional, or excisional biopsy of a tumor lesion not previously irradiated has been provided",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The clinical note confirms that histopathologic analysis of tissue from the lung and lymph nodes was performed, which indicates that tumor tissue samples are available for the patient.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have a sample of archival tumor tissue or a newly obtained core, incisional, or excisional biopsy of a tumor lesion that has not been previously irradiated.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\"\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: YES\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: HIGH"
+      },
+      {
+        "text": "Participants who have AEs due to previous anticancer therapies must have recovered to Grade \u22641 or baseline.",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The patient's note contains no information about prior anticancer therapies or any associated adverse events, so it cannot be determined if they have recovered to the required grade.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires that patients who have experienced adverse events (AEs) due to previous anticancer therapies must have recovered to a Grade \u22641 or their baseline condition.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention any prior anticancer therapies or any AEs related to them.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    NO\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    LOW"
+      },
+      {
+        "text": "Participants who are hepatitis B surface antigen (HBsAg) positive are eligible if they have received HBV antiviral therapy for at least 4 weeks, and have undetectable HBV viral load prior to randomization.",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The clinical note contains no information regarding the patient's Hepatitis B surface antigen status, HBV antiviral therapy history, or HBV viral load, which are required to determine eligibility for this inclusion criterion.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    This criterion requires that a patient must be Hepatitis B surface antigen (HBsAg) positive, have received HBV antiviral therapy for at least 4 weeks, and have an undetectable HBV viral load prior to randomization.\n\n2.  What does the patient note state about this? Cite specific sentences by index.\n    The patient note does not mention the patient's Hepatitis B status, antiviral therapy history, or viral load.\n\n3.  Does the patient have or satisfy the condition described in this criterion?\n    NO\n\n4.  How confident are you?\n    LOW"
+      },
+      {
+        "text": "Human immunodeficiency virus (HIV)-infected participants must have well controlled HIV on antiretroviral therapy.",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The clinical note does not provide information regarding the patient's HIV status or whether they are receiving antiretroviral therapy, preventing a determination of eligibility for this inclusion criterion.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires that HIV-infected participants must have well-controlled HIV on antiretroviral therapy.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention the patient's HIV status or whether it is well-controlled.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    INSUFFICIENT DATA\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    LOW"
+      },
+      {
+        "text": "Have an ECOG performance status of 0 or 1 within 3 days before randomization.",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The patient note does not mention the patient's ECOG performance status, so it cannot be determined if the patient meets this inclusion criterion.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have an ECOG performance status of 0 or 1 within 3 days before randomization.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention the patient's ECOG performance status or any information about their status within 3 days before randomization.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    NO\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    LOW"
+      },
+      {
+        "text": "Has predominantly squamous cell histology NSCLC.",
+        "type": "exclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The medical analysis indicates that the patient's histopathology showed signet-ring cells, which are associated with adenocarcinoma rather than squamous cell histology. Since the patient does not have the excluded condition, they are eligible.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have predominantly squamous cell histology NSCLC.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\"\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Confidence: LOW"
+      }
+    ]
+  },
+  "NCT00301119": {
+    "verdict": "EXCLUDED",
+    "mode": "two_stage",
+    "criteria": [
+      {
+        "text": "DISEASE CHARACTERISTICS:",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The clinical note specifically confirms all the radiological features required by the inclusion criterion, including the tree-in-bud pattern in the right upper lobe, the mass in the left lower lobe, and the interstitial changes/effusion in the right lung.",
+        "evidence_sentences": [
+          0,
+          1,
+          2
+        ],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have a disease characterized by nodular and branching opacities in the right upper lobe, consistent with a tree-in-bud pattern, a large, well-circumscribed mass in the left lower lobe, and interstitial changes in the right lung, including honeycombing and pleural thickening, along with a small right-sided pleural effusion.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states: \"Axial CT images of the chest demonstrate nodular and branching opacities in the right upper lobe, consistent with a tree-in-bud pattern. A large, well-circumscribed mass is present in the left lower lobe. Additionally, there is evidence of interstitial changes in the right lung, including honeycombing and pleural thickening, particularly in the right lower lobe, along with a small right-sided pleural effusion.\"\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: YES\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: HIGH"
+      },
+      {
+        "text": "Screening Cohort",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The medical analysis states that the patient note does not mention the screening cohort, which means it cannot be determined if the patient satisfies this inclusion criterion.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to be part of a screening cohort.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention anything about the patient being part of a screening cohort.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
+      },
+      {
+        "text": "At high- or low-risk for lung cancer",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The medical analysis indicates that the patient's note does not provide a formal risk assessment for lung cancer, resulting in insufficient data to determine if the inclusion criterion is met.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to be at high- or low-risk for lung cancer.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not explicitly state the patient's risk for lung cancer. The note mentions a large mass in the left lower lobe and nodular/branching opacities in the right upper lobe, which are suggestive of lung cancer, but it does not provide a formal risk assessment.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: INSUFFICIENT DATA\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
+      },
+      {
+        "text": "Smoking history \u2265 20 pack years\\*",
+        "type": "inclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The clinical note states the patient has no history of tobacco use, which directly contradicts the inclusion requirement of a smoking history of at least 20 pack years.",
+        "evidence_sentences": [
+          1
+        ],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    This criterion requires the patient to have a smoking history of at least 20 pack-years.\n\n2.  What does the patient note state about this? Cite specific sentences by index.\n    The patient note states: \"She has no history of tobacco use.\" (Index 1)\n\n3.  Does the patient have or satisfy the condition described in this criterion?\n    Answer: NO\n4.  How confident are you? HIGH / MEDIUM / LOW\n    Answer: LOW"
+      },
+      {
+        "text": "With or without workplace exposure to asbestos",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The medical analysis states that the patient note does not mention any history of workplace exposure to asbestos. Since this information is missing from the record, eligibility for this inclusion criterion cannot be determined, resulting in an unknown status.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    The criterion requires information about whether the patient has had or is currently exposed to asbestos.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention any history of workplace exposure to asbestos.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
+      },
+      {
+        "text": "NOTE: \\* Participants with \\< 20 pack years of smoking are eligible if 50 years of age or older",
+        "type": "inclusion",
+        "verdict": "NOT_MET",
+        "reasoning": "The inclusion criterion requires participants with less than 20 pack years of smoking history to be at least 50 years old. The patient is 43 years old, therefore failing to meet the age requirement.",
+        "evidence_sentences": [
+          0,
+          2
+        ],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    This criterion requires participants to be 50 years of age or older and have less than 20 pack years of smoking history.\n\n2.  What does the patient note state about this? Cite specific sentences by index.\n    The patient note states: \"A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chronic illnesses or tobacco use.\"\n\n3.  Does the patient have or satisfy the condition described in this criterion?\n    Answer: NO\n4.  How confident are you? HIGH / MEDIUM / LOW\n    Answer: LOW"
+      },
+      {
+        "text": "Rule-Out Lung cancer group",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The clinical analysis confirms that the patient satisfies the inclusion criterion because histopathologic analysis of tissue samples from the lung and lymph nodes confirmed malignancy, indicating the patient was being evaluated for and subsequently diagnosed with lung cancer.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to be in the \"Rule-Out Lung cancer group\". This means the patient must be considered for lung cancer.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not explicitly state that the patient is in the \"Rule-Out Lung cancer group\". However, the presence of a large, well-circumscribed mass in the left lower lobe, along with nodular and branching opacities in the right upper lobe (tree-in-bud pattern), and interstitial changes in the right lung, raises suspicion for lung cancer. The assessment and plan section also mentions that histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: YES\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: HIGH"
+      },
+      {
+        "text": "Referred for evaluation of suspicious nodules with 1 of the following diagnoses:",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The patient's histopathologic analysis confirmed lung malignancy with involvement of the mediastinal lymph nodes, which satisfies the requirement for a diagnosis of lung cancer with mediastinal lymph node involvement.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have been referred for evaluation of suspicious nodules with one of the following diagnoses:\n    *   Lung cancer\n    *   Lung cancer with metastasis\n    *   Lung cancer with pleural effusion\n    *   Lung cancer with mediastinal lymph node involvement\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\" This indicates the patient has confirmed malignancy.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: YES\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: HIGH"
+      },
+      {
+        "text": "Lung cancer",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The patient's histopathologic analysis confirmed malignancy in the right lung lobes, which satisfies the inclusion requirement for lung cancer.",
+        "evidence_sentences": [
+          0
+        ],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the patient to have lung cancer.\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note states that \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\"\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: YES\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: HIGH"
+      },
+      {
+        "text": "Nonmalignant nodules (control group)",
+        "type": "inclusion",
+        "verdict": "UNKNOWN",
+        "reasoning": "The medical analysis indicates that the clinical note does not mention the presence or absence of nonmalignant nodules. For an inclusion criterion, if the required condition is not mentioned in the text, the eligibility status cannot be determined.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  **What does this criterion specifically require?**\n    This criterion requires the presence of nonmalignant nodules (control group).\n\n2.  **What does the patient note state about this? Cite specific sentences by index.**\n    The patient note does not mention any nonmalignant nodules.\n\n3.  **Does the patient have or satisfy the condition described in this criterion?**\n    Answer: NO\n\n4.  **How confident are you? HIGH / MEDIUM / LOW**\n    Answer: LOW"
       }
     ]
   }

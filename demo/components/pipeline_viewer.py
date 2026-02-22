@@ -11,6 +11,13 @@ _FRIENDLY_FIELD_NAMES: dict[str, str] = {
     "imaging_findings": "Imaging Results",
     "missing_info": "Information Gaps",
     "symptoms": "Current Symptoms",
+    "medgemma_imaging": "AI Image Findings",
+    "medical_history": "Medical History",
+    "comorbidities": "Other Conditions",
+    "lab_results": "Lab Results",
+    "biomarkers": "Biomarkers",
+    "cancer_stage": "Cancer Stage",
+    "physical_exam_findings": "Physical Exam",
 }
 
 
@@ -95,3 +102,34 @@ def render_validate_placeholder(dev_mode: bool = False) -> None:
 
     with st.expander(title, expanded=False):
         st.info(message)
+
+
+def render_image_findings(
+    image_findings: dict, model_name: str = "MedGemma 4B", dev_mode: bool = False
+) -> None:
+    """Render MedGemma image extraction findings.
+
+    Args:
+        image_findings: Dict with extracted_text, latency_seconds, model, prompt, etc.
+        model_name: Display name of the model used for extraction.
+        dev_mode: If True, show model name, latency, and extraction prompt.
+    """
+    if dev_mode:
+        title = f"INGEST: {model_name} Image Analysis"
+    else:
+        title = "AI Image Analysis"
+
+    with st.expander(title, expanded=True):
+        extracted = image_findings.get("extracted_text", "")
+        if extracted:
+            st.markdown(extracted)
+        else:
+            st.warning("No findings extracted from image.")
+
+        if dev_mode:
+            latency = image_findings.get("latency_seconds", 0)
+            model = image_findings.get("model", "unknown")
+            st.caption(f"Model: {model} | Latency: {latency:.1f}s")
+            if image_findings.get("prompt"):
+                with st.expander("Extraction prompt", expanded=False):
+                    st.text(image_findings["prompt"])
