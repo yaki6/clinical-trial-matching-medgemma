@@ -234,14 +234,56 @@ curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/
 
 **Decision**: Abandon HF Inference for 27B. Use Vertex AI Model Garden instead (configured but untested).
 
-## Rate Limits
+## Concurrency Constraints
 
-| Service | Limit | Used By | Notes |
-|---------|-------|---------|-------|
-| HuggingFace Inference | 1 concurrent | MedGemma 1.5 4B | Was 5; reduced to 1 due to CUDA bug at higher concurrency |
-| HuggingFace Inference | max_tokens=512 | MedGemma 1.5 4B | TGI CUDA bug at ≥1024; see HF Inference Endpoint Operations |
-| Google AI Studio | 10 concurrent | Gemini 3 Pro | |
-| CT.gov API v2 | 40 req/min | Tier B trial-level eval (deferred) | |
+### Constraint Stack (all endpoints)
+
+| Layer | MedGemma 4B (HF TGI) | MedGemma 27B (Vertex AI) | Gemini (AI Studio) | CT.gov API |
+|-------|----------------------|--------------------------|-------------------|------------|
+| **Platform limit** | N/A | No QPS limit (dedicated endpoint) | 10 concurrent | 40 req/min |
+| **GPU / hardware** | CUDA bug (see below) | **4 concurrent** (KV cache ceiling) | N/A | N/A |
+| **Software config** | max_tokens=512 | `--max-num-seqs=4` | max_output_tokens=32768 | 1.5s interval |
+| **App config** | `max_concurrent: 1` | `max_concurrent: 1` | `max_concurrent: 1` | Single client |
+| **Binding constraint** | CUDA bug → 1 | GPU VRAM → 4 | Platform → 10 | API → 40 rpm |
+
+### MedGemma 4B (HF Inference) — Hard limit: 1
+
+TGI CUDA bug forces `max_concurrent: 1` and `max_tokens: 512`. Not a quota — a kernel-level crash. Concurrency > 1 increases crash probability, and a single crash poisons the GPU until full endpoint restart. See "HF Inference Endpoint Operations" section for details.
+
+### MedGemma 27B (Vertex AI) — Hard limit: 4 concurrent sequences
+
+The Vertex AI dedicated endpoint has **no platform-level QPS cap**. The binding constraint is GPU VRAM on the deployed hardware.
+
+**Deployment config** (`scripts/deploy_vertex_27b.py`):
+- Machine: `g2-standard-24` — **2x NVIDIA L4** (24 GB each = 48 GB total)
+- Quantization: int8 (bitsandbytes) → 27B x 1 byte = ~27 GB model weights
+- `--gpu-memory-utilization=0.95` → 45.6 GB usable
+- `--tensor-parallel-size=2`
+
+**VRAM budget**:
+- Model weights: ~27 GB
+- Remaining for KV cache + activations: ~17 GB
+- KV cache per token: 2 (K+V) x 16 (KV heads) x 128 (head_dim) x 2 bytes x 62 layers = **496 KB/token**
+- At `--max-model-len=8192`: each sequence needs up to 8192 x 496 KB ≈ **4 GB**
+- Max concurrent sequences: 17 GB / 4 GB ≈ **4**
+
+`--max-num-seqs=4` in the deploy script matches this hardware ceiling exactly. This is NOT an arbitrary config choice.
+
+**Throughput bottleneck**: L4 memory bandwidth (300 GB/s per GPU) limits autoregressive decoding to ~22 tok/s aggregate across all concurrent sequences. At 4 concurrent: ~5-6 tok/s per sequence. Observed: ~8.3s/pair.
+
+**If upgraded** to official Google 4x L4 config (`g2-standard-48`, bf16, `--max-num-seqs=16`): ceiling rises to ~8-16 concurrent depending on sequence lengths. Cost doubles to ~$4.00/hr.
+
+### Gemini (Google AI Studio) — Limit: 10 concurrent
+
+Platform quota of 10 concurrent requests. Adapter retries on 429 `RESOURCE_EXHAUSTED` with exponential backoff (max 8 retries, 30s cap). Current app config uses `max_concurrent: 1` for benchmark determinism — safely adjustable up to 10.
+
+### CT.gov API v2 — Limit: 40 req/min
+
+Implemented as timestamp-based rate limiter in `CTGovClient`: minimum 1.5s between requests. Retries on 429 with exponential backoff.
+
+### Two-Stage Pipeline — Sequential dependency
+
+Two-stage evaluation (MedGemma → Gemini) has an inherent serial dependency per criterion pair: Stage 2 cannot start until Stage 1 completes. `run_two_stage_benchmark()` processes pairs sequentially. Multiple pairs could theoretically run in parallel (up to MedGemma's 4-sequence limit), but current implementation does not.
 
 ## Agent Session Protocol
 
@@ -280,6 +322,7 @@ curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/
 | Understand annotation rules | `docs/sot-annotation-requirements.md` |
 | Run Phase 0 | `configs/phase0.yaml` |
 | Review prompt changes | `docs/prompt-changelog.md` |
+| Review all 35 benchmark runs | `docs/benchmark-chronicle.md` |
 
 ## BDD Commands
 

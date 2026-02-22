@@ -11,7 +11,7 @@ along with benchmark results and lessons learned.
 | v1 | 30fb2fd | 80% | — | Initial two-stage split | Beats GPT-4 75% baseline |
 | v2 | 7131225 | **95%** | 75% | CWA exceptions, severity/staging Q4, explicit label mapping rules | Best ever on seed 42 |
 | v3 | 2f77531 | 85% | 70% | Expanded CWA categories, negation handling, contradiction check blocks re-derivation | **REGRESSION** — contradiction check + "don't re-derive" hurt |
-| v4 | (current) | **95%** | TBD | Revert Stage 2 to v2-style re-derivation + add severity gating + diagnosis vs symptoms | **Recovered** — matches v2 best |
+| v4 | c7a05ad | **95%** | TBD (needs Vertex redeploy) | Revert Stage 2 to v2-style re-derivation + add severity gating + diagnosis vs symptoms | **Recovered** — matches v2 best |
 
 ---
 
@@ -176,7 +176,7 @@ Respond ONLY with valid JSON:
 ## v4 — Severity Gating + Diagnosis Distinction + Reverted Re-Derivation (current)
 
 **Date**: 2026-02-22
-**Result**: TBD
+**Result**: 95% accuracy, 0.958 F1, 0.922 kappa (seed 42) — **RECOVERED from v3 regression**
 
 ### Design Rationale
 
