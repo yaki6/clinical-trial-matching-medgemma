@@ -1,10 +1,10 @@
-<!-- Last updated: 2026-02-22T03:05:00Z -->
+<!-- Last updated: 2026-02-22T11:00:00Z -->
 
 # Project Dashboard
 
 ## Current Phase
 
-**DEMO_BUILD** — Streamlit demo scaffold built, 4 critical bugs fixed (set_page_config, connection leak, async loop, token counting), 176 tests passing. Vertex AI adapter added. CTGov search enhanced with location/sex/age params.
+**DEMO_BUILD** — PRESCREEN optimized (MedGemma pre-search + study_type filter + scoring heuristic), two-stage eval achieves 85% accuracy (beats GPT-4 75%), 225 tests passing. 3 new ADRs (009-011), architecture docs updated.
 
 ```
 [SCAFFOLDING] ✅ DONE
@@ -40,7 +40,14 @@
 - [x] Add profile_adapter for nsclc_trial_profiles.json
 - [x] Enhance CTGov client: aggFilters, location/sex/age params
 - [x] Fix 4 critical demo bugs (set_page_config, connection leak, async, token counting)
+- [x] PRESCREEN optimization: MedGemma clinical reasoning pre-search (ADR-009)
+- [x] Fix CT.gov study_type filter: AREA[StudyType] Essie syntax (ADR-010)
+- [x] Comment out normalize_medical_terms (~75s wasted latency) (ADR-011)
+- [x] Two-stage eval: MedGemma 27B reasoning + Gemini Pro labeling = 85% accuracy
+- [x] PRESCREEN e2e verified: 64 raw → 20 candidates, 51s, $0.06, 20% harness overlap
 - [ ] Wire VALIDATE into Streamlit with live/cached mode
+- [ ] Fix event loop bug in live VALIDATE mode
+- [ ] Update cached prescreen_result.json with latest optimized run
 - [ ] Playwright QA + demo video recording
 - [ ] Kaggle writeup + submission
 
@@ -52,7 +59,7 @@
 | data/ | CriterionAnnotation | hf_loader + sampler | 19 tests | none | Ready |
 | models/ | ModelResponse, CriterionVerdict | base + medgemma (4B+27B) + gemini + vertex | 18 tests + 3 smoke | none | Ready |
 | ingest/ | - | profile_adapter | 15 tests | none | Ready |
-| prescreen/ | ToolCallRecord, TrialCandidate, PresearchResult | CTGovClient (aggFilters, location/sex/age), ToolExecutor, agent loop | 41 tests | none | Ready |
+| prescreen/ | ToolCallRecord, TrialCandidate, PresearchResult | CTGovClient (AREA syntax, aggFilters), ToolExecutor, MedGemma pre-search + Gemini agent loop, heuristic scoring (MAX=20) | 39+2skip tests | none | Ready (optimized) |
 | validate/ | CriterionResult | evaluator (REUSABLE) | 14 tests | 4 scenarios | Ready |
 | evaluation/ | - | metrics + evidence overlap | 10 tests | none | Ready |
 | tracing/ | RunResult | run_manager | 6 tests | none | Ready |
@@ -60,10 +67,10 @@
 
 ## Test Summary
 
-- **176 unit tests** passing across 14 test files
+- **225 unit tests** passing across 14 test files (2 skipped — normalize_medical_terms)
 - **4 BDD scenarios** passing for validate module
 - **3 smoke tests** for MedGemma 27B endpoint (health check, criterion eval, template format)
-- **183 total tests**, zero lint errors on modified files
+- **232 total tests**, zero lint errors on modified files
 
 ## Blockers
 
@@ -72,6 +79,18 @@
 | ~~TREC 2021 data fetch status unknown~~ | ~~Can't verify data loading works~~ | ~~Human~~ | Resolved 2026-02-19 — switched to HF dataset (ADR-006) |
 | ~~MedGemma endpoint activation status unknown~~ | ~~Can't test MedGemma adapter~~ | ~~Human~~ | Resolved 2026-02-18 |
 | ~~GOOGLE_API_KEY availability for Gemini~~ | ~~Can't test Gemini adapter~~ | ~~Human~~ | Resolved 2026-02-18 |
+
+## Known Code Issues (from 2026-02-22 team review)
+
+| Priority | File | Issue | Impact |
+|----------|------|-------|--------|
+| Critical | profile_adapter.py:35-40 | demographics branch missing `else` — field processed twice | Token waste, noisy key_facts |
+| Critical | agent.py:263 | `final_text` overwritten each turn — intermediate reasoning lost | Debug/UI display incomplete |
+| Should Fix | agent.py:458 | Cross-layer import `clean_model_response` from validate/ | Architecture violation |
+| Should Fix | agent.py:32-34 | Hardcoded pricing constants (should import from gemini.py) | Cost tracking drift risk |
+| Should Fix | ctgov_client.py:139 | `AREA[StudyType]"Expanded Access"` needs quotes for spaces | API 400 on EXPANDED_ACCESS |
+| Should Fix | tools.py:241 | page_size max inconsistent (50 in tools vs 100 in client) | Confusing behavior |
+| Low | agent.py:397 | `executor.medgemma_calls` always 0 (dead code from commented normalize) | No impact currently |
 
 ## Open Questions for Human
 
@@ -93,6 +112,7 @@ _Space for human to communicate intent changes without updating the PRD. Agents:
 
 | Date | Agent | What Was Done | What's Next |
 |------|-------|--------------|-------------|
+| 2026-02-22 | Claude (team) | PRESCREEN optimization + team review: (1) Added MedGemma 4B clinical reasoning pre-search — generates condition terms, molecular drivers, eligibility keywords before Gemini loop (ADR-009), (2) Fixed CT.gov study_type filter — `filter.studyType` invalid, replaced with `AREA[StudyType]Interventional` Essie syntax (ADR-010), (3) Commented out normalize_medical_terms (~75s wasted latency, ADR-011), (4) Added heuristic candidate scoring + MAX_CANDIDATES=20 pruning, (5) E2E verified: 64 raw → 20 candidates, 51.2s, $0.063, 1/5 harness overlap, (6) 3-agent team review: code review found 2 critical bugs (profile_adapter else-branch, final_text overwrite), benchmark review found 85% best accuracy (27B+Pro two-stage), docs audit created ADRs 009-011, updated 3 architecture docs + decision log. 225 tests passing. | Fix 2 code review bugs, update cached run data, wire VALIDATE into Streamlit, Playwright QA, Kaggle writeup |
 | 2026-02-22 | Claude | Deployed MedGemma 27B on Vertex AI + Phase 0 benchmark: (1) Deployed 27B with int8 quantization (bitsandbytes) on 2x L4 GPUs (g2-standard-24) — bypassed L4 quota limit of 2 by halving VRAM with int8, (2) Wired max_tokens from YAML config through CLI to evaluator — Vertex has no TGI CUDA bug so 2048 tokens available, (3) Smoke test passed (5.5s latency), (4) Phase 0 benchmark: 70% accuracy / 72.2% F1 / 0.538 kappa — massive improvement over 4B (35%) and close to GPT-4 baseline (75%), (5) Updated vertex-ai-deploy skill with benchmark results, teardown procedure, and gotchas, (6) Tore down endpoint to avoid cost. Run: phase0-medgemma-27b-vertex-20260221-020334 | Wire VALIDATE into Streamlit; Playwright QA; Kaggle writeup |
 | 2026-02-21 | Claude | MedGemma 4B Phase 0 benchmark + TGI CUDA bug investigation: (1) Deleted failed 27B vLLM endpoint, (2) Discovered TGI CUDA CUBLAS_STATUS_EXECUTION_FAILED bug — systematic isolation proved NOT hardware (L4=L40S), NOT memory leak (first request crashes), NOT prompt length; binary search found max_new_tokens threshold at ~500-1024, (3) Applied max_tokens=512 workaround — 20/20 pairs complete, (4) Result: 35% accuracy (down from 55% pre-fix) due to thinking token truncation, (5) Created ADR-007, (6) Updated CLAUDE.md with full deployment learnings, HF endpoint operations guide, model behavior notes. | Vertex AI deployment may bypass TGI bug; Streamlit demo wiring; Kaggle submission |
 | 2026-02-21 | Claude | Demo build + critical bug fixes: (1) Built Streamlit demo scaffold (app.py, Pipeline Demo, Benchmark Dashboard, cache_manager, components), (2) Fixed 4 critical bugs: duplicate set_page_config crashes, CTGovClient connection leak in VALIDATE loop, deprecated asyncio event loop API, MedGemma 27B token double-division, (3) Added Vertex AI MedGemma adapter with auth + retry + GPU-hour costing, (4) Enhanced CTGov client: phase aggFilters fix, location/sex/age params, 400 error handling, (5) Added profile_adapter for nsclc_trial_profiles.json, (6) 176 unit tests passing. | Wire VALIDATE into Streamlit, Playwright QA, demo video, Kaggle submission |

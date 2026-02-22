@@ -14,11 +14,13 @@ HuggingFace Dataset (TrialGPT criterion annotations)
     ├──────────────────────────────────────┐
     ▼                                      ▼
 [PRESCREEN] run_prescreen_agent()     [VALIDATE] evaluate_criterion()
-    │   Gemini 3 Pro agentic loop         │   MedGemma / Gemini 3 Pro
-    │   Tools: search_trials,             │   Input: patient_note +
-    │     get_trial_details,              │     criterion_text + criterion_type
-    │     normalize_medical_terms         │   Output: CriterionResult
-    │   CT.gov API v2 + MedGemma          │     (MET / NOT_MET / UNKNOWN)
+    │   1. MedGemma 4B clinical           │   Two-stage evaluation:
+    │      reasoning (pre-search)         │     Stage 1: MedGemma reasoning
+    │   2. Gemini Flash agentic loop      │     Stage 2: Gemini labeling
+    │   Tools: search_trials,             │   Output: CriterionResult
+    │     get_trial_details               │     (MET / NOT_MET / UNKNOWN)
+    │   CT.gov API v2 (AREA[StudyType]    │
+    │     Interventional filtering)       │
     │                                      │
     ▼                                      ▼
 PresearchResult                       CriterionResult[]
@@ -48,11 +50,12 @@ PresearchResult                       CriterionResult[]
 src/trialmatch/
 ├── cli/           # Click CLI entry points (trialmatch command)
 ├── ingest/        # INGEST component — profile_adapter converts nsclc JSON → PRESCREEN dict
-├── prescreen/     # PRESCREEN component — Gemini agentic search → PresearchResult (TrialCandidate[])
-│   ├── agent.py       # Gemini multi-turn agentic loop
-│   ├── ctgov_client.py # Async CT.gov API v2 client (rate-limited, retry)
+│   └── profile_adapter.py  # list-of-objects → flat dict, demographics promotion (age/sex → top-level)
+├── prescreen/     # PRESCREEN component — MedGemma pre-search + Gemini agentic search
+│   ├── agent.py       # MedGemma clinical reasoning + Gemini multi-turn agentic loop
+│   ├── ctgov_client.py # Async CT.gov API v2 client (AREA[StudyType], rate-limited, retry)
 │   ├── schema.py      # TrialCandidate, ToolCallRecord, PresearchResult
-│   └── tools.py       # Gemini FunctionDeclarations + ToolExecutor
+│   └── tools.py       # Gemini FunctionDeclarations (search_trials, get_trial_details) + ToolExecutor
 ├── validate/      # VALIDATE component — (Patient, Criterion) → MET/NOT_MET/UNKNOWN
 │   └── evaluator.py   # Reusable criterion evaluator (model-agnostic)
 ├── data/          # Data loading: HF dataset (TrialGPT criterion annotations), sampling
@@ -92,10 +95,32 @@ Gemini uses Google AI Studio (`google-genai` SDK).
 2. **Evaluation runs**: Each component can be run independently with gold or model inputs
 3. **Comparison**: `trialmatch compare` generates cross-model comparison reports
 
+## PRESCREEN Agent Architecture
+
+The PRESCREEN agent uses a two-model architecture (ADR-009):
+
+1. **MedGemma 4B** — Clinical reasoning pre-search: generates structured guidance (condition terms, likely molecular drivers, priority eligibility keywords, treatment line assessment) before the agentic loop begins. Latency: 12-43s, cost: ~$0.05/patient.
+
+2. **Gemini Flash** — Agentic search orchestrator: multi-turn function-calling loop with 2 tools (`search_trials`, `get_trial_details`), max 8 tool calls. Budget guard sends structured FunctionResponse errors when tool cap is reached.
+
+`normalize_medical_terms` was the original third tool (MedGemma-powered term normalization) but was commented out (ADR-011) due to ~25s latency per call with near-zero value — MedGemma echoed inputs unchanged. The clinical reasoning pre-search step provides better guidance.
+
+### Candidate Scoring
+
+Candidates are ranked by a heuristic score: `query_count * 3 + phase_bonus + recruiting_bonus + details_bonus`, capped at MAX_CANDIDATES=20. Phase II/III trials get +2, RECRUITING gets +1, trials with fetched eligibility criteria get +2.
+
+### CT.gov API v2 Filtering
+
+Study type filtering uses Essie `AREA[StudyType]Interventional` syntax in `query.term` (ADR-010), NOT `filter.studyType` which is invalid. Age bounds use `AREA[MinimumAge]RANGE[MIN, X]` and `AREA[MaximumAge]RANGE[X, MAX]`. Phase and sex use `aggFilters` (comma-joined, e.g., `phase:2,sex:f`).
+
+### Demographics Promotion
+
+`profile_adapter.py` promotes nested demographics fields (from `key_facts[].value.age`, `key_facts[].value.sex`) to top-level keys in the key_facts dict. This enables the agent to inject age/sex into CT.gov API filters automatically.
+
 ## Rate Limits
 
 | Service | Limit | Enforcement |
 |---------|-------|-------------|
-| HuggingFace Inference (MedGemma) | 5 concurrent | Adapter-level |
+| HuggingFace Inference (MedGemma) | 1 concurrent | Adapter-level (reduced from 5 due to CUDA bug) |
 | Gemini API | 10 concurrent | Adapter-level |
 | CT.gov API v2 | 40 req/min | CTGovClient rate limiter + 429 retry |

@@ -28,10 +28,10 @@ graph TD
     GEMINI["Gemini 3 Pro"]
 
     PRESCREEN <-. "search_trials<br/>get_trial_details" .-> CTGOV
-    PRESCREEN <-. "normalize_medical_terms" .-> MEDGEMMA
+    MEDGEMMA -. "clinical reasoning<br/>pre-search (ADR-009)" .-> PRESCREEN
     PRESCREEN <-. "agentic loop<br/>function calling" .-> GEMINI
-    VALIDATE <-. "evaluate_criterion()" .-> GEMINI
-    VALIDATE <-. "evaluate_criterion()" .-> MEDGEMMA
+    VALIDATE <-. "two-stage eval:<br/>MedGemma reasoning +<br/>Gemini labeling" .-> GEMINI
+    VALIDATE <-. "two-stage eval:<br/>MedGemma reasoning +<br/>Gemini labeling" .-> MEDGEMMA
 ```
 
 ---
@@ -246,7 +246,8 @@ Cache keys include `ingest_source` to prevent cross-contamination:
 
 ## PRESCREEN Tool Schema
 
-The PRESCREEN agent (Gemini 3 Pro with function calling) has access to three tools.
+The PRESCREEN agent (Gemini Flash with function calling) has access to two tools.
+A third tool (`normalize_medical_terms`) was commented out — see ADR-011.
 
 ### search_trials
 
@@ -263,7 +264,10 @@ Searches CT.gov API v2 `GET /studies` endpoint.
 | `min_age` | `str` | `query.term` via `AREA[MinimumAge]RANGE[MIN, X]` | Patient age lower bound |
 | `max_age` | `str` | `query.term` via `AREA[MaximumAge]RANGE[X, MAX]` | Patient age upper bound |
 | `sex` | `str` enum | `aggFilters` (`sex:m`/`sex:f`) | Sex eligibility filter |
-| `page_size` | `int` | `pageSize` (max 100) | Number of results |
+| `study_type` | `str` enum | `query.term` via `AREA[StudyType]` (ADR-010) | Study type filter (default: `INTERVENTIONAL`) |
+| `page_size` | `int` | `pageSize` (max 50) | Number of results |
+
+**Note on study_type**: CT.gov API v2 does NOT have a `filter.studyType` parameter. Study type is filtered via Essie `AREA[StudyType]Interventional` syntax in `query.term`. See ADR-010.
 
 ### get_trial_details
 
@@ -275,17 +279,9 @@ Fetches full eligibility criteria via `GET /studies/{nct_id}`.
 
 **Returns**: `nct_id`, `title`, `eligibility_criteria` (full text), `minimum_age`, `maximum_age`, `sex`, `healthy_volunteers`.
 
-### normalize_medical_terms
+### normalize_medical_terms (COMMENTED OUT — ADR-011)
 
-Calls MedGemma to produce CT.gov-optimized search variants. No CT.gov API call.
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `raw_term` | `str` (required) | Term as extracted from patient profile |
-| `term_type` | `str` enum (required) | `"biomarker"` / `"condition"` / `"drug"` / `"phenotype"` |
-| `patient_context` | `str` | Brief context for disambiguation |
-
-**Returns**: `normalized` (canonical form), `search_variants` (list, most-to-least specific), `disambiguation`, `avoid` (false-positive risk terms).
+Previously called MedGemma to produce CT.gov-optimized search variants. Commented out due to ~25s latency per call with near-zero value (MedGemma echoed inputs unchanged). Replaced by MedGemma clinical reasoning pre-search step (ADR-009). Code preserved in `tools.py` for potential future reactivation.
 
 ---
 
@@ -350,5 +346,5 @@ runs/
 | Service | Limit | Enforcement |
 |---------|-------|-------------|
 | CT.gov API v2 | 40 req/min | `CTGovClient` enforces `_MIN_INTERVAL` (1.5s) between requests + retry on 429 |
-| HuggingFace Inference | 5 concurrent | Adapter-level concurrency control |
+| HuggingFace Inference | 1 concurrent | Adapter-level (reduced from 5 due to TGI CUDA bug — ADR-007) |
 | Google AI Studio (Gemini) | 10 concurrent | Adapter-level concurrency control |

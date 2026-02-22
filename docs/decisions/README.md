@@ -12,6 +12,20 @@ Quick-reference table of all architectural and strategic decisions. Full details
 | 006 | Switch to TrialGPT HF criterion-level annotations | Accepted | Need trial-level eval (Tier B) or broader coverage |
 | 007 | TGI CUDA bug — max_tokens=512 workaround for MedGemma 4B | Accepted | Vertex AI confirmed no TGI bug; 27B uses max_tokens=2048 on Vertex |
 | 008 | Eligible label experiment: simplify to eligible/not eligible/unknown | **Rejected** | N/A — experiment disproved hypothesis. See `docs/medgemma-4b-reasoning-analysis.md` |
+| 009 | MedGemma clinical reasoning pre-search step in PRESCREEN | Accepted | MedGemma 27B available for pre-search, or Gemini gains sufficient medical domain knowledge |
+| 010 | CT.gov study type filtering via AREA[StudyType] Essie syntax (not filter.studyType) | Accepted | CT.gov API v2 adds a proper `filter.studyType` parameter |
+| 011 | Comment out normalize_medical_terms tool (~25s/call, near-zero value) | Accepted | Better MedGemma prompts or lightweight vocabulary lookup (UMLS/MeSH) available |
+
+## From PRESCREEN Implementation (2026-02-22)
+
+| Decision | Rationale | Revisit When |
+|----------|-----------|-------------|
+| MedGemma 4B for clinical reasoning pre-search (ADR-009) | Provides domain-specific guidance (molecular drivers, condition terms) that Gemini alone lacks; complementary architecture for competition narrative | MedGemma 27B fast inference available |
+| AREA[StudyType]Interventional in query.term (ADR-010) | filter.studyType is not a valid CT.gov API v2 parameter; returns 400 errors | CT.gov API adds filter.studyType |
+| Comment out normalize_medical_terms (ADR-011) | ~25s latency per call with near-zero value (MedGemma echoes input); replaced by clinical reasoning pre-search | Better prompts or vocabulary lookup |
+| Heuristic candidate scoring: query_count*3 + bonuses | Simple, interpretable ranking; phase II/III (+2), RECRUITING (+1), fetched details (+2); MAX_CANDIDATES=20 | ML-based scoring or LLM re-ranking |
+| Two-stage evaluation: MedGemma reasoning + Gemini labeling | 80% accuracy vs 35% (MedGemma alone) or 75% (Gemini alone); combines domain reasoning with reliable structured output | MedGemma improves instruction-following for JSON |
+| Demographics promotion in profile_adapter.py | Nested dict age/sex values promoted to top-level keys for CT.gov API filter injection | INGEST produces flat key_facts natively |
 
 ## From CTO Review (2026-02-17)
 

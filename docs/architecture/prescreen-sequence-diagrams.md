@@ -1,51 +1,53 @@
 # Sequence Diagrams: PRESCREEN & Pipeline Interactions
 
 > Generated from source: `src/trialmatch/prescreen/agent.py`, `tools.py`, `ctgov_client.py`, `cli/phase0.py`
+>
+> **Updated 2026-02-22**: Reflects current implementation — MedGemma clinical reasoning
+> pre-search step (ADR-009), two tools only (normalize_medical_terms commented out — ADR-011),
+> AREA[StudyType] filtering (ADR-010), heuristic candidate scoring.
 
 ---
 
 ## 1. PRESCREEN Agent Loop
 
-The core agentic loop where Gemini autonomously searches ClinicalTrials.gov
-using three tools: `normalize_medical_terms`, `search_trials`, and
-`get_trial_details`. The loop runs up to `max_tool_calls + 5` iterations,
-with a budget guard that gracefully closes the conversation when the tool
-call cap is reached.
+The PRESCREEN pipeline has two phases:
+1. **MedGemma clinical reasoning** (optional): MedGemma 4B generates clinical
+   guidance (condition terms, molecular drivers, eligibility keywords) that is
+   injected into Gemini's prompt.
+2. **Gemini agentic loop**: Gemini autonomously searches ClinicalTrials.gov
+   using two tools: `search_trials` and `get_trial_details`. The loop runs
+   up to `max_tool_calls + 5` iterations, with a budget guard that sends
+   structured FunctionResponse errors when the tool call cap is reached.
+
+Note: `normalize_medical_terms` was the original third tool but was commented
+out (ADR-011) due to ~25s latency with near-zero value.
 
 ```mermaid
 sequenceDiagram
     participant CLI
     participant Agent as Agent<br/>(run_prescreen_agent)
-    participant Gemini as Gemini 3 Pro
+    participant MG as MedGemma 4B
+    participant Gemini as Gemini Flash
     participant TE as ToolExecutor
     participant CTGov as CTGovClient
     participant API as CT.gov API v2
-    participant MG as MedGemma
 
     CLI->>Agent: run_prescreen_agent(patient_note, key_facts, ...)
     activate Agent
 
     Agent->>Agent: Create CTGovClient + ToolExecutor
-    Agent->>Agent: Format user message via PRESCREEN_USER_TEMPLATE
+    Agent->>Agent: Extract demographics (age, sex) from key_facts
+
+    opt MedGemma clinical reasoning (if medgemma_adapter provided)
+        Agent->>MG: generate(CLINICAL_REASONING_PROMPT)
+        activate MG
+        MG-->>Agent: Clinical guidance (condition terms, molecular drivers, keywords)
+        deactivate MG
+        Agent->>Agent: Inject guidance into user prompt as "MedGemma Clinical Reasoning" section
+    end
+
+    Agent->>Agent: Format user message via PRESCREEN_USER_TEMPLATE (with demographics + guidance)
     Agent->>Agent: Build contents[] with system prompt + user message
-
-    Agent->>Gemini: generate_content(contents, tools, config)
-    activate Gemini
-    Gemini-->>Agent: response with function_calls[normalize_medical_terms]
-    deactivate Gemini
-
-    Note over Agent: call_index = 0
-
-    Agent->>TE: execute("normalize_medical_terms", {raw_term, term_type, context})
-    activate TE
-    TE->>MG: generate(MEDGEMMA_NORMALIZE_SYSTEM + user prompt)
-    activate MG
-    MG-->>TE: JSON {normalized, search_variants, disambiguation, avoid}
-    deactivate MG
-    TE-->>Agent: (result, summary) — track medgemma_calls++
-    deactivate TE
-
-    Agent->>Agent: Append FunctionResponse to contents[]
 
     loop Agentic Loop (max_tool_calls + 5 iterations)
         Agent->>Gemini: generate_content(contents with tool results)
@@ -99,7 +101,8 @@ sequenceDiagram
         end
     end
 
-    Agent->>Agent: _build_candidates() — sort by found_by_queries count desc
+    Agent->>Agent: _build_candidates() — heuristic score: query_count*3 + phase_bonus + recruiting_bonus + details_bonus
+    Agent->>Agent: Prune to MAX_CANDIDATES=20
     Agent->>Agent: Compute gemini_cost from token counts
     Agent->>CTGov: aclose()
 
@@ -115,7 +118,9 @@ Shows how Gemini's high-level search parameters are mapped to
 ClinicalTrials.gov API v2 HTTP query parameters. Key details:
 - `phase` and `sex` are joined into `aggFilters` (comma-separated)
 - `min_age`/`max_age` become Essie `AREA[]RANGE[]` expressions in `query.term`
-- `eligibility_keywords` and age Essie clauses are AND-composed in `query.term`
+- `study_type` becomes `AREA[StudyType]Interventional` in `query.term` (ADR-010)
+- `eligibility_keywords`, age, and study_type AREA clauses are AND-composed in `query.term`
+- `filter.studyType` is NOT a valid API parameter — must use AREA syntax
 
 ```mermaid
 sequenceDiagram
