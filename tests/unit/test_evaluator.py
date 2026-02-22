@@ -590,6 +590,35 @@ def test_build_reasoning_prompt_contains_cwa():
     assert "assume" in prompt
 
 
+def test_build_reasoning_prompt_contains_cwa_exception():
+    """Stage 1 CWA has exceptions for procedural/safety requirements."""
+    prompt = build_reasoning_prompt(
+        patient_note="Note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "EXCEPTION" in prompt
+    assert "Procedural" in prompt or "procedural" in prompt.lower()
+    assert "INSUFFICIENT DATA" in prompt
+    assert "contraception" in prompt.lower()
+
+
+def test_build_reasoning_prompt_contains_severity_subquestion():
+    """Stage 1 asks severity/specificity sub-question (Q4) after general condition."""
+    prompt = build_reasoning_prompt(
+        patient_note="Note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "GENERAL condition" in prompt
+    assert "SPECIFIC requirements" in prompt
+    assert "MATCHES" in prompt
+    assert "DOES NOT MATCH" in prompt
+    # Severity examples
+    assert "mild" in prompt.lower()
+    assert "severe" in prompt.lower()
+
+
 def test_build_labeling_prompt_contains_reasoning():
     """Stage 2 prompt includes Stage 1 reasoning text."""
     prompt = build_labeling_prompt(
@@ -628,15 +657,40 @@ def test_build_labeling_prompt_requests_json():
     assert "JSON" in prompt
 
 
-def test_build_labeling_prompt_contains_consistency_instruction():
-    """Stage 2 prompt has the label-reasoning consistency instruction."""
+def test_build_labeling_prompt_contains_mapping_rules():
+    """Stage 2 prompt has explicit label mapping rules for inclusion and exclusion."""
     prompt = build_labeling_prompt(
         stage1_reasoning="Analysis",
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
-    assert "CRITICAL" in prompt
-    assert "consistent" in prompt.lower()
+    assert "LABEL MAPPING RULES" in prompt
+    assert "INCLUSION criteria" in prompt
+    assert "EXCLUSION criteria" in prompt
+    assert "MATCHES" in prompt
+    assert "DOES NOT MATCH" in prompt
+
+
+def test_build_labeling_prompt_contains_contradiction_check():
+    """Stage 2 prompt has contradiction detection instruction."""
+    prompt = build_labeling_prompt(
+        stage1_reasoning="Analysis",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "CONTRADICTION CHECK" in prompt
+    assert "REASONING CONTENT" in prompt
+
+
+def test_build_labeling_prompt_contains_abstention_guardrail():
+    """Stage 2 prompt prevents over-abstention to unknown on clear negatives."""
+    prompt = build_labeling_prompt(
+        stage1_reasoning="Analysis",
+        criterion_text="Criterion",
+        criterion_type="exclusion",
+    )
+    assert "Do NOT downgrade" in prompt
+    assert "HIGH confidence" in prompt
 
 
 # --- Two-stage evaluate function tests ---

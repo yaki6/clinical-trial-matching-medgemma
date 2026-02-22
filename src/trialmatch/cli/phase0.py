@@ -336,7 +336,7 @@ async def run_phase0(config: dict, dry_run: bool = False):
             if not api_key:
                 click.echo("ERROR: GOOGLE_API_KEY env var required for Gemini. Skipping.", err=True)
                 continue
-            adapter = GeminiAdapter(api_key=api_key)
+            adapter = GeminiAdapter(api_key=api_key, model=model_cfg.get("name", "gemini-3-pro-preview"))
         elif model_cfg["provider"] == "vertex":
             from trialmatch.models.vertex_medgemma import VertexMedGemmaAdapter
 
@@ -379,7 +379,7 @@ async def run_phase0(config: dict, dry_run: bool = False):
                 with open(replay_path) as f:
                     saved_results = _json.load(f)
                 replay_reasoning = {
-                    r["pair_index"]: r.get("reasoning", "")
+                    r["pair_index"]: r.get("stage1_reasoning") or r.get("reasoning", "")
                     for r in saved_results
                 }
                 logger.info("replay_mode", source=replay_path, pairs=len(replay_reasoning))
@@ -391,11 +391,15 @@ async def run_phase0(config: dict, dry_run: bool = False):
                     s1_project = stage1_cfg.get("project_id") or os.environ.get("GCP_PROJECT_ID", "")
                     s1_region = stage1_cfg.get("region") or os.environ.get("GCP_REGION", "us-central1")
                     s1_endpoint = stage1_cfg.get("endpoint_id") or os.environ.get("VERTEX_ENDPOINT_ID", "")
+                    s1_dedicated_dns = stage1_cfg.get("dedicated_endpoint_dns") or os.environ.get(
+                        "VERTEX_DEDICATED_DNS", ""
+                    ) or None
                     reasoning_adapter = VertexMedGemmaAdapter(
                         project_id=s1_project,
                         region=s1_region,
                         endpoint_id=s1_endpoint,
                         model_name=stage1_cfg["name"],
+                        dedicated_endpoint_dns=s1_dedicated_dns,
                     )
                 elif stage1_cfg.get("provider") == "huggingface":
                     hf_token = os.environ.get("HF_TOKEN", "")
@@ -412,7 +416,8 @@ async def run_phase0(config: dict, dry_run: bool = False):
             if not api_key:
                 click.echo("ERROR: GOOGLE_API_KEY required for Stage 2. Skipping.", err=True)
                 continue
-            labeling_adapter = GeminiAdapter(api_key=api_key)
+            s2_model = stage2_cfg.get("name", "gemini-3-pro-preview")
+            labeling_adapter = GeminiAdapter(api_key=api_key, model=s2_model)
 
             model_display_name = model_cfg["name"]
             logger.info(

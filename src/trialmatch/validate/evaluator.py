@@ -103,9 +103,15 @@ evidence_sentences: JSON array of integer sentence indices from the patient note
 
 STAGE1_REASONING_PROMPT = """You are a medical expert analyzing a patient's clinical note.
 
-Important: if the patient note does not mention a medically important fact, you can
-assume that the fact is not true for the patient (e.g., if the note does not mention
-any allergies, assume the patient has no known allergies).
+Closed World Assumption (CWA):
+If the note does not mention a MEDICAL CONDITION, assume the patient does NOT have it
+(e.g., no mention of allergies = no known allergies; no mention of diabetes = no diabetes).
+
+EXCEPTION — Do NOT apply CWA to:
+- Procedural/safety requirements (contraception use, pregnancy tests, informed consent)
+- Active treatments or scheduled interventions (currently on medication X, scheduled for surgery Y)
+- Test results not yet obtained (spirometry values, specific imaging modality results)
+For these, if not documented, answer INSUFFICIENT DATA.
 
 Criterion Type: {criterion_type}
 Criterion: {criterion_text}
@@ -114,11 +120,24 @@ Patient Note:
 {patient_note}
 
 Analyze this criterion against the patient note. Answer these questions:
+
 1. What does this criterion specifically require?
-2. What does the patient note state about this? Cite specific sentences by index.
-3. Does the patient have or satisfy the condition described in this criterion?
+   Note any severity, staging, timing, or specificity requirements.
+
+2. What does the patient note explicitly state about this?
+   Cite specific sentences by index.
+
+3. Does the patient have the GENERAL condition described in this criterion?
    Answer: YES / NO / INSUFFICIENT DATA
-4. How confident are you? HIGH / MEDIUM / LOW
+
+4. If YES to #3: Does it match the SPECIFIC requirements?
+   - Severity match? (e.g., "mild" vs "severe")
+   - Type/staging match? (e.g., "Rutherford stage 2")
+   - Modality/test match? (e.g., "on CT scan")
+   Answer: MATCHES / DOES NOT MATCH / INSUFFICIENT DATA
+   If NO to #3, skip this question.
+
+5. How confident are you? HIGH / MEDIUM / LOW
 
 Respond in plain text (no JSON). Focus on clinical accuracy."""
 
@@ -136,9 +155,26 @@ Criterion: {criterion_text}
 Medical Analysis:
 {stage1_reasoning}
 
-Based on the medical analysis and criterion type, determine eligibility.
+LABEL MAPPING RULES:
 
-CRITICAL: Your JSON "label" field MUST be consistent with the medical analysis.
+For INCLUSION criteria:
+- Analysis says YES + MATCHES specifics → "eligible"
+- Analysis says YES + DOES NOT MATCH specifics → "not eligible"
+- Analysis says YES + INSUFFICIENT DATA on specifics → "unknown"
+- Analysis says NO → "not eligible"
+- Analysis says INSUFFICIENT DATA → "unknown"
+
+For EXCLUSION criteria:
+- Analysis says YES (patient HAS the excluded condition) → "not eligible"
+- Analysis says NO (patient does NOT have it) → "eligible"
+- Analysis says INSUFFICIENT DATA → "unknown"
+
+IMPORTANT RULES:
+1. When the analysis gives a clear NO with HIGH confidence, output "not eligible" (inclusion)
+   or "eligible" (exclusion). Do NOT downgrade to "unknown" unless you find a specific error.
+2. CONTRADICTION CHECK: If the analysis conclusion (YES/NO) contradicts its own reasoning
+   (e.g., says "NO" but reasoning describes the patient HAS the condition), rely on the
+   REASONING CONTENT, not the conclusion. If ambiguous, output "unknown".
 
 Respond ONLY with valid JSON:
 {{
