@@ -11073,3 +11073,75 @@
 [ 5621825ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
 [ 5621826ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
 [ 5621827ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5623832ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5623832ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5623833ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5623834ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5625847ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5625848ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5625849ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5625850ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5627860ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5627860ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5627861ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5627862ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5629870ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5629871ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5629871ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5629872ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5631882ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5631883ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5631883ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5631885ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5633897ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5633897ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5633898ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5633902ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5636015ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5636015ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5636017ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5636019ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5638210ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5638214ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5638227ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5638232ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5640357ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5640362ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5640365ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5640366ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5642403ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5642404ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5642405ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5642406ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5644414ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5644415ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5644415ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5644416ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5646424ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5646424ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5646425ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5646448ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5648431ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5648431ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5648432ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5648432ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5650439ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5650439ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5650440ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5650440ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5652444ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5652444ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5652444ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5652444ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5654449ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5654449ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5654449ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5654449ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[ 5656453ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[ 5656453ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5656453ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5656454ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[ 5658460ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[ 5658460ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[ 5658461ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[ 5658461ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
