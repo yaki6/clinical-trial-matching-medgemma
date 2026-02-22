@@ -1,20 +1,21 @@
-# Replay: Re-run Stage 2 only with generalized prompts v3 on saved 27B reasoning (seed 42)
+# Full two-stage: MedGemma 27B (Vertex live) + Gemini Flash — seed 99 (fresh)
 phase: 0
-description: "Replay Stage 2: generalized prompts v3 on 27B reasoning (seed 42)"
+description: "Two-stage v3: 27B reasoning + Flash labeling (seed 99, fresh generalization test)"
 
 data:
   fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
   n_pairs: 20
   sampling: stratified
-  seed: 42
+  seed: 99
 
 models:
   - name: medgemma-27b+gemini-flash-two-stage-v3
     provider: two_stage
-    replay_reasoning_from: runs/phase0-medgemma-27b+gemini-flash-two-stage-20260221-225551/results.json
     stage1:
       name: medgemma-27b-vertex
       provider: vertex
+      endpoint_id: "7499477442478735360"
+      region: us-central1
       max_tokens: 2048
     stage2:
       name: gemini-3-flash-preview
@@ -30,8 +31,8 @@ evaluation:
   timeout_seconds: 300
 
 budget:
-  max_cost_usd: 1.0
-  warn_at_usd: 0.5
+  max_cost_usd: 5.0
+  warn_at_usd: 3.0
 
 output:
   run_dir: "runs/"

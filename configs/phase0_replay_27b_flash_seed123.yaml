@@ -1,6 +1,6 @@
-# Replay: Re-run Stage 2 only with improved prompts on saved 27B reasoning (seed 123)
+# Replay: Re-run Stage 2 only with generalized prompts v3 on saved 27B reasoning (seed 123)
 phase: 0
-description: "Replay Stage 2: improved prompts on 27B reasoning (seed 123)"
+description: "Replay Stage 2: generalized prompts v3 on 27B reasoning (seed 123)"
 
 data:
   fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
@@ -9,7 +9,7 @@ data:
   seed: 123
 
 models:
-  - name: medgemma-27b+gemini-flash-two-stage-v2
+  - name: medgemma-27b+gemini-flash-two-stage-v3
     provider: two_stage
     replay_reasoning_from: runs/phase0-medgemma-27b+gemini-flash-two-stage-20260221-232739/results.json
     stage1:

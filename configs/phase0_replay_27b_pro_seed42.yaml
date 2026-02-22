@@ -1,6 +1,6 @@
-# Replay: Re-run Stage 2 only with generalized prompts v3 on saved 27B reasoning (seed 42)
+# Replay: Stage 2 with Gemini Pro (instead of Flash) on saved 27B reasoning (seed 42)
 phase: 0
-description: "Replay Stage 2: generalized prompts v3 on 27B reasoning (seed 42)"
+description: "Replay Stage 2: Gemini Pro labeler on 27B reasoning (seed 42)"
 
 data:
   fixture_path: data/hf_cache/trialgpt_criterion_annotations.json
@@ -9,7 +9,7 @@ data:
   seed: 42
 
 models:
-  - name: medgemma-27b+gemini-flash-two-stage-v3
+  - name: medgemma-27b+gemini-pro-two-stage-v3
     provider: two_stage
     replay_reasoning_from: runs/phase0-medgemma-27b+gemini-flash-two-stage-20260221-225551/results.json
     stage1:
@@ -17,7 +17,7 @@ models:
       provider: vertex
       max_tokens: 2048
     stage2:
-      name: gemini-3-flash-preview
+      name: gemini-3-pro-preview
       provider: google
       max_tokens: 512
     max_concurrent: 1
