@@ -87,15 +87,11 @@ def parse_model_response(text: str) -> dict[str, str]:
     recognized section header or end of text. Recognized section headers
     are DIAGNOSIS:, FINDINGS:, and DIFFERENTIAL:.
 
+    Includes fallback strategies for models (like MedGemma 4B) that may
+    not follow the expected format precisely.
+
     Args:
         text: Raw model response text.
-
-    Example input:
-        DIAGNOSIS: Adenocarcinoma of the Lung
-
-        FINDINGS: There is a 3cm spiculated mass in the right upper lobe...
-
-        DIFFERENTIAL: Small cell carcinoma, Squamous cell carcinoma
 
     Returns:
         Dict with keys "diagnosis" and "findings", each a stripped string.
@@ -107,9 +103,9 @@ def parse_model_response(text: str) -> dict[str, str]:
         return result
 
     # Pattern: section header followed by content until next section or end.
-    # Section headers are recognized as word in ALL CAPS followed by a colon.
+    # Handles **DIAGNOSIS:** (bold markdown) and plain DIAGNOSIS:
     section_pattern = re.compile(
-        r"(?:^|\n)\s*(DIAGNOSIS|FINDINGS|DIFFERENTIAL)\s*:\s*",
+        r"(?:^|\n)\s*\**\s*(DIAGNOSIS|FINDINGS|DIFFERENTIAL|IMPRESSION)\s*\**\s*:\s*\**\s*",
         re.IGNORECASE,
     )
 
@@ -119,14 +115,39 @@ def parse_model_response(text: str) -> dict[str, str]:
     for i, match in enumerate(matches):
         section_name = match.group(1).upper()
         content_start = match.end()
-        # Content ends at the start of the next section or end of text
         content_end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
         content = text[content_start:content_end].strip()
 
         if section_name == "DIAGNOSIS":
-            result["diagnosis"] = content
+            # Only take first DIAGNOSIS match (avoid overwriting with later noise)
+            if not result["diagnosis"]:
+                result["diagnosis"] = content
         elif section_name == "FINDINGS":
+            if not result["findings"]:
+                result["findings"] = content
+        elif section_name == "IMPRESSION" and not result["findings"]:
+            # MedGemma sometimes uses IMPRESSION instead of FINDINGS
             result["findings"] = content
+
+    # Fallback: if no DIAGNOSIS section found, try to extract from full text
+    if not result["diagnosis"]:
+        # Look for patterns like "consistent with X" or "suggestive of X"
+        diag_hints = re.findall(
+            r"(?:consistent with|suggestive of|diagnosis[:\s]+(?:is)?|diagnosed as)\s+([^\n.]{5,80})",
+            text,
+            re.IGNORECASE,
+        )
+        if diag_hints:
+            result["diagnosis"] = diag_hints[0].strip().rstrip(",;")
+
+    # Fallback: if no FINDINGS, use the full text (minus JSON/code blocks)
+    if not result["findings"] and len(text.strip()) > 50:
+        # Remove JSON/code blocks that MedGemma sometimes hallucinates
+        cleaned = re.sub(r"```[\s\S]*?```", "", text)
+        cleaned = re.sub(r"\{[\s\S]*?\}", "", cleaned)
+        cleaned = cleaned.strip()
+        if len(cleaned) > 50:
+            result["findings"] = cleaned[:2000]
 
     return result
 

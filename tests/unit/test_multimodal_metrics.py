@@ -157,6 +157,14 @@ class TestParseModelResponse:
         text = "This is just free text without any recognized section headers."
         result = parse_model_response(text)
         assert result["diagnosis"] == ""
+        # Fallback: long unstructured text is captured as findings
+        assert "free text" in result["findings"]
+
+    def test_no_recognized_sections_short(self):
+        """Short unstructured text (< 50 chars) is NOT used as fallback."""
+        text = "Short text."
+        result = parse_model_response(text)
+        assert result["diagnosis"] == ""
         assert result["findings"] == ""
 
     def test_case_insensitive_headers(self):

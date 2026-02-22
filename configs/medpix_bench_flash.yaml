@@ -1,0 +1,46 @@
+# MedPix Multimodal Benchmark — MedGemma 4B vs Gemini Flash
+# Switched from Pro to Flash due to Pro rate limits (429 RESOURCE_EXHAUSTED)
+# Flash has 15 RPM vs Pro's ~2 RPM for multimodal calls
+
+benchmark: medpix_multimodal
+description: "Compare MedGemma 4B (medical SigLIP) vs Gemini 3 Flash on radiology image analysis"
+
+data:
+  benchmark_file: data/benchmark/medpix_thorax_10.json
+  phase: 1  # Phase 1 = 10 pilot cases
+
+models:
+  medgemma_4b:
+    provider: huggingface
+    endpoint_url: "https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud"
+    model_name: "medgemma-4b-multimodal"
+    max_tokens: 512  # HF TGI CUDA bug limit — cannot go higher
+    max_concurrent: 1
+
+  gemini_pro:
+    provider: google
+    model_id: "gemini-3-flash-preview"
+    max_tokens: 2048
+    max_concurrent: 1
+
+judge:
+  model_id: "gemini-3-flash-preview"
+  description: "LLM-as-judge for diagnosis semantic equivalence"
+
+evaluation:
+  metrics:
+    - diagnosis_exact_match
+    - diagnosis_substring_match
+    - diagnosis_llm_judge
+    - findings_rouge_l_recall
+    - findings_rouge_l_precision
+    - findings_rouge_l_f1
+
+budget:
+  max_cost_usd: 5.0
+  warn_at_usd: 2.0
+
+output:
+  run_dir: "runs/"
+  save_raw_responses: true
+  save_per_case_scores: true
