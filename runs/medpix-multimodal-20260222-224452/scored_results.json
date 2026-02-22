@@ -1,0 +1,312 @@
+[
+  {
+    "uid": "MPX1452",
+    "title": "Pulmonary valve stenosis",
+    "gold_diagnosis": "Pulmonary valve stenosis",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "[Summary of the clinical significance and next steps]\n\n---\n\n**Image:**\n\n```json\n{\n  \"modality\": \"Chest X-ray\",\n  \"series_description\": \"PA Chest\",\n  \"image_index\": 1,\n  \"patient_id\": \"123456789\",\n  \"s",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.09722222222222222,
+      "rouge_precision": 0.04216867469879518,
+      "rouge_fmeasure": 0.0588235294117647,
+      "latency_ms": 26130.310666980222,
+      "cost": 0.012159999999999999
+    },
+    "gemini": {
+      "predicted_diagnosis": "Idiopathic Dilation of the Pulmonary Artery (IDPA)",
+      "predicted_findings": "- **Location and Morphology:** Axial contrast-enhanced CT image at the level of the pulmonary artery bifurcation demonstrates marked, isolated dilation of the main pulmonary artery (MPA). The MPA diam",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Pulmonary valve stenosis refers to a narrowing of the valve, whereas Idiopathic Dilation of the Pulmonary Artery refers to an enlargement of the artery; these are distinct clinical conditions.",
+      "rouge_recall": 0.20833333333333334,
+      "rouge_precision": 0.08571428571428572,
+      "rouge_fmeasure": 0.12145748987854252,
+      "latency_ms": 10590.662750066258,
+      "cost": 0.00544875
+    }
+  },
+  {
+    "uid": "MPX1063",
+    "title": "thoracic aortic dissection",
+    "gold_diagnosis": "thoracic aortic dissection",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "[Summary of the key findings and their clinical significance]\n\n---\n\n**Image:**\n\n```json\n{\n  \"modality\": \"CT\",\n  \"series_description\": \"CT Chest Angiography\",\n  \"image_index\": 1,\n  \"image_type\": \"CTA\",",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.13953488372093023,
+      "rouge_precision": 0.0392156862745098,
+      "rouge_fmeasure": 0.061224489795918366,
+      "latency_ms": 49156.37141605839,
+      "cost": 0.01099
+    },
+    "gemini": {
+      "predicted_diagnosis": "Stanford Type A Aortic Dissection.",
+      "predicted_findings": "*   **Thoracic Aorta:** There is a clearly visualized intimal flap within the aortic arch and descending thoracic aorta, separating the vessel into a true lumen and a false lumen. Based on the axial s",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "partial",
+      "llm_judge_explanation": "Stanford Type A is a specific subtype of thoracic aortic dissection, representing a narrower diagnosis.",
+      "rouge_recall": 0.37209302325581395,
+      "rouge_precision": 0.10526315789473684,
+      "rouge_fmeasure": 0.1641025641025641,
+      "latency_ms": 12952.27199990768,
+      "cost": 0.0049725
+    }
+  },
+  {
+    "uid": "MPX2015",
+    "title": "Hiatal Hernia",
+    "gold_diagnosis": "Hiatal Hernia",
+    "medgemma": {
+      "predicted_diagnosis": "Pulmonary Embolism",
+      "predicted_findings": "[Summary of the key findings and their clinical significance]\n\n---\n\n**Image:** Chest X-ray\n\n**Clinical History:** 83 y.o. woman with shortness of breath.\n\n**Analysis:**",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Hiatal Hernia is a gastrointestinal condition involving the stomach and diaphragm, whereas Pulmonary Embolism is a life-threatening blockage in the pulmonary arteries; they are unrelated.",
+      "rouge_recall": 0.02527075812274368,
+      "rouge_precision": 0.2916666666666667,
+      "rouge_fmeasure": 0.04651162790697675,
+      "latency_ms": 37111.69383395463,
+      "cost": 0.01907
+    },
+    "gemini": {
+      "predicted_diagnosis": "Large paraesophageal (hiatal) hernia with associated left-sided pleural effusion.",
+      "predicted_findings": "*   **Mediastinum:** There is a large, air-containing structure within the posterior mediastinum, consistent with a massive hiatal hernia (likely a Type IV \"upside-down stomach\"). This structure is ca",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The model correctly identifies the hiatal hernia, which matches the gold standard, providing additional specificity and associated findings.",
+      "rouge_recall": 0.148014440433213,
+      "rouge_precision": 0.24848484848484848,
+      "rouge_fmeasure": 0.1855203619909502,
+      "latency_ms": 17962.81908301171,
+      "cost": 0.00593875
+    }
+  },
+  {
+    "uid": "MPX1938",
+    "title": "Nonspecific Interstitial Pneumonitis",
+    "gold_diagnosis": "Nonspecific Interstitial Pneumonitis",
+    "medgemma": {
+      "predicted_diagnosis": "Right lower lobe pneumonia.",
+      "predicted_findings": "[Summary of the findings and their clinical significance]\n\n---\n\n**Image:** [Image description - e.g., Chest X-ray PA view, CT Chest HR, etc.]\n\n**Image Description:**\nA chest X-ray showing a right lowe",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Nonspecific Interstitial Pneumonitis is a chronic interstitial lung disease, whereas right lower lobe pneumonia is a localized acute infectious process; these are distinct conditions.",
+      "rouge_recall": 0.13157894736842105,
+      "rouge_precision": 0.14285714285714285,
+      "rouge_fmeasure": 0.136986301369863,
+      "latency_ms": 32015.939416945912,
+      "cost": 0.019710000000000002
+    },
+    "gemini": {
+      "predicted_diagnosis": "Paget's disease of the sternum (manubrium).",
+      "predicted_findings": "*   **Skeletal Structures:** The manubrium of the sternum is markedly enlarged and shows diffuse, dense sclerosis. There is significant cortical thickening and a coarsened trabecular pattern, leading ",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The gold standard is a lung condition (Nonspecific Interstitial Pneumonitis), whereas the model prediction is a bone disorder (Paget's disease of the sternum).",
+      "rouge_recall": 0.15789473684210525,
+      "rouge_precision": 0.03614457831325301,
+      "rouge_fmeasure": 0.0588235294117647,
+      "latency_ms": 18938.72412503697,
+      "cost": 0.0055475
+    }
+  },
+  {
+    "uid": "MPX1873",
+    "title": "Coarctation of the Aorta",
+    "gold_diagnosis": "Coarctation of the Aorta",
+    "medgemma": {
+      "predicted_diagnosis": "Pulmonary Alveolar Proteinosis (PAP)",
+      "predicted_findings": "[Summary of the key findings and their clinical significance]\n\n---\n\n**Image:** [Image description - e.g., Chest X-ray PA view]\n\n**Clinical History:** 14 year old male with chronic shortness of breath.",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model prediction is a lung disease, whereas the gold standard is a congenital heart defect. There is no overlap between the conditions.",
+      "rouge_recall": 0.0625,
+      "rouge_precision": 0.16129032258064516,
+      "rouge_fmeasure": 0.09009009009009009,
+      "latency_ms": 30972.01204195153,
+      "cost": 0.018500000000000003
+    },
+    "gemini": {
+      "predicted_diagnosis": "Right aortic arch with aberrant left subclavian artery (Vascular Ring)",
+      "predicted_findings": "* **Vascular Anatomy:** Axial contrast-enhanced CT of the chest demonstrates a right-sided aortic arch, situated to the right of the trachea. A prominent vessel is seen arising from the posterior aspe",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Coarctation of the aorta is a focal narrowing of the aorta, whereas a right aortic arch with aberrant left subclavian artery is a distinct vascular ring anomaly.",
+      "rouge_recall": 0.375,
+      "rouge_precision": 0.16216216216216217,
+      "rouge_fmeasure": 0.22641509433962265,
+      "latency_ms": 12848.931042011827,
+      "cost": 0.00577625
+    }
+  },
+  {
+    "uid": "MPX1481",
+    "title": "Aberrant Right Subclavian Artery",
+    "gold_diagnosis": "Aberrant Right Subclavian Artery",
+    "medgemma": {
+      "predicted_diagnosis": "missing",
+      "predicted_findings": "[Summary of the key findings and their clinical significance]\n\n---\n\n**Image:** [Image description - e.g., \"Chest X-ray PA view\"]\n\n**Image Analysis:**\n\n*   **Image Type:** Chest X-ray PA view.\n*   **Pa",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model prediction is 'missing' and does not identify the Aberrant Right Subclavian Artery specified in the gold standard.",
+      "rouge_recall": 0.09375,
+      "rouge_precision": 0.07692307692307693,
+      "rouge_fmeasure": 0.08450704225352113,
+      "latency_ms": 37745.747125009075,
+      "cost": 0.01771
+    },
+    "gemini": {
+      "predicted_diagnosis": "Aberrant Right Subclavian Artery (Arteria Lusoria)",
+      "predicted_findings": "*   **Vascular Anatomy:** The axial contrast-enhanced CT image at the level of the thoracic inlet demonstrates a \"four-vessel sign\" in the superior mediastinum. There is an independent origin of the r",
+      "exact_match": false,
+      "substring_match": true,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The model prediction exactly matches the gold standard, providing 'Arteria Lusoria' which is a synonymous term for 'Aberrant Right Subclavian Artery'.",
+      "rouge_recall": 0.34375,
+      "rouge_precision": 0.04721030042918455,
+      "rouge_fmeasure": 0.08301886792452831,
+      "latency_ms": 19405.45220801141,
+      "cost": 0.0067075
+    }
+  },
+  {
+    "uid": "MPX1355",
+    "title": "Nodular Sclerosing Hodgkin\u2019s Lymphoma",
+    "gold_diagnosis": "Nodular Sclerosing Hodgkin\u2019s Lymphoma",
+    "medgemma": {
+      "predicted_diagnosis": "a systemic inflammatory or infectious process, or malignancy",
+      "predicted_findings": "[Summary of the findings and their significance in the context of the clinical presentation]\n\n---\n\n**Image Description:**\nThe image is a CT scan of the chest, axial plane. It shows the lungs, heart, m",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "partial",
+      "llm_judge_explanation": "The model prediction includes 'malignancy', which is a broad category encompassing Hodgkin's Lymphoma, but it lacks the specific diagnosis and includes non-malignant possibilities.",
+      "rouge_recall": 0.2727272727272727,
+      "rouge_precision": 0.009771986970684038,
+      "rouge_fmeasure": 0.018867924528301886,
+      "latency_ms": 30936.545958044007,
+      "cost": 0.01949
+    },
+    "gemini": {
+      "predicted_diagnosis": "Mediastinal Hodgkin Lymphoma",
+      "predicted_findings": "- **Mediastinal Mass:** There is a large, bulky, and lobulated soft-tissue mass occupying the anterior and middle mediastinum. The mass significantly widens the mediastinum and is relatively homogeneo",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "partial",
+      "llm_judge_explanation": "The prediction identifies the correct general condition (Hodgkin Lymphoma) and a common location for it, but misses the specific histological subtype (Nodular Sclerosing) provided in the gold standard.",
+      "rouge_recall": 0.5454545454545454,
+      "rouge_precision": 0.041666666666666664,
+      "rouge_fmeasure": 0.07741935483870968,
+      "latency_ms": 9013.499167049304,
+      "cost": 0.00486875
+    }
+  },
+  {
+    "uid": "MPX1307",
+    "title": "Benign Metastasizing Leiomyoma",
+    "gold_diagnosis": "Benign Metastasizing Leiomyoma",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "[Summary of the findings and their clinical significance]",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 41042.431666050106,
+      "cost": 0.02048
+    },
+    "gemini": {
+      "predicted_diagnosis": "Benign Metastasizing Leiomyoma (BML)",
+      "predicted_findings": "- Multiple bilateral pulmonary nodules are identified within the visualized portions of the lower lobes.\n- The nodules are well-circumscribed, solid, and vary in size, with the largest measuring appro",
+      "exact_match": false,
+      "substring_match": true,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The model prediction matches the gold standard exactly, including the common abbreviation (BML).",
+      "rouge_recall": 0.46153846153846156,
+      "rouge_precision": 0.05172413793103448,
+      "rouge_fmeasure": 0.09302325581395349,
+      "latency_ms": 6786.3492500036955,
+      "cost": 0.00424125
+    }
+  },
+  {
+    "uid": "MPX2391",
+    "title": "Pneumothorax",
+    "gold_diagnosis": "Pneumothorax",
+    "medgemma": {
+      "predicted_diagnosis": "Right lower lobe mass with associated volume loss.",
+      "predicted_findings": "[Summary of the findings and their clinical significance]\n\n---\n\n**Image:** [Image description - e.g., \"Chest X-ray PA view\"]\n\n**Image Description:**\nA chest X-ray shows a large, lobulated opacity in t",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The gold standard is pneumothorax (air in the pleural space), whereas the prediction identifies a mass and volume loss, which are unrelated medical findings.",
+      "rouge_recall": 0.10714285714285714,
+      "rouge_precision": 0.1875,
+      "rouge_fmeasure": 0.13636363636363635,
+      "latency_ms": 42891.499000019394,
+      "cost": 0.01924
+    },
+    "gemini": {
+      "predicted_diagnosis": "Iatrogenic left-sided pneumothorax.",
+      "predicted_findings": "*   **Left Hemithorax:** There is a large left-sided pneumothorax characterized by a visible visceral pleural line and a complete absence of distal lung markings in the lateral and posterior pleural s",
+      "exact_match": false,
+      "substring_match": true,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The model identifies the specific type and location of the condition specified in the gold standard diagnosis.",
+      "rouge_recall": 0.1875,
+      "rouge_precision": 0.109375,
+      "rouge_fmeasure": 0.13815789473684212,
+      "latency_ms": 13886.89299998805,
+      "cost": 0.00577
+    }
+  },
+  {
+    "uid": "MPX1067",
+    "title": "Takayasu&#34;s Arteritis",
+    "gold_diagnosis": "Takayasu\"s Arteritis",
+    "medgemma": {
+      "predicted_diagnosis": "Left renal cyst.",
+      "predicted_findings": "[Summary of the key findings and their clinical significance]\n\n---\n\n**Image:** [Image description - e.g., CT Abdomen with contrast, Chest X-ray PA view, MRI Brain T1-weighted sequence]\n\n**Image Analys",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Takayasu's Arteritis is a systemic inflammatory disease of the large arteries, while a left renal cyst is a localized, usually benign, fluid-filled sac on the kidney. These are unrelated conditions.",
+      "rouge_recall": 0.13559322033898305,
+      "rouge_precision": 0.0893854748603352,
+      "rouge_fmeasure": 0.10774410774410775,
+      "latency_ms": 35796.71549994964,
+      "cost": 0.015870000000000002
+    },
+    "gemini": {
+      "predicted_diagnosis": "Takayasu Arteritis",
+      "predicted_findings": "* **Modality:** Digital subtraction angiography (DSA) of the aortic arch.\n* **Aortic Arch and Branches:** There is severe, irregular narrowing (stenosis) involving the origins of all three major branc",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The prediction is a common synonym for the gold standard diagnosis, differing only by the use of the possessive form.",
+      "rouge_recall": 0.2033898305084746,
+      "rouge_precision": 0.14906832298136646,
+      "rouge_fmeasure": 0.17204301075268819,
+      "latency_ms": 17348.26866700314,
+      "cost": 0.00549625
+    }
+  }
+]
