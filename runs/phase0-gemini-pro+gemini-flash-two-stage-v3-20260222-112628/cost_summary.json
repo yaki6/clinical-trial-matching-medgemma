@@ -1,0 +1,9 @@
+{
+  "model": "gemini-pro+gemini-flash-two-stage-v3",
+  "total_pairs": 20,
+  "total_cost_usd": 0.030594999999999994,
+  "total_input_tokens": 12404,
+  "total_output_tokens": 1509,
+  "avg_latency_ms": 8569.782497885171,
+  "token_counts_estimated": false
+}

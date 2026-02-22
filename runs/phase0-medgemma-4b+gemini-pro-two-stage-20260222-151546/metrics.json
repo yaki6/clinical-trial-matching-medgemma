@@ -1,0 +1,115 @@
+{
+  "accuracy": 0.8,
+  "f1_macro": 0.8087912087912089,
+  "f1_met_not_met": 0.7846153846153847,
+  "cohens_kappa": 0.6825396825396826,
+  "confusion_matrix": [
+    [
+      8,
+      0,
+      0
+    ],
+    [
+      3,
+      5,
+      0
+    ],
+    [
+      1,
+      0,
+      3
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "MET",
+    "NOT_MET",
+    "UNKNOWN"
+  ],
+  "f1_per_class": {
+    "MET": 0.8,
+    "NOT_MET": 0.7692307692307693,
+    "UNKNOWN": 0.8571428571428571
+  },
+  "by_criterion_type": {
+    "inclusion": {
+      "accuracy": 0.75,
+      "f1_macro": 0.75,
+      "f1_met_not_met": 0.625,
+      "cohens_kappa": 0.6190476190476191,
+      "confusion_matrix": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          2,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          2
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.5,
+        "NOT_MET": 0.75,
+        "UNKNOWN": 1.0
+      }
+    },
+    "exclusion": {
+      "accuracy": 0.8333333333333334,
+      "f1_macro": 0.7805555555555556,
+      "f1_met_not_met": 0.8375,
+      "cohens_kappa": 0.6712328767123288,
+      "confusion_matrix": [
+        [
+          7,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.875,
+        "NOT_MET": 0.8,
+        "UNKNOWN": 0.6666666666666666
+      }
+    }
+  },
+  "calibration": {
+    "met_bias": 0.19999999999999996,
+    "unknown_rate_diff": -0.05000000000000002
+  },
+  "mean_evidence_overlap": 0.75,
+  "gpt4_baseline_accuracy": 0.95,
+  "gpt4_baseline_f1_macro": 0.9581699346405229,
+  "trial_level": {
+    "n_unique_trials": 18,
+    "ELIGIBLE": 3,
+    "EXCLUDED": 7,
+    "NOT_RELEVANT": 3,
+    "UNCERTAIN": 5
+  }
+}

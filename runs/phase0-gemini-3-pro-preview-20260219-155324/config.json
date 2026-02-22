@@ -1,0 +1,48 @@
+{
+  "phase": 0,
+  "description": "1-pair smoke test \u2014 verify audit table, enriched results, logging",
+  "data": {
+    "source": "huggingface",
+    "dataset_id": "ncbi/TrialGPT-Criterion-Annotations",
+    "split": "train",
+    "n_pairs": 1,
+    "sampling": "stratified",
+    "seed": 42
+  },
+  "models": [
+    {
+      "name": "gemini-3-pro",
+      "provider": "google",
+      "model_id": "gemini-3-pro-preview",
+      "max_concurrent": 1
+    }
+  ],
+  "baselines": [
+    {
+      "name": "gpt4-precomputed",
+      "source": "dataset"
+    }
+  ],
+  "evaluation": {
+    "tier": "phase0",
+    "granularity": "criterion_level",
+    "ingest_source": "gold",
+    "timeout_seconds": 120,
+    "metrics": [
+      "accuracy",
+      "f1_macro",
+      "cohens_kappa",
+      "evidence_overlap"
+    ]
+  },
+  "budget": {
+    "max_cost_usd": 0.5,
+    "warn_at_usd": 0.3
+  },
+  "output": {
+    "run_dir": "runs/",
+    "save_reasoning_chains": true,
+    "save_raw_responses": true,
+    "save_evidence_sentences": true
+  }
+}

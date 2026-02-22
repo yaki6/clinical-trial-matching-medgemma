@@ -1,0 +1,115 @@
+{
+  "accuracy": 0.95,
+  "f1_macro": 0.9581699346405229,
+  "f1_met_not_met": 0.9372549019607843,
+  "cohens_kappa": 0.921875,
+  "confusion_matrix": [
+    [
+      7,
+      1,
+      0
+    ],
+    [
+      0,
+      8,
+      0
+    ],
+    [
+      0,
+      0,
+      4
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "MET",
+    "NOT_MET",
+    "UNKNOWN"
+  ],
+  "f1_per_class": {
+    "MET": 0.9333333333333333,
+    "NOT_MET": 0.9411764705882353,
+    "UNKNOWN": 1.0
+  },
+  "by_criterion_type": {
+    "inclusion": {
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "f1_met_not_met": 1.0,
+      "cohens_kappa": 1.0,
+      "confusion_matrix": [
+        [
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 1.0,
+        "NOT_MET": 1.0,
+        "UNKNOWN": 1.0
+      }
+    },
+    "exclusion": {
+      "accuracy": 0.875,
+      "f1_macro": 0.582010582010582,
+      "f1_met_not_met": 0.873015873015873,
+      "cohens_kappa": 0.75,
+      "confusion_matrix": [
+        [
+          4,
+          1,
+          0
+        ],
+        [
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.8888888888888888,
+        "NOT_MET": 0.8571428571428571,
+        "UNKNOWN": 0.0
+      }
+    }
+  },
+  "calibration": {
+    "met_bias": -0.050000000000000044,
+    "unknown_rate_diff": 0.0
+  },
+  "mean_evidence_overlap": 0.2,
+  "gpt4_baseline_accuracy": 0.75,
+  "gpt4_baseline_f1_macro": 0.746031746031746,
+  "trial_level": {
+    "n_unique_trials": 15,
+    "ELIGIBLE": 2,
+    "EXCLUDED": 2,
+    "NOT_RELEVANT": 5,
+    "UNCERTAIN": 6
+  }
+}

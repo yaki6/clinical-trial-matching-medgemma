@@ -1,0 +1,63 @@
+{
+  "phase": 0,
+  "description": "20-pair criterion-level benchmark for MedGemma 1.5 4B vs Gemini 3 Pro",
+  "data": {
+    "source": "huggingface",
+    "dataset_id": "ncbi/TrialGPT-Criterion-Annotations",
+    "split": "train",
+    "n_pairs": 20,
+    "sampling": "stratified",
+    "seed": 42,
+    "label_mapping": {
+      "included": "MET",
+      "not_excluded": "MET",
+      "excluded": "NOT_MET",
+      "not_included": "NOT_MET",
+      "not_enough_information": "UNKNOWN",
+      "not_applicable": "UNKNOWN"
+    }
+  },
+  "models": [
+    {
+      "name": "medgemma-1.5-4b",
+      "provider": "huggingface",
+      "model_id": "google/medgemma-1-5-4b-it-hae",
+      "max_concurrent": 5
+    },
+    {
+      "name": "gemini-3-pro",
+      "provider": "google",
+      "model_id": "gemini-3-pro-preview",
+      "max_concurrent": 10
+    }
+  ],
+  "baselines": [
+    {
+      "name": "gpt4-precomputed",
+      "source": "dataset"
+    }
+  ],
+  "evaluation": {
+    "tier": "phase0",
+    "granularity": "criterion_level",
+    "ingest_source": "gold",
+    "metrics": [
+      "accuracy",
+      "f1_macro",
+      "f1_met_not_met",
+      "cohens_kappa",
+      "confusion_matrix",
+      "evidence_overlap"
+    ]
+  },
+  "budget": {
+    "max_cost_usd": 5.0,
+    "warn_at_usd": 3.0
+  },
+  "output": {
+    "run_dir": "runs/",
+    "save_reasoning_chains": true,
+    "save_raw_responses": true,
+    "save_evidence_sentences": true
+  }
+}

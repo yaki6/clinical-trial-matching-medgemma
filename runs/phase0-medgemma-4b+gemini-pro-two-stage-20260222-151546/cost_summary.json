@@ -1,0 +1,9 @@
+{
+  "model": "medgemma-4b+gemini-pro-two-stage",
+  "total_pairs": 20,
+  "total_cost_usd": 0.0445775,
+  "total_input_tokens": 22078,
+  "total_output_tokens": 1698,
+  "avg_latency_ms": 14627.208185347263,
+  "token_counts_estimated": false
+}

@@ -1,0 +1,36 @@
+{
+  "accuracy": 1.0,
+  "f1_macro": 0.3333333333333333,
+  "f1_met_not_met": 0.5,
+  "cohens_kappa": NaN,
+  "confusion_matrix": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "MET",
+    "NOT_MET",
+    "UNKNOWN"
+  ],
+  "f1_per_class": {
+    "MET": 1.0,
+    "NOT_MET": 0.0,
+    "UNKNOWN": 0.0
+  },
+  "mean_evidence_overlap": 0.0,
+  "gpt4_baseline_accuracy": 1.0,
+  "gpt4_baseline_f1_macro": 0.3333333333333333
+}

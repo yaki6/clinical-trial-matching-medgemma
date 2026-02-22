@@ -1,0 +1,115 @@
+{
+  "accuracy": 0.8,
+  "f1_macro": 0.7964285714285714,
+  "f1_met_not_met": 0.7946428571428572,
+  "cohens_kappa": 0.696969696969697,
+  "confusion_matrix": [
+    [
+      7,
+      1,
+      0
+    ],
+    [
+      1,
+      5,
+      2
+    ],
+    [
+      0,
+      0,
+      4
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "MET",
+    "NOT_MET",
+    "UNKNOWN"
+  ],
+  "f1_per_class": {
+    "MET": 0.875,
+    "NOT_MET": 0.7142857142857143,
+    "UNKNOWN": 0.8
+  },
+  "by_criterion_type": {
+    "inclusion": {
+      "accuracy": 0.75,
+      "f1_macro": 0.7428571428571429,
+      "f1_met_not_met": 0.7142857142857142,
+      "cohens_kappa": 0.6326530612244898,
+      "confusion_matrix": [
+        [
+          3,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.8571428571428571,
+        "NOT_MET": 0.5714285714285714,
+        "UNKNOWN": 0.8
+      }
+    },
+    "exclusion": {
+      "accuracy": 0.875,
+      "f1_macro": 0.582010582010582,
+      "f1_met_not_met": 0.873015873015873,
+      "cohens_kappa": 0.75,
+      "confusion_matrix": [
+        [
+          4,
+          1,
+          0
+        ],
+        [
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.8888888888888888,
+        "NOT_MET": 0.8571428571428571,
+        "UNKNOWN": 0.0
+      }
+    }
+  },
+  "calibration": {
+    "met_bias": 0.0,
+    "unknown_rate_diff": 0.09999999999999998
+  },
+  "mean_evidence_overlap": 0.45,
+  "gpt4_baseline_accuracy": 0.75,
+  "gpt4_baseline_f1_macro": 0.746031746031746,
+  "trial_level": {
+    "n_unique_trials": 15,
+    "ELIGIBLE": 3,
+    "EXCLUDED": 3,
+    "NOT_RELEVANT": 2,
+    "UNCERTAIN": 7
+  }
+}

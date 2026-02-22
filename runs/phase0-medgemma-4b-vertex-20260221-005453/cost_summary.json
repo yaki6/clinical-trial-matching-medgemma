@@ -1,0 +1,9 @@
+{
+  "model": "medgemma-4b-vertex",
+  "total_pairs": 20,
+  "total_cost_usd": 0.015099450859525756,
+  "total_input_tokens": 9322,
+  "total_output_tokens": 1912,
+  "avg_latency_ms": 2363.39230844751,
+  "token_counts_estimated": false
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "pair_index": 0,
+    "patient_id": "sigir-20156",
+    "trial_id": "NCT01717352",
+    "criterion_type": "inclusion",
+    "criterion_text": "age 21 to 65",
+    "expert_label": "MET",
+    "gpt4_label": "MET",
+    "model_verdict": "MET",
+    "correct": true,
+    "reasoning": "The patient is identified as a 46-year-old woman in the clinical note, which falls within the required age range of 21 to 65 years.",
+    "evidence_sentences": [
+      0
+    ],
+    "input_tokens": 321,
+    "output_tokens": 69,
+    "latency_ms": 62646.239959052764,
+    "estimated_cost": 0.00109125,
+    "token_count_estimated": false
+  }
+]

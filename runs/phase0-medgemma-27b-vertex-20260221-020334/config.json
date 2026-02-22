@@ -1,0 +1,53 @@
+{
+  "phase": 0,
+  "description": "20-pair MedGemma 27B (Vertex AI) benchmark",
+  "data": {
+    "source": "huggingface",
+    "dataset_id": "ncbi/TrialGPT-Criterion-Annotations",
+    "split": "train",
+    "n_pairs": 20,
+    "sampling": "stratified",
+    "seed": 42
+  },
+  "models": [
+    {
+      "name": "medgemma-27b-vertex",
+      "provider": "vertex",
+      "endpoint_id": "6588061467889631232",
+      "region": "us-central1",
+      "dedicated_endpoint_dns": "6588061467889631232.us-central1-189529605434.prediction.vertexai.goog",
+      "max_concurrent": 1,
+      "max_tokens": 2048
+    }
+  ],
+  "baselines": [
+    {
+      "name": "gpt4-precomputed",
+      "source": "dataset"
+    }
+  ],
+  "evaluation": {
+    "tier": "phase0",
+    "granularity": "criterion_level",
+    "ingest_source": "gold",
+    "timeout_seconds": 300,
+    "metrics": [
+      "accuracy",
+      "f1_macro",
+      "f1_met_not_met",
+      "cohens_kappa",
+      "confusion_matrix",
+      "evidence_overlap"
+    ]
+  },
+  "budget": {
+    "max_cost_usd": 5.0,
+    "warn_at_usd": 3.0
+  },
+  "output": {
+    "run_dir": "runs/",
+    "save_reasoning_chains": true,
+    "save_raw_responses": true,
+    "save_evidence_sentences": true
+  }
+}

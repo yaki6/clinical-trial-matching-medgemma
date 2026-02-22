@@ -1,0 +1,9 @@
+{
+  "model": "medgemma-27b+gemini-flash-two-stage-v2",
+  "total_pairs": 20,
+  "total_cost_usd": 0.031383749999999995,
+  "total_input_tokens": 13547,
+  "total_output_tokens": 1445,
+  "avg_latency_ms": 7163.8640727847815,
+  "token_counts_estimated": false
+}

@@ -1,0 +1,46 @@
+{
+  "phase": 0,
+  "description": "Two-stage v3: Gemini Pro reasoning + Flash labeling (seed 7)",
+  "data": {
+    "fixture_path": "data/hf_cache/trialgpt_criterion_annotations.json",
+    "n_pairs": 20,
+    "sampling": "stratified",
+    "seed": 7
+  },
+  "models": [
+    {
+      "name": "gemini-pro+gemini-flash-two-stage-v3",
+      "provider": "two_stage",
+      "stage1": {
+        "name": "gemini-3-pro-preview",
+        "provider": "google",
+        "max_tokens": 2048
+      },
+      "stage2": {
+        "name": "gemini-3-flash-preview",
+        "provider": "google",
+        "max_tokens": 512
+      },
+      "max_concurrent": 1
+    }
+  ],
+  "baselines": [
+    {
+      "name": "gpt4-precomputed",
+      "source": "dataset"
+    }
+  ],
+  "evaluation": {
+    "timeout_seconds": 300
+  },
+  "budget": {
+    "max_cost_usd": 5.0,
+    "warn_at_usd": 3.0
+  },
+  "output": {
+    "run_dir": "runs/",
+    "save_reasoning_chains": true,
+    "save_raw_responses": true,
+    "save_evidence_sentences": true
+  }
+}

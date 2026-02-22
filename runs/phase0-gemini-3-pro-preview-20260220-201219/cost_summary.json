@@ -1,0 +1,9 @@
+{
+  "model": "gemini-3-pro-preview",
+  "total_pairs": 20,
+  "total_cost_usd": 0.0312775,
+  "total_input_tokens": 8494,
+  "total_output_tokens": 2066,
+  "avg_latency_ms": 10176.015093602473,
+  "token_counts_estimated": false
+}

@@ -1,0 +1,9 @@
+{
+  "model": "medgemma-27b-vertex",
+  "total_pairs": 20,
+  "total_cost_usd": 0.053260314379238276,
+  "total_input_tokens": 9550,
+  "total_output_tokens": 3016,
+  "avg_latency_ms": 8336.397033272078,
+  "token_counts_estimated": false
+}

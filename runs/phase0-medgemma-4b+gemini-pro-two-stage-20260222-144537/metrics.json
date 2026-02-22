@@ -1,0 +1,115 @@
+{
+  "accuracy": 0.45,
+  "f1_macro": 0.39676113360323884,
+  "f1_met_not_met": 0.38461538461538464,
+  "cohens_kappa": 0.2666666666666667,
+  "confusion_matrix": [
+    [
+      5,
+      0,
+      3
+    ],
+    [
+      0,
+      0,
+      8
+    ],
+    [
+      0,
+      0,
+      4
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "MET",
+    "NOT_MET",
+    "UNKNOWN"
+  ],
+  "f1_per_class": {
+    "MET": 0.7692307692307693,
+    "NOT_MET": 0.0,
+    "UNKNOWN": 0.42105263157894735
+  },
+  "by_criterion_type": {
+    "inclusion": {
+      "accuracy": 0.5,
+      "f1_macro": 0.45714285714285713,
+      "f1_met_not_met": 0.4,
+      "cohens_kappa": 0.26530612244897966,
+      "confusion_matrix": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          5
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.8,
+        "NOT_MET": 0.0,
+        "UNKNOWN": 0.5714285714285714
+      }
+    },
+    "exclusion": {
+      "accuracy": 0.375,
+      "f1_macro": 0.25,
+      "f1_met_not_met": 0.375,
+      "cohens_kappa": 0.18367346938775508,
+      "confusion_matrix": [
+        [
+          3,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.75,
+        "NOT_MET": 0.0,
+        "UNKNOWN": 0.0
+      }
+    }
+  },
+  "calibration": {
+    "met_bias": -0.15000000000000002,
+    "unknown_rate_diff": 0.55
+  },
+  "mean_evidence_overlap": 0.95,
+  "gpt4_baseline_accuracy": 0.75,
+  "gpt4_baseline_f1_macro": 0.746031746031746,
+  "trial_level": {
+    "n_unique_trials": 15,
+    "ELIGIBLE": 1,
+    "EXCLUDED": 3,
+    "NOT_RELEVANT": 0,
+    "UNCERTAIN": 11
+  }
+}

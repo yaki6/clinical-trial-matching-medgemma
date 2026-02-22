@@ -1,0 +1,60 @@
+{
+  "phase": 0,
+  "description": "Two-stage: MedGemma 4B (HF) reasons, Gemini 3 Pro labels",
+  "data": {
+    "source": "huggingface",
+    "fixture_path": "data/hf_cache/trialgpt_criterion_annotations.json",
+    "dataset_id": "ncbi/TrialGPT-Criterion-Annotations",
+    "split": "train",
+    "n_pairs": 20,
+    "sampling": "stratified",
+    "seed": 42
+  },
+  "models": [
+    {
+      "name": "medgemma-4b+gemini-two-stage",
+      "provider": "two_stage",
+      "stage1": {
+        "name": "medgemma-1.5-4b",
+        "provider": "huggingface",
+        "max_tokens": 512
+      },
+      "stage2": {
+        "name": "gemini-3-pro",
+        "provider": "google",
+        "max_tokens": 512
+      },
+      "max_concurrent": 1
+    }
+  ],
+  "baselines": [
+    {
+      "name": "gpt4-precomputed",
+      "source": "dataset"
+    }
+  ],
+  "evaluation": {
+    "tier": "phase0",
+    "granularity": "criterion_level",
+    "ingest_source": "gold",
+    "timeout_seconds": 300,
+    "metrics": [
+      "accuracy",
+      "f1_macro",
+      "f1_met_not_met",
+      "cohens_kappa",
+      "confusion_matrix",
+      "evidence_overlap"
+    ]
+  },
+  "budget": {
+    "max_cost_usd": 5.0,
+    "warn_at_usd": 3.0
+  },
+  "output": {
+    "run_dir": "runs/",
+    "save_reasoning_chains": true,
+    "save_raw_responses": true,
+    "save_evidence_sentences": true
+  }
+}

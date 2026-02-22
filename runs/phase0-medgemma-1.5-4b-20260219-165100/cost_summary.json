@@ -1,0 +1,9 @@
+{
+  "model": "medgemma-1.5-4b",
+  "total_pairs": 20,
+  "total_cost_usd": 0.69533,
+  "total_input_tokens": 7757,
+  "total_output_tokens": 20592,
+  "avg_latency_ms": 49271.25118117547,
+  "token_counts_estimated": true
+}

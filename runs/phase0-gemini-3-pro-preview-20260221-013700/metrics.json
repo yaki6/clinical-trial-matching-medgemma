@@ -1,0 +1,43 @@
+{
+  "accuracy": 0.45,
+  "f1_macro": 0.4481481481481482,
+  "f1_met_not_met": 0.45,
+  "cohens_kappa": 0.2567567567567568,
+  "confusion_matrix": [
+    [
+      2,
+      1,
+      5
+    ],
+    [
+      0,
+      3,
+      5
+    ],
+    [
+      0,
+      0,
+      4
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "MET",
+    "NOT_MET",
+    "UNKNOWN"
+  ],
+  "f1_per_class": {
+    "MET": 0.4,
+    "NOT_MET": 0.5,
+    "UNKNOWN": 0.4444444444444444
+  },
+  "mean_evidence_overlap": 0.75,
+  "gpt4_baseline_accuracy": 0.75,
+  "gpt4_baseline_f1_macro": 0.746031746031746,
+  "trial_level": {
+    "n_unique_trials": 15,
+    "ELIGIBLE": 1,
+    "EXCLUDED": 0,
+    "NOT_RELEVANT": 2,
+    "UNCERTAIN": 12
+  }
+}

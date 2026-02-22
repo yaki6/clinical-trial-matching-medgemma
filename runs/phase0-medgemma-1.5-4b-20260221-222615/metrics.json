@@ -1,0 +1,115 @@
+{
+  "accuracy": 0.5,
+  "f1_macro": 0.44801864801864805,
+  "f1_met_not_met": 0.47202797202797203,
+  "cohens_kappa": 0.180327868852459,
+  "confusion_matrix": [
+    [
+      7,
+      1,
+      0
+    ],
+    [
+      6,
+      2,
+      0
+    ],
+    [
+      1,
+      2,
+      1
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "MET",
+    "NOT_MET",
+    "UNKNOWN"
+  ],
+  "f1_per_class": {
+    "MET": 0.6363636363636364,
+    "NOT_MET": 0.3076923076923077,
+    "UNKNOWN": 0.4
+  },
+  "by_criterion_type": {
+    "inclusion": {
+      "accuracy": 0.25,
+      "f1_macro": 0.3055555555555555,
+      "f1_met_not_met": 0.125,
+      "cohens_kappa": -0.11627906976744184,
+      "confusion_matrix": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          4,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.0,
+        "NOT_MET": 0.25,
+        "UNKNOWN": 0.6666666666666666
+      }
+    },
+    "exclusion": {
+      "accuracy": 0.6666666666666666,
+      "f1_macro": 0.407843137254902,
+      "f1_met_not_met": 0.611764705882353,
+      "cohens_kappa": 0.2941176470588236,
+      "confusion_matrix": [
+        [
+          7,
+          0,
+          0
+        ],
+        [
+          2,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "MET",
+        "NOT_MET",
+        "UNKNOWN"
+      ],
+      "f1_per_class": {
+        "MET": 0.8235294117647058,
+        "NOT_MET": 0.4,
+        "UNKNOWN": 0.0
+      }
+    }
+  },
+  "calibration": {
+    "met_bias": 0.29999999999999993,
+    "unknown_rate_diff": -0.15000000000000002
+  },
+  "mean_evidence_overlap": 0.15,
+  "gpt4_baseline_accuracy": 0.95,
+  "gpt4_baseline_f1_macro": 0.9581699346405229,
+  "trial_level": {
+    "n_unique_trials": 18,
+    "ELIGIBLE": 3,
+    "EXCLUDED": 9,
+    "NOT_RELEVANT": 3,
+    "UNCERTAIN": 3
+  }
+}

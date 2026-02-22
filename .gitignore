@@ -22,9 +22,6 @@ venv/
 .env
 .env.local
 
-# Run artifacts (large, generated)
-runs/
-
 # Data (large, downloaded)
 data/trec2021/*.xml
 data/trec2022/trials/*.json
