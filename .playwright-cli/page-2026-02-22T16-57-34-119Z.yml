@@ -1,0 +1,199 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - button "keyboard_double_arrow_left" [ref=e10] [cursor=pointer]:
+      - generic [ref=e12]: keyboard_double_arrow_left
+    - list [ref=e14]:
+      - listitem [ref=e15]:
+        - link "app" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e18]: app
+      - listitem [ref=e19]:
+        - link "Pipeline Demo" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e22]: Pipeline Demo
+      - listitem [ref=e23]:
+        - link "Benchmark" [ref=e25] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e26]: Benchmark
+    - generic [ref=e30]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e34]
+      - generic [ref=e36]:
+        - paragraph [ref=e40]: Select Patient
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: mpx1575 (86M, metastatic Squamous Cell Non-small Ce...)
+            - combobox "Selected mpx1575 (86M, metastatic Squamous Cell Non-small Ce...). Select Patient" [ref=e442]
+          - img "open" [ref=e48]
+      - paragraph [ref=e54]:
+        - strong [ref=e55]: mpx1575
+        - text: ": ## Clinical History An 86-year-old male with a past medical history of hypertension, atrial fibrillation, hypothyroidism, idiopathic pulmonary fibrosis, dementia, and depression was transferred from h..."
+      - button "Search for Trials" [active] [ref=e58] [cursor=pointer]:
+        - paragraph [ref=e62]: Search for Trials
+      - group [ref=e65]:
+        - generic "settings Settings" [ref=e66] [cursor=pointer]:
+          - generic [ref=e67]:
+            - generic [ref=e69]: settings
+            - paragraph [ref=e72]: Settings
+  - generic [ref=e3]:
+    - banner [ref=e75]:
+      - generic [ref=e78]:
+        - button "Deploy" [ref=e80] [cursor=pointer]:
+          - generic [ref=e82]: Deploy
+        - button [ref=e84] [cursor=pointer]:
+          - img [ref=e85]
+    - generic [ref=e88]:
+      - heading "Find Clinical Trials" [level=1] [ref=e93]:
+        - text: Find Clinical Trials
+        - generic [ref=e94]:
+          - link "Link to heading":
+            - /url: "#find-clinical-trials"
+            - img
+      - paragraph [ref=e99]: This is an AI-assisted screening tool for informational purposes only. It does not constitute medical advice. Always consult with your healthcare provider and the trial's research team before making decisions about clinical trial participation.
+      - 'heading "Patient: mpx1575 (86M, metastatic Squamous Cell Non-small Ce...)" [level=3] [ref=e443]':
+        - text: "Patient: mpx1575 (86M, metastatic Squamous Cell Non-small Ce...)"
+        - generic [ref=e105]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016-43-f-lung-adenocarcinoma-with-signet-ring"
+            - img
+      - group [ref=e108]:
+        - generic "keyboard_arrow_right View Full Medical Record" [ref=e109] [cursor=pointer]:
+          - generic [ref=e110]:
+            - generic [ref=e112]: keyboard_arrow_right
+            - paragraph [ref=e115]: View Full Medical Record
+      - group [ref=e118]:
+        - 'generic "keyboard_arrow_right Medical Image: CT - noncontrast — Axial" [ref=e444] [cursor=pointer]':
+          - generic [ref=e120]:
+            - generic [ref=e122]: keyboard_arrow_right
+            - paragraph [ref=e125]: "Medical Image: CT - noncontrast — Axial"
+      - separator [ref=e130]
+      - group [ref=e133]:
+        - generic "keyboard_arrow_down Your Clinical Profile" [ref=e134] [cursor=pointer]:
+          - generic [ref=e135]:
+            - generic [ref=e137]: keyboard_arrow_down
+            - paragraph [ref=e140]: Your Clinical Profile
+        - generic [ref=e142]:
+          - paragraph [ref=e147]: "Here's what we extracted from your medical record:"
+          - generic [ref=e149]:
+            - paragraph [ref=e156]:
+              - strong [ref=e157]: Diagnosis
+            - paragraph [ref=e164]: metastatic Squamous Cell Non-small Cell Lung Cancer
+          - generic [ref=e166]:
+            - paragraph [ref=e173]:
+              - strong [ref=e174]: Age
+            - paragraph [ref=e181]: "86"
+          - generic [ref=e183]:
+            - paragraph [ref=e190]:
+              - strong [ref=e191]: Sex
+            - paragraph [ref=e198]: male
+          - generic [ref=e200]:
+            - paragraph [ref=e207]:
+              - strong [ref=e208]: Imaging Results
+            - paragraph [ref=e215]: "description: Axial CT of the chest shows extensive bilateral pulmonary abnormalities, including numerous variably sized nodules and areas of consolidation, more prominent in the right lung. These are superimposed on a background of severe fibrotic changes with a lower lobe predominance, featuring reticulation, traction bronchiectasis, and honeycombing, consistent with a usual interstitial pneumonia (UIP) pattern.; key_features: Bilateral pulmonary nodules, Confluent opacities/consolidation, Reticulation, Traction bronchiectasis, Honeycombing, Lower lobe predominance of fibrotic changes"
+          - generic [ref=e217]:
+            - paragraph [ref=e224]:
+              - strong [ref=e225]: Key Findings
+            - paragraph [ref=e232]: History of idiopathic pulmonary fibrosis, Decreased PO intake, Dry cough, Increased confusion, Hypotension, Bilateral rales and ronchi, Leukocytosis (WBC 17.7), Low albumin (2.8), Bronchoscopy positive for metastatic Squamous Cell NSCLC
+          - generic [ref=e234]:
+            - paragraph [ref=e241]:
+              - strong [ref=e242]: Information Gaps
+            - paragraph [ref=e249]: smoking_history, performance_status, cancer_stage
+          - generic [ref=e251]:
+            - paragraph [ref=e258]:
+              - strong [ref=e259]: Other Conditions
+            - paragraph [ref=e266]: HTN, Afib, hypothyroidism, idiopathic pulmonary fibrosis, dementia, depression, bilateral pneumonia, malnutrition
+          - generic [ref=e268]:
+            - paragraph [ref=e275]:
+              - strong [ref=e276]: Lab Results
+            - paragraph [ref=e283]: "WBC: 17.7; HGB: 13.4; HCT: 40.7; Plt: 417; Na: 144; K: 3.9; CL: 106; CO2: 27; BUN: 17; Cr: 1.35; Gluc: 92; Alb: 2.8"
+      - group [ref=e303]:
+        - generic "keyboard_arrow_down AI Image Analysis" [ref=e304] [cursor=pointer]:
+          - generic [ref=e305]:
+            - generic [ref=e307]: keyboard_arrow_down
+            - paragraph [ref=e310]: AI Image Analysis
+        - generic [ref=e316]:
+          - paragraph [ref=e317]:
+            - strong [ref=e318]: "Image Analysis:"
+          - list [ref=e319]:
+            - listitem [ref=e320]:
+              - strong [ref=e321]: "Lung Fields:"
+              - text: The lung fields appear relatively clear, with no obvious consolidation or infiltrates.
+            - listitem [ref=e445]:
+              - strong [ref=e446]: "Pleural Spaces:"
+              - text: There are no significant pleural effusions visible.
+            - listitem [ref=e447]:
+              - strong [ref=e448]: "Mediastinum:"
+              - text: The mediastinum appears unremarkable.
+            - listitem [ref=e449]:
+              - strong [ref=e450]: "Hila:"
+              - text: The hila are unremarkable.
+            - listitem [ref=e451]:
+              - strong [ref=e452]: "Bones:"
+              - text: The visualized bony structures appear normal.
+            - listitem [ref=e453]:
+              - strong [ref=e454]: "Soft Tissues:"
+              - text: The soft tissues are unremarkable.
+          - paragraph [ref=e455]:
+            - strong [ref=e456]: "Findings:"
+          - list [ref=e457]:
+            - listitem [ref=e458]: No pulmonary masses are identified.
+            - listitem [ref=e459]: No significant fibrotic changes are identified.
+            - listitem [ref=e460]: No honeycombing is identified.
+            - listitem [ref=e461]: No pleural effusions are identified.
+            - listitem [ref=e462]: No lymphadenopathy is identified.
+          - paragraph [ref=e463]:
+            - strong [ref=e464]: "Conclusion:"
+          - paragraph [ref=e465]: The CT scan shows no significant abnormalities in the lungs, pleura, mediastinum, or visualized bones.
+          - paragraph [ref=e466]:
+            - strong [ref=e467]: "Disclaimer:"
+            - text: This analysis is based solely on the provided image and should not be considered a definitive diagnosis. A radiologist's interpretation is required for a complete assessment.
+          - paragraph [ref=e468]:
+            - strong [ref=e469]: Please provide the CT image for analysis.
+          - paragraph [ref=e470]:
+            - strong [ref=e471]: "Analysis of the provided CT image:"
+          - list [ref=e472]:
+            - listitem [ref=e473]:
+              - strong [ref=e474]: "Lung Fields:"
+              - text: The lung fields appear generally clear. There is no evidence of consolidation, atelectasis, or significant infiltrates.
+            - listitem [ref=e475]:
+              - strong [ref=e476]: "Pleural Spaces:"
+              - text: No significant pleural effusions are visible. The pleural lines appear sharp.
+            - listitem [ref=e477]:
+              - strong [ref=e478]: "Mediastinum:"
+              - text: The mediastinum appears unremarkable in width and contour. No obvious masses or lymphadenopathy are seen.
+            - listitem [ref=e479]:
+              - strong [ref=e480]: "Hila:"
+              - text: The hila appear normal in size and shape. No obvious enlargement or masses are noted.
+            - listitem [ref=e481]:
+              - strong [ref=e482]: "Bones:"
+              - text: The visualized bony structures (ribs, clavicles, thoracic spine) appear unremarkable.
+            - listitem [ref=e483]:
+              - strong [ref=e484]: "Soft Tissues:"
+              - text: The soft tissues are unremarkable.
+          - paragraph [ref=e485]:
+            - strong [ref=e486]: "Overall Findings:"
+          - paragraph [ref=e487]: The CT scan shows no evidence of pulmonary masses, significant fibrotic changes, honeycombing, pleural effusions, or lymphadenopathy. The lung parenchyma appears relatively normal.
+          - paragraph [ref=e488]:
+            - strong [ref=e489]: "Disclaimer:"
+            - text: This interpretation is based on the provided image and does not constitute a medical diagnosis. A radiologist's formal report is necessary for a complete assessment.
+          - paragraph [ref=e490]:
+            - strong [ref=e491]: Please provide the CT image for analysis.
+          - paragraph [ref=e492]:
+            - strong [ref=e493]: "Analysis of the provided CT image:"
+          - list [ref=e494]:
+            - listitem [ref=e495]:
+              - strong [ref=e496]: "Lung Fields:"
+              - text: The lung fields appear generally clear. There is no evidence of consolidation, atelectasis, or significant infiltrates.
+            - listitem [ref=e497]: "**"
+      - alert [ref=e500]:
+        - paragraph [ref=e505]: Pre-computed results are not yet available for this patient.
+      - button "Run live search (may take 1-2 minutes)" [ref=e508] [cursor=pointer]:
+        - paragraph [ref=e512]: Run live search (may take 1-2 minutes)
+      - separator [ref=e370]
+      - heading "Your Results" [level=3] [ref=e375]:
+        - text: Your Results
+        - generic [ref=e376]:
+          - link "Link to heading":
+            - /url: "#your-results"
+            - img
+      - alert [ref=e514]:
+        - paragraph [ref=e519]: No matching results found. Please try a different patient or run a live search.

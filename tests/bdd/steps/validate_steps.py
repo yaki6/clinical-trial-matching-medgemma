@@ -81,11 +81,10 @@ def prompt_has_criterion(prompt, criterion_text):
     assert criterion_text in prompt
 
 
-@then("the prompt asks for MET, NOT_MET, or UNKNOWN")
+@then("the prompt asks for eligible, not eligible, or unknown")
 def prompt_has_verdicts(prompt):
-    assert "MET" in prompt
-    assert "NOT_MET" in prompt
-    assert "UNKNOWN" in prompt
+    prompt_lower = prompt.lower()
+    assert '"label": "<eligible|not eligible|unknown>"' in prompt_lower
 
 
 # --- Verdict parsing steps ---

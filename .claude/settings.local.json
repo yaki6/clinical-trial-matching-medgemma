@@ -14,7 +14,8 @@
       "WebFetch(domain:trec.nist.gov)",
       "WebFetch(domain:www.ncbi.nlm.nih.gov)",
       "WebFetch(domain:ftp.ncbi.nlm.nih.gov)",
-      "WebFetch(domain:datasets-server.huggingface.co)"
+      "WebFetch(domain:datasets-server.huggingface.co)",
+      "Bash(uv run:*)"
     ]
   }
 }

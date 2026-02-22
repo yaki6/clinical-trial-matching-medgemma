@@ -1,0 +1,24 @@
+- generic [ref=e2]:
+  - list [ref=e10]:
+    - listitem [ref=e11]:
+      - link "app" [ref=e13] [cursor=pointer]:
+        - /url: http://localhost:8501/
+        - generic [ref=e14]: app
+    - listitem [ref=e15]:
+      - link "Pipeline Demo" [ref=e17] [cursor=pointer]:
+        - /url: http://localhost:8501/Pipeline_Demo
+        - generic [ref=e18]: Pipeline Demo
+    - listitem [ref=e19]:
+      - link "Benchmark" [ref=e21] [cursor=pointer]:
+        - /url: http://localhost:8501/Benchmark
+        - generic [ref=e22]: Benchmark
+  - banner [ref=e26]:
+    - generic [ref=e29]:
+      - generic [ref=e31]:
+        - img "Running..." [ref=e32]:
+          - img [ref=e33]
+        - button "Stop" [ref=e38] [cursor=pointer]
+      - button "Deploy" [ref=e40] [cursor=pointer]:
+        - generic [ref=e42]: Deploy
+      - button [ref=e44] [cursor=pointer]:
+        - img [ref=e45]

@@ -1,0 +1,176 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - button "keyboard_double_arrow_left" [ref=e10] [cursor=pointer]:
+      - generic [ref=e12]: keyboard_double_arrow_left
+    - list [ref=e14]:
+      - listitem [ref=e15]:
+        - link "app" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e18]: app
+      - listitem [ref=e19]:
+        - link "Pipeline Demo" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e22]: Pipeline Demo
+      - listitem [ref=e23]:
+        - link "Benchmark" [ref=e25] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e26]: Benchmark
+    - generic [ref=e30]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e34]
+      - generic [ref=e36]:
+        - paragraph [ref=e40]: Select Patient
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: mpx1016
+            - combobox "Selected mpx1016. Select Patient" [ref=e46]
+          - img "open" [ref=e48]
+      - paragraph [ref=e54]:
+        - strong [ref=e55]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - generic [ref=e57]:
+        - paragraph [ref=e61]: Pipeline Mode
+        - radiogroup "Pipeline Mode" [ref=e62] [cursor=pointer]:
+          - generic [ref=e63]:
+            - radio "live"
+            - paragraph [ref=e68]: live
+          - generic [ref=e69]:
+            - radio "cached" [checked] [active]
+            - paragraph [ref=e74]: cached
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - paragraph [ref=e80]: VALIDATE Mode
+          - button "Help for VALIDATE Mode" [ref=e84] [cursor=pointer]:
+            - img [ref=e85]
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e91]: Two-Stage (MedGemma → Gemini)
+            - combobox "Selected Two-Stage (MedGemma → Gemini). VALIDATE Mode" [ref=e93]
+          - img "open" [ref=e95]
+      - generic [ref=e99]:
+        - paragraph [ref=e103]: Max trials to evaluate
+        - generic [ref=e104]:
+          - slider "Max trials to evaluate" [ref=e108]:
+            - generic:
+              - generic:
+                - paragraph: "3"
+          - generic:
+            - generic:
+              - paragraph: "1"
+            - generic:
+              - paragraph: "10"
+      - generic [ref=e112]:
+        - paragraph [ref=e116]: Max criteria per trial
+        - generic [ref=e117]:
+          - slider "Max criteria per trial" [ref=e121]:
+            - generic:
+              - generic:
+                - paragraph: "10"
+          - generic:
+            - generic:
+              - paragraph: "5"
+            - generic:
+              - paragraph: "30"
+      - paragraph [ref=e127]: "Cached: 1 patients (mpx1016)"
+      - button "Run Pipeline" [ref=e130] [cursor=pointer]:
+        - paragraph [ref=e134]: Run Pipeline
+      - group [ref=e137]:
+        - generic "settings Settings" [ref=e138] [cursor=pointer]:
+          - generic [ref=e139]:
+            - generic [ref=e141]: settings
+            - paragraph [ref=e144]: Settings
+  - generic [ref=e3]:
+    - banner [ref=e147]:
+      - generic [ref=e150]:
+        - button "Deploy" [ref=e152] [cursor=pointer]:
+          - generic [ref=e154]: Deploy
+        - button [ref=e156] [cursor=pointer]:
+          - img [ref=e157]
+    - generic [ref=e160]:
+      - heading "Pipeline Demo" [level=1] [ref=e165]:
+        - text: Pipeline Demo
+        - generic [ref=e166]:
+          - link "Link to heading":
+            - /url: "#pipeline-demo"
+            - img
+      - 'heading "Patient: mpx1016" [level=3] [ref=e171]':
+        - text: "Patient: mpx1016"
+        - generic [ref=e172]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016"
+            - img
+      - group [ref=e175]:
+        - generic "keyboard_arrow_right Clinical Note" [ref=e176] [cursor=pointer]:
+          - generic [ref=e177]:
+            - generic [ref=e179]: keyboard_arrow_right
+            - paragraph [ref=e182]: Clinical Note
+      - group [ref=e185]:
+        - generic "keyboard_arrow_right Ambiguities / Missing Info" [ref=e186] [cursor=pointer]:
+          - generic [ref=e187]:
+            - generic [ref=e189]: keyboard_arrow_right
+            - paragraph [ref=e192]: Ambiguities / Missing Info
+      - separator [ref=e197]
+      - group [ref=e200]:
+        - 'generic "keyboard_arrow_down Step 1: INGEST — Key Facts" [ref=e201] [cursor=pointer]':
+          - generic [ref=e202]:
+            - generic [ref=e204]: keyboard_arrow_down
+            - paragraph [ref=e207]: "Step 1: INGEST — Key Facts"
+        - generic [ref=e209]:
+          - paragraph [ref=e214]: Key clinical facts extracted from patient record
+          - generic [ref=e216]:
+            - paragraph [ref=e223]:
+              - strong [ref=e224]: primary_diagnosis
+            - paragraph [ref=e231]: Lung adenocarcinoma with signet-ring cell features
+          - generic [ref=e233]:
+            - paragraph [ref=e240]:
+              - strong [ref=e241]: age
+            - paragraph [ref=e248]: "43"
+          - generic [ref=e250]:
+            - paragraph [ref=e257]:
+              - strong [ref=e258]: sex
+            - paragraph [ref=e265]: female
+          - generic [ref=e267]:
+            - paragraph [ref=e274]:
+              - strong [ref=e275]: demographics
+            - paragraph [ref=e282]: "age: 43; sex: female"
+          - generic [ref=e284]:
+            - paragraph [ref=e291]:
+              - strong [ref=e292]: imaging_findings
+            - paragraph [ref=e299]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+          - generic [ref=e301]:
+            - paragraph [ref=e308]:
+              - strong [ref=e309]: key_findings
+            - paragraph [ref=e316]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+          - generic [ref=e318]:
+            - paragraph [ref=e325]:
+              - strong [ref=e326]: missing_info
+            - paragraph [ref=e333]: Cancer stage, Performance status, Treatment history
+          - generic [ref=e335]:
+            - paragraph [ref=e342]:
+              - strong [ref=e343]: symptoms
+            - paragraph [ref=e350]: shortness of breath with exertion, wheezing
+          - generic [ref=e352]:
+            - paragraph [ref=e359]:
+              - strong [ref=e360]: histopathology
+            - paragraph [ref=e367]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+          - generic [ref=e369]:
+            - paragraph [ref=e376]:
+              - strong [ref=e377]: tobacco_use
+            - paragraph [ref=e384]: never smoker
+      - group [ref=e387]:
+        - 'generic "keyboard_arrow_right Step 2: PRESCREEN — Trial Search" [ref=e388] [cursor=pointer]':
+          - generic [ref=e389]:
+            - generic [ref=e391]: keyboard_arrow_right
+            - paragraph [ref=e394]: "Step 2: PRESCREEN — Trial Search"
+      - group [ref=e397]:
+        - 'generic "keyboard_arrow_right Step 3: VALIDATE — Eligibility Check" [ref=e398] [cursor=pointer]':
+          - generic [ref=e399]:
+            - generic [ref=e401]: keyboard_arrow_right
+            - paragraph [ref=e404]: "Step 3: VALIDATE — Eligibility Check"
+      - separator [ref=e409]
+      - heading "Results" [level=3] [ref=e414]:
+        - text: Results
+        - generic [ref=e415]:
+          - link "Link to heading":
+            - /url: "#results"
+            - img
+      - paragraph [ref=e420]: Run the pipeline to see matching results.

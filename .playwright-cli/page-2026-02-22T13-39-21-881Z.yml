@@ -1,0 +1,1135 @@
+- generic:
+  - generic [ref=e2]:
+    - generic [ref=e7]:
+      - button "keyboard_double_arrow_left" [ref=e10] [cursor=pointer]:
+        - generic [ref=e12]: keyboard_double_arrow_left
+      - list [ref=e14]:
+        - listitem [ref=e15]:
+          - link "app" [ref=e17] [cursor=pointer]:
+            - /url: http://localhost:8501/
+            - generic [ref=e18]: app
+        - listitem [ref=e19]:
+          - link "Pipeline Demo" [ref=e21] [cursor=pointer]:
+            - /url: http://localhost:8501/Pipeline_Demo
+            - generic [ref=e22]: Pipeline Demo
+        - listitem [ref=e23]:
+          - link "Benchmark" [active] [ref=e25] [cursor=pointer]:
+            - /url: http://localhost:8501/Benchmark
+            - generic [ref=e26]: Benchmark
+    - generic [ref=e3]:
+      - banner [ref=e147]:
+        - generic [ref=e150]:
+          - button "Deploy" [ref=e152] [cursor=pointer]:
+            - generic [ref=e154]: Deploy
+          - button [ref=e156] [cursor=pointer]:
+            - img [ref=e157]
+      - generic [ref=e160]:
+        - heading "Benchmark Dashboard" [level=1] [ref=e570]:
+          - text: Benchmark Dashboard
+          - generic [ref=e571]:
+            - link "Link to heading":
+              - /url: "#benchmark-dashboard"
+              - img
+        - paragraph [ref=e576]: Phase 0 criterion-level evaluation — 20 pairs from TrialGPT HF dataset
+        - heading "Model Comparison" [level=2] [ref=e581]:
+          - text: Model Comparison
+          - generic [ref=e582]:
+            - link "Link to heading":
+              - /url: "#model-comparison"
+              - img
+        - generic [ref=e587]:
+          - button "Show/hide columns" [ref=e591] [cursor=pointer]:
+            - img [ref=e592]
+          - button "Download as CSV" [ref=e597] [cursor=pointer]:
+            - img [ref=e598]
+          - button "Search" [ref=e603] [cursor=pointer]:
+            - img [ref=e604]
+          - button "Fullscreen" [ref=e609] [cursor=pointer]:
+            - img [ref=e610]
+        - heading "Confusion Matrices" [level=2] [ref=e625]:
+          - text: Confusion Matrices
+          - generic [ref=e626]:
+            - link "Link to heading":
+              - /url: "#confusion-matrices"
+              - img
+        - generic [ref=e628]:
+          - generic [ref=e636]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "7"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "8"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "3"
+                          - generic:
+                            - generic: "0"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Gemini 3 Pro Preview
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e650]:
+              - button "Download plot as a PNG" [ref=e652] [cursor=pointer]:
+                - img [ref=e653]
+              - generic [ref=e655]:
+                - button "Zoom" [ref=e656] [cursor=pointer]:
+                  - img [ref=e657]
+                - button "Pan" [ref=e659] [cursor=pointer]:
+                  - img [ref=e660]
+              - generic [ref=e662]:
+                - button "Zoom in" [ref=e663] [cursor=pointer]:
+                  - img [ref=e664]
+                - button "Zoom out" [ref=e666] [cursor=pointer]:
+                  - img [ref=e667]
+                - button "Autoscale" [ref=e669] [cursor=pointer]:
+                  - img [ref=e670]
+                - button "Reset axes" [ref=e672] [cursor=pointer]:
+                  - img [ref=e673]
+              - button "Fullscreen" [ref=e676] [cursor=pointer]:
+                - img [ref=e677]
+            - img
+          - generic [ref=e686]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "7"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "5"
+                          - generic:
+                            - generic: "3"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "0"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Gemini Pro+Gemini Flash Two Stage V3
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e700]:
+              - button "Download plot as a PNG" [ref=e702] [cursor=pointer]:
+                - img [ref=e703]
+              - generic [ref=e705]:
+                - button "Zoom" [ref=e706] [cursor=pointer]:
+                  - img [ref=e707]
+                - button "Pan" [ref=e709] [cursor=pointer]:
+                  - img [ref=e710]
+              - generic [ref=e712]:
+                - button "Zoom in" [ref=e713] [cursor=pointer]:
+                  - img [ref=e714]
+                - button "Zoom out" [ref=e716] [cursor=pointer]:
+                  - img [ref=e717]
+                - button "Autoscale" [ref=e719] [cursor=pointer]:
+                  - img [ref=e720]
+                - button "Reset axes" [ref=e722] [cursor=pointer]:
+                  - img [ref=e723]
+              - button "Fullscreen" [ref=e726] [cursor=pointer]:
+                - img [ref=e727]
+            - img
+          - generic [ref=e736]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "7"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "6"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "1"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 1.5 4B
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e750]:
+              - button "Download plot as a PNG" [ref=e752] [cursor=pointer]:
+                - img [ref=e753]
+              - generic [ref=e755]:
+                - button "Zoom" [ref=e756] [cursor=pointer]:
+                  - img [ref=e757]
+                - button "Pan" [ref=e759] [cursor=pointer]:
+                  - img [ref=e760]
+              - generic [ref=e762]:
+                - button "Zoom in" [ref=e763] [cursor=pointer]:
+                  - img [ref=e764]
+                - button "Zoom out" [ref=e766] [cursor=pointer]:
+                  - img [ref=e767]
+                - button "Autoscale" [ref=e769] [cursor=pointer]:
+                  - img [ref=e770]
+                - button "Reset axes" [ref=e772] [cursor=pointer]:
+                  - img [ref=e773]
+              - button "Fullscreen" [ref=e776] [cursor=pointer]:
+                - img [ref=e777]
+            - img
+          - generic [ref=e786]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "8"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "4"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "0"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 27B+Gemini Flash Two Stage
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e800]:
+              - button "Download plot as a PNG" [ref=e802] [cursor=pointer]:
+                - img [ref=e803]
+              - generic [ref=e805]:
+                - button "Zoom" [ref=e806] [cursor=pointer]:
+                  - img [ref=e807]
+                - button "Pan" [ref=e809] [cursor=pointer]:
+                  - img [ref=e810]
+              - generic [ref=e812]:
+                - button "Zoom in" [ref=e813] [cursor=pointer]:
+                  - img [ref=e814]
+                - button "Zoom out" [ref=e816] [cursor=pointer]:
+                  - img [ref=e817]
+                - button "Autoscale" [ref=e819] [cursor=pointer]:
+                  - img [ref=e820]
+                - button "Reset axes" [ref=e822] [cursor=pointer]:
+                  - img [ref=e823]
+              - button "Fullscreen" [ref=e826] [cursor=pointer]:
+                - img [ref=e827]
+            - img
+          - generic [ref=e836]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "8"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "5"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "2"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 27B+Gemini Flash Two Stage V2
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e850]:
+              - button "Download plot as a PNG" [ref=e852] [cursor=pointer]:
+                - img [ref=e853]
+              - generic [ref=e855]:
+                - button "Zoom" [ref=e856] [cursor=pointer]:
+                  - img [ref=e857]
+                - button "Pan" [ref=e859] [cursor=pointer]:
+                  - img [ref=e860]
+              - generic [ref=e862]:
+                - button "Zoom in" [ref=e863] [cursor=pointer]:
+                  - img [ref=e864]
+                - button "Zoom out" [ref=e866] [cursor=pointer]:
+                  - img [ref=e867]
+                - button "Autoscale" [ref=e869] [cursor=pointer]:
+                  - img [ref=e870]
+                - button "Reset axes" [ref=e872] [cursor=pointer]:
+                  - img [ref=e873]
+              - button "Fullscreen" [ref=e876] [cursor=pointer]:
+                - img [ref=e877]
+            - img
+          - generic [ref=e886]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "5"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "6"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "3"
+                          - generic:
+                            - generic: "0"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 27B+Gemini Flash Two Stage V3
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e900]:
+              - button "Download plot as a PNG" [ref=e902] [cursor=pointer]:
+                - img [ref=e903]
+              - generic [ref=e905]:
+                - button "Zoom" [ref=e906] [cursor=pointer]:
+                  - img [ref=e907]
+                - button "Pan" [ref=e909] [cursor=pointer]:
+                  - img [ref=e910]
+              - generic [ref=e912]:
+                - button "Zoom in" [ref=e913] [cursor=pointer]:
+                  - img [ref=e914]
+                - button "Zoom out" [ref=e916] [cursor=pointer]:
+                  - img [ref=e917]
+                - button "Autoscale" [ref=e919] [cursor=pointer]:
+                  - img [ref=e920]
+                - button "Reset axes" [ref=e922] [cursor=pointer]:
+                  - img [ref=e923]
+              - button "Fullscreen" [ref=e926] [cursor=pointer]:
+                - img [ref=e927]
+            - img
+          - generic [ref=e936]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "7"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "8"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "4"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 27B+Gemini Flash Two Stage V4
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e950]:
+              - button "Download plot as a PNG" [ref=e952] [cursor=pointer]:
+                - img [ref=e953]
+              - generic [ref=e955]:
+                - button "Zoom" [ref=e956] [cursor=pointer]:
+                  - img [ref=e957]
+                - button "Pan" [ref=e959] [cursor=pointer]:
+                  - img [ref=e960]
+              - generic [ref=e962]:
+                - button "Zoom in" [ref=e963] [cursor=pointer]:
+                  - img [ref=e964]
+                - button "Zoom out" [ref=e966] [cursor=pointer]:
+                  - img [ref=e967]
+                - button "Autoscale" [ref=e969] [cursor=pointer]:
+                  - img [ref=e970]
+                - button "Reset axes" [ref=e972] [cursor=pointer]:
+                  - img [ref=e973]
+              - button "Fullscreen" [ref=e976] [cursor=pointer]:
+                - img [ref=e977]
+            - img
+          - generic [ref=e986]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "7"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "6"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "4"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 27B+Gemini Pro Two Stage V3
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e1000]:
+              - button "Download plot as a PNG" [ref=e1002] [cursor=pointer]:
+                - img [ref=e1003]
+              - generic [ref=e1005]:
+                - button "Zoom" [ref=e1006] [cursor=pointer]:
+                  - img [ref=e1007]
+                - button "Pan" [ref=e1009] [cursor=pointer]:
+                  - img [ref=e1010]
+              - generic [ref=e1012]:
+                - button "Zoom in" [ref=e1013] [cursor=pointer]:
+                  - img [ref=e1014]
+                - button "Zoom out" [ref=e1016] [cursor=pointer]:
+                  - img [ref=e1017]
+                - button "Autoscale" [ref=e1019] [cursor=pointer]:
+                  - img [ref=e1020]
+                - button "Reset axes" [ref=e1022] [cursor=pointer]:
+                  - img [ref=e1023]
+              - button "Fullscreen" [ref=e1026] [cursor=pointer]:
+                - img [ref=e1027]
+            - img
+          - generic [ref=e1036]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "7"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "8"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "4"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 27B+Gemini Pro Two Stage V4
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e1050]:
+              - button "Download plot as a PNG" [ref=e1052] [cursor=pointer]:
+                - img [ref=e1053]
+              - generic [ref=e1055]:
+                - button "Zoom" [ref=e1056] [cursor=pointer]:
+                  - img [ref=e1057]
+                - button "Pan" [ref=e1059] [cursor=pointer]:
+                  - img [ref=e1060]
+              - generic [ref=e1062]:
+                - button "Zoom in" [ref=e1063] [cursor=pointer]:
+                  - img [ref=e1064]
+                - button "Zoom out" [ref=e1066] [cursor=pointer]:
+                  - img [ref=e1067]
+                - button "Autoscale" [ref=e1069] [cursor=pointer]:
+                  - img [ref=e1070]
+                - button "Reset axes" [ref=e1072] [cursor=pointer]:
+                  - img [ref=e1073]
+              - button "Fullscreen" [ref=e1076] [cursor=pointer]:
+                - img [ref=e1077]
+            - img
+          - generic [ref=e1086]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "6"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "3"
+                          - generic:
+                            - generic: "4"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "4"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 27B Vertex
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e1100]:
+              - button "Download plot as a PNG" [ref=e1102] [cursor=pointer]:
+                - img [ref=e1103]
+              - generic [ref=e1105]:
+                - button "Zoom" [ref=e1106] [cursor=pointer]:
+                  - img [ref=e1107]
+                - button "Pan" [ref=e1109] [cursor=pointer]:
+                  - img [ref=e1110]
+              - generic [ref=e1112]:
+                - button "Zoom in" [ref=e1113] [cursor=pointer]:
+                  - img [ref=e1114]
+                - button "Zoom out" [ref=e1116] [cursor=pointer]:
+                  - img [ref=e1117]
+                - button "Autoscale" [ref=e1119] [cursor=pointer]:
+                  - img [ref=e1120]
+                - button "Reset axes" [ref=e1122] [cursor=pointer]:
+                  - img [ref=e1123]
+              - button "Fullscreen" [ref=e1126] [cursor=pointer]:
+                - img [ref=e1127]
+            - img
+          - generic [ref=e1136]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "3"
+                          - generic:
+                            - generic: "3"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "5"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "4"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 4B+Gemini Flash Two Stage
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e1150]:
+              - button "Download plot as a PNG" [ref=e1152] [cursor=pointer]:
+                - img [ref=e1153]
+              - generic [ref=e1155]:
+                - button "Zoom" [ref=e1156] [cursor=pointer]:
+                  - img [ref=e1157]
+                - button "Pan" [ref=e1159] [cursor=pointer]:
+                  - img [ref=e1160]
+              - generic [ref=e1162]:
+                - button "Zoom in" [ref=e1163] [cursor=pointer]:
+                  - img [ref=e1164]
+                - button "Zoom out" [ref=e1166] [cursor=pointer]:
+                  - img [ref=e1167]
+                - button "Autoscale" [ref=e1169] [cursor=pointer]:
+                  - img [ref=e1170]
+                - button "Reset axes" [ref=e1172] [cursor=pointer]:
+                  - img [ref=e1173]
+              - button "Fullscreen" [ref=e1176] [cursor=pointer]:
+                - img [ref=e1177]
+            - img
+          - generic [ref=e1186]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "5"
+                          - generic:
+                            - generic: "3"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "1"
+                          - generic:
+                            - generic: "7"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "4"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 4B+Gemini Two Stage
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e1200]:
+              - button "Download plot as a PNG" [ref=e1202] [cursor=pointer]:
+                - img [ref=e1203]
+              - generic [ref=e1205]:
+                - button "Zoom" [ref=e1206] [cursor=pointer]:
+                  - img [ref=e1207]
+                - button "Pan" [ref=e1209] [cursor=pointer]:
+                  - img [ref=e1210]
+              - generic [ref=e1212]:
+                - button "Zoom in" [ref=e1213] [cursor=pointer]:
+                  - img [ref=e1214]
+                - button "Zoom out" [ref=e1216] [cursor=pointer]:
+                  - img [ref=e1217]
+                - button "Autoscale" [ref=e1219] [cursor=pointer]:
+                  - img [ref=e1220]
+                - button "Reset axes" [ref=e1222] [cursor=pointer]:
+                  - img [ref=e1223]
+              - button "Fullscreen" [ref=e1226] [cursor=pointer]:
+                - img [ref=e1227]
+            - img
+          - generic [ref=e1236]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: "4"
+                          - generic:
+                            - generic: "4"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "6"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "0"
+                          - generic:
+                            - generic: "2"
+                          - generic:
+                            - generic: "2"
+                  - generic:
+                    - generic:
+                      - generic: MET
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: UNKNOWN
+                  - generic:
+                    - generic:
+                      - generic: UNKNOWN
+                    - generic:
+                      - generic: NOT_MET
+                    - generic:
+                      - generic: MET
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Medgemma 4B Vertex
+                - generic:
+                  - generic: Predicted
+                - generic:
+                  - generic: Actual
+            - toolbar [ref=e1250]:
+              - button "Download plot as a PNG" [ref=e1252] [cursor=pointer]:
+                - img [ref=e1253]
+              - generic [ref=e1255]:
+                - button "Zoom" [ref=e1256] [cursor=pointer]:
+                  - img [ref=e1257]
+                - button "Pan" [ref=e1259] [cursor=pointer]:
+                  - img [ref=e1260]
+              - generic [ref=e1262]:
+                - button "Zoom in" [ref=e1263] [cursor=pointer]:
+                  - img [ref=e1264]
+                - button "Zoom out" [ref=e1266] [cursor=pointer]:
+                  - img [ref=e1267]
+                - button "Autoscale" [ref=e1269] [cursor=pointer]:
+                  - img [ref=e1270]
+                - button "Reset axes" [ref=e1272] [cursor=pointer]:
+                  - img [ref=e1273]
+              - button "Fullscreen" [ref=e1276] [cursor=pointer]:
+                - img [ref=e1277]
+            - img
+        - heading "Per-Class F1 Scores" [level=2] [ref=e1283]:
+          - text: Per-Class F1 Scores
+          - generic [ref=e1284]:
+            - link "Link to heading":
+              - /url: "#per-class-f1-scores"
+              - img
+        - generic [ref=e1290]:
+          - img:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: MET
+                  - generic:
+                    - generic: NOT_MET
+                  - generic:
+                    - generic: UNKNOWN
+                - generic:
+                  - generic:
+                    - generic: "0"
+                  - generic:
+                    - generic: "0.2"
+                  - generic:
+                    - generic: "0.4"
+                  - generic:
+                    - generic: "0.6"
+                  - generic:
+                    - generic: "0.8"
+                  - generic:
+                    - generic: "1"
+          - img:
+            - generic:
+              - generic [ref=e1306]:
+                - generic [ref=e1307]: Model
+                - generic [ref=e1310]: Gemini 3 Pro Preview
+                - generic [ref=e1318]: Gemini Pro+Gemini Flash Two Stage V3
+                - generic [ref=e1326]: Medgemma 1.5 4B
+                - generic [ref=e1334]: Medgemma 27B+Gemini Flash Two Stage
+                - generic [ref=e1342]: Medgemma 27B+Gemini Flash Two Stage V2
+                - generic [ref=e1350]: Medgemma 27B+Gemini Flash Two Stage V3
+                - generic [ref=e1358]: Medgemma 27B+Gemini Flash Two Stage V4
+                - generic [ref=e1366]: Medgemma 27B+Gemini Pro Two Stage V3
+                - generic [ref=e1374]: Medgemma 27B+Gemini Pro Two Stage V4
+                - generic [ref=e1382]: Medgemma 27B Vertex
+                - generic [ref=e1390]: Medgemma 4B+Gemini Flash Two Stage
+                - generic [ref=e1398]: Medgemma 4B+Gemini Two Stage
+                - generic [ref=e1406]: Medgemma 4B Vertex
+              - generic:
+                - generic:
+                  - generic: F1 Score by Class and Model
+              - generic:
+                - generic: Class
+              - generic:
+                - generic: F1
+          - toolbar [ref=e1413]:
+            - button "Download plot as a PNG" [ref=e1415] [cursor=pointer]:
+              - img [ref=e1416]
+            - generic [ref=e1418]:
+              - button "Zoom" [ref=e1419] [cursor=pointer]:
+                - img [ref=e1420]
+              - button "Pan" [ref=e1422] [cursor=pointer]:
+                - img [ref=e1423]
+            - generic [ref=e1425]:
+              - button "Zoom in" [ref=e1426] [cursor=pointer]:
+                - img [ref=e1427]
+              - button "Zoom out" [ref=e1429] [cursor=pointer]:
+                - img [ref=e1430]
+              - button "Autoscale" [ref=e1432] [cursor=pointer]:
+                - img [ref=e1433]
+              - button "Reset axes" [ref=e1435] [cursor=pointer]:
+                - img [ref=e1436]
+            - button "Fullscreen" [ref=e1439] [cursor=pointer]:
+              - img [ref=e1440]
+          - img
+        - heading "Cost & Latency" [level=2] [ref=e1446]:
+          - text: Cost & Latency
+          - generic [ref=e1447]:
+            - link "Link to heading":
+              - /url: "#cost-and-latency"
+              - img
+        - generic [ref=e1452]:
+          - button "Show/hide columns" [ref=e1456] [cursor=pointer]:
+            - img [ref=e1457]
+          - button "Download as CSV" [ref=e1462] [cursor=pointer]:
+            - img [ref=e1463]
+          - button "Search" [ref=e1468] [cursor=pointer]:
+            - img [ref=e1469]
+          - button "Fullscreen" [ref=e1474] [cursor=pointer]:
+            - img [ref=e1475]
+        - heading "Key Findings" [level=2] [ref=e1490]:
+          - text: Key Findings
+          - generic [ref=e1491]:
+            - link "Link to heading":
+              - /url: "#key-findings"
+              - img
+        - list [ref=e1496]:
+          - listitem [ref=e1497]:
+            - strong [ref=e1498]: MedGemma 27B is competitive with GPT-4
+            - text: on criterion-level matching (70% accuracy, F1 macro 0.722, Cohen's kappa 0.538 vs GPT-4 baseline 75%)
+          - listitem [ref=e1499]:
+            - strong [ref=e1500]: 27B dramatically outperforms 4B
+            - text: (70% vs 35% accuracy) — the larger model has much better instruction-following for structured JSON output
+          - listitem [ref=e1501]:
+            - strong [ref=e1502]: MedGemma 4B has systematic MET bias
+            - text: on exclusion criteria — model reasoning is often correct but the JSON label contradicts it (instruction-following failure, not a reasoning failure). Degraded further by max_tokens=512 TGI CUDA bug workaround
+          - listitem [ref=e1503]:
+            - strong [ref=e1504]: Gemini 3 Pro matches GPT-4 baseline
+            - text: at 75% accuracy, confirming it as a strong general-purpose option for criterion evaluation
+          - listitem [ref=e1505]:
+            - strong [ref=e1506]: Multi-model approach validated
+            - text: ": domain-specialized models (MedGemma 27B) approach general model (GPT-4) accuracy, supporting the orchestration narrative"
+        - heading "Audit Tables" [level=2] [ref=e1511]:
+          - text: Audit Tables
+          - generic [ref=e1512]:
+            - link "Link to heading":
+              - /url: "#audit-tables"
+              - img
+        - group [ref=e1515]:
+          - generic "keyboard_arrow_right Gemini 3 Pro Preview — Audit Table" [ref=e1516] [cursor=pointer]:
+            - generic [ref=e1517]:
+              - generic [ref=e1519]: keyboard_arrow_right
+              - paragraph [ref=e1522]: Gemini 3 Pro Preview — Audit Table
+        - group [ref=e1525]:
+          - generic "keyboard_arrow_right Gemini Pro+Gemini Flash Two Stage V3 — Audit Table" [ref=e1526] [cursor=pointer]:
+            - generic [ref=e1527]:
+              - generic [ref=e1529]: keyboard_arrow_right
+              - paragraph [ref=e1532]: Gemini Pro+Gemini Flash Two Stage V3 — Audit Table
+        - group [ref=e1535]:
+          - generic "keyboard_arrow_right Medgemma 1.5 4B — Audit Table" [ref=e1536] [cursor=pointer]:
+            - generic [ref=e1537]:
+              - generic [ref=e1539]: keyboard_arrow_right
+              - paragraph [ref=e1542]: Medgemma 1.5 4B — Audit Table
+        - group [ref=e1545]:
+          - generic "keyboard_arrow_right Medgemma 27B+Gemini Flash Two Stage — Audit Table" [ref=e1546] [cursor=pointer]:
+            - generic [ref=e1547]:
+              - generic [ref=e1549]: keyboard_arrow_right
+              - paragraph [ref=e1552]: Medgemma 27B+Gemini Flash Two Stage — Audit Table
+        - group [ref=e1555]:
+          - generic "keyboard_arrow_right Medgemma 27B+Gemini Flash Two Stage V2 — Audit Table" [ref=e1556] [cursor=pointer]:
+            - generic [ref=e1557]:
+              - generic [ref=e1559]: keyboard_arrow_right
+              - paragraph [ref=e1562]: Medgemma 27B+Gemini Flash Two Stage V2 — Audit Table
+        - group [ref=e1565]:
+          - generic "keyboard_arrow_right Medgemma 27B+Gemini Flash Two Stage V3 — Audit Table" [ref=e1566] [cursor=pointer]:
+            - generic [ref=e1567]:
+              - generic [ref=e1569]: keyboard_arrow_right
+              - paragraph [ref=e1572]: Medgemma 27B+Gemini Flash Two Stage V3 — Audit Table
+        - group [ref=e1575]:
+          - generic "keyboard_arrow_right Medgemma 27B+Gemini Flash Two Stage V4 — Audit Table" [ref=e1576] [cursor=pointer]:
+            - generic [ref=e1577]:
+              - generic [ref=e1579]: keyboard_arrow_right
+              - paragraph [ref=e1582]: Medgemma 27B+Gemini Flash Two Stage V4 — Audit Table
+        - group [ref=e1585]:
+          - generic "keyboard_arrow_right Medgemma 27B+Gemini Pro Two Stage V3 — Audit Table" [ref=e1586] [cursor=pointer]:
+            - generic [ref=e1587]:
+              - generic [ref=e1589]: keyboard_arrow_right
+              - paragraph [ref=e1592]: Medgemma 27B+Gemini Pro Two Stage V3 — Audit Table
+        - group [ref=e1595]:
+          - generic "keyboard_arrow_right Medgemma 27B+Gemini Pro Two Stage V4 — Audit Table" [ref=e1596] [cursor=pointer]:
+            - generic [ref=e1597]:
+              - generic [ref=e1599]: keyboard_arrow_right
+              - paragraph [ref=e1602]: Medgemma 27B+Gemini Pro Two Stage V4 — Audit Table
+        - group [ref=e1605]:
+          - generic "keyboard_arrow_right Medgemma 27B Vertex — Audit Table" [ref=e1606] [cursor=pointer]:
+            - generic [ref=e1607]:
+              - generic [ref=e1609]: keyboard_arrow_right
+              - paragraph [ref=e1612]: Medgemma 27B Vertex — Audit Table
+        - group [ref=e1615]:
+          - generic "keyboard_arrow_right Medgemma 4B+Gemini Flash Two Stage — Audit Table" [ref=e1616] [cursor=pointer]:
+            - generic [ref=e1617]:
+              - generic [ref=e1619]: keyboard_arrow_right
+              - paragraph [ref=e1622]: Medgemma 4B+Gemini Flash Two Stage — Audit Table
+        - group [ref=e1625]:
+          - generic "keyboard_arrow_right Medgemma 4B+Gemini Two Stage — Audit Table" [ref=e1626] [cursor=pointer]:
+            - generic [ref=e1627]:
+              - generic [ref=e1629]: keyboard_arrow_right
+              - paragraph [ref=e1632]: Medgemma 4B+Gemini Two Stage — Audit Table
+        - group [ref=e1635]:
+          - generic "keyboard_arrow_right Medgemma 4B Vertex — Audit Table" [ref=e1636] [cursor=pointer]:
+            - generic [ref=e1637]:
+              - generic [ref=e1639]: keyboard_arrow_right
+              - paragraph [ref=e1642]: Medgemma 4B Vertex — Audit Table
+  - img [ref=e1643]

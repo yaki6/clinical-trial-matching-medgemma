@@ -1,0 +1,27 @@
+[     295ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[     296ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[  105685ms] [WARNING] WebSocket onclose @ http://localhost:8501/static/js/index.Drusyo5m.js:150
+[  107102ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[  107103ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[  107209ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[  107209ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[  107311ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[  107312ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[  107512ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[  107512ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[  107714ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[  107714ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[  108121ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[  108122ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[  108494ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[  108495ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[  109313ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[  109314ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[  110016ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[  110018ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0
+[  111529ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/health:0
+[  111529ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/_stcore/host-config:0
+[  113062ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/health:0
+[  113067ms] [ERROR] Client Error in reaching server endpoint - No response received when attempting to reach /Pipeline_Demo/_stcore/health @ http://localhost:8501/static/js/index.Drusyo5m.js:148
+[  113077ms] [ERROR] Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal: @ http://localhost:8501/static/js/index.Drusyo5m.js:154
+[  113078ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8501/Pipeline_Demo/_stcore/host-config:0

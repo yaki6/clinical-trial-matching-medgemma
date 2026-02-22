@@ -1,0 +1,346 @@
+- generic [ref=e2]:
+  - generic [ref=e20]:
+    - button "keyboard_double_arrow_left" [ref=e58] [cursor=pointer]:
+      - generic [ref=e60]: keyboard_double_arrow_left
+    - list [ref=e23]:
+      - listitem [ref=e24]:
+        - link "app" [ref=e26] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e27]: app
+      - listitem [ref=e28]:
+        - link "Pipeline Demo" [ref=e30] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e31]: Pipeline Demo
+      - listitem [ref=e32]:
+        - link "Benchmark" [ref=e34] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e35]: Benchmark
+    - generic [ref=e63]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e67]
+      - generic [ref=e69]:
+        - paragraph [ref=e73]: Select Patient
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - generic [ref=e77]: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)
+            - combobox "Selected mpx1016 (43F, Lung adenocarcinoma with signet-ring...). Select Patient" [ref=e79]
+          - img "open" [ref=e81]
+      - paragraph [ref=e87]:
+        - strong [ref=e88]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - button "Search for Trials" [active] [ref=e91] [cursor=pointer]:
+        - paragraph [ref=e95]: Search for Trials
+      - group [ref=e98]:
+        - generic "settings Settings" [ref=e99] [cursor=pointer]:
+          - generic [ref=e100]:
+            - generic [ref=e102]: settings
+            - paragraph [ref=e105]: Settings
+  - generic [ref=e3]:
+    - banner [ref=e6]:
+      - generic [ref=e9]:
+        - button "Deploy" [ref=e11] [cursor=pointer]:
+          - generic [ref=e13]: Deploy
+        - button [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+    - generic [ref=e39]:
+      - heading "Find Clinical Trials" [level=1] [ref=e110]:
+        - text: Find Clinical Trials
+        - generic [ref=e111]:
+          - link "Link to heading":
+            - /url: "#find-clinical-trials"
+            - img
+      - paragraph [ref=e116]: This is an AI-assisted screening tool for informational purposes only. It does not constitute medical advice. Always consult with your healthcare provider and the trial's research team before making decisions about clinical trial participation.
+      - 'heading "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)" [level=3] [ref=e121]':
+        - text: "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)"
+        - generic [ref=e122]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016-43-f-lung-adenocarcinoma-with-signet-ring"
+            - img
+      - group [ref=e125]:
+        - generic "keyboard_arrow_right View Full Medical Record" [ref=e126] [cursor=pointer]:
+          - generic [ref=e127]:
+            - generic [ref=e129]: keyboard_arrow_right
+            - paragraph [ref=e132]: View Full Medical Record
+      - group [ref=e135]:
+        - 'generic "keyboard_arrow_right Medical Image: CT w/contrast (IV) — Axial" [ref=e136] [cursor=pointer]':
+          - generic [ref=e137]:
+            - generic [ref=e139]: keyboard_arrow_right
+            - paragraph [ref=e142]: "Medical Image: CT w/contrast (IV) — Axial"
+      - separator [ref=e147]
+      - group [ref=e150]:
+        - generic "keyboard_arrow_down Your Clinical Profile" [ref=e151] [cursor=pointer]:
+          - generic [ref=e152]:
+            - generic [ref=e154]: keyboard_arrow_down
+            - paragraph [ref=e157]: Your Clinical Profile
+        - generic [ref=e159]:
+          - paragraph [ref=e164]: "Here's what we extracted from your medical record:"
+          - generic [ref=e166]:
+            - paragraph [ref=e173]:
+              - strong [ref=e174]: Diagnosis
+            - paragraph [ref=e181]: Lung adenocarcinoma with signet-ring cell features
+          - generic [ref=e183]:
+            - paragraph [ref=e190]:
+              - strong [ref=e191]: Age & Sex
+            - paragraph [ref=e198]: "age: 43; sex: female"
+          - generic [ref=e200]:
+            - paragraph [ref=e207]:
+              - strong [ref=e208]: Imaging Results
+            - paragraph [ref=e215]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+          - generic [ref=e217]:
+            - paragraph [ref=e224]:
+              - strong [ref=e225]: Key Findings
+            - paragraph [ref=e232]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+          - generic [ref=e234]:
+            - paragraph [ref=e241]:
+              - strong [ref=e242]: Information Gaps
+            - paragraph [ref=e249]: Cancer stage, Performance status, Treatment history
+          - generic [ref=e251]:
+            - paragraph [ref=e258]:
+              - strong [ref=e259]: Current Symptoms
+            - paragraph [ref=e266]: shortness of breath with exertion, wheezing
+          - generic [ref=e268]:
+            - paragraph [ref=e275]:
+              - strong [ref=e276]: Pathology Results
+            - paragraph [ref=e283]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+          - generic [ref=e285]:
+            - paragraph [ref=e292]:
+              - strong [ref=e293]: Smoking History
+            - paragraph [ref=e300]: never smoker
+      - group [ref=e303]:
+        - generic "keyboard_arrow_down AI Image Analysis" [ref=e304] [cursor=pointer]:
+          - generic [ref=e305]:
+            - generic [ref=e307]: keyboard_arrow_down
+            - paragraph [ref=e310]: AI Image Analysis
+        - generic [ref=e316]:
+          - paragraph [ref=e317]:
+            - strong [ref=e318]: "Findings:"
+          - list [ref=e319]:
+            - listitem [ref=e320]:
+              - strong [ref=e321]: "Lung Parenchyma:"
+              - list [ref=e322]:
+                - listitem [ref=e323]: There is a 1.5 cm nodule in the right upper lobe (RUL).
+                - listitem [ref=e324]: There is a 1.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e325]: There is a 1.0 cm nodule in the right middle lobe (RML).
+                - listitem [ref=e326]: There is a 0.8 cm nodule in the left upper lobe (LUL).
+                - listitem [ref=e327]: There is a 0.6 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e328]: There is a 0.5 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e329]: There is a 0.4 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e330]: There is a 0.3 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e331]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e332]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e333]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e334]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e335]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e336]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e337]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e338]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e339]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e340]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e341]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e342]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e343]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e344]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e345]
+      - alert [ref=e384]:
+        - paragraph [ref=e389]: Found 63 clinical trials that may be relevant to your condition.
+      - separator [ref=e394]
+      - heading "Your Results" [level=3] [ref=e398]:
+        - text: Your Results
+        - generic [ref=e399]:
+          - link "Link to heading":
+            - /url: "#your-results"
+            - img
+      - generic [ref=e401]:
+        - heading "Your Trial Matching Results" [level=3] [ref=e407]:
+          - text: Your Trial Matching Results
+          - generic [ref=e408]:
+            - link "Link to heading":
+              - /url: "#your-trial-matching-results"
+              - img
+        - paragraph [ref=e413]:
+          - text: We found
+          - strong [ref=e414]: "3"
+          - text: clinical trials for your condition.
+        - paragraph [ref=e419]:
+          - text: ✅
+          - strong [ref=e420]: "0"
+          - text: trials you may be eligible for
+        - paragraph [ref=e425]:
+          - text: ❔
+          - strong [ref=e426]: "0"
+          - text: trials need more information
+        - paragraph [ref=e431]:
+          - text: ❌
+          - strong [ref=e432]: "3"
+          - text: trials you likely don't qualify for
+        - alert [ref=e435]:
+          - paragraph [ref=e440]: Based on available information, no matching trials were found. Your healthcare provider can help explore other options.
+      - generic [ref=e442]:
+        - heading "A Study to Investigate the Family History of Cancer in Patients With Non-small Cell Lung Cancer (FAHIC - Lung)." [level=3] [ref=e448]:
+          - text: A Study to Investigate the Family History of Cancer in Patients With Non-small Cell Lung Cancer (FAHIC - Lung).
+          - generic [ref=e449]:
+            - link "Link to heading":
+              - /url: "#a-study-to-investigate-the-family-history-of-cancer-in-patients-with-non-small-cell-lung-cancer-fahic-lung"
+              - img
+        - paragraph [ref=e454]: NCT06196424
+        - generic [ref=e456]:
+          - paragraph [ref=e463]:
+            - code [ref=e464]: N/A
+          - paragraph [ref=e471]:
+            - code [ref=e472]: RECRUITING
+        - paragraph [ref=e479]:
+          - strong [ref=e481]: You likely do not qualify for this trial
+        - separator [ref=e486]
+        - paragraph [ref=e491]:
+          - strong [ref=e492]: "Criteria you meet:"
+        - paragraph [ref=e497]:
+          - strong [ref=e499]: ✓
+          - text: Histopathological diagnosis of Non-Small Cell Lung Cancer (...
+        - paragraph [ref=e504]:
+          - strong [ref=e506]: ✓
+          - text: Age ≥ 18 years old
+        - paragraph [ref=e511]:
+          - strong [ref=e512]: "Criteria not met:"
+        - paragraph [ref=e517]:
+          - strong [ref=e519]: ✗
+          - text: Availability of familiar and/or personal anamnestic data of...
+        - paragraph [ref=e524]:
+          - strong [ref=e526]: ✗
+          - text: Unavailability of familiar and/or personal anamnestic data...
+        - paragraph [ref=e531]:
+          - strong [ref=e533]: ✗
+          - text: Patient's refusal
+        - paragraph [ref=e538]:
+          - strong [ref=e539]: "Needs further review:"
+        - paragraph [ref=e544]:
+          - strong [ref=e546]: "?"
+          - text: Signed informed consent
+        - group [ref=e549]:
+          - generic "keyboard_arrow_right View detailed eligibility breakdown" [ref=e550] [cursor=pointer]:
+            - generic [ref=e551]:
+              - generic [ref=e553]: keyboard_arrow_right
+              - paragraph [ref=e556]: View detailed eligibility breakdown
+        - paragraph [ref=e561]:
+          - link "View on ClinicalTrials.gov" [ref=e562] [cursor=pointer]:
+            - /url: https://clinicaltrials.gov/study/NCT06196424
+      - generic [ref=e564]:
+        - heading "Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)" [level=3] [ref=e570]:
+          - text: Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)
+          - generic [ref=e571]:
+            - link "Link to heading":
+              - /url: "#sacituzumab-tirumotecan-mk-2870-versus-chemotherapy-in-previously-treated-advanced-or-metastatic-nonsquamous-non-small-cell-lung-cancer-nsclc-with-egfr-mutations-or-other-genomic-alterations-mk-2870-004"
+              - img
+        - paragraph [ref=e576]: NCT06074588
+        - generic [ref=e578]:
+          - paragraph [ref=e585]:
+            - code [ref=e586]: PHASE3
+          - paragraph [ref=e593]:
+            - code [ref=e594]: RECRUITING
+        - paragraph [ref=e601]:
+          - strong [ref=e603]: You likely do not qualify for this trial
+        - separator [ref=e608]
+        - paragraph [ref=e613]:
+          - strong [ref=e614]: "Criteria you meet:"
+        - paragraph [ref=e619]:
+          - strong [ref=e621]: ✓
+          - text: Archival tumor tissue sample or newly obtained core, incisi...
+        - paragraph [ref=e626]:
+          - strong [ref=e627]: "Criteria not met:"
+        - paragraph [ref=e632]:
+          - strong [ref=e634]: ✗
+          - text: Histologically- or cytologically-documented advanced (Stage...
+        - paragraph [ref=e639]:
+          - strong [ref=e641]: ✗
+          - text: Documentation of locally assessed radiological disease prog...
+        - paragraph [ref=e646]:
+          - strong [ref=e648]: ✗
+          - text: Has predominantly squamous cell histology NSCLC.
+        - paragraph [ref=e653]:
+          - strong [ref=e654]: "Needs further review:"
+        - paragraph [ref=e659]:
+          - strong [ref=e661]: "?"
+          - text: Participants with genome mutations must have received 1 or...
+        - paragraph [ref=e666]:
+          - strong [ref=e668]: "?"
+          - text: Measurable disease per RECIST 1.1 as assessed by the local...
+        - paragraph [ref=e673]:
+          - strong [ref=e675]: "?"
+          - text: Participants who have AEs due to previous anticancer therap...
+        - paragraph [ref=e680]:
+          - strong [ref=e682]: "?"
+          - text: Participants who are hepatitis B surface antigen (HBsAg) po...
+        - paragraph [ref=e687]:
+          - strong [ref=e689]: "?"
+          - text: Human immunodeficiency virus (HIV)-infected participants mu...
+        - paragraph [ref=e694]:
+          - strong [ref=e696]: "?"
+          - text: Have an ECOG performance status of 0 or 1 within 3 days bef...
+        - group [ref=e699]:
+          - generic "keyboard_arrow_right View detailed eligibility breakdown" [ref=e700] [cursor=pointer]:
+            - generic [ref=e701]:
+              - generic [ref=e703]: keyboard_arrow_right
+              - paragraph [ref=e706]: View detailed eligibility breakdown
+        - paragraph [ref=e711]:
+          - link "View on ClinicalTrials.gov" [ref=e712] [cursor=pointer]:
+            - /url: https://clinicaltrials.gov/study/NCT06074588
+      - generic [ref=e714]:
+        - heading "Lung Cancer Biomarkers and Screening" [level=3] [ref=e720]:
+          - text: Lung Cancer Biomarkers and Screening
+          - generic [ref=e721]:
+            - link "Link to heading":
+              - /url: "#lung-cancer-biomarkers-and-screening"
+              - img
+        - paragraph [ref=e726]: NCT00301119
+        - generic [ref=e728]:
+          - paragraph [ref=e735]:
+            - code [ref=e736]: N/A
+          - paragraph [ref=e743]:
+            - code [ref=e744]: RECRUITING
+        - paragraph [ref=e751]:
+          - strong [ref=e753]: You likely do not qualify for this trial
+        - separator [ref=e758]
+        - paragraph [ref=e763]:
+          - strong [ref=e764]: "Criteria you meet:"
+        - paragraph [ref=e769]:
+          - strong [ref=e771]: ✓
+          - text: "DISEASE CHARACTERISTICS:"
+        - paragraph [ref=e776]:
+          - strong [ref=e778]: ✓
+          - text: Rule-Out Lung cancer group
+        - paragraph [ref=e783]:
+          - strong [ref=e785]: ✓
+          - text: Referred for evaluation of suspicious nodules with 1 of the...
+        - paragraph [ref=e790]:
+          - strong [ref=e792]: ✓
+          - text: Lung cancer
+        - paragraph [ref=e797]:
+          - strong [ref=e798]: "Criteria not met:"
+        - paragraph [ref=e803]:
+          - strong [ref=e805]: ✗
+          - text: Smoking history ≥ 20 pack years*
+        - paragraph [ref=e810]:
+          - strong [ref=e812]: ✗
+          - text: "NOTE: * Participants with < 20 pack years of smoking are..."
+        - paragraph [ref=e817]:
+          - strong [ref=e818]: "Needs further review:"
+        - paragraph [ref=e823]:
+          - strong [ref=e825]: "?"
+          - text: Screening Cohort
+        - paragraph [ref=e830]:
+          - strong [ref=e832]: "?"
+          - text: At high- or low-risk for lung cancer
+        - paragraph [ref=e837]:
+          - strong [ref=e839]: "?"
+          - text: With or without workplace exposure to asbestos
+        - paragraph [ref=e844]:
+          - strong [ref=e846]: "?"
+          - text: Nonmalignant nodules (control group)
+        - group [ref=e849]:
+          - generic "keyboard_arrow_right View detailed eligibility breakdown" [ref=e850] [cursor=pointer]:
+            - generic [ref=e851]:
+              - generic [ref=e853]: keyboard_arrow_right
+              - paragraph [ref=e856]: View detailed eligibility breakdown
+        - paragraph [ref=e861]:
+          - link "View on ClinicalTrials.gov" [ref=e862] [cursor=pointer]:
+            - /url: https://clinicaltrials.gov/study/NCT00301119
+      - separator [ref=e867]
+      - paragraph [ref=e872]: This is an AI-assisted screening tool for informational purposes only. It does not constitute medical advice. Always consult with your healthcare provider and the trial's research team before making decisions about clinical trial participation.

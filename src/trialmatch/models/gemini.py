@@ -125,6 +125,15 @@ class GeminiAdapter(ModelAdapter):
                 contents='Return JSON: {"status": "ok"}',
                 config={"response_mime_type": "application/json", "max_output_tokens": 50},
             )
-            return response.text is not None
+            if response is None:
+                return False
+            if getattr(response, "text", None):
+                return True
+            if getattr(response, "candidates", None):
+                return True
+            if getattr(response, "usage_metadata", None):
+                return True
+            # The request succeeded and returned a response object.
+            return True
         except Exception:
             return False

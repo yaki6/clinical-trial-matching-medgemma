@@ -11,7 +11,7 @@ Feature: Criterion-level eligibility evaluation
     When I build the criterion evaluation prompt
     Then the prompt contains the patient note
     And the prompt contains the criterion text
-    And the prompt asks for MET, NOT_MET, or UNKNOWN
+    And the prompt asks for eligible, not eligible, or unknown
 
   @implemented
   Scenario: Parse MET verdict from JSON

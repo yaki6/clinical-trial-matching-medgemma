@@ -1,0 +1,311 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - button "keyboard_double_arrow_left" [ref=e317] [cursor=pointer]:
+      - generic [ref=e319]: keyboard_double_arrow_left
+    - list [ref=e10]:
+      - listitem [ref=e11]:
+        - link "app" [ref=e13] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e14]: app
+      - listitem [ref=e15]:
+        - link "Pipeline Demo" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e18]: Pipeline Demo
+      - listitem [ref=e19]:
+        - link "Benchmark" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e22]: Benchmark
+    - generic [ref=e26]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e30]
+      - generic [ref=e32]:
+        - paragraph [ref=e36]: Select Patient
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e40]: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)
+            - combobox "Selected mpx1016 (43F, Lung adenocarcinoma with signet-ring...). Select Patient" [ref=e42]
+          - img "open" [ref=e44]
+      - paragraph [ref=e50]:
+        - strong [ref=e51]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - button "Search for Trials" [active] [ref=e54] [cursor=pointer]:
+        - paragraph [ref=e58]: Search for Trials
+      - group [ref=e61]:
+        - generic "settings Settings" [ref=e62] [cursor=pointer]:
+          - generic [ref=e63]:
+            - generic [ref=e65]: settings
+            - paragraph [ref=e68]: Settings
+  - generic [ref=e3]:
+    - banner [ref=e71]:
+      - generic [ref=e74]:
+        - button "Deploy" [ref=e76] [cursor=pointer]:
+          - generic [ref=e78]: Deploy
+        - button [ref=e80] [cursor=pointer]:
+          - img [ref=e81]
+    - generic [ref=e84]:
+      - heading "Find Clinical Trials" [level=1] [ref=e89]:
+        - text: Find Clinical Trials
+        - generic [ref=e90]:
+          - link "Link to heading":
+            - /url: "#find-clinical-trials"
+            - img
+      - paragraph [ref=e95]: This is an AI-assisted screening tool for informational purposes only. It does not constitute medical advice. Always consult with your healthcare provider and the trial's research team before making decisions about clinical trial participation.
+      - 'heading "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)" [level=3] [ref=e100]':
+        - text: "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)"
+        - generic [ref=e101]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016-43-f-lung-adenocarcinoma-with-signet-ring"
+            - img
+      - group [ref=e104]:
+        - generic "keyboard_arrow_right View Full Medical Record" [ref=e105] [cursor=pointer]:
+          - generic [ref=e106]:
+            - generic [ref=e108]: keyboard_arrow_right
+            - paragraph [ref=e111]: View Full Medical Record
+      - group [ref=e114]:
+        - generic "keyboard_arrow_right Information Gaps in Your Record" [ref=e115] [cursor=pointer]:
+          - generic [ref=e116]:
+            - generic [ref=e118]: keyboard_arrow_right
+            - paragraph [ref=e121]: Information Gaps in Your Record
+      - separator [ref=e126]
+      - group [ref=e129]:
+        - generic "keyboard_arrow_down Your Clinical Profile" [ref=e130] [cursor=pointer]:
+          - generic [ref=e131]:
+            - generic [ref=e133]: keyboard_arrow_down
+            - paragraph [ref=e136]: Your Clinical Profile
+        - generic [ref=e138]:
+          - paragraph [ref=e143]: "Here's what we extracted from your medical record:"
+          - generic [ref=e145]:
+            - paragraph [ref=e152]:
+              - strong [ref=e153]: Diagnosis
+            - paragraph [ref=e160]: Lung adenocarcinoma with signet-ring cell features
+          - generic [ref=e162]:
+            - paragraph [ref=e169]:
+              - strong [ref=e170]: Age & Sex
+            - paragraph [ref=e177]: "age: 43; sex: female"
+          - generic [ref=e179]:
+            - paragraph [ref=e186]:
+              - strong [ref=e187]: Imaging Results
+            - paragraph [ref=e194]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+          - generic [ref=e196]:
+            - paragraph [ref=e203]:
+              - strong [ref=e204]: Key Findings
+            - paragraph [ref=e211]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+          - generic [ref=e213]:
+            - paragraph [ref=e220]:
+              - strong [ref=e221]: Information Gaps
+            - paragraph [ref=e228]: Cancer stage, Performance status, Treatment history
+          - generic [ref=e230]:
+            - paragraph [ref=e237]:
+              - strong [ref=e238]: Current Symptoms
+            - paragraph [ref=e245]: shortness of breath with exertion, wheezing
+          - generic [ref=e247]:
+            - paragraph [ref=e254]:
+              - strong [ref=e255]: Pathology Results
+            - paragraph [ref=e262]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+          - generic [ref=e264]:
+            - paragraph [ref=e271]:
+              - strong [ref=e272]: Smoking History
+            - paragraph [ref=e279]: never smoker
+      - alert [ref=e322]:
+        - paragraph [ref=e327]: Found 63 clinical trials that may be relevant to your condition.
+      - separator [ref=e332]
+      - heading "Your Results" [level=3] [ref=e336]:
+        - text: Your Results
+        - generic [ref=e337]:
+          - link "Link to heading":
+            - /url: "#your-results"
+            - img
+      - generic [ref=e339]:
+        - heading "Your Trial Matching Results" [level=3] [ref=e345]:
+          - text: Your Trial Matching Results
+          - generic [ref=e346]:
+            - link "Link to heading":
+              - /url: "#your-trial-matching-results"
+              - img
+        - paragraph [ref=e351]:
+          - text: We found
+          - strong [ref=e352]: "3"
+          - text: clinical trials for your condition.
+        - paragraph [ref=e357]:
+          - text: ✅
+          - strong [ref=e358]: "0"
+          - text: trials you may be eligible for
+        - paragraph [ref=e363]:
+          - text: ❔
+          - strong [ref=e364]: "0"
+          - text: trials need more information
+        - paragraph [ref=e369]:
+          - text: ❌
+          - strong [ref=e370]: "3"
+          - text: trials you likely don't qualify for
+        - alert [ref=e373]:
+          - paragraph [ref=e378]: Based on available information, no matching trials were found. Your healthcare provider can help explore other options.
+      - generic [ref=e380]:
+        - heading "A Study to Investigate the Family History of Cancer in Patients With Non-small Cell Lung Cancer (FAHIC - Lung)." [level=3] [ref=e386]:
+          - text: A Study to Investigate the Family History of Cancer in Patients With Non-small Cell Lung Cancer (FAHIC - Lung).
+          - generic [ref=e387]:
+            - link "Link to heading":
+              - /url: "#a-study-to-investigate-the-family-history-of-cancer-in-patients-with-non-small-cell-lung-cancer-fahic-lung"
+              - img
+        - paragraph [ref=e392]: NCT06196424
+        - generic [ref=e394]:
+          - paragraph [ref=e401]:
+            - code [ref=e402]: N/A
+          - paragraph [ref=e409]:
+            - code [ref=e410]: RECRUITING
+        - paragraph [ref=e417]:
+          - strong [ref=e419]: You likely do not qualify for this trial
+        - separator [ref=e424]
+        - paragraph [ref=e429]:
+          - strong [ref=e430]: "Criteria you meet:"
+        - paragraph [ref=e435]:
+          - strong [ref=e437]: \u2713
+          - text: Histopathological diagnosis of Non-Small Cell Lung Cancer (...
+        - paragraph [ref=e442]:
+          - strong [ref=e444]: \u2713
+          - text: Age ≥ 18 years old
+        - paragraph [ref=e449]:
+          - strong [ref=e450]: "Criteria not met:"
+        - paragraph [ref=e455]:
+          - strong [ref=e457]: \u2717
+          - text: Availability of familiar and/or personal anamnestic data of...
+        - paragraph [ref=e462]:
+          - strong [ref=e464]: \u2717
+          - text: Unavailability of familiar and/or personal anamnestic data...
+        - paragraph [ref=e469]:
+          - strong [ref=e471]: \u2717
+          - text: Patient's refusal
+        - paragraph [ref=e476]:
+          - strong [ref=e477]: "Needs further review:"
+        - paragraph [ref=e482]:
+          - strong [ref=e484]: "?"
+          - text: Signed informed consent
+        - group [ref=e487]:
+          - generic "keyboard_arrow_right View detailed eligibility breakdown" [ref=e488] [cursor=pointer]:
+            - generic [ref=e489]:
+              - generic [ref=e491]: keyboard_arrow_right
+              - paragraph [ref=e494]: View detailed eligibility breakdown
+        - paragraph [ref=e499]:
+          - link "View on ClinicalTrials.gov" [ref=e500] [cursor=pointer]:
+            - /url: https://clinicaltrials.gov/study/NCT06196424
+      - generic [ref=e502]:
+        - heading "Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)" [level=3] [ref=e508]:
+          - text: Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)
+          - generic [ref=e509]:
+            - link "Link to heading":
+              - /url: "#sacituzumab-tirumotecan-mk-2870-versus-chemotherapy-in-previously-treated-advanced-or-metastatic-nonsquamous-non-small-cell-lung-cancer-nsclc-with-egfr-mutations-or-other-genomic-alterations-mk-2870-004"
+              - img
+        - paragraph [ref=e514]: NCT06074588
+        - generic [ref=e516]:
+          - paragraph [ref=e523]:
+            - code [ref=e524]: PHASE3
+          - paragraph [ref=e531]:
+            - code [ref=e532]: RECRUITING
+        - paragraph [ref=e539]:
+          - strong [ref=e541]: You likely do not qualify for this trial
+        - separator [ref=e546]
+        - paragraph [ref=e551]:
+          - strong [ref=e552]: "Criteria you meet:"
+        - paragraph [ref=e557]:
+          - strong [ref=e559]: \u2713
+          - text: Archival tumor tissue sample or newly obtained core, incisi...
+        - paragraph [ref=e564]:
+          - strong [ref=e565]: "Criteria not met:"
+        - paragraph [ref=e570]:
+          - strong [ref=e572]: \u2717
+          - text: Histologically- or cytologically-documented advanced (Stage...
+        - paragraph [ref=e577]:
+          - strong [ref=e579]: \u2717
+          - text: Documentation of locally assessed radiological disease prog...
+        - paragraph [ref=e584]:
+          - strong [ref=e586]: \u2717
+          - text: Has predominantly squamous cell histology NSCLC.
+        - paragraph [ref=e591]:
+          - strong [ref=e592]: "Needs further review:"
+        - paragraph [ref=e597]:
+          - strong [ref=e599]: "?"
+          - text: Participants with genome mutations must have received 1 or...
+        - paragraph [ref=e604]:
+          - strong [ref=e606]: "?"
+          - text: Measurable disease per RECIST 1.1 as assessed by the local...
+        - paragraph [ref=e611]:
+          - strong [ref=e613]: "?"
+          - text: Participants who have AEs due to previous anticancer therap...
+        - paragraph [ref=e618]:
+          - strong [ref=e620]: "?"
+          - text: Participants who are hepatitis B surface antigen (HBsAg) po...
+        - paragraph [ref=e625]:
+          - strong [ref=e627]: "?"
+          - text: Human immunodeficiency virus (HIV)-infected participants mu...
+        - paragraph [ref=e632]:
+          - strong [ref=e634]: "?"
+          - text: Have an ECOG performance status of 0 or 1 within 3 days bef...
+        - group [ref=e637]:
+          - generic "keyboard_arrow_right View detailed eligibility breakdown" [ref=e638] [cursor=pointer]:
+            - generic [ref=e639]:
+              - generic [ref=e641]: keyboard_arrow_right
+              - paragraph [ref=e644]: View detailed eligibility breakdown
+        - paragraph [ref=e649]:
+          - link "View on ClinicalTrials.gov" [ref=e650] [cursor=pointer]:
+            - /url: https://clinicaltrials.gov/study/NCT06074588
+      - generic [ref=e652]:
+        - heading "Lung Cancer Biomarkers and Screening" [level=3] [ref=e658]:
+          - text: Lung Cancer Biomarkers and Screening
+          - generic [ref=e659]:
+            - link "Link to heading":
+              - /url: "#lung-cancer-biomarkers-and-screening"
+              - img
+        - paragraph [ref=e664]: NCT00301119
+        - generic [ref=e666]:
+          - paragraph [ref=e673]:
+            - code [ref=e674]: N/A
+          - paragraph [ref=e681]:
+            - code [ref=e682]: RECRUITING
+        - paragraph [ref=e689]:
+          - strong [ref=e691]: You likely do not qualify for this trial
+        - separator [ref=e696]
+        - paragraph [ref=e701]:
+          - strong [ref=e702]: "Criteria you meet:"
+        - paragraph [ref=e707]:
+          - strong [ref=e709]: \u2713
+          - text: "DISEASE CHARACTERISTICS:"
+        - paragraph [ref=e714]:
+          - strong [ref=e716]: \u2713
+          - text: Rule-Out Lung cancer group
+        - paragraph [ref=e721]:
+          - strong [ref=e723]: \u2713
+          - text: Referred for evaluation of suspicious nodules with 1 of the...
+        - paragraph [ref=e728]:
+          - strong [ref=e730]: \u2713
+          - text: Lung cancer
+        - paragraph [ref=e735]:
+          - strong [ref=e736]: "Criteria not met:"
+        - paragraph [ref=e741]:
+          - strong [ref=e743]: \u2717
+          - text: Smoking history ≥ 20 pack years*
+        - paragraph [ref=e748]:
+          - strong [ref=e750]: \u2717
+          - text: "NOTE: * Participants with < 20 pack years of smoking are..."
+        - paragraph [ref=e755]:
+          - strong [ref=e756]: "Needs further review:"
+        - paragraph [ref=e761]:
+          - strong [ref=e763]: "?"
+          - text: Screening Cohort
+        - paragraph [ref=e768]:
+          - strong [ref=e770]: "?"
+          - text: At high- or low-risk for lung cancer
+        - paragraph [ref=e775]:
+          - strong [ref=e777]: "?"
+          - text: With or without workplace exposure to asbestos
+        - paragraph [ref=e782]:
+          - strong [ref=e784]: "?"
+          - text: Nonmalignant nodules (control group)
+        - group [ref=e787]:
+          - generic "keyboard_arrow_right View detailed eligibility breakdown" [ref=e788] [cursor=pointer]:
+            - generic [ref=e789]:
+              - generic [ref=e791]: keyboard_arrow_right
+              - paragraph [ref=e794]: View detailed eligibility breakdown
+        - paragraph [ref=e799]:
+          - link "View on ClinicalTrials.gov" [ref=e800] [cursor=pointer]:
+            - /url: https://clinicaltrials.gov/study/NCT00301119
+      - separator [ref=e805]
+      - paragraph [ref=e810]: This is an AI-assisted screening tool for informational purposes only. It does not constitute medical advice. Always consult with your healthcare provider and the trial's research team before making decisions about clinical trial participation.

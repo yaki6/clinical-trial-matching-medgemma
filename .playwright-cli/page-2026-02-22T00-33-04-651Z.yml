@@ -1,0 +1,227 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - list [ref=e10]:
+      - listitem [ref=e11]:
+        - link "app" [ref=e13] [cursor=pointer]:
+          - /url: http://localhost:8502/
+          - generic [ref=e14]: app
+      - listitem [ref=e15]:
+        - link "Pipeline Demo" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8502/Pipeline_Demo
+          - generic [ref=e18]: Pipeline Demo
+      - listitem [ref=e19]:
+        - link "Benchmark" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8502/Benchmark
+          - generic [ref=e22]: Benchmark
+    - generic [ref=e26]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e30]
+      - generic [ref=e32]:
+        - paragraph [ref=e36]: Select Patient
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e40]: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)
+            - combobox "Selected mpx1016 (43F, Lung adenocarcinoma with signet-ring...). Select Patient" [ref=e42]
+          - img "open" [ref=e44]
+      - paragraph [ref=e50]:
+        - strong [ref=e51]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - button "Search for Trials" [ref=e54] [cursor=pointer]:
+        - paragraph [ref=e58]: Search for Trials
+      - group [ref=e61]:
+        - generic "settings Settings" [ref=e62] [cursor=pointer]:
+          - generic [ref=e63]:
+            - generic [ref=e65]: settings
+            - paragraph [ref=e68]: Settings
+  - generic [ref=e3]:
+    - banner [ref=e71]:
+      - generic [ref=e74]:
+        - button "Deploy" [ref=e76] [cursor=pointer]:
+          - generic [ref=e78]: Deploy
+        - button [ref=e80] [cursor=pointer]:
+          - img [ref=e81]
+    - generic [ref=e84]:
+      - heading "Find Clinical Trials" [level=1] [ref=e89]:
+        - text: Find Clinical Trials
+        - generic [ref=e90]:
+          - link "Link to heading":
+            - /url: "#find-clinical-trials"
+            - img
+      - paragraph [ref=e95]: This is an AI-assisted screening tool for informational purposes only. It does not constitute medical advice. Always consult with your healthcare provider and the trial's research team before making decisions about clinical trial participation.
+      - 'heading "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)" [level=3] [ref=e100]':
+        - text: "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)"
+        - generic [ref=e101]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016-43-f-lung-adenocarcinoma-with-signet-ring"
+            - img
+      - group [ref=e104]:
+        - generic "keyboard_arrow_right View Full Medical Record" [ref=e105] [cursor=pointer]:
+          - generic [ref=e106]:
+            - generic [ref=e108]: keyboard_arrow_right
+            - paragraph [ref=e111]: View Full Medical Record
+      - group [ref=e114]:
+        - 'generic "keyboard_arrow_down Medical Image: CT w/contrast (IV) — Axial" [active] [ref=e435] [cursor=pointer]':
+          - generic [ref=e116]:
+            - generic [ref=e437]: keyboard_arrow_down
+            - paragraph [ref=e121]: "Medical Image: CT w/contrast (IV) — Axial"
+        - generic [ref=e439]:
+          - generic [ref=e442]:
+            - button "Fullscreen" [ref=e447] [cursor=pointer]:
+              - img [ref=e448]
+            - img "0" [ref=e453]
+          - paragraph [ref=e458]: Contrast enhanced chest CT shows diffuse increased interstitial markings involving the right middle and lower lobes.
+      - separator [ref=e126]
+      - group [ref=e129]:
+        - generic "keyboard_arrow_down Your Clinical Profile" [ref=e130] [cursor=pointer]:
+          - generic [ref=e131]:
+            - generic [ref=e133]: keyboard_arrow_down
+            - paragraph [ref=e136]: Your Clinical Profile
+        - generic [ref=e138]:
+          - paragraph [ref=e143]: "Here's what we extracted from your medical record:"
+          - generic [ref=e145]:
+            - paragraph [ref=e152]:
+              - strong [ref=e153]: Diagnosis
+            - paragraph [ref=e160]: Lung adenocarcinoma with signet-ring cell features
+          - generic [ref=e162]:
+            - paragraph [ref=e169]:
+              - strong [ref=e170]: Age & Sex
+            - paragraph [ref=e177]: "age: 43; sex: female"
+          - generic [ref=e179]:
+            - paragraph [ref=e186]:
+              - strong [ref=e187]: Imaging Results
+            - paragraph [ref=e194]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+          - generic [ref=e196]:
+            - paragraph [ref=e203]:
+              - strong [ref=e204]: Key Findings
+            - paragraph [ref=e211]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+          - generic [ref=e213]:
+            - paragraph [ref=e220]:
+              - strong [ref=e221]: Information Gaps
+            - paragraph [ref=e228]: Cancer stage, Performance status, Treatment history
+          - generic [ref=e230]:
+            - paragraph [ref=e237]:
+              - strong [ref=e238]: Current Symptoms
+            - paragraph [ref=e245]: shortness of breath with exertion, wheezing
+          - generic [ref=e247]:
+            - paragraph [ref=e254]:
+              - strong [ref=e255]: Pathology Results
+            - paragraph [ref=e262]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+          - generic [ref=e264]:
+            - paragraph [ref=e271]:
+              - strong [ref=e272]: Smoking History
+            - paragraph [ref=e279]: never smoker
+          - generic [ref=e281]:
+            - paragraph [ref=e288]:
+              - strong [ref=e289]: AI Image Findings
+            - generic [ref=e295]:
+              - paragraph [ref=e296]: "topic_id: mpx1016; image_path: ingest_design/MedPix-2-0/images/MPX1016_synpic34317.png; prompt: What abnormalities do you see in this chest CT scan? Focus on lung parenchyma, pleural space, and any masses or nodules. Describe location, size, and characteristics.; raw_response: What abnormalities do you see in this chest CT scan? Focus on lung parenchyma, pleural space, and any masses or nodules. Describe location, size, and characteristics."
+              - paragraph [ref=e297]:
+                - strong [ref=e298]: "Findings:"
+              - list [ref=e299]:
+                - listitem [ref=e300]:
+                  - paragraph [ref=e301]:
+                    - strong [ref=e302]: "Lung Parenchyma:"
+                  - list [ref=e303]:
+                    - listitem [ref=e304]: There is a 1.5 cm nodule in the right upper lobe (RUL).
+                    - listitem [ref=e305]: There is a 1.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e306]: There is a 1.0 cm nodule in the right middle lobe (RML).
+                    - listitem [ref=e307]: There is a 0.8 cm nodule in the left upper lobe (LUL).
+                    - listitem [ref=e308]: There is a 0.6 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e309]: There is a 0.5 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e310]: There is a 0.4 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e311]: There is a 0.3 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e312]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e313]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e314]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e315]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e316]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e317]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e318]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e319]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e320]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e321]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e322]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e323]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e324]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e325]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e326]:
+                      - text: "; extracted_text:"
+                      - strong [ref=e327]: "Findings:"
+                - listitem [ref=e328]:
+                  - paragraph [ref=e329]:
+                    - strong [ref=e330]: "Lung Parenchyma:"
+                  - list [ref=e331]:
+                    - listitem [ref=e332]: There is a 1.5 cm nodule in the right upper lobe (RUL).
+                    - listitem [ref=e333]: There is a 1.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e334]: There is a 1.0 cm nodule in the right middle lobe (RML).
+                    - listitem [ref=e335]: There is a 0.8 cm nodule in the left upper lobe (LUL).
+                    - listitem [ref=e336]: There is a 0.6 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e337]: There is a 0.5 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e338]: There is a 0.4 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e339]: There is a 0.3 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e340]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e341]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e342]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e343]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e344]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e345]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e346]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e347]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e348]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e349]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e350]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e351]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e352]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e353]: "There is a 0.2 cm nodule in the left lower lobe (LLL). *; latency_seconds: 31.6; timestamp: 2026-02-21T23:13:02.458795+00:00; model: medgemma-1.5-4b-it-hae"
+      - group [ref=e356]:
+        - generic "keyboard_arrow_down AI Image Analysis" [ref=e357] [cursor=pointer]:
+          - generic [ref=e358]:
+            - generic [ref=e360]: keyboard_arrow_down
+            - paragraph [ref=e363]: AI Image Analysis
+        - generic [ref=e369]:
+          - paragraph [ref=e370]:
+            - strong [ref=e371]: "Findings:"
+          - list [ref=e372]:
+            - listitem [ref=e373]:
+              - strong [ref=e374]: "Lung Parenchyma:"
+              - list [ref=e375]:
+                - listitem [ref=e376]: There is a 1.5 cm nodule in the right upper lobe (RUL).
+                - listitem [ref=e377]: There is a 1.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e378]: There is a 1.0 cm nodule in the right middle lobe (RML).
+                - listitem [ref=e379]: There is a 0.8 cm nodule in the left upper lobe (LUL).
+                - listitem [ref=e380]: There is a 0.6 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e381]: There is a 0.5 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e382]: There is a 0.4 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e383]: There is a 0.3 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e384]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e385]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e386]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e387]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e388]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e389]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e390]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e391]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e392]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e393]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e394]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e395]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e396]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                - listitem [ref=e397]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                - listitem [ref=e398]
+      - group [ref=e401]:
+        - generic "keyboard_arrow_right Finding Matching Trials" [ref=e402] [cursor=pointer]:
+          - generic [ref=e403]:
+            - generic [ref=e405]: keyboard_arrow_right
+            - paragraph [ref=e408]: Finding Matching Trials
+      - group [ref=e411]:
+        - generic "keyboard_arrow_right Checking Your Eligibility" [ref=e412] [cursor=pointer]:
+          - generic [ref=e413]:
+            - generic [ref=e415]: keyboard_arrow_right
+            - paragraph [ref=e418]: Checking Your Eligibility
+      - separator [ref=e423]
+      - heading "Your Results" [level=3] [ref=e428]:
+        - text: Your Results
+        - generic [ref=e429]:
+          - link "Link to heading":
+            - /url: "#your-results"
+            - img
+      - paragraph [ref=e434]: Click 'Search for Trials' above to find matching clinical trials.

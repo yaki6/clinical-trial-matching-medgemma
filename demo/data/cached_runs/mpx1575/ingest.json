@@ -1,0 +1,46 @@
+{
+  "patient_note": "## Clinical History\nAn 86-year-old male with a past medical history of hypertension, atrial fibrillation, hypothyroidism, idiopathic pulmonary fibrosis, dementia, and depression was transferred from his assisted living facility for a three-week history of decreased oral intake, dry cough, increased confusion, and recent hypotension. He was admitted for bilateral pneumonia and malnutrition.\n\n## Physical Exam\nThe patient is an 86-year-old, well-developed but poorly nourished male with dementia, who is a poor historian. He complains of cough and poor appetite. Pulmonary exam reveals bilateral rales and rhonchi. The cardiovascular exam is notable for an irregular rate and rhythm. His skin is pale, warm, and dry. The abdomen is non-tender and non-distended with positive bowel sounds. Extremities are without edema.\n\n## Imaging Findings\nAxial CT of the chest demonstrates extensive bilateral pulmonary abnormalities. There are numerous, variably sized nodules and areas of consolidation throughout both lungs, more prominent on the right. These findings are superimposed on a background of severe fibrotic changes, including reticulation, traction bronchiectasis, and honeycombing, particularly in the lower lobes, consistent with a usual interstitial pneumonia (UIP) pattern. The combination is suggestive of metastatic disease in the setting of underlying idiopathic pulmonary fibrosis.\n\n## Assessment & Plan\nThe patient is an 86-year-old male with multiple comorbidities, including idiopathic pulmonary fibrosis, admitted for pneumonia and malnutrition. Labs were significant for leukocytosis (WBC 17.7) and hypoalbuminemia (Alb 2.8). Blood cultures were negative, but a respiratory culture grew Candida. A bronchoscopy confirmed a new diagnosis of metastatic Squamous Cell Non-small Cell Lung Cancer.\n\n## Demographics\nThe patient is an 86-year-old male.\n\n## Missing Info\nInformation not available in the provided record includes smoking history, cancer stage, and performance status (e.g., ECOG).",
+  "key_facts": {
+    "primary_diagnosis": "metastatic Squamous Cell Non-small Cell Lung Cancer",
+    "age": "86",
+    "sex": "male",
+    "imaging_findings": "description: Axial CT of the chest shows extensive bilateral pulmonary abnormalities, including numerous variably sized nodules and areas of consolidation, more prominent in the right lung. These are superimposed on a background of severe fibrotic changes with a lower lobe predominance, featuring reticulation, traction bronchiectasis, and honeycombing, consistent with a usual interstitial pneumonia (UIP) pattern.; key_features: Bilateral pulmonary nodules, Confluent opacities/consolidation, Reticulation, Traction bronchiectasis, Honeycombing, Lower lobe predominance of fibrotic changes",
+    "key_findings": [
+      "History of idiopathic pulmonary fibrosis",
+      "Decreased PO intake",
+      "Dry cough",
+      "Increased confusion",
+      "Hypotension",
+      "Bilateral rales and ronchi",
+      "Leukocytosis (WBC 17.7)",
+      "Low albumin (2.8)",
+      "Bronchoscopy positive for metastatic Squamous Cell NSCLC"
+    ],
+    "missing_info": [
+      "smoking_history",
+      "performance_status",
+      "cancer_stage"
+    ],
+    "comorbidities": [
+      "HTN",
+      "Afib",
+      "hypothyroidism",
+      "idiopathic pulmonary fibrosis",
+      "dementia",
+      "depression",
+      "bilateral pneumonia",
+      "malnutrition"
+    ],
+    "lab_results": "WBC: 17.7; HGB: 13.4; HCT: 40.7; Plt: 417; Na: 144; K: 3.9; CL: 106; CO2: 27; BUN: 17; Cr: 1.35; Gluc: 92; Alb: 2.8",
+    "medgemma_imaging": {
+      "topic_id": "mpx1575",
+      "image_path": "ingest_design/MedPix-2-0/images/MPX1575_synpic39398.png",
+      "prompt": "Analyze this CT image. Identify any pulmonary masses, fibrotic changes, honeycombing, pleural effusions, or lymphadenopathy. Describe findings systematically.",
+      "raw_response": "Analyze this CT image. Identify any pulmonary masses, fibrotic changes, honeycombing, pleural effusions, or lymphadenopathy. Describe findings systematically.\n\n**Image Analysis:**\n\n*   **Lung Fields:** The lung fields appear relatively clear, with no obvious consolidation or infiltrates.\n*   **Pleural Spaces:** There are no significant pleural effusions visible.\n*   **Mediastinum:** The mediastinum appears unremarkable.\n*   **Hila:** The hila are unremarkable.\n*   **Bones:** The visualized bony structures appear normal.\n*   **Soft Tissues:** The soft tissues are unremarkable.\n\n**Findings:**\n\n*   No pulmonary masses are identified.\n*   No significant fibrotic changes are identified.\n*   No honeycombing is identified.\n*   No pleural effusions are identified.\n*   No lymphadenopathy is identified.\n\n**Conclusion:**\n\nThe CT scan shows no significant abnormalities in the lungs, pleura, mediastinum, or visualized bones.\n\n**Disclaimer:** This analysis is based solely on the provided image and should not be considered a definitive diagnosis. A radiologist's interpretation is required for a complete assessment.\n\n**Please provide the CT image for analysis.**\n\n**Analysis of the provided CT image:**\n\n1.  **Lung Fields:** The lung fields appear generally clear. There is no evidence of consolidation, atelectasis, or significant infiltrates.\n2.  **Pleural Spaces:** No significant pleural effusions are visible. The pleural lines appear sharp.\n3.  **Mediastinum:** The mediastinum appears unremarkable in width and contour. No obvious masses or lymphadenopathy are seen.\n4.  **Hila:** The hila appear normal in size and shape. No obvious enlargement or masses are noted.\n5.  **Bones:** The visualized bony structures (ribs, clavicles, thoracic spine) appear unremarkable.\n6.  **Soft Tissues:** The soft tissues are unremarkable.\n\n**Overall Findings:**\n\nThe CT scan shows no evidence of pulmonary masses, significant fibrotic changes, honeycombing, pleural effusions, or lymphadenopathy. The lung parenchyma appears relatively normal.\n\n**Disclaimer:** This interpretation is based on the provided image and does not constitute a medical diagnosis. A radiologist's formal report is necessary for a complete assessment.\n\n**Please provide the CT image for analysis.**\n\n**Analysis of the provided CT image:**\n\n1.  **Lung Fields:** The lung fields appear generally clear. There is no evidence of consolidation, atelectasis, or significant infiltrates.\n2.  **",
+      "extracted_text": "**Image Analysis:**\n\n*   **Lung Fields:** The lung fields appear relatively clear, with no obvious consolidation or infiltrates.\n*   **Pleural Spaces:** There are no significant pleural effusions visible.\n*   **Mediastinum:** The mediastinum appears unremarkable.\n*   **Hila:** The hila are unremarkable.\n*   **Bones:** The visualized bony structures appear normal.\n*   **Soft Tissues:** The soft tissues are unremarkable.\n\n**Findings:**\n\n*   No pulmonary masses are identified.\n*   No significant fibrotic changes are identified.\n*   No honeycombing is identified.\n*   No pleural effusions are identified.\n*   No lymphadenopathy is identified.\n\n**Conclusion:**\n\nThe CT scan shows no significant abnormalities in the lungs, pleura, mediastinum, or visualized bones.\n\n**Disclaimer:** This analysis is based solely on the provided image and should not be considered a definitive diagnosis. A radiologist's interpretation is required for a complete assessment.\n\n**Please provide the CT image for analysis.**\n\n**Analysis of the provided CT image:**\n\n1.  **Lung Fields:** The lung fields appear generally clear. There is no evidence of consolidation, atelectasis, or significant infiltrates.\n2.  **Pleural Spaces:** No significant pleural effusions are visible. The pleural lines appear sharp.\n3.  **Mediastinum:** The mediastinum appears unremarkable in width and contour. No obvious masses or lymphadenopathy are seen.\n4.  **Hila:** The hila appear normal in size and shape. No obvious enlargement or masses are noted.\n5.  **Bones:** The visualized bony structures (ribs, clavicles, thoracic spine) appear unremarkable.\n6.  **Soft Tissues:** The soft tissues are unremarkable.\n\n**Overall Findings:**\n\nThe CT scan shows no evidence of pulmonary masses, significant fibrotic changes, honeycombing, pleural effusions, or lymphadenopathy. The lung parenchyma appears relatively normal.\n\n**Disclaimer:** This interpretation is based on the provided image and does not constitute a medical diagnosis. A radiologist's formal report is necessary for a complete assessment.\n\n**Please provide the CT image for analysis.**\n\n**Analysis of the provided CT image:**\n\n1.  **Lung Fields:** The lung fields appear generally clear. There is no evidence of consolidation, atelectasis, or significant infiltrates.\n2.  **",
+      "latency_seconds": 38.7,
+      "timestamp": "2026-02-21T23:13:41.149747+00:00",
+      "model": "medgemma-1.5-4b-it-hae"
+    }
+  }
+}

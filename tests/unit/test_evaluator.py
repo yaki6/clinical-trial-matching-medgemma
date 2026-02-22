@@ -388,6 +388,37 @@ def test_evaluate_criterion_returns_result():
     assert result.evidence_sentences == [0]
 
 
+def test_evaluate_criterion_emits_trace_events():
+    mock_adapter = AsyncMock()
+    mock_adapter.name = "test-model"
+    mock_adapter.generate.return_value = ModelResponse(
+        text='{"label": "eligible", "reasoning": "criterion met", "evidence_sentences": [1]}',
+        input_tokens=180,
+        output_tokens=22,
+        latency_ms=300.0,
+        estimated_cost=0.004,
+    )
+    events: list[tuple[str, dict]] = []
+
+    result = asyncio.run(
+        evaluate_criterion(
+            patient_note="Patient note",
+            criterion_text="Age >= 18",
+            criterion_type="inclusion",
+            adapter=mock_adapter,
+            trace_callback=lambda event, payload: events.append((event, payload)),
+        )
+    )
+
+    assert result.verdict == CriterionVerdict.MET
+    names = [name for name, _payload in events]
+    assert "validate_single_prompt" in names
+    assert "validate_single_response" in names
+    response_payload = next(payload for name, payload in events if name == "validate_single_response")
+    assert response_payload["verdict"] == "MET"
+    assert response_payload["response_text"]
+
+
 def test_evaluate_criterion_timeout():
     """Timeout returns UNKNOWN without crashing."""
     import asyncio as _asyncio
@@ -777,6 +808,47 @@ def test_evaluate_criterion_two_stage_returns_result():
     assert "25 years old" in result.stage1_reasoning
     assert result.stage1_response is not None
     assert result.stage1_response.estimated_cost == 0.005
+
+
+def test_evaluate_criterion_two_stage_emits_trace_events():
+    mock_reasoning = AsyncMock()
+    mock_reasoning.name = "medgemma-27b"
+    mock_reasoning.generate.return_value = ModelResponse(
+        text="YES. Patient meets criterion.",
+        input_tokens=100,
+        output_tokens=20,
+        latency_ms=250.0,
+        estimated_cost=0.002,
+    )
+
+    mock_labeling = AsyncMock()
+    mock_labeling.name = "gemini-3-pro"
+    mock_labeling.generate.return_value = ModelResponse(
+        text='{"label": "eligible", "reasoning": "matches", "evidence_sentences": [0]}',
+        input_tokens=80,
+        output_tokens=18,
+        latency_ms=120.0,
+        estimated_cost=0.001,
+    )
+    events: list[tuple[str, dict]] = []
+
+    result = asyncio.run(
+        evaluate_criterion_two_stage(
+            patient_note="Patient note",
+            criterion_text="Age >= 18",
+            criterion_type="inclusion",
+            reasoning_adapter=mock_reasoning,
+            labeling_adapter=mock_labeling,
+            trace_callback=lambda event, payload: events.append((event, payload)),
+        )
+    )
+
+    assert result.verdict == CriterionVerdict.MET
+    names = [name for name, _payload in events]
+    assert "validate_two_stage_reasoning_prompt" in names
+    assert "validate_two_stage_reasoning_response" in names
+    assert "validate_two_stage_labeling_prompt" in names
+    assert "validate_two_stage_labeling_response" in names
 
 
 def test_evaluate_criterion_two_stage_exclusion_inversion_fix():

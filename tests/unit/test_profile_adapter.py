@@ -42,8 +42,8 @@ def test_flat_string_value():
     assert facts["primary_diagnosis"] == "Lung adenocarcinoma"
 
 
-def test_nested_dict_flattened():
-    """Nested dict (demographics) is flattened to 'key: val; key: val' string."""
+def test_demographics_promoted_to_top_level():
+    """Demographics dict is promoted to top-level keys (age, sex), not flattened."""
     profile = _make_profile(
         key_facts=[
             {
@@ -56,7 +56,9 @@ def test_nested_dict_flattened():
         ]
     )
     _note, facts = adapt_profile_for_prescreen(profile)
-    assert facts["demographics"] == "age: 43; sex: female"
+    assert facts["age"] == "43"
+    assert facts["sex"] == "female"
+    assert "demographics" not in facts  # not duplicated as flattened string
 
 
 def test_nested_dict_with_list():
@@ -193,7 +195,9 @@ def test_roundtrip_with_format_key_facts():
     result = _format_key_facts(facts)
 
     assert "primary_diagnosis: Lung adenocarcinoma" in result
-    assert "demographics: age: 43; sex: female" in result
+    assert "age: 43" in result
+    assert "sex: female" in result
+    assert "demographics" not in result  # promoted to top-level, not flattened
     assert "key_findings: dyspnea, wheezing" in result
 
 

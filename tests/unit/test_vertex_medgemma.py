@@ -118,6 +118,47 @@ async def test_generate_chat_completions_format(adapter):
 
 
 @pytest.mark.asyncio
+async def test_generate_with_image_chat_completions_format(adapter, tmp_path):
+    """Multimodal payload includes image_url content for Vertex chatCompletions."""
+    image_path = tmp_path / "ct.png"
+    image_path.write_bytes(b"\x89PNG\r\n\x1a\nfake")
+
+    mock_response = httpx.Response(
+        200,
+        json={
+            "predictions": [
+                {
+                    "choices": [{"message": {"content": "Image findings"}}],
+                    "usage": {"prompt_tokens": 30, "completion_tokens": 12},
+                }
+            ]
+        },
+        request=httpx.Request("POST", "https://example.com"),
+    )
+
+    with (
+        patch.object(adapter, "_get_auth_token", return_value="fake-token"),
+        patch("httpx.post", return_value=mock_response) as mock_post,
+    ):
+        result = await adapter.generate_with_image("Analyze image", image_path, max_tokens=64)
+
+    assert result.text == "Image findings"
+    assert result.input_tokens == 30
+    assert result.output_tokens == 12
+
+    payload = mock_post.call_args.kwargs["json"]
+    instance = payload["instances"][0]
+    assert instance["@requestFormat"] == "chatCompletions"
+    content = instance["messages"][0]["content"]
+    assert isinstance(content, list)
+    assert content[0]["type"] == "text"
+    assert content[0]["text"] == "Analyze image"
+    assert content[1]["type"] == "image_url"
+    assert content[1]["image_url"]["url"].startswith("data:image/png;base64,")
+    assert instance["max_tokens"] == 64
+
+
+@pytest.mark.asyncio
 async def test_generate_fallback_on_no_choices(adapter):
     """Falls back to raw text extraction when chatCompletions format not in response."""
     mock_response = httpx.Response(

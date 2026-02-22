@@ -23,12 +23,23 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 # Add demo root to path for component imports
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from trialmatch.live_runtime import (
+    HealthCheckResult,
+    create_prescreen_adapters,
+    create_validate_adapters,
+    failed_preflight_checks,
+    run_live_preflight,
+)
+from trialmatch.tracing.live_trace import LiveTraceRecorder, create_live_trace_recorder
+
 from cache_manager import (
     list_cached_patients,
     load_validate_results,
     save_ingest_result,
+    save_cached_manifest,
     save_prescreen_result,
     save_validate_results,
+    validate_cached_run,
 )
 from components.patient_card import extract_friendly_label, render_medical_image, render_patient_card
 from components.pipeline_viewer import (
@@ -134,6 +145,17 @@ def _run_async(coro):
     return asyncio.run(coro)
 
 
+def _trace_event(
+    recorder: LiveTraceRecorder | None,
+    event_name: str,
+    payload: dict | None = None,
+) -> None:
+    """Emit local trace event when recorder is available."""
+    if recorder is None:
+        return
+    recorder.record(event_name, payload or {})
+
+
 def _friendly_patient_label(profile: dict) -> str:
     """Build patient-friendly label from profile data.
 
@@ -153,30 +175,49 @@ def _load_image_cache(topic_id: str) -> dict | None:
     return None
 
 
+def _render_preflight_results(results: list[HealthCheckResult], dev_mode: bool) -> None:
+    """Render live preflight status for dev and patient modes."""
+    failed_checks = [r for r in results if not r.ok]
+
+    if dev_mode:
+        with st.expander("Live Preflight Checks", expanded=True):
+            for r in results:
+                icon = "✅" if r.ok else "⚠️"
+                st.write(f"{icon} **{r.name}** — {r.latency_ms:.0f}ms")
+                st.caption(r.detail)
+
+    if failed_checks:
+        names = ", ".join(r.name for r in failed_checks)
+        st.error(f"Live preflight failed: {names}. Resolve checks before running live.")
+
+
+def _filter_validate_to_prescreen(
+    cached_validate: dict[str, dict] | None,
+    prescreen_result,
+) -> dict[str, dict]:
+    """Keep only validate entries that correspond to PRESCREEN candidates."""
+    if not cached_validate:
+        return {}
+    valid_ids = {c.nct_id for c in prescreen_result.candidates}
+    return {nct: payload for nct, payload in cached_validate.items() if nct in valid_ids}
+
+
 def _init_adapters():
     """Initialize model adapters from env vars. Returns (gemini, medgemma) or (None, None)."""
     api_key = os.environ.get("GOOGLE_API_KEY", "")
     hf_token = os.environ.get("HF_TOKEN", "")
 
-    errors = []
     if not api_key:
-        errors.append(
+        st.error(
             "GOOGLE_API_KEY not set. Required for PRESCREEN agent (Gemini orchestration)."
         )
-    if not hf_token:
-        errors.append("HF_TOKEN not set. Required for MedGemma normalization.")
-
-    if errors:
-        for e in errors:
-            st.error(e)
         return None, None
 
-    from trialmatch.models.gemini import GeminiAdapter
-    from trialmatch.models.medgemma import MedGemmaAdapter
-
-    gemini = GeminiAdapter(api_key=api_key)
-    medgemma = MedGemmaAdapter(hf_token=hf_token)
-    return gemini, medgemma
+    try:
+        return create_prescreen_adapters(api_key=api_key, hf_token=hf_token)
+    except ValueError as exc:
+        st.error(str(exc))
+        return None, None
 
 
 def _get_validate_adapters(mode: str):
@@ -185,43 +226,27 @@ def _get_validate_adapters(mode: str):
     Returns (reasoning_adapter, labeling_adapter) for two-stage mode,
     or (adapter, None) for single-stage mode.
     """
-    if mode == "Two-Stage (MedGemma \u2192 Gemini)":
+    try:
         api_key = os.environ.get("GOOGLE_API_KEY", "")
         hf_token = os.environ.get("HF_TOKEN", "")
-        errors = []
-        if not api_key:
-            errors.append("GOOGLE_API_KEY not set (needed for Gemini labeling).")
-        if not hf_token:
-            errors.append("HF_TOKEN not set (needed for MedGemma reasoning).")
-        if errors:
-            for e in errors:
-                st.error(e)
-            return None, None
 
-        from trialmatch.models.gemini import GeminiAdapter
-        from trialmatch.models.medgemma import MedGemmaAdapter
+        if mode == "Two-Stage (MedGemma \u2192 Gemini)":
+            if not api_key:
+                st.error("GOOGLE_API_KEY not set (needed for Gemini labeling).")
+                return None, None
+            return create_validate_adapters(mode, api_key=api_key, hf_token=hf_token)
 
-        medgemma = MedGemmaAdapter(hf_token=hf_token)
-        gemini = GeminiAdapter(api_key=api_key)
-        return medgemma, gemini  # (reasoning, labeling)
+        if mode == "Gemini 3 Pro (single)":
+            if not api_key:
+                st.error("GOOGLE_API_KEY not set.")
+                return None, None
+            return create_validate_adapters(mode, api_key=api_key)
 
-    elif mode == "Gemini 3 Pro (single)":
-        api_key = os.environ.get("GOOGLE_API_KEY", "")
-        if not api_key:
-            st.error("GOOGLE_API_KEY not set.")
-            return None, None
-        from trialmatch.models.gemini import GeminiAdapter
-
-        return GeminiAdapter(api_key=api_key), None
-
-    else:  # MedGemma 4B (single)
-        hf_token = os.environ.get("HF_TOKEN", "")
-        if not hf_token:
-            st.error("HF_TOKEN not set.")
-            return None, None
-        from trialmatch.models.medgemma import MedGemmaAdapter
-
-        return MedGemmaAdapter(hf_token=hf_token), None
+        # MedGemma 4B (single)
+        return create_validate_adapters(mode, hf_token=hf_token)
+    except ValueError as exc:
+        st.error(str(exc))
+        return None, None
 
 
 def parse_eligibility_criteria(criteria_text: str) -> list[dict]:
@@ -372,15 +397,22 @@ if DEV_MODE:
 
 else:
     # ----- Patient mode sidebar: simplified -----
+    cached_topic_ids = [tid for tid in topic_ids if tid in set(list_cached_patients())]
+    topic_selector_ids = cached_topic_ids if cached_topic_ids else topic_ids
+
     selected_topic = st.sidebar.selectbox(
         "Select Patient",
-        topic_ids,
+        topic_selector_ids,
         format_func=lambda tid: _friendly_patient_label(profile_map[tid]),
     )
 
     if selected_topic:
         preview_text = profile_map[selected_topic].get("profile_text", "")[:200]
         st.sidebar.caption(f"**{selected_topic}**: {preview_text}...")
+    if cached_topic_ids:
+        st.sidebar.caption(
+            "Demo-ready cached patients: " + ", ".join(cached_topic_ids)
+        )
 
     # Set patient-mode defaults (hidden from sidebar)
     if pipeline_mode is None:
@@ -444,6 +476,35 @@ render_ingest_step(key_facts, dev_mode=DEV_MODE)
 if image_cache:
     render_image_findings(image_cache, dev_mode=DEV_MODE)
 
+# Reset previous run outputs before a new run starts.
+if run_button:
+    st.session_state.pop("prescreen_result", None)
+    st.session_state.pop("validate_results", None)
+    st.session_state.pop("trial_verdicts", None)
+    st.session_state.pop("cached_validate_data", None)
+
+# Live run trace recorder (local JSONL artifact)
+live_trace: LiveTraceRecorder | None = None
+if run_button and pipeline_mode == "live":
+    live_trace = create_live_trace_recorder(
+        topic_id=selected_topic,
+        pipeline_mode=pipeline_mode,
+        validate_mode=validate_mode,
+        dev_mode=DEV_MODE,
+    )
+    _trace_event(
+        live_trace,
+        "streamlit_live_context",
+        {
+            "selected_topic": selected_topic,
+            "is_multimodal": is_multimodal,
+            "max_trials": max_trials,
+            "max_criteria": max_criteria,
+        },
+    )
+    if DEV_MODE:
+        st.caption(f"Local trace log: {live_trace.path}")
+
 # ---------------------------------------------------------------------------
 # PRESCREEN step
 # ---------------------------------------------------------------------------
@@ -451,7 +512,64 @@ if run_button and pipeline_mode == "live":
     gemini_adapter, medgemma_adapter = _init_adapters()
 
     if gemini_adapter is None:
+        _trace_event(
+            live_trace,
+            "live_run_blocked_missing_credentials",
+            {
+                "google_api_key_set": bool(os.environ.get("GOOGLE_API_KEY", "")),
+                "hf_token_set": bool(os.environ.get("HF_TOKEN", "")),
+            },
+        )
         st.error("Cannot run pipeline: missing GOOGLE_API_KEY. Set env vars and reload.")
+        st.stop()
+
+    preflight_results = _run_async(
+        run_live_preflight(
+            gemini_adapter=gemini_adapter,
+            medgemma_adapter=medgemma_adapter,
+            include_ctgov=True,
+        )
+    )
+    _trace_event(
+        live_trace,
+        "live_preflight_results",
+        {
+            "gemini_model": gemini_adapter.name,
+            "medgemma_model": medgemma_adapter.name if medgemma_adapter else "",
+            "checks": [
+                {
+                    "name": r.name,
+                    "ok": r.ok,
+                    "latency_ms": r.latency_ms,
+                    "detail": r.detail,
+                }
+                for r in preflight_results
+            ],
+        },
+    )
+    _render_preflight_results(preflight_results, dev_mode=DEV_MODE)
+    failed_checks = failed_preflight_checks(preflight_results)
+    if failed_checks:
+        failed_names = [r.name for r in failed_checks]
+        _trace_event(
+            live_trace,
+            "live_run_blocked_preflight_failed",
+            {
+                "failed_checks": failed_names,
+                "details": [
+                    {
+                        "name": r.name,
+                        "latency_ms": r.latency_ms,
+                        "detail": r.detail,
+                    }
+                    for r in failed_checks
+                ],
+            },
+        )
+        st.error(
+            "Live mode is blocked because one or more preflight checks failed. "
+            "Use cached mode for recording or fix endpoint/credentials first."
+        )
         st.stop()
 
     from trialmatch.prescreen.agent import run_prescreen_agent
@@ -461,7 +579,9 @@ if run_button and pipeline_mode == "live":
         # Container for live-streaming agent tool calls
         prescreen_status = st.status("PRESCREEN: Searching ClinicalTrials.gov...", expanded=True)
         prescreen_log = prescreen_status.container()
-        prescreen_log.write("Running agentic search with Gemini Flash orchestration...")
+        prescreen_log.write(
+            f"Running agentic search with {gemini_adapter.name} orchestration..."
+        )
 
         # Live-streaming callbacks -- called from within the agent loop
         _tool_counter = {"n": 0}
@@ -495,12 +615,22 @@ if run_button and pipeline_mode == "live":
                         ingest_source="gold",
                         gemini_adapter=gemini_adapter,
                         medgemma_adapter=medgemma_adapter,
+                        require_clinical_guidance=True,
                         topic_id=selected_topic,
                         on_tool_call=_on_tool_call,
                         on_agent_text=_on_agent_text,
+                        trace_callback=live_trace.record if live_trace else None,
                     )
                 )
             except Exception as exc:
+                _trace_event(
+                    live_trace,
+                    "prescreen_failed",
+                    {
+                        "topic_id": selected_topic,
+                        "error": str(exc)[:500],
+                    },
+                )
                 st.error(f"PRESCREEN failed: {exc}")
                 prescreen_status.update(label="PRESCREEN failed", state="error")
                 st.stop()
@@ -564,10 +694,20 @@ if run_button and pipeline_mode == "live":
                         ingest_source="gold",
                         gemini_adapter=gemini_adapter,
                         medgemma_adapter=medgemma_adapter,
+                        require_clinical_guidance=True,
                         topic_id=selected_topic,
+                        trace_callback=live_trace.record if live_trace else None,
                     )
                 )
             except Exception as exc:
+                _trace_event(
+                    live_trace,
+                    "prescreen_failed",
+                    {
+                        "topic_id": selected_topic,
+                        "error": str(exc)[:500],
+                    },
+                )
                 st.error(f"Search failed: {exc}")
                 st.stop()
 
@@ -576,78 +716,91 @@ if run_button and pipeline_mode == "live":
 
     # Store for VALIDATE
     st.session_state["prescreen_result"] = prescreen_result
+    _trace_event(
+        live_trace,
+        "prescreen_result_saved",
+        {
+            "topic_id": selected_topic,
+            "candidate_count": len(prescreen_result.candidates),
+            "tool_calls": prescreen_result.total_api_calls,
+            "gemini_input_tokens": prescreen_result.gemini_input_tokens,
+            "gemini_output_tokens": prescreen_result.gemini_output_tokens,
+            "gemini_estimated_cost": prescreen_result.gemini_estimated_cost,
+            "medgemma_estimated_cost": prescreen_result.medgemma_estimated_cost,
+            "latency_ms": prescreen_result.latency_ms,
+        },
+    )
 
     # Auto-save to cache for replay
-    save_prescreen_result(selected_topic, prescreen_result)
-    save_ingest_result(selected_topic, patient_note, key_facts)
+    prescreen_cache_path = save_prescreen_result(selected_topic, prescreen_result)
+    ingest_cache_path = save_ingest_result(selected_topic, patient_note, key_facts)
+    _trace_event(
+        live_trace,
+        "prescreen_cache_saved",
+        {
+            "prescreen_cache_path": str(prescreen_cache_path),
+            "ingest_cache_path": str(ingest_cache_path),
+        },
+    )
     if DEV_MODE:
         st.caption(f"Results cached for replay: {selected_topic}")
 
 elif run_button and pipeline_mode == "cached":
-    # Load cached PRESCREEN result if available
+    cache_report = validate_cached_run(selected_topic)
+    if not cache_report.valid:
+        error_lines = "\n".join(f"- {e}" for e in cache_report.errors)
+        st.error(
+            "Cached demo data is invalid for this patient. "
+            "Regenerate cache artifacts before recording.\n\n"
+            f"{error_lines}"
+        )
+        st.stop()
+
     cached_path = CACHED_RUNS_DIR / selected_topic / "prescreen_result.json"
-    if cached_path.exists():
-        with open(cached_path) as f:
-            cached_data = json.load(f)
+    with open(cached_path) as f:
+        cached_data = json.load(f)
 
-        from trialmatch.prescreen.schema import PresearchResult
+    from trialmatch.prescreen.schema import PresearchResult
 
-        prescreen_result = PresearchResult(**cached_data)
-        st.session_state["prescreen_result"] = prescreen_result
+    prescreen_result = PresearchResult(**cached_data)
+    st.session_state["prescreen_result"] = prescreen_result
 
-        if DEV_MODE:
-            # ---- Dev mode: full cached prescreen display ----
-            with st.expander("Step 2: PRESCREEN -- Trial Search (cached)", expanded=True):
-                st.caption(f"Loaded cached result: {len(prescreen_result.candidates)} trials")
-
-                # Show tool trace from cache
-                st.write(f"**{len(prescreen_result.tool_call_trace)} tool calls recorded**")
-                for tc in prescreen_result.tool_call_trace:
-                    icon = "\U0001f527" if not tc.error else "\u26a0\ufe0f"
-                    exp_label = f"{icon} {tc.tool_name} (call #{tc.call_index})"
-                    with st.expander(exp_label, expanded=False):
-                        st.json(tc.args)
-                        st.caption(tc.result_summary)
-                        if tc.error:
-                            st.error(f"Error: {tc.error}")
-                        st.caption(f"Latency: {tc.latency_ms:.0f}ms")
-
-                if prescreen_result.candidates:
-                    trial_data = []
-                    for c in prescreen_result.candidates:
-                        trial_data.append(
-                            {
-                                "NCT ID": c.nct_id,
-                                "Title": c.brief_title or c.title,
-                                "Phase": ", ".join(c.phase) if c.phase else "N/A",
-                                "Status": c.status,
-                                "Conditions": ", ".join(c.conditions[:3]),
-                                "Relevance": len(c.found_by_queries),
-                            }
-                        )
-                    st.dataframe(trial_data, use_container_width=True)
-        else:
-            # ---- Patient mode: simple cached result summary ----
-            n_candidates = len(prescreen_result.candidates)
-            st.success(
-                f"Found {n_candidates} clinical trials that may be relevant to your condition."
+    if DEV_MODE:
+        with st.expander("Step 2: PRESCREEN -- Trial Search (cached)", expanded=True):
+            st.caption(
+                "Loaded cached result: "
+                f"{len(prescreen_result.candidates)} candidates"
             )
+            st.write(f"**{len(prescreen_result.tool_call_trace)} tool calls recorded**")
+            for tc in prescreen_result.tool_call_trace:
+                icon = "\U0001f527" if not tc.error else "\u26a0\ufe0f"
+                exp_label = f"{icon} {tc.tool_name} (call #{tc.call_index})"
+                with st.expander(exp_label, expanded=False):
+                    st.json(tc.args)
+                    st.caption(tc.result_summary)
+                    if tc.error:
+                        st.error(f"Error: {tc.error}")
+                    st.caption(f"Latency: {tc.latency_ms:.0f}ms")
 
+            if prescreen_result.candidates:
+                trial_data = []
+                for c in prescreen_result.candidates:
+                    trial_data.append(
+                        {
+                            "NCT ID": c.nct_id,
+                            "Title": c.brief_title or c.title,
+                            "Phase": ", ".join(c.phase) if c.phase else "N/A",
+                            "Status": c.status,
+                            "Conditions": ", ".join(c.conditions[:3]),
+                            "Relevance": len(c.found_by_queries),
+                        }
+                    )
+                st.dataframe(trial_data, use_container_width=True)
     else:
-        if DEV_MODE:
-            with st.expander("Step 2: PRESCREEN -- Trial Search (cached)", expanded=True):
-                st.warning(
-                    f"No cached run found for {selected_topic}. "
-                    f"Expected at: {cached_path}\n\n"
-                    "Run in LIVE mode first to generate a cached result, "
-                    "or add cached data to the demo/data/cached_runs/ directory."
-                )
-        else:
-            # ---- Patient mode: no cache, offer live run ----
-            st.warning("Pre-computed results are not yet available for this patient.")
-            if st.button("Run live search (may take 1-2 minutes)"):
-                st.session_state["force_live"] = True
-                st.rerun()
+        n_candidates = len(prescreen_result.candidates)
+        st.success(
+            f"Loaded cached PRESCREEN output with {n_candidates} candidate trials."
+        )
 else:
     render_prescreen_placeholder(dev_mode=DEV_MODE)
 
@@ -660,10 +813,19 @@ if run_button and pipeline_mode == "cached" and prescreen_result and prescreen_r
     # -- Cached VALIDATE path --
     cached_validate = load_validate_results(selected_topic)
     if cached_validate:
+        filtered_validate = _filter_validate_to_prescreen(cached_validate, prescreen_result)
+        skipped_count = len(cached_validate) - len(filtered_validate)
+        cached_validate = filtered_validate
+
         if DEV_MODE:
             # ---- Dev mode: full cached validate display ----
             with st.expander("Step 3: VALIDATE -- Eligibility Check (cached)", expanded=True):
                 cached_mode = None
+                if skipped_count:
+                    st.warning(
+                        f"Ignored {skipped_count} cached validate trial(s) not present in "
+                        "PRESCREEN candidates."
+                    )
                 for nct_id, data in cached_validate.items():
                     cached_mode = data.get("mode", "single")
                     st.write(f"**{nct_id}**")
@@ -689,11 +851,18 @@ if run_button and pipeline_mode == "cached" and prescreen_result and prescreen_r
                         if cached_mode == "two_stage"
                         else "Single-Stage"
                     )
-                    st.caption(f"Evaluation mode: {mode_display}")
+                    st.caption(
+                        f"Evaluation mode: {mode_display} | "
+                        f"PRESCREEN candidates: {len(prescreen_result.candidates)} | "
+                        f"VALIDATE evaluated: {len(cached_validate)}"
+                    )
         else:
             # ---- Patient mode: render trial cards from cache ----
             # (trial cards are rendered in the Results panel below)
-            pass
+            st.caption(
+                f"PRESCREEN candidates: {len(prescreen_result.candidates)} | "
+                f"VALIDATE evaluated: {len(cached_validate)}"
+            )
 
         st.session_state["trial_verdicts"] = {
             nct: d["verdict"] for nct, d in cached_validate.items()
@@ -718,8 +887,31 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
     reasoning_adapter, labeling_adapter = _get_validate_adapters(validate_mode)
 
     if reasoning_adapter is None:
+        _trace_event(
+            live_trace,
+            "validate_blocked_missing_credentials",
+            {
+                "validate_mode": validate_mode,
+                "google_api_key_set": bool(os.environ.get("GOOGLE_API_KEY", "")),
+                "hf_token_set": bool(os.environ.get("HF_TOKEN", "")),
+            },
+        )
         st.error("Cannot run VALIDATE: missing API credentials.")
         st.stop()
+
+    _trace_event(
+        live_trace,
+        "validate_started",
+        {
+            "validate_mode": validate_mode,
+            "is_two_stage": is_two_stage,
+            "reasoning_adapter": reasoning_adapter.name,
+            "labeling_adapter": labeling_adapter.name if labeling_adapter else "",
+            "candidate_pool_size": len(prescreen_result.candidates),
+            "max_trials": max_trials,
+            "max_criteria": max_criteria,
+        },
+    )
 
     # Collect eligibility criteria from candidates that had get_trial_details called.
     # The agent merges eligibility_criteria into candidates_by_nct, but TrialCandidate
@@ -773,7 +965,23 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                             proto = raw_details.get("protocolSection", {})
                             eligibility = proto.get("eligibilityModule", {})
                             criteria_text = eligibility.get("eligibilityCriteria", "")
+                            _trace_event(
+                                live_trace,
+                                "validate_ctgov_details_loaded",
+                                {
+                                    "trial_nct_id": trial.nct_id,
+                                    "criteria_chars": len(criteria_text),
+                                },
+                            )
                         except Exception as exc:
+                            _trace_event(
+                                live_trace,
+                                "validate_ctgov_details_failed",
+                                {
+                                    "trial_nct_id": trial.nct_id,
+                                    "error": str(exc)[:500],
+                                },
+                            )
                             st.warning(f"Could not fetch criteria for {trial.nct_id}: {exc}")
                             criteria_text = ""
 
@@ -790,7 +998,24 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                     st.caption(f"Evaluating {n_eval} of {len(criteria)} criteria...")
 
                     results = []
-                    for criterion in criteria[:max_criteria]:
+                    for idx, criterion in enumerate(criteria[:max_criteria]):
+                        criterion_trace = None
+                        if live_trace:
+                            criterion_trace = (
+                                lambda event_name, payload, *,
+                                _trial_id=trial.nct_id,
+                                _criterion=criterion,
+                                _idx=idx: live_trace.record(
+                                    event_name,
+                                    {
+                                        "trial_nct_id": _trial_id,
+                                        "criterion_index": _idx,
+                                        "criterion_type": _criterion["type"],
+                                        "criterion_text": _criterion["text"],
+                                        **payload,
+                                    },
+                                )
+                            )
                         try:
                             if is_two_stage:
                                 cr = loop.run_until_complete(
@@ -800,6 +1025,7 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                                         criterion_type=criterion["type"],
                                         reasoning_adapter=reasoning_adapter,
                                         labeling_adapter=labeling_adapter,
+                                        trace_callback=criterion_trace,
                                     )
                                 )
                             else:
@@ -809,10 +1035,22 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                                         criterion_text=criterion["text"],
                                         criterion_type=criterion["type"],
                                         adapter=reasoning_adapter,
+                                        trace_callback=criterion_trace,
                                     )
                                 )
                             results.append((criterion, cr))
                         except Exception as exc:
+                            _trace_event(
+                                live_trace,
+                                "validate_criterion_failed",
+                                {
+                                    "trial_nct_id": trial.nct_id,
+                                    "criterion_index": idx,
+                                    "criterion_type": criterion["type"],
+                                    "criterion_text": criterion["text"],
+                                    "error": str(exc)[:500],
+                                },
+                            )
                             st.warning(f"Criterion eval failed: {exc}")
                             continue
 
@@ -902,6 +1140,18 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                             f"${total_cost:.4f} | "
                             f"Verdict: {verdict_badge}"
                         )
+                        _trace_event(
+                            live_trace,
+                            "validate_trial_complete",
+                            {
+                                "trial_nct_id": trial.nct_id,
+                                "criteria_evaluated": len(results),
+                                "mode_label": mode_label,
+                                "latency_ms": total_latency_ms,
+                                "total_cost": total_cost,
+                                "verdict": verdict,
+                            },
+                        )
 
                     st.divider()
 
@@ -926,7 +1176,22 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                             proto = raw_details.get("protocolSection", {})
                             eligibility = proto.get("eligibilityModule", {})
                             criteria_text = eligibility.get("eligibilityCriteria", "")
+                            _trace_event(
+                                live_trace,
+                                "validate_ctgov_details_loaded",
+                                {
+                                    "trial_nct_id": trial.nct_id,
+                                    "criteria_chars": len(criteria_text),
+                                },
+                            )
                         except Exception:
+                            _trace_event(
+                                live_trace,
+                                "validate_ctgov_details_failed",
+                                {
+                                    "trial_nct_id": trial.nct_id,
+                                },
+                            )
                             criteria_text = ""
 
                     if not criteria_text:
@@ -937,7 +1202,24 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                         continue
 
                     results = []
-                    for criterion in criteria[:max_criteria]:
+                    for idx, criterion in enumerate(criteria[:max_criteria]):
+                        criterion_trace = None
+                        if live_trace:
+                            criterion_trace = (
+                                lambda event_name, payload, *,
+                                _trial_id=trial.nct_id,
+                                _criterion=criterion,
+                                _idx=idx: live_trace.record(
+                                    event_name,
+                                    {
+                                        "trial_nct_id": _trial_id,
+                                        "criterion_index": _idx,
+                                        "criterion_type": _criterion["type"],
+                                        "criterion_text": _criterion["text"],
+                                        **payload,
+                                    },
+                                )
+                            )
                         try:
                             if is_two_stage:
                                 cr = loop.run_until_complete(
@@ -947,6 +1229,7 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                                         criterion_type=criterion["type"],
                                         reasoning_adapter=reasoning_adapter,
                                         labeling_adapter=labeling_adapter,
+                                        trace_callback=criterion_trace,
                                     )
                                 )
                             else:
@@ -956,16 +1239,37 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                                         criterion_text=criterion["text"],
                                         criterion_type=criterion["type"],
                                         adapter=reasoning_adapter,
+                                        trace_callback=criterion_trace,
                                     )
                                 )
                             results.append((criterion, cr))
-                        except Exception:
+                        except Exception as exc:
+                            _trace_event(
+                                live_trace,
+                                "validate_criterion_failed",
+                                {
+                                    "trial_nct_id": trial.nct_id,
+                                    "criterion_index": idx,
+                                    "criterion_type": criterion["type"],
+                                    "criterion_text": criterion["text"],
+                                    "error": str(exc)[:500],
+                                },
+                            )
                             continue
 
                     if results:
                         validate_results[trial.nct_id] = results
                         verdict = _compute_trial_verdict(results)
                         trial_verdicts[trial.nct_id] = verdict
+                        _trace_event(
+                            live_trace,
+                            "validate_trial_complete",
+                            {
+                                "trial_nct_id": trial.nct_id,
+                                "criteria_evaluated": len(results),
+                                "verdict": verdict,
+                            },
+                        )
 
             finally:
                 loop.run_until_complete(ctgov.aclose())
@@ -1019,11 +1323,43 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
             "mode": "two_stage" if is_two_stage else "single",
             "criteria": criteria_cache,
         }
-    save_validate_results(selected_topic, validate_cache)
+    validate_cache_path = save_validate_results(selected_topic, validate_cache)
+    manifest_path = save_cached_manifest(
+        topic_id=selected_topic,
+        prescreen_trial_ids=[c.nct_id for c in prescreen_result.candidates],
+        validated_trial_ids=list(validate_cache.keys()),
+        validate_mode="two_stage" if is_two_stage else "single",
+    )
+    _trace_event(
+        live_trace,
+        "validate_results_saved",
+        {
+            "topic_id": selected_topic,
+            "trial_count": len(validate_cache),
+            "cache_path": str(validate_cache_path),
+            "manifest_path": str(manifest_path),
+        },
+    )
     if DEV_MODE:
         st.caption("VALIDATE results cached for replay")
 
 elif run_button and prescreen_result and not prescreen_result.candidates:
+    empty_validate_path = save_validate_results(selected_topic, {})
+    manifest_path = save_cached_manifest(
+        topic_id=selected_topic,
+        prescreen_trial_ids=[],
+        validated_trial_ids=[],
+        validate_mode="not_run_no_candidates",
+    )
+    _trace_event(
+        live_trace,
+        "validate_results_saved_empty",
+        {
+            "topic_id": selected_topic,
+            "cache_path": str(empty_validate_path),
+            "manifest_path": str(manifest_path),
+        },
+    )
     if DEV_MODE:
         with st.expander("Step 3: VALIDATE -- Eligibility Check", expanded=True):
             st.warning("No candidate trials found by PRESCREEN. Nothing to validate.")
@@ -1049,6 +1385,11 @@ prescreen_for_results = st.session_state.get("prescreen_result")
 cached_validate_data = st.session_state.get("cached_validate_data") or (
     load_validate_results(selected_topic) if pipeline_mode == "cached" else None
 )
+if cached_validate_data and prescreen_for_results:
+    cached_validate_data = _filter_validate_to_prescreen(
+        cached_validate_data,
+        prescreen_for_results,
+    )
 
 if trial_verdicts and prescreen_for_results:
     if DEV_MODE:
@@ -1101,12 +1442,18 @@ if trial_verdicts and prescreen_for_results:
 
     else:
         # ---- Patient mode: results summary + trial cards ----
+        prescreen_count = len(prescreen_for_results.candidates)
+        evaluated_count = len(trial_verdicts)
         eligible_count = sum(1 for v in trial_verdicts.values() if v == "ELIGIBLE")
         uncertain_count = sum(1 for v in trial_verdicts.values() if v == "UNCERTAIN")
         excluded_count = sum(1 for v in trial_verdicts.values() if v == "EXCLUDED")
 
+        st.caption(
+            f"PRESCREEN candidates: {prescreen_count} | "
+            f"VALIDATE evaluated: {evaluated_count}"
+        )
         render_results_summary(
-            total_trials=len(trial_verdicts),
+            total_trials=evaluated_count,
             eligible_count=eligible_count,
             uncertain_count=uncertain_count,
             excluded_count=excluded_count,

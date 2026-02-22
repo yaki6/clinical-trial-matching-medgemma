@@ -33,6 +33,8 @@ MAX_TOOL_CALLS_DEFAULT = 8
 _COST_PER_1M_INPUT = 1.25
 _COST_PER_1M_OUTPUT = 10.00
 
+TraceCallback = Any
+
 PRESCREEN_SYSTEM_PROMPT = """\
 You are a clinical trial search specialist. Your job: find the TOP 5-15 most \
 relevant recruiting trials for a patient — quality over quantity.
@@ -147,10 +149,12 @@ async def run_prescreen_agent(
     ingest_source: str,
     gemini_adapter: GeminiAdapter,
     medgemma_adapter: Any | None = None,
+    require_clinical_guidance: bool = False,
     max_tool_calls: int = MAX_TOOL_CALLS_DEFAULT,
     topic_id: str = "",
     on_tool_call: Any | None = None,
     on_agent_text: Any | None = None,
+    trace_callback: TraceCallback | None = None,
 ) -> PresearchResult:
     """Run the Gemini agentic PRESCREEN loop for one patient.
 
@@ -160,10 +164,12 @@ async def run_prescreen_agent(
         ingest_source: "gold" | "model_medgemma" | "model_gemini" — for cache isolation.
         gemini_adapter: Configured GeminiAdapter (provides raw genai.Client access).
         medgemma_adapter: If provided, used for clinical reasoning pre-search step.
+        require_clinical_guidance: If True, PRESCREEN fails when MedGemma guidance fails.
         max_tool_calls: Hard cap on total tool calls (safety budget guard).
         topic_id: Patient/topic identifier for tracing.
         on_tool_call: Optional sync callback(ToolCallRecord) — invoked after each tool execution.
         on_agent_text: Optional sync callback(str) — invoked when agent produces reasoning text.
+        trace_callback: Optional callback(event_name, payload) for local trace recording.
 
     Returns:
         PresearchResult with deduplicated TrialCandidate list + full agent trace.
@@ -190,6 +196,8 @@ async def run_prescreen_agent(
                 key_facts_text=_format_key_facts(key_facts),
                 topic_id=topic_id,
                 on_agent_text=on_agent_text,
+                require_success=require_clinical_guidance,
+                trace_callback=trace_callback,
             )
 
         clinical_guidance_section = ""
@@ -206,6 +214,18 @@ async def run_prescreen_agent(
             sex=sex_raw,
             sex_api=sex_api,
             clinical_guidance_section=clinical_guidance_section,
+        )
+        _emit_trace(
+            trace_callback,
+            "prescreen_prompt",
+            {
+                "topic_id": topic_id,
+                "ingest_source": ingest_source,
+                "model": gemini_adapter.name,
+                "system_instruction": PRESCREEN_SYSTEM_PROMPT,
+                "user_message": user_message,
+                "max_tool_calls": max_tool_calls,
+            },
         )
 
         contents: list[genai_types.Content] = [
@@ -256,11 +276,16 @@ async def run_prescreen_agent(
             contents.append(model_content)
 
             parts = model_content.parts or []
+            turn_texts: list[str] = []
 
-            # Collect any text the model produced (updated on each turn)
+            # Collect any text the model produced (append across turns)
             for part in parts:
                 if getattr(part, "text", None):
-                    final_text = part.text
+                    turn_texts.append(part.text)
+                    if final_text:
+                        final_text += "\n" + part.text
+                    else:
+                        final_text = part.text
                     if on_agent_text:
                         on_agent_text(part.text)
 
@@ -270,6 +295,28 @@ async def run_prescreen_agent(
                 for part in parts
                 if getattr(part, "function_call", None)
             ]
+            _emit_trace(
+                trace_callback,
+                "gemini_turn",
+                {
+                    "topic_id": topic_id,
+                    "turn_index": _iteration,
+                    "texts": turn_texts,
+                    "function_calls": [
+                        {
+                            "name": fc.name,
+                            "args": dict(fc.args) if fc.args else {},
+                        }
+                        for fc in function_calls
+                    ],
+                    "input_tokens": getattr(response.usage_metadata, "prompt_token_count", 0)
+                    if getattr(response, "usage_metadata", None)
+                    else 0,
+                    "output_tokens": getattr(response.usage_metadata, "candidates_token_count", 0)
+                    if getattr(response, "usage_metadata", None)
+                    else 0,
+                },
+            )
 
             if not function_calls:
                 # Gemini has stopped calling tools — done
@@ -364,6 +411,20 @@ async def run_prescreen_agent(
                 )
                 tool_call_records.append(record)
                 call_index += 1
+                _emit_trace(
+                    trace_callback,
+                    "tool_call_result",
+                    {
+                        "topic_id": topic_id,
+                        "call_index": record.call_index,
+                        "tool_name": fc_name,
+                        "args": fc_args,
+                        "result": result,
+                        "result_summary": summary,
+                        "latency_ms": latency_ms,
+                        "error": error_msg,
+                    },
+                )
 
                 if on_tool_call:
                     on_tool_call(record)
@@ -406,6 +467,23 @@ async def run_prescreen_agent(
             gemini_cost=f"${gemini_cost:.4f}",
             medgemma_calls=total_medgemma_calls,
         )
+        _emit_trace(
+            trace_callback,
+            "prescreen_complete",
+            {
+                "topic_id": topic_id,
+                "candidate_count": len(candidates),
+                "candidate_nct_ids": [c.nct_id for c in candidates],
+                "tool_calls": call_index,
+                "gemini_input_tokens": total_input_tokens,
+                "gemini_output_tokens": total_output_tokens,
+                "gemini_estimated_cost": gemini_cost,
+                "medgemma_calls": total_medgemma_calls,
+                "medgemma_estimated_cost": total_medgemma_cost,
+                "latency_ms": total_latency_ms,
+                "agent_reasoning": final_text,
+            },
+        )
 
         return PresearchResult(
             topic_id=topic_id,
@@ -438,15 +516,26 @@ async def _get_clinical_guidance(
     key_facts_text: str,
     topic_id: str = "",
     on_agent_text: Any | None = None,
+    require_success: bool = False,
+    trace_callback: TraceCallback | None = None,
 ) -> tuple[str, int, float]:
     """Call MedGemma for clinical reasoning to guide search strategy.
 
     Returns (guidance_text, call_count, estimated_cost).
-    On failure, returns empty guidance (search proceeds without it).
+    On failure, returns empty guidance unless require_success is True.
     """
     prompt = CLINICAL_REASONING_PROMPT.format(
         patient_note=patient_note.strip(),
         key_facts_text=key_facts_text,
+    )
+    _emit_trace(
+        trace_callback,
+        "medgemma_guidance_prompt",
+        {
+            "topic_id": topic_id,
+            "prompt": prompt,
+            "max_tokens": 512,
+        },
     )
 
     try:
@@ -465,6 +554,18 @@ async def _get_clinical_guidance(
             latency_ms=f"{latency_ms:.0f}",
             guidance_len=len(guidance),
         )
+        _emit_trace(
+            trace_callback,
+            "medgemma_guidance_response",
+            {
+                "topic_id": topic_id,
+                "model": getattr(medgemma_adapter, "name", ""),
+                "latency_ms": latency_ms,
+                "estimated_cost": response.estimated_cost,
+                "raw_response": response.text,
+                "guidance": guidance,
+            },
+        )
 
         if on_agent_text:
             on_agent_text(f"[MedGemma clinical reasoning] {guidance[:200]}...")
@@ -472,12 +573,52 @@ async def _get_clinical_guidance(
         return guidance, 1, response.estimated_cost
 
     except Exception as exc:
+        err = str(exc)[:200]
         logger.warning(
             "medgemma_clinical_reasoning_failed",
             topic_id=topic_id,
-            error=str(exc)[:200],
+            error=err,
         )
+        _emit_trace(
+            trace_callback,
+            "medgemma_guidance_failed",
+            {
+                "topic_id": topic_id,
+                "error": err,
+                "required": require_success,
+            },
+        )
+        if require_success:
+            logger.error(
+                "medgemma_clinical_reasoning_required_failed",
+                topic_id=topic_id,
+                error=err,
+            )
+            _emit_trace(
+                trace_callback,
+                "medgemma_guidance_required_failed",
+                {
+                    "topic_id": topic_id,
+                    "error": err,
+                },
+            )
+            msg = f"MedGemma clinical guidance required but failed: {err}"
+            raise RuntimeError(msg) from exc
         return "", 0, 0.0
+
+
+def _emit_trace(
+    trace_callback: TraceCallback | None,
+    event_name: str,
+    payload: dict[str, Any],
+) -> None:
+    """Emit trace events without affecting runtime behavior on callback errors."""
+    if trace_callback is None:
+        return
+    try:
+        trace_callback(event_name, payload)
+    except Exception:
+        logger.warning("prescreen_trace_callback_failed", event=event_name, exc_info=True)
 
 
 async def _generate_with_retry(

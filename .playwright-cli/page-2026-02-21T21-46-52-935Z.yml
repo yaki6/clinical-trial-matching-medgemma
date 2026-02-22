@@ -1,0 +1,38 @@
+- generic [ref=e2]:
+  - list [ref=e26]:
+    - listitem [ref=e27]:
+      - link "app" [ref=e29] [cursor=pointer]:
+        - /url: http://localhost:8501/
+        - generic [ref=e30]: app
+    - listitem [ref=e31]:
+      - link "Pipeline Demo" [ref=e33] [cursor=pointer]:
+        - /url: http://localhost:8501/Pipeline_Demo
+        - generic [ref=e34]: Pipeline Demo
+    - listitem [ref=e35]:
+      - link "Benchmark" [ref=e37] [cursor=pointer]:
+        - /url: http://localhost:8501/Benchmark
+        - generic [ref=e38]: Benchmark
+  - generic [ref=e9]:
+    - banner [ref=e10]:
+      - generic [ref=e13]:
+        - button "Deploy" [ref=e15] [cursor=pointer]:
+          - generic [ref=e17]: Deploy
+        - button [ref=e19] [cursor=pointer]:
+          - img [ref=e20]
+    - generic [ref=e39]:
+      - 'heading "TrialMatch: Clinical Trial Matching" [level=1] [ref=e44]':
+        - text: "TrialMatch: Clinical Trial Matching"
+        - generic [ref=e45]:
+          - link "Link to heading":
+            - /url: "#trial-match-clinical-trial-matching"
+            - img
+      - generic [ref=e49]:
+        - paragraph [ref=e50]: Multi-model AI pipeline for matching cancer patients to clinical trials.
+        - paragraph [ref=e51]:
+          - strong [ref=e52]: Pipeline
+          - text: ": INGEST → PRESCREEN → VALIDATE"
+        - paragraph [ref=e53]:
+          - strong [ref=e54]: Models
+          - text: ": MedGemma 4B (normalization) · MedGemma 27B (evaluation) · Gemini 3 Pro (orchestration)"
+        - separator [ref=e55]
+        - paragraph [ref=e56]: Select a page from the sidebar to get started.

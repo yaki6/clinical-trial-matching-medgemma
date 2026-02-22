@@ -7,6 +7,8 @@ Supports chatCompletions request format (vLLM on Vertex).
 from __future__ import annotations
 
 import asyncio
+import base64
+import mimetypes
 import time
 
 import google.auth
@@ -82,24 +84,12 @@ class VertexMedGemmaAdapter(ModelAdapter):
         """Estimate cost based on GPU-hour rate and request latency."""
         return (latency_ms / 3_600_000) * self._gpu_hourly_rate
 
-    async def generate(self, prompt: str, max_tokens: int = 2048) -> ModelResponse:
-        """Generate text via Vertex AI endpoint with retry for transient errors."""
-        start = time.perf_counter()
-
+    async def _post_with_retry(self, payload: dict) -> dict:
+        """POST prediction payload to Vertex with retry on transient errors."""
         token = self._get_auth_token()
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
-        }
-        payload = {
-            "instances": [
-                {
-                    "@requestFormat": "chatCompletions",
-                    "messages": [{"role": "user", "content": prompt}],
-                    "max_tokens": max_tokens,
-                    "temperature": 0.2,
-                }
-            ]
         }
 
         for attempt in range(self._max_retries):
@@ -136,44 +126,114 @@ class VertexMedGemmaAdapter(ModelAdapter):
 
             # Non-transient HTTP errors: raise immediately
             response.raise_for_status()
-
-            # Parse successful response
-            elapsed = (time.perf_counter() - start) * 1000
-            data = response.json()
-            predictions = data["predictions"]
-
-            # Dedicated endpoints return predictions as a dict;
-            # shared endpoints return a list. Normalize to a single prediction.
-            if isinstance(predictions, list):
-                prediction = predictions[0]
-            else:
-                prediction = predictions
-
-            # Try chatCompletions format first
-            token_count_estimated = False
-            if isinstance(prediction, dict) and "choices" in prediction:
-                text = prediction["choices"][0]["message"]["content"]
-                usage = prediction.get("usage", {})
-                input_tokens = usage.get("prompt_tokens", len(text) // 4)
-                output_tokens = usage.get("completion_tokens", len(text) // 4)
-            else:
-                # Fallback: raw text prediction
-                text = str(prediction)
-                input_tokens = len(text) // 4
-                output_tokens = len(text) // 4
-                token_count_estimated = True
-
-            return ModelResponse(
-                text=text,
-                input_tokens=input_tokens,
-                output_tokens=output_tokens,
-                latency_ms=elapsed,
-                estimated_cost=self._estimate_cost(elapsed),
-                token_count_estimated=token_count_estimated,
-            )
+            return response.json()
 
         raise RuntimeError(
             f"Vertex MedGemma failed after {self._max_retries} retries"
+        )
+
+    @staticmethod
+    def _extract_text_and_usage(data: dict) -> tuple[str, int, int, bool]:
+        """Parse Vertex prediction response into text and token counts."""
+        predictions = data["predictions"]
+
+        # Dedicated endpoints return predictions as a dict;
+        # shared endpoints return a list. Normalize to a single prediction.
+        if isinstance(predictions, list):
+            prediction = predictions[0]
+        else:
+            prediction = predictions
+
+        # Try chatCompletions format first.
+        token_count_estimated = False
+        if isinstance(prediction, dict) and "choices" in prediction:
+            text = prediction["choices"][0]["message"]["content"]
+            usage = prediction.get("usage", {})
+            input_tokens = usage.get("prompt_tokens", len(text) // 4)
+            output_tokens = usage.get("completion_tokens", len(text) // 4)
+            return text, input_tokens, output_tokens, token_count_estimated
+
+        # Fallback: raw text prediction.
+        text = str(prediction)
+        input_tokens = len(text) // 4
+        output_tokens = len(text) // 4
+        token_count_estimated = True
+        return text, input_tokens, output_tokens, token_count_estimated
+
+    async def generate(self, prompt: str, max_tokens: int = 2048) -> ModelResponse:
+        """Generate text via Vertex AI endpoint with retry for transient errors."""
+        start = time.perf_counter()
+        payload = {
+            "instances": [
+                {
+                    "@requestFormat": "chatCompletions",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_tokens": max_tokens,
+                    "temperature": 0.2,
+                }
+            ]
+        }
+        data = await self._post_with_retry(payload)
+        elapsed = (time.perf_counter() - start) * 1000
+        text, input_tokens, output_tokens, token_count_estimated = self._extract_text_and_usage(data)
+
+        return ModelResponse(
+            text=text,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            latency_ms=elapsed,
+            estimated_cost=self._estimate_cost(elapsed),
+            token_count_estimated=token_count_estimated,
+        )
+
+    async def generate_with_image(
+        self,
+        prompt: str,
+        image_path,
+        max_tokens: int = 512,
+    ) -> ModelResponse:
+        """Generate text from image + prompt via Vertex chatCompletions payload."""
+        from pathlib import Path as _Path
+
+        start = time.perf_counter()
+        image_path = _Path(image_path)
+        mime_type = mimetypes.guess_type(str(image_path))[0] or "image/png"
+
+        with open(image_path, "rb") as f:
+            image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+        payload = {
+            "instances": [
+                {
+                    "@requestFormat": "chatCompletions",
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": prompt},
+                                {
+                                    "type": "image_url",
+                                    "image_url": {"url": f"data:{mime_type};base64,{image_b64}"},
+                                },
+                            ],
+                        }
+                    ],
+                    "max_tokens": max_tokens,
+                    "temperature": 0.2,
+                }
+            ]
+        }
+        data = await self._post_with_retry(payload)
+        elapsed = (time.perf_counter() - start) * 1000
+        text, input_tokens, output_tokens, token_count_estimated = self._extract_text_and_usage(data)
+
+        return ModelResponse(
+            text=text,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            latency_ms=elapsed,
+            estimated_cost=self._estimate_cost(elapsed),
+            token_count_estimated=token_count_estimated,
         )
 
     async def health_check(self) -> bool:

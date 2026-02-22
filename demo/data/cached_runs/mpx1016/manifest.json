@@ -1,0 +1,31 @@
+{
+  "topic_id": "mpx1016",
+  "prescreen_trial_ids": [
+    "NCT01639508",
+    "NCT03093116",
+    "NCT03175224",
+    "NCT03556228",
+    "NCT04585750",
+    "NCT05261399",
+    "NCT05286814",
+    "NCT05317858",
+    "NCT05498428",
+    "NCT05783622",
+    "NCT05785741",
+    "NCT05797168",
+    "NCT05807048",
+    "NCT05920356",
+    "NCT06074588",
+    "NCT06151574",
+    "NCT06385925",
+    "NCT06562192",
+    "NCT06765109",
+    "NCT06814496"
+  ],
+  "validated_trial_ids": [
+    "NCT06074588"
+  ],
+  "validate_mode": "two_stage",
+  "generated_at": "2026-02-22T17:59:58+00:00",
+  "schema_version": "1"
+}

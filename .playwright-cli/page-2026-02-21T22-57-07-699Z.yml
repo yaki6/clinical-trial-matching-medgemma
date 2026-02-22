@@ -1,0 +1,161 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - list [ref=e10]:
+      - listitem [ref=e11]:
+        - link "app" [ref=e13] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e14]: app
+      - listitem [ref=e15]:
+        - link "Pipeline Demo" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e18]: Pipeline Demo
+      - listitem [ref=e19]:
+        - link "Benchmark" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e22]: Benchmark
+    - generic [ref=e26]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e30]
+      - generic [ref=e32]:
+        - paragraph [ref=e36]: Select Patient
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e40]: mpx1016
+            - combobox "Selected mpx1016. Select Patient" [ref=e42]
+          - img "open" [ref=e44]
+      - paragraph [ref=e50]:
+        - strong [ref=e51]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - generic [ref=e53]:
+        - paragraph [ref=e57]: Pipeline Mode
+        - radiogroup "Pipeline Mode" [ref=e58] [cursor=pointer]:
+          - generic [ref=e59]:
+            - radio "live" [checked]
+            - paragraph [ref=e64]: live
+          - generic [ref=e65]:
+            - radio "cached"
+            - paragraph [ref=e70]: cached
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - paragraph [ref=e76]: VALIDATE Mode
+          - button "Help for VALIDATE Mode" [ref=e80] [cursor=pointer]:
+            - img [ref=e81]
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]: Two-Stage (MedGemma → Gemini)
+            - combobox "Selected Two-Stage (MedGemma → Gemini). VALIDATE Mode" [ref=e89]
+          - img "open" [ref=e91]
+      - generic [ref=e95]:
+        - paragraph [ref=e99]: Max trials to evaluate
+        - generic [ref=e100]:
+          - slider "Max trials to evaluate" [ref=e104]:
+            - generic:
+              - generic:
+                - paragraph: "10"
+          - generic:
+            - generic:
+              - paragraph: "1"
+            - generic:
+              - paragraph: "10"
+      - generic [ref=e108]:
+        - paragraph [ref=e112]: Max criteria per trial
+        - generic [ref=e113]:
+          - slider "Max criteria per trial" [ref=e117]:
+            - generic:
+              - generic:
+                - paragraph: "10"
+          - generic:
+            - generic:
+              - paragraph: "5"
+            - generic:
+              - paragraph: "30"
+      - paragraph [ref=e123]: "Cached: 1 patients (mpx1016)"
+      - button "Run Pipeline" [ref=e126] [cursor=pointer]:
+        - paragraph [ref=e130]: Run Pipeline
+  - generic [ref=e3]:
+    - banner [ref=e133]:
+      - generic [ref=e136]:
+        - button "Deploy" [ref=e138] [cursor=pointer]:
+          - generic [ref=e140]: Deploy
+        - button [ref=e142] [cursor=pointer]:
+          - img [ref=e143]
+    - generic [ref=e146]:
+      - heading "Pipeline Demo" [level=1] [ref=e151]:
+        - text: Pipeline Demo
+        - generic [ref=e152]:
+          - link "Link to heading":
+            - /url: "#pipeline-demo"
+            - img
+      - 'heading "Patient: mpx1016" [level=3] [ref=e157]':
+        - text: "Patient: mpx1016"
+        - generic [ref=e158]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016"
+            - img
+      - group [ref=e161]:
+        - generic "keyboard_arrow_right Clinical Note" [ref=e162] [cursor=pointer]:
+          - generic [ref=e163]:
+            - generic [ref=e165]: keyboard_arrow_right
+            - paragraph [ref=e168]: Clinical Note
+      - group [ref=e171]:
+        - generic "keyboard_arrow_right Ambiguities / Missing Info" [ref=e172] [cursor=pointer]:
+          - generic [ref=e173]:
+            - generic [ref=e175]: keyboard_arrow_right
+            - paragraph [ref=e178]: Ambiguities / Missing Info
+      - separator [ref=e183]
+      - group [ref=e186]:
+        - 'generic "keyboard_arrow_down Step 1: INGEST — Key Facts" [ref=e187] [cursor=pointer]':
+          - generic [ref=e188]:
+            - generic [ref=e190]: keyboard_arrow_down
+            - paragraph [ref=e193]: "Step 1: INGEST — Key Facts"
+        - generic [ref=e195]:
+          - paragraph [ref=e200]: Key clinical facts extracted from patient record
+          - generic [ref=e202]:
+            - paragraph [ref=e209]:
+              - strong [ref=e210]: primary_diagnosis
+            - paragraph [ref=e217]: Lung adenocarcinoma with signet-ring cell features
+          - generic [ref=e219]:
+            - paragraph [ref=e226]:
+              - strong [ref=e227]: demographics
+            - paragraph [ref=e234]: "age: 43; sex: female"
+          - generic [ref=e236]:
+            - paragraph [ref=e243]:
+              - strong [ref=e244]: imaging_findings
+            - paragraph [ref=e251]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+          - generic [ref=e253]:
+            - paragraph [ref=e260]:
+              - strong [ref=e261]: key_findings
+            - paragraph [ref=e268]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+          - generic [ref=e270]:
+            - paragraph [ref=e277]:
+              - strong [ref=e278]: missing_info
+            - paragraph [ref=e285]: Cancer stage, Performance status, Treatment history
+          - generic [ref=e287]:
+            - paragraph [ref=e294]:
+              - strong [ref=e295]: symptoms
+            - paragraph [ref=e302]: shortness of breath with exertion, wheezing
+          - generic [ref=e304]:
+            - paragraph [ref=e311]:
+              - strong [ref=e312]: histopathology
+            - paragraph [ref=e319]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+          - generic [ref=e321]:
+            - paragraph [ref=e328]:
+              - strong [ref=e329]: tobacco_use
+            - paragraph [ref=e336]: never smoker
+      - group [ref=e339]:
+        - 'generic "keyboard_arrow_right Step 2: PRESCREEN — Trial Search" [ref=e340] [cursor=pointer]':
+          - generic [ref=e341]:
+            - generic [ref=e343]: keyboard_arrow_right
+            - paragraph [ref=e346]: "Step 2: PRESCREEN — Trial Search"
+      - group [ref=e349]:
+        - 'generic "keyboard_arrow_right Step 3: VALIDATE — Eligibility Check" [ref=e350] [cursor=pointer]':
+          - generic [ref=e351]:
+            - generic [ref=e353]: keyboard_arrow_right
+            - paragraph [ref=e356]: "Step 3: VALIDATE — Eligibility Check"
+      - separator [ref=e361]
+      - heading "Results" [level=3] [ref=e366]:
+        - text: Results
+        - generic [ref=e367]:
+          - link "Link to heading":
+            - /url: "#results"
+            - img
+      - paragraph [ref=e372]: Run the pipeline to see matching results.

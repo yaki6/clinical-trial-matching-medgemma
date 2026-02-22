@@ -15,7 +15,7 @@ import asyncio
 import json
 import re
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import structlog
 
@@ -25,6 +25,8 @@ if TYPE_CHECKING:
     from trialmatch.models.base import ModelAdapter
 
 logger = structlog.get_logger()
+
+TraceCallback = Any
 
 INCLUSION_INSTRUCTIONS = (
     'For this INCLUSION criterion, determine if the patient is eligible.\n'
@@ -391,6 +393,20 @@ def _parse_evidence(raw: str | int | list | None) -> list[int]:
         return []
 
 
+def _emit_trace(
+    trace_callback: TraceCallback | None,
+    event_name: str,
+    payload: dict[str, Any],
+) -> None:
+    """Emit evaluator trace event and suppress callback failures."""
+    if trace_callback is None:
+        return
+    try:
+        trace_callback(event_name, payload)
+    except Exception:
+        logger.warning("validate_trace_callback_failed", event=event_name, exc_info=True)
+
+
 async def evaluate_criterion(
     patient_note: str,
     criterion_text: str,
@@ -398,6 +414,7 @@ async def evaluate_criterion(
     adapter: ModelAdapter,
     max_tokens: int = 512,
     timeout_seconds: float = 300.0,
+    trace_callback: TraceCallback | None = None,
 ) -> CriterionResult:
     """Evaluate a single criterion against a patient note.
 
@@ -411,11 +428,24 @@ async def evaluate_criterion(
         adapter: Any ModelAdapter implementation.
         max_tokens: Max tokens for model response.
         timeout_seconds: Per-call timeout. Returns UNKNOWN on timeout.
+        trace_callback: Optional callback(event_name, payload) for local traces.
     """
     prompt = build_criterion_prompt(
         patient_note=patient_note,
         criterion_text=criterion_text,
         criterion_type=criterion_type,
+    )
+    _emit_trace(
+        trace_callback,
+        "validate_single_prompt",
+        {
+            "adapter": adapter.name,
+            "criterion_type": criterion_type,
+            "criterion_text": criterion_text,
+            "prompt": prompt,
+            "max_tokens": max_tokens,
+            "timeout_seconds": timeout_seconds,
+        },
     )
 
     call_start = time.perf_counter()
@@ -432,6 +462,17 @@ async def evaluate_criterion(
             timeout_seconds=timeout_seconds,
             elapsed_ms=elapsed_ms,
         )
+        _emit_trace(
+            trace_callback,
+            "validate_single_timeout",
+            {
+                "adapter": adapter.name,
+                "criterion_type": criterion_type,
+                "criterion_text": criterion_text,
+                "timeout_seconds": timeout_seconds,
+                "latency_ms": elapsed_ms,
+            },
+        )
         return CriterionResult(
             verdict=CriterionVerdict.UNKNOWN,
             reasoning=f"Timeout: model did not respond within {timeout_seconds}s",
@@ -447,6 +488,23 @@ async def evaluate_criterion(
         )
 
     verdict, reasoning, evidence = parse_criterion_verdict(response.text)
+    _emit_trace(
+        trace_callback,
+        "validate_single_response",
+        {
+            "adapter": adapter.name,
+            "criterion_type": criterion_type,
+            "criterion_text": criterion_text,
+            "response_text": response.text,
+            "verdict": verdict.value,
+            "reasoning": reasoning,
+            "evidence_sentences": evidence,
+            "input_tokens": response.input_tokens,
+            "output_tokens": response.output_tokens,
+            "latency_ms": response.latency_ms,
+            "estimated_cost": response.estimated_cost,
+        },
+    )
 
     return CriterionResult(
         verdict=verdict,
@@ -465,6 +523,7 @@ async def evaluate_criterion_two_stage(
     max_tokens_reasoning: int = 2048,
     max_tokens_labeling: int = 256,
     timeout_seconds: float = 300.0,
+    trace_callback: TraceCallback | None = None,
 ) -> CriterionResult:
     """Two-stage evaluation: MedGemma reasons, Gemini labels.
 
@@ -473,9 +532,23 @@ async def evaluate_criterion_two_stage(
 
     This separates medical reasoning (MedGemma's strength) from label assignment
     (Gemini's strength), fixing exclusion inversion and instruction-following errors.
+    If provided, trace_callback receives stage prompts/responses for local auditing.
     """
     # Stage 1: MedGemma medical reasoning
     reasoning_prompt = build_reasoning_prompt(patient_note, criterion_text, criterion_type)
+    _emit_trace(
+        trace_callback,
+        "validate_two_stage_reasoning_prompt",
+        {
+            "reasoning_adapter": reasoning_adapter.name,
+            "labeling_adapter": labeling_adapter.name,
+            "criterion_type": criterion_type,
+            "criterion_text": criterion_text,
+            "prompt": reasoning_prompt,
+            "max_tokens_reasoning": max_tokens_reasoning,
+            "timeout_seconds": timeout_seconds,
+        },
+    )
     call_start = time.perf_counter()
 
     try:
@@ -489,6 +562,17 @@ async def evaluate_criterion_two_stage(
             "two_stage_reasoning_timeout",
             adapter=reasoning_adapter.name,
             timeout_seconds=timeout_seconds,
+        )
+        _emit_trace(
+            trace_callback,
+            "validate_two_stage_reasoning_timeout",
+            {
+                "reasoning_adapter": reasoning_adapter.name,
+                "criterion_type": criterion_type,
+                "criterion_text": criterion_text,
+                "timeout_seconds": timeout_seconds,
+                "latency_ms": elapsed_ms,
+            },
         )
         return CriterionResult(
             verdict=CriterionVerdict.UNKNOWN,
@@ -505,12 +589,39 @@ async def evaluate_criterion_two_stage(
         )
 
     stage1_text = clean_model_response(reasoning_response.text)
+    _emit_trace(
+        trace_callback,
+        "validate_two_stage_reasoning_response",
+        {
+            "reasoning_adapter": reasoning_adapter.name,
+            "criterion_type": criterion_type,
+            "criterion_text": criterion_text,
+            "response_text": reasoning_response.text,
+            "cleaned_reasoning": stage1_text,
+            "input_tokens": reasoning_response.input_tokens,
+            "output_tokens": reasoning_response.output_tokens,
+            "latency_ms": reasoning_response.latency_ms,
+            "estimated_cost": reasoning_response.estimated_cost,
+        },
+    )
 
     # Stage 2: Gemini label assignment
     labeling_prompt = build_labeling_prompt(
         stage1_reasoning=stage1_text,
         criterion_text=criterion_text,
         criterion_type=criterion_type,
+    )
+    _emit_trace(
+        trace_callback,
+        "validate_two_stage_labeling_prompt",
+        {
+            "labeling_adapter": labeling_adapter.name,
+            "criterion_type": criterion_type,
+            "criterion_text": criterion_text,
+            "prompt": labeling_prompt,
+            "max_tokens_labeling": max_tokens_labeling,
+            "timeout_seconds": timeout_seconds,
+        },
     )
 
     try:
@@ -524,6 +635,17 @@ async def evaluate_criterion_two_stage(
             "two_stage_labeling_timeout",
             adapter=labeling_adapter.name,
             timeout_seconds=timeout_seconds,
+        )
+        _emit_trace(
+            trace_callback,
+            "validate_two_stage_labeling_timeout",
+            {
+                "labeling_adapter": labeling_adapter.name,
+                "criterion_type": criterion_type,
+                "criterion_text": criterion_text,
+                "timeout_seconds": timeout_seconds,
+                "latency_ms": elapsed_ms,
+            },
         )
         return CriterionResult(
             verdict=CriterionVerdict.UNKNOWN,
@@ -542,6 +664,23 @@ async def evaluate_criterion_two_stage(
         )
 
     verdict, reasoning, evidence = parse_criterion_verdict(labeling_response.text)
+    _emit_trace(
+        trace_callback,
+        "validate_two_stage_labeling_response",
+        {
+            "labeling_adapter": labeling_adapter.name,
+            "criterion_type": criterion_type,
+            "criterion_text": criterion_text,
+            "response_text": labeling_response.text,
+            "verdict": verdict.value,
+            "reasoning": reasoning,
+            "evidence_sentences": evidence,
+            "input_tokens": labeling_response.input_tokens,
+            "output_tokens": labeling_response.output_tokens,
+            "latency_ms": labeling_response.latency_ms,
+            "estimated_cost": labeling_response.estimated_cost,
+        },
+    )
 
     return CriterionResult(
         verdict=verdict,

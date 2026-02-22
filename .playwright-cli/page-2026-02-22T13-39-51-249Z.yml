@@ -1,0 +1,245 @@
+- generic:
+  - generic [ref=e2]:
+    - generic [ref=e7]:
+      - button "keyboard_double_arrow_left" [ref=e10] [cursor=pointer]:
+        - generic [ref=e12]: keyboard_double_arrow_left
+      - list [ref=e14]:
+        - listitem [ref=e15]:
+          - link "app" [ref=e17] [cursor=pointer]:
+            - /url: http://localhost:8501/
+            - generic [ref=e18]: app
+        - listitem [ref=e19]:
+          - link "Pipeline Demo" [ref=e21] [cursor=pointer]:
+            - /url: http://localhost:8501/Pipeline_Demo
+            - generic [ref=e22]: Pipeline Demo
+        - listitem [ref=e23]:
+          - link "Benchmark" [ref=e25] [cursor=pointer]:
+            - /url: http://localhost:8501/Benchmark
+            - generic [ref=e26]: Benchmark
+      - generic [ref=e30]:
+        - heading "TrialMatch Pipeline" [level=1] [ref=e1649]
+        - generic [ref=e1651]:
+          - paragraph [ref=e1655]: Select Patient
+          - generic [ref=e1657]:
+            - generic [ref=e1658]:
+              - generic [ref=e1659]: mpx1016
+              - combobox "Selected mpx1016. Select Patient" [ref=e1661]
+            - img "open" [ref=e1663]
+        - paragraph [ref=e1669]:
+          - strong [ref=e1670]: mpx1016
+          - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+        - generic [ref=e1672]:
+          - paragraph [ref=e1676]: Pipeline Mode
+          - radiogroup "Pipeline Mode" [ref=e1677] [cursor=pointer]:
+            - generic [ref=e1678]:
+              - radio "live" [checked]
+              - paragraph [ref=e1683]: live
+            - generic [ref=e1684]:
+              - radio "cached"
+              - paragraph [ref=e1689]: cached
+        - generic [ref=e1691]:
+          - generic [ref=e1692]:
+            - paragraph [ref=e1695]: VALIDATE Mode
+            - button "Help for VALIDATE Mode" [ref=e1699] [cursor=pointer]:
+              - img [ref=e1700]
+          - generic [ref=e1704]:
+            - generic [ref=e1705]:
+              - generic [ref=e1706]: Two-Stage (MedGemma → Gemini)
+              - combobox "Selected Two-Stage (MedGemma → Gemini). VALIDATE Mode" [ref=e1708]
+            - img "open" [ref=e1710]
+        - generic [ref=e1714]:
+          - paragraph [ref=e1718]: Max trials to evaluate
+          - generic [ref=e1719]:
+            - slider "Max trials to evaluate" [ref=e1723]:
+              - generic:
+                - generic:
+                  - paragraph: "3"
+            - generic:
+              - generic:
+                - paragraph: "1"
+              - generic:
+                - paragraph: "10"
+        - generic [ref=e1727]:
+          - paragraph [ref=e1731]: Max criteria per trial
+          - generic [ref=e1732]:
+            - slider "Max criteria per trial" [ref=e1736]:
+              - generic:
+                - generic:
+                  - paragraph: "10"
+            - generic:
+              - generic:
+                - paragraph: "5"
+              - generic:
+                - paragraph: "30"
+        - paragraph [ref=e1742]: "Cached: 1 patients (mpx1016)"
+        - button "Run Pipeline" [active] [ref=e1745] [cursor=pointer]:
+          - paragraph [ref=e1749]: Run Pipeline
+        - group [ref=e1752]:
+          - generic "settings Settings" [ref=e1753] [cursor=pointer]:
+            - generic [ref=e1754]:
+              - generic [ref=e1756]: settings
+              - paragraph [ref=e1759]: Settings
+    - generic [ref=e3]:
+      - banner [ref=e147]:
+        - generic [ref=e150]:
+          - button "Deploy" [ref=e152] [cursor=pointer]:
+            - generic [ref=e154]: Deploy
+          - button [ref=e156] [cursor=pointer]:
+            - img [ref=e157]
+      - generic [ref=e160]:
+        - heading "Pipeline Demo" [level=1] [ref=e1764]:
+          - text: Pipeline Demo
+          - generic [ref=e1765]:
+            - link "Link to heading":
+              - /url: "#pipeline-demo"
+              - img
+        - 'heading "Patient: mpx1016" [level=3] [ref=e1770]':
+          - text: "Patient: mpx1016"
+          - generic [ref=e1771]:
+            - link "Link to heading":
+              - /url: "#patient-mpx1016"
+              - img
+        - group [ref=e1774]:
+          - generic "keyboard_arrow_right Clinical Note" [ref=e1775] [cursor=pointer]:
+            - generic [ref=e1776]:
+              - generic [ref=e1778]: keyboard_arrow_right
+              - paragraph [ref=e1781]: Clinical Note
+        - group [ref=e1784]:
+          - 'generic "keyboard_arrow_down Medical Image: CT w/contrast (IV) (Axial) — Chest, Pulmonary" [ref=e1785] [cursor=pointer]':
+            - generic [ref=e1786]:
+              - generic [ref=e1788]: keyboard_arrow_down
+              - paragraph [ref=e1791]: "Medical Image: CT w/contrast (IV) (Axial) — Chest, Pulmonary"
+          - generic [ref=e1793]:
+            - generic [ref=e1796]:
+              - button "Fullscreen" [ref=e1801] [cursor=pointer]:
+                - img [ref=e1802]
+              - img "0" [ref=e1807]
+            - paragraph [ref=e1812]: Contrast enhanced chest CT shows diffuse increased interstitial markings involving the right middle and lower lobes.
+            - paragraph [ref=e1817]:
+              - text: "File:"
+              - code [ref=e1818]: MPX1016_synpic34317.png
+        - separator [ref=e1823]
+        - group [ref=e1826]:
+          - 'generic "keyboard_arrow_down Step 1: INGEST — Key Facts" [ref=e1827] [cursor=pointer]':
+            - generic [ref=e1828]:
+              - generic [ref=e1830]: keyboard_arrow_down
+              - paragraph [ref=e1833]: "Step 1: INGEST — Key Facts"
+          - generic [ref=e1835]:
+            - paragraph [ref=e1840]: Key clinical facts extracted from patient record
+            - generic [ref=e1842]:
+              - paragraph [ref=e1849]:
+                - strong [ref=e1850]: primary_diagnosis
+              - paragraph [ref=e1857]: Lung adenocarcinoma with signet-ring cell features
+            - generic [ref=e1859]:
+              - paragraph [ref=e1866]:
+                - strong [ref=e1867]: age
+              - paragraph [ref=e1874]: "43"
+            - generic [ref=e1876]:
+              - paragraph [ref=e1883]:
+                - strong [ref=e1884]: sex
+              - paragraph [ref=e1891]: female
+            - generic [ref=e1893]:
+              - paragraph [ref=e1900]:
+                - strong [ref=e1901]: imaging_findings
+              - paragraph [ref=e1908]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+            - generic [ref=e1910]:
+              - paragraph [ref=e1917]:
+                - strong [ref=e1918]: key_findings
+              - paragraph [ref=e1925]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+            - generic [ref=e1927]:
+              - paragraph [ref=e1934]:
+                - strong [ref=e1935]: missing_info
+              - paragraph [ref=e1942]: Cancer stage, Performance status, Treatment history
+            - generic [ref=e1944]:
+              - paragraph [ref=e1951]:
+                - strong [ref=e1952]: symptoms
+              - paragraph [ref=e1959]: shortness of breath with exertion, wheezing
+            - generic [ref=e1961]:
+              - paragraph [ref=e1968]:
+                - strong [ref=e1969]: histopathology
+              - paragraph [ref=e1976]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+            - generic [ref=e1978]:
+              - paragraph [ref=e1985]:
+                - strong [ref=e1986]: tobacco_use
+              - paragraph [ref=e1993]: never smoker
+        - group [ref=e1996]:
+          - 'generic "keyboard_arrow_down INGEST: MedGemma 4B Image Analysis" [ref=e1997] [cursor=pointer]':
+            - generic [ref=e1998]:
+              - generic [ref=e2000]: keyboard_arrow_down
+              - paragraph [ref=e2003]: "INGEST: MedGemma 4B Image Analysis"
+          - generic [ref=e2005]:
+            - generic [ref=e2009]:
+              - paragraph [ref=e2010]:
+                - strong [ref=e2011]: "Findings:"
+              - list [ref=e2012]:
+                - listitem [ref=e2013]:
+                  - strong [ref=e2014]: "Lung Parenchyma:"
+                  - list [ref=e2015]:
+                    - listitem [ref=e2016]: There is a 1.5 cm nodule in the right upper lobe (RUL).
+                    - listitem [ref=e2017]: There is a 1.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2018]: There is a 1.0 cm nodule in the right middle lobe (RML).
+                    - listitem [ref=e2019]: There is a 0.8 cm nodule in the left upper lobe (LUL).
+                    - listitem [ref=e2020]: There is a 0.6 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2021]: There is a 0.5 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2022]: There is a 0.4 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2023]: There is a 0.3 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2024]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2025]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2026]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2027]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2028]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2029]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2030]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2031]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2032]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2033]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2034]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2035]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2036]: There is a 0.2 cm nodule in the right lower lobe (RLL).
+                    - listitem [ref=e2037]: There is a 0.2 cm nodule in the left lower lobe (LLL).
+                    - listitem [ref=e2038]
+            - paragraph [ref=e2043]: "Model: medgemma-1.5-4b-it-hae | Latency: 31.6s"
+            - group [ref=e2046]:
+              - generic "keyboard_arrow_right Extraction prompt" [ref=e2047] [cursor=pointer]:
+                - generic [ref=e2048]:
+                  - generic [ref=e2050]: keyboard_arrow_right
+                  - paragraph [ref=e2053]: Extraction prompt
+        - group [ref=e2056]:
+          - generic "keyboard_arrow_down Live Preflight Checks" [ref=e2090] [cursor=pointer]:
+            - generic [ref=e2058]:
+              - generic [ref=e2092]: keyboard_arrow_down
+              - paragraph [ref=e2063]: Live Preflight Checks
+          - generic [ref=e2094]:
+            - paragraph [ref=e2099]:
+              - text: ⚠️
+              - strong [ref=e2100]: Gemini
+              - text: — 239ms
+            - paragraph [ref=e2105]: health check returned False
+            - paragraph [ref=e2110]:
+              - text: ⚠️
+              - strong [ref=e2111]: MedGemma
+              - text: — 656ms
+            - paragraph [ref=e2116]: health check returned False
+            - paragraph [ref=e2121]:
+              - text: ✅
+              - strong [ref=e2122]: CT.gov API
+              - text: — 231ms
+            - paragraph [ref=e2127]: ok (1 studies)
+        - alert [ref=e2130]:
+          - paragraph [ref=e2135]: "Live preflight warnings: Gemini, MedGemma. Continuing with live run."
+        - group [ref=e2138]:
+          - generic "error PRESCREEN failed" [ref=e2139] [cursor=pointer]:
+            - generic [ref=e2140]:
+              - generic [ref=e2142]: error
+              - paragraph [ref=e2145]: PRESCREEN failed
+          - generic [ref=e2147]:
+            - paragraph [ref=e2154]: Running agentic search with gemini-3-pro-preview orchestration...
+            - alert [ref=e2157]:
+              - paragraph [ref=e2162]:
+                - text: "PRESCREEN failed: MedGemma clinical guidance required but failed: Client error '401 Unauthorized' for url '"
+                - link "https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud" [ref=e2163] [cursor=pointer]:
+                  - /url: https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud
+                - text: "' (Request ID: WrMFLf) For more information check:"
+                - link "https://developer.mozilla.org/en-US/docs/W" [ref=e2164] [cursor=pointer]:
+                  - /url: https://developer.mozilla.org/en-US/docs/W
+  - img [ref=e1643]

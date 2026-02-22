@@ -737,6 +737,101 @@ class TestRunPresearchAgent:
         assert result.total_api_calls == 0
         assert "No relevant trials" in result.agent_reasoning
 
+    def test_trace_callback_records_prompt_and_tool_result(self, sample_search_response):
+        """Trace callback captures prescreen prompt, model turns, and raw tool outputs."""
+        adapter = _make_gemini_adapter(
+            [
+                {"function_calls": [{"name": "search_trials", "args": {"condition": "NSCLC"}}]},
+                {"text": "Done.", "function_calls": []},
+            ]
+        )
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.search = AsyncMock(return_value=sample_search_response)
+        mock_ctgov.aclose = AsyncMock()
+        events: list[tuple[str, dict]] = []
+
+        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+            asyncio.run(
+                run_prescreen_agent(
+                    patient_note="NSCLC patient",
+                    key_facts={"diagnosis": "NSCLC"},
+                    ingest_source="gold",
+                    gemini_adapter=adapter,
+                    medgemma_adapter=None,
+                    topic_id="trace-test-001",
+                    trace_callback=lambda event, payload: events.append((event, payload)),
+                )
+            )
+
+        event_names = [name for name, _payload in events]
+        assert "prescreen_prompt" in event_names
+        assert "gemini_turn" in event_names
+        assert "tool_call_result" in event_names
+
+        tool_payload = next(payload for name, payload in events if name == "tool_call_result")
+        assert tool_payload["tool_name"] == "search_trials"
+        assert tool_payload["result"]["count"] == 2
+
+    def test_guidance_required_fails_when_medgemma_fails(self):
+        """When guidance is required, MedGemma failure should abort PRESCREEN."""
+        adapter = _make_gemini_adapter([{"text": "unused", "function_calls": []}])
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.aclose = AsyncMock()
+        mock_medgemma = MagicMock()
+        mock_medgemma.generate = AsyncMock(side_effect=RuntimeError("guidance endpoint down"))
+
+        with (
+            patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov),
+            pytest.raises(
+                RuntimeError,
+                match="MedGemma clinical guidance required but failed",
+            ),
+        ):
+            asyncio.run(
+                run_prescreen_agent(
+                    patient_note="NSCLC patient",
+                    key_facts={"diagnosis": "NSCLC"},
+                    ingest_source="gold",
+                    gemini_adapter=adapter,
+                    medgemma_adapter=mock_medgemma,
+                    require_clinical_guidance=True,
+                    topic_id="test-guidance-required",
+                )
+            )
+
+        mock_ctgov.aclose.assert_awaited_once()
+
+    def test_guidance_optional_continues_when_medgemma_fails(self):
+        """When guidance is optional, MedGemma failure should not abort PRESCREEN."""
+        adapter = _make_gemini_adapter(
+            [{"text": "Completed with optional guidance fallback.", "function_calls": []}]
+        )
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.aclose = AsyncMock()
+        mock_medgemma = MagicMock()
+        mock_medgemma.generate = AsyncMock(side_effect=RuntimeError("guidance endpoint down"))
+
+        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+            result = asyncio.run(
+                run_prescreen_agent(
+                    patient_note="NSCLC patient",
+                    key_facts={"diagnosis": "NSCLC"},
+                    ingest_source="gold",
+                    gemini_adapter=adapter,
+                    medgemma_adapter=mock_medgemma,
+                    require_clinical_guidance=False,
+                    topic_id="test-guidance-optional",
+                )
+            )
+
+        assert isinstance(result, PresearchResult)
+        assert result.total_api_calls == 0
+        assert "optional guidance fallback" in result.agent_reasoning
+        mock_ctgov.aclose.assert_awaited_once()
+
     def test_agent_single_search_tool_call(self, sample_search_response):
         """Gemini calls search_trials once, then returns summary."""
         adapter = _make_gemini_adapter(

@@ -1,0 +1,83 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - button "keyboard_double_arrow_left" [ref=e58] [cursor=pointer]:
+      - generic [ref=e60]: keyboard_double_arrow_left
+    - list [ref=e10]:
+      - listitem [ref=e11]:
+        - link "app" [ref=e13] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e14]: app
+      - listitem [ref=e15]:
+        - link "Pipeline Demo" [active] [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e18]: Pipeline Demo
+      - listitem [ref=e19]:
+        - link "Benchmark" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e22]: Benchmark
+    - generic [ref=e63]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e67]
+      - generic [ref=e69]:
+        - paragraph [ref=e73]: Select Patient
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - generic [ref=e77]: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)
+            - combobox "Selected mpx1016 (43F, Lung adenocarcinoma with signet-ring...). Select Patient" [ref=e79]
+          - img "open" [ref=e81]
+      - paragraph [ref=e87]:
+        - strong [ref=e88]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - button "Search for Trials" [ref=e91] [cursor=pointer]:
+        - paragraph [ref=e95]: Search for Trials
+      - group [ref=e98]:
+        - generic "settings Settings" [ref=e99] [cursor=pointer]:
+          - generic [ref=e100]:
+            - generic [ref=e102]: settings
+            - paragraph [ref=e105]: Settings
+  - generic [ref=e3]:
+    - banner [ref=e26]:
+      - generic [ref=e29]:
+        - generic [ref=e107]:
+          - img "Running..." [ref=e108]:
+            - img [ref=e109]
+          - button "Stop" [ref=e114] [cursor=pointer]
+        - button "Deploy" [ref=e31] [cursor=pointer]:
+          - generic [ref=e33]: Deploy
+        - button [ref=e35] [cursor=pointer]:
+          - img [ref=e36]
+    - generic [ref=e39]:
+      - heading "Find Clinical Trials" [level=1] [ref=e119]:
+        - text: Find Clinical Trials
+        - generic [ref=e120]:
+          - link "Link to heading":
+            - /url: "#find-clinical-trials"
+            - img
+      - paragraph [ref=e125]: This is an AI-assisted screening tool for informational purposes only. It does not constitute medical advice. Always consult with your healthcare provider and the trial's research team before making decisions about clinical trial participation.
+      - 'heading "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)" [level=3] [ref=e130]':
+        - text: "Patient: mpx1016 (43F, Lung adenocarcinoma with signet-ring...)"
+        - generic [ref=e131]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016-43-f-lung-adenocarcinoma-with-signet-ring"
+            - img
+      - group [ref=e134]:
+        - generic "keyboard_arrow_right View Full Medical Record" [ref=e135] [cursor=pointer]:
+          - generic [ref=e136]:
+            - generic [ref=e138]: keyboard_arrow_right
+            - paragraph [ref=e141]: View Full Medical Record
+      - group [ref=e144]:
+        - 'generic "keyboard_arrow_right Medical Image: CT w/contrast (IV) — Axial" [ref=e145] [cursor=pointer]':
+          - generic [ref=e146]:
+            - generic [ref=e148]: keyboard_arrow_right
+            - paragraph [ref=e151]: "Medical Image: CT w/contrast (IV) — Axial"
+      - separator [ref=e156]
+      - group [ref=e159]:
+        - generic "keyboard_arrow_down Your Clinical Profile" [ref=e160] [cursor=pointer]:
+          - generic [ref=e161]:
+            - generic [ref=e163]: keyboard_arrow_down
+            - paragraph [ref=e166]: Your Clinical Profile
+        - generic [ref=e168]:
+          - paragraph [ref=e173]: "Here's what we extracted from your medical record:"
+          - generic [ref=e175]:
+            - paragraph [ref=e182]:
+              - strong [ref=e183]: Diagnosis
+            - paragraph [ref=e190]: Lung adenocarcinoma with signet-ring cell features

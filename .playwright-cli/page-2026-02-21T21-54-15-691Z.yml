@@ -1,0 +1,269 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - button "keyboard_double_arrow_left" [ref=e10] [cursor=pointer]:
+      - generic [ref=e12]: keyboard_double_arrow_left
+    - list [ref=e14]:
+      - listitem [ref=e15]:
+        - link "app" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e18]: app
+      - listitem [ref=e19]:
+        - link "Pipeline Demo" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e22]: Pipeline Demo
+      - listitem [ref=e23]:
+        - link "Benchmark" [ref=e25] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e26]: Benchmark
+    - generic [ref=e30]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e34]
+      - generic [ref=e36]:
+        - paragraph [ref=e40]: Select Patient
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: mpx1016
+            - combobox "Selected mpx1016. Select Patient" [ref=e46]
+          - img "open" [ref=e48]
+      - paragraph [ref=e54]:
+        - strong [ref=e55]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - generic [ref=e57]:
+        - paragraph [ref=e61]: Pipeline Mode
+        - radiogroup "Pipeline Mode" [ref=e62] [cursor=pointer]:
+          - generic [ref=e63]:
+            - radio "live"
+            - paragraph [ref=e68]: live
+          - generic [ref=e69]:
+            - radio "cached" [checked]
+            - paragraph [ref=e74]: cached
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - paragraph [ref=e80]: VALIDATE Model
+          - button "Help for VALIDATE Model" [ref=e84] [cursor=pointer]:
+            - img [ref=e85]
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e91]: Gemini 3 Pro
+            - combobox "Selected Gemini 3 Pro. VALIDATE Model" [ref=e93]
+          - img "open" [ref=e95]
+      - generic [ref=e99]:
+        - paragraph [ref=e103]: Max trials to evaluate
+        - generic [ref=e104]:
+          - slider "Max trials to evaluate" [ref=e108]:
+            - generic:
+              - generic:
+                - paragraph: "3"
+          - generic:
+            - generic:
+              - paragraph: "1"
+            - generic:
+              - paragraph: "10"
+      - generic [ref=e112]:
+        - paragraph [ref=e116]: Max criteria per trial
+        - generic [ref=e117]:
+          - slider "Max criteria per trial" [ref=e121]:
+            - generic:
+              - generic:
+                - paragraph: "10"
+          - generic:
+            - generic:
+              - paragraph: "5"
+            - generic:
+              - paragraph: "30"
+      - paragraph [ref=e127]: "Cached: 1 patients (mpx1016)"
+      - button "Run Pipeline" [active] [ref=e130] [cursor=pointer]:
+        - paragraph [ref=e134]: Run Pipeline
+  - generic [ref=e3]:
+    - banner [ref=e137]:
+      - generic [ref=e140]:
+        - button "Deploy" [ref=e142] [cursor=pointer]:
+          - generic [ref=e144]: Deploy
+        - button [ref=e146] [cursor=pointer]:
+          - img [ref=e147]
+    - generic [ref=e150]:
+      - heading "Pipeline Demo" [level=1] [ref=e155]:
+        - text: Pipeline Demo
+        - generic [ref=e156]:
+          - link "Link to heading":
+            - /url: "#pipeline-demo"
+            - img
+      - 'heading "Patient: mpx1016" [level=3] [ref=e161]':
+        - text: "Patient: mpx1016"
+        - generic [ref=e162]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016"
+            - img
+      - group [ref=e165]:
+        - generic "keyboard_arrow_right Clinical Note" [ref=e166] [cursor=pointer]:
+          - generic [ref=e167]:
+            - generic [ref=e169]: keyboard_arrow_right
+            - paragraph [ref=e172]: Clinical Note
+      - group [ref=e175]:
+        - generic "keyboard_arrow_right Ambiguities / Missing Info" [ref=e176] [cursor=pointer]:
+          - generic [ref=e177]:
+            - generic [ref=e179]: keyboard_arrow_right
+            - paragraph [ref=e182]: Ambiguities / Missing Info
+      - separator [ref=e187]
+      - group [ref=e190]:
+        - 'generic "keyboard_arrow_down Step 1: INGEST — Key Facts" [ref=e191] [cursor=pointer]':
+          - generic [ref=e192]:
+            - generic [ref=e194]: keyboard_arrow_down
+            - paragraph [ref=e197]: "Step 1: INGEST — Key Facts"
+        - generic [ref=e199]:
+          - paragraph [ref=e204]: Key clinical facts extracted from patient record
+          - generic [ref=e206]:
+            - paragraph [ref=e213]:
+              - strong [ref=e214]: primary_diagnosis
+            - paragraph [ref=e221]: Lung adenocarcinoma with signet-ring cell features
+          - generic [ref=e223]:
+            - paragraph [ref=e230]:
+              - strong [ref=e231]: demographics
+            - paragraph [ref=e238]: "age: 43; sex: female"
+          - generic [ref=e240]:
+            - paragraph [ref=e247]:
+              - strong [ref=e248]: imaging_findings
+            - paragraph [ref=e255]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+          - generic [ref=e257]:
+            - paragraph [ref=e264]:
+              - strong [ref=e265]: key_findings
+            - paragraph [ref=e272]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+          - generic [ref=e274]:
+            - paragraph [ref=e281]:
+              - strong [ref=e282]: missing_info
+            - paragraph [ref=e289]: Cancer stage, Performance status, Treatment history
+          - generic [ref=e291]:
+            - paragraph [ref=e298]:
+              - strong [ref=e299]: symptoms
+            - paragraph [ref=e306]: shortness of breath with exertion, wheezing
+          - generic [ref=e308]:
+            - paragraph [ref=e315]:
+              - strong [ref=e316]: histopathology
+            - paragraph [ref=e323]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+          - generic [ref=e325]:
+            - paragraph [ref=e332]:
+              - strong [ref=e333]: tobacco_use
+            - paragraph [ref=e340]: never smoker
+      - group [ref=e343]:
+        - 'generic "keyboard_arrow_down Step 2: PRESCREEN — Trial Search (cached)" [ref=e377] [cursor=pointer]':
+          - generic [ref=e345]:
+            - generic [ref=e379]: keyboard_arrow_down
+            - paragraph [ref=e350]: "Step 2: PRESCREEN — Trial Search (cached)"
+        - generic [ref=e381]:
+          - paragraph [ref=e386]: "Loaded cached result: 35 trials"
+          - paragraph [ref=e391]:
+            - strong [ref=e392]: 12 tool calls recorded
+          - group [ref=e395]:
+            - 'generic "keyboard_arrow_right 🔧 normalize_medical_terms (call #0)" [ref=e396] [cursor=pointer]':
+              - generic [ref=e397]:
+                - generic [ref=e399]: keyboard_arrow_right
+                - paragraph [ref=e402]: "🔧 normalize_medical_terms (call #0)"
+          - group [ref=e405]:
+            - 'generic "keyboard_arrow_right 🔧 normalize_medical_terms (call #1)" [ref=e406] [cursor=pointer]':
+              - generic [ref=e407]:
+                - generic [ref=e409]: keyboard_arrow_right
+                - paragraph [ref=e412]: "🔧 normalize_medical_terms (call #1)"
+          - group [ref=e415]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #2)" [ref=e416] [cursor=pointer]':
+              - generic [ref=e417]:
+                - generic [ref=e419]: keyboard_arrow_right
+                - paragraph [ref=e422]: "🔧 search_trials (call #2)"
+          - group [ref=e425]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #3)" [ref=e426] [cursor=pointer]':
+              - generic [ref=e427]:
+                - generic [ref=e429]: keyboard_arrow_right
+                - paragraph [ref=e432]: "🔧 search_trials (call #3)"
+          - group [ref=e435]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #4)" [ref=e436] [cursor=pointer]':
+              - generic [ref=e437]:
+                - generic [ref=e439]: keyboard_arrow_right
+                - paragraph [ref=e442]: "🔧 search_trials (call #4)"
+          - group [ref=e445]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #5)" [ref=e446] [cursor=pointer]':
+              - generic [ref=e447]:
+                - generic [ref=e449]: keyboard_arrow_right
+                - paragraph [ref=e452]: "🔧 search_trials (call #5)"
+          - group [ref=e455]:
+            - 'generic "keyboard_arrow_right 🔧 get_trial_details (call #6)" [ref=e456] [cursor=pointer]':
+              - generic [ref=e457]:
+                - generic [ref=e459]: keyboard_arrow_right
+                - paragraph [ref=e462]: "🔧 get_trial_details (call #6)"
+          - group [ref=e465]:
+            - 'generic "keyboard_arrow_right 🔧 get_trial_details (call #7)" [ref=e466] [cursor=pointer]':
+              - generic [ref=e467]:
+                - generic [ref=e469]: keyboard_arrow_right
+                - paragraph [ref=e472]: "🔧 get_trial_details (call #7)"
+          - group [ref=e475]:
+            - 'generic "keyboard_arrow_right 🔧 get_trial_details (call #8)" [ref=e476] [cursor=pointer]':
+              - generic [ref=e477]:
+                - generic [ref=e479]: keyboard_arrow_right
+                - paragraph [ref=e482]: "🔧 get_trial_details (call #8)"
+          - group [ref=e485]:
+            - 'generic "keyboard_arrow_right 🔧 get_trial_details (call #9)" [ref=e486] [cursor=pointer]':
+              - generic [ref=e487]:
+                - generic [ref=e489]: keyboard_arrow_right
+                - paragraph [ref=e492]: "🔧 get_trial_details (call #9)"
+          - group [ref=e495]:
+            - 'generic "keyboard_arrow_right 🔧 get_trial_details (call #10)" [ref=e496] [cursor=pointer]':
+              - generic [ref=e497]:
+                - generic [ref=e499]: keyboard_arrow_right
+                - paragraph [ref=e502]: "🔧 get_trial_details (call #10)"
+          - group [ref=e505]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #11)" [ref=e506] [cursor=pointer]':
+              - generic [ref=e507]:
+                - generic [ref=e509]: keyboard_arrow_right
+                - paragraph [ref=e512]: "🔧 search_trials (call #11)"
+          - generic [ref=e517]:
+            - button "Show/hide columns" [ref=e521] [cursor=pointer]:
+              - img [ref=e522]
+            - button "Download as CSV" [ref=e527] [cursor=pointer]:
+              - img [ref=e528]
+            - button "Search" [ref=e533] [cursor=pointer]:
+              - img [ref=e534]
+            - button "Fullscreen" [ref=e539] [cursor=pointer]:
+              - img [ref=e540]
+      - group [ref=e353]:
+        - 'generic "keyboard_arrow_down Step 3: VALIDATE — Eligibility Check (cached)" [ref=e551] [cursor=pointer]':
+          - generic [ref=e355]:
+            - generic [ref=e553]: keyboard_arrow_down
+            - paragraph [ref=e360]: "Step 3: VALIDATE — Eligibility Check (cached)"
+        - generic [ref=e555]:
+          - paragraph [ref=e560]:
+            - strong [ref=e561]: NCT05885698
+          - paragraph [ref=e566]:
+            - text: 🟡
+            - strong [ref=e567]: UNKNOWN
+            - text: "[INCLUSION] — Adult subjects (18 years and older) with newly diagnosed early stage, locally advanced or metastatic"
+          - paragraph [ref=e572]:
+            - text: 🟡
+            - strong [ref=e573]: UNKNOWN
+            - text: "[INCLUSION] — Must be eligible for systemic therapy based on the treating provider's assessment. If systemic thera"
+          - paragraph [ref=e578]:
+            - text: 🟡
+            - strong [ref=e579]: UNKNOWN
+            - text: "[INCLUSION] — Subjects who developed locally advanced or metastatic disease after receiving adjuvant or neoadjuvan"
+          - paragraph [ref=e584]:
+            - text: 🟡
+            - strong [ref=e585]: UNKNOWN
+            - text: "[INCLUSION] — Subjects must be enrolled within 30 days of initiation of systemic therapy"
+          - paragraph [ref=e590]:
+            - text: 🟡
+            - strong [ref=e591]: UNKNOWN
+            - text: "[INCLUSION] — Signed informed consent"
+          - paragraph [ref=e596]:
+            - strong [ref=e597]: "Trial verdict: UNCERTAIN"
+          - separator [ref=e602]
+      - separator [ref=e365]
+      - heading "Results" [level=3] [ref=e370]:
+        - text: Results
+        - generic [ref=e371]:
+          - link "Link to heading":
+            - /url: "#results"
+            - img
+      - paragraph [ref=e376]:
+        - strong [ref=e603]: UNCERTAIN
+        - text: "|"
+        - link "NCT05885698" [ref=e604] [cursor=pointer]:
+          - /url: https://clinicaltrials.gov/study/NCT05885698
+        - text: "| MYLUNG Consortium Part 3: Observational Study | Criteria: 0/5"
+      - separator [ref=e609]
+      - paragraph [ref=e614]: "Evaluated 1 trials with Gemini 3 Pro. Pipeline mode: cached."

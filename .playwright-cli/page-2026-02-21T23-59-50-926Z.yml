@@ -1,0 +1,654 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - button "keyboard_double_arrow_left" [ref=e10] [cursor=pointer]:
+      - generic [ref=e12]: keyboard_double_arrow_left
+    - list [ref=e14]:
+      - listitem [ref=e15]:
+        - link "app" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e18]: app
+      - listitem [ref=e19]:
+        - link "Pipeline Demo" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e22]: Pipeline Demo
+      - listitem [ref=e23]:
+        - link "Benchmark" [ref=e25] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e26]: Benchmark
+    - generic [ref=e30]:
+      - heading "TrialMatch Pipeline" [level=1] [ref=e34]
+      - generic [ref=e36]:
+        - paragraph [ref=e40]: Select Patient
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: mpx1016
+            - combobox "Selected mpx1016. Select Patient" [ref=e46]
+          - img "open" [ref=e48]
+      - paragraph [ref=e54]:
+        - strong [ref=e55]: mpx1016
+        - text: ": ## Clinical History A 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chro..."
+      - generic [ref=e57]:
+        - paragraph [ref=e61]: Pipeline Mode
+        - radiogroup "Pipeline Mode" [ref=e62] [cursor=pointer]:
+          - generic [ref=e63]:
+            - radio "live"
+            - paragraph [ref=e68]: live
+          - generic [ref=e69]:
+            - radio "cached" [checked]
+            - paragraph [ref=e74]: cached
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - paragraph [ref=e80]: VALIDATE Mode
+          - button "Help for VALIDATE Mode" [ref=e84] [cursor=pointer]:
+            - img [ref=e85]
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e91]: Two-Stage (MedGemma → Gemini)
+            - combobox "Selected Two-Stage (MedGemma → Gemini). VALIDATE Mode" [ref=e93]
+          - img "open" [ref=e95]
+      - generic [ref=e99]:
+        - paragraph [ref=e103]: Max trials to evaluate
+        - generic [ref=e104]:
+          - slider "Max trials to evaluate" [ref=e108]:
+            - generic:
+              - generic:
+                - paragraph: "3"
+          - generic:
+            - generic:
+              - paragraph: "1"
+            - generic:
+              - paragraph: "10"
+      - generic [ref=e112]:
+        - paragraph [ref=e116]: Max criteria per trial
+        - generic [ref=e117]:
+          - slider "Max criteria per trial" [ref=e121]:
+            - generic:
+              - generic:
+                - paragraph: "10"
+          - generic:
+            - generic:
+              - paragraph: "5"
+            - generic:
+              - paragraph: "30"
+      - paragraph [ref=e127]: "Cached: 1 patients (mpx1016)"
+      - button "Run Pipeline" [active] [ref=e130] [cursor=pointer]:
+        - paragraph [ref=e134]: Run Pipeline
+      - group [ref=e137]:
+        - generic "settings Settings" [ref=e138] [cursor=pointer]:
+          - generic [ref=e139]:
+            - generic [ref=e141]: settings
+            - paragraph [ref=e144]: Settings
+  - generic [ref=e3]:
+    - banner [ref=e147]:
+      - generic [ref=e150]:
+        - button "Deploy" [ref=e152] [cursor=pointer]:
+          - generic [ref=e154]: Deploy
+        - button [ref=e156] [cursor=pointer]:
+          - img [ref=e157]
+    - generic [ref=e160]:
+      - heading "Pipeline Demo" [level=1] [ref=e165]:
+        - text: Pipeline Demo
+        - generic [ref=e166]:
+          - link "Link to heading":
+            - /url: "#pipeline-demo"
+            - img
+      - 'heading "Patient: mpx1016" [level=3] [ref=e171]':
+        - text: "Patient: mpx1016"
+        - generic [ref=e172]:
+          - link "Link to heading":
+            - /url: "#patient-mpx1016"
+            - img
+      - group [ref=e175]:
+        - generic "keyboard_arrow_right Clinical Note" [ref=e176] [cursor=pointer]:
+          - generic [ref=e177]:
+            - generic [ref=e179]: keyboard_arrow_right
+            - paragraph [ref=e182]: Clinical Note
+      - group [ref=e185]:
+        - generic "keyboard_arrow_right Ambiguities / Missing Info" [ref=e186] [cursor=pointer]:
+          - generic [ref=e187]:
+            - generic [ref=e189]: keyboard_arrow_right
+            - paragraph [ref=e192]: Ambiguities / Missing Info
+      - separator [ref=e197]
+      - group [ref=e200]:
+        - 'generic "keyboard_arrow_down Step 1: INGEST — Key Facts" [ref=e201] [cursor=pointer]':
+          - generic [ref=e202]:
+            - generic [ref=e204]: keyboard_arrow_down
+            - paragraph [ref=e207]: "Step 1: INGEST — Key Facts"
+        - generic [ref=e209]:
+          - paragraph [ref=e214]: Key clinical facts extracted from patient record
+          - generic [ref=e216]:
+            - paragraph [ref=e223]:
+              - strong [ref=e224]: primary_diagnosis
+            - paragraph [ref=e231]: Lung adenocarcinoma with signet-ring cell features
+          - generic [ref=e233]:
+            - paragraph [ref=e240]:
+              - strong [ref=e241]: age
+            - paragraph [ref=e248]: "43"
+          - generic [ref=e250]:
+            - paragraph [ref=e257]:
+              - strong [ref=e258]: sex
+            - paragraph [ref=e265]: female
+          - generic [ref=e267]:
+            - paragraph [ref=e274]:
+              - strong [ref=e275]: demographics
+            - paragraph [ref=e282]: "age: 43; sex: female"
+          - generic [ref=e284]:
+            - paragraph [ref=e291]:
+              - strong [ref=e292]: imaging_findings
+            - paragraph [ref=e299]: "description: Axial CT of the chest shows nodular and branching opacities in the right upper lobe (tree-in-bud pattern), a large, well-defined mass in the left lower lobe, and interstitial changes with pleural thickening and a small effusion in the right lung.; findings: Nodular and branching opacities in right upper lobe (tree-in-bud pattern), Large mass in left lower lobe, Interstitial changes in right lung, Right pleural thickening, Small right-sided pleural effusion"
+          - generic [ref=e301]:
+            - paragraph [ref=e308]:
+              - strong [ref=e309]: key_findings
+            - paragraph [ref=e316]: Progressively worsening shortness of breath with exertion, Wheezing, Pleural fluid suspicious for malignancy, Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells, No history of tobacco use
+          - generic [ref=e318]:
+            - paragraph [ref=e325]:
+              - strong [ref=e326]: missing_info
+            - paragraph [ref=e333]: Cancer stage, Performance status, Treatment history
+          - generic [ref=e335]:
+            - paragraph [ref=e342]:
+              - strong [ref=e343]: symptoms
+            - paragraph [ref=e350]: shortness of breath with exertion, wheezing
+          - generic [ref=e352]:
+            - paragraph [ref=e359]:
+              - strong [ref=e360]: histopathology
+            - paragraph [ref=e367]: "lymphovascular_invasion: True; necrosis: focal; cell_type: signet-ring cells"
+          - generic [ref=e369]:
+            - paragraph [ref=e376]:
+              - strong [ref=e377]: tobacco_use
+            - paragraph [ref=e384]: never smoker
+      - group [ref=e387]:
+        - 'generic "keyboard_arrow_down Step 2: PRESCREEN — Trial Search (cached)" [ref=e421] [cursor=pointer]':
+          - generic [ref=e389]:
+            - generic [ref=e423]: keyboard_arrow_down
+            - paragraph [ref=e394]: "Step 2: PRESCREEN — Trial Search (cached)"
+        - generic [ref=e425]:
+          - paragraph [ref=e430]: "Loaded cached result: 63 trials"
+          - paragraph [ref=e435]:
+            - strong [ref=e436]: 13 tool calls recorded
+          - group [ref=e439]:
+            - 'generic "keyboard_arrow_right 🔧 normalize_medical_terms (call #0)" [ref=e440] [cursor=pointer]':
+              - generic [ref=e441]:
+                - generic [ref=e443]: keyboard_arrow_right
+                - paragraph [ref=e446]: "🔧 normalize_medical_terms (call #0)"
+          - group [ref=e449]:
+            - 'generic "keyboard_arrow_right 🔧 normalize_medical_terms (call #1)" [ref=e450] [cursor=pointer]':
+              - generic [ref=e451]:
+                - generic [ref=e453]: keyboard_arrow_right
+                - paragraph [ref=e456]: "🔧 normalize_medical_terms (call #1)"
+          - group [ref=e459]:
+            - 'generic "keyboard_arrow_right 🔧 normalize_medical_terms (call #2)" [ref=e460] [cursor=pointer]':
+              - generic [ref=e461]:
+                - generic [ref=e463]: keyboard_arrow_right
+                - paragraph [ref=e466]: "🔧 normalize_medical_terms (call #2)"
+          - group [ref=e469]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #3)" [ref=e470] [cursor=pointer]':
+              - generic [ref=e471]:
+                - generic [ref=e473]: keyboard_arrow_right
+                - paragraph [ref=e476]: "🔧 search_trials (call #3)"
+          - group [ref=e479]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #4)" [ref=e480] [cursor=pointer]':
+              - generic [ref=e481]:
+                - generic [ref=e483]: keyboard_arrow_right
+                - paragraph [ref=e486]: "🔧 search_trials (call #4)"
+          - group [ref=e489]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #5)" [ref=e490] [cursor=pointer]':
+              - generic [ref=e491]:
+                - generic [ref=e493]: keyboard_arrow_right
+                - paragraph [ref=e496]: "🔧 search_trials (call #5)"
+          - group [ref=e499]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #6)" [ref=e500] [cursor=pointer]':
+              - generic [ref=e501]:
+                - generic [ref=e503]: keyboard_arrow_right
+                - paragraph [ref=e506]: "🔧 search_trials (call #6)"
+          - group [ref=e509]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #7)" [ref=e510] [cursor=pointer]':
+              - generic [ref=e511]:
+                - generic [ref=e513]: keyboard_arrow_right
+                - paragraph [ref=e516]: "🔧 search_trials (call #7)"
+          - group [ref=e519]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #8)" [ref=e520] [cursor=pointer]':
+              - generic [ref=e521]:
+                - generic [ref=e523]: keyboard_arrow_right
+                - paragraph [ref=e526]: "🔧 search_trials (call #8)"
+          - group [ref=e529]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #9)" [ref=e530] [cursor=pointer]':
+              - generic [ref=e531]:
+                - generic [ref=e533]: keyboard_arrow_right
+                - paragraph [ref=e536]: "🔧 search_trials (call #9)"
+          - group [ref=e539]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #10)" [ref=e540] [cursor=pointer]':
+              - generic [ref=e541]:
+                - generic [ref=e543]: keyboard_arrow_right
+                - paragraph [ref=e546]: "🔧 search_trials (call #10)"
+          - group [ref=e549]:
+            - 'generic "keyboard_arrow_right 🔧 search_trials (call #11)" [ref=e550] [cursor=pointer]':
+              - generic [ref=e551]:
+                - generic [ref=e553]: keyboard_arrow_right
+                - paragraph [ref=e556]: "🔧 search_trials (call #11)"
+          - group [ref=e559]:
+            - 'generic "keyboard_arrow_right 🔧 get_trial_details (call #12)" [ref=e560] [cursor=pointer]':
+              - generic [ref=e561]:
+                - generic [ref=e563]: keyboard_arrow_right
+                - paragraph [ref=e566]: "🔧 get_trial_details (call #12)"
+          - generic [ref=e571]:
+            - button "Show/hide columns" [ref=e575] [cursor=pointer]:
+              - img [ref=e576]
+            - button "Download as CSV" [ref=e581] [cursor=pointer]:
+              - img [ref=e582]
+            - button "Search" [ref=e587] [cursor=pointer]:
+              - img [ref=e588]
+            - button "Fullscreen" [ref=e593] [cursor=pointer]:
+              - img [ref=e594]
+      - group [ref=e397]:
+        - 'generic "keyboard_arrow_down Step 3: VALIDATE — Eligibility Check (cached)" [ref=e605] [cursor=pointer]':
+          - generic [ref=e399]:
+            - generic [ref=e607]: keyboard_arrow_down
+            - paragraph [ref=e404]: "Step 3: VALIDATE — Eligibility Check (cached)"
+        - generic [ref=e609]:
+          - paragraph [ref=e614]:
+            - strong [ref=e615]: NCT06196424
+          - paragraph [ref=e620]:
+            - text: 🟢
+            - strong [ref=e621]: MET
+            - text: "[INCLUSION] — Histopathological diagnosis of Non-Small Cell Lung Cancer (all stages)"
+          - group [ref=e624]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e625] [cursor=pointer]':
+              - generic [ref=e626]:
+                - generic [ref=e628]: keyboard_arrow_right
+                - paragraph [ref=e631]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e634]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e635] [cursor=pointer]':
+              - generic [ref=e636]:
+                - generic [ref=e638]: keyboard_arrow_right
+                - paragraph [ref=e641]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e646]:
+            - text: 🟢
+            - strong [ref=e647]: MET
+            - text: "[INCLUSION] — Age ≥ 18 years old"
+          - group [ref=e650]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e651] [cursor=pointer]':
+              - generic [ref=e652]:
+                - generic [ref=e654]: keyboard_arrow_right
+                - paragraph [ref=e657]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e660]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e661] [cursor=pointer]':
+              - generic [ref=e662]:
+                - generic [ref=e664]: keyboard_arrow_right
+                - paragraph [ref=e667]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e672]:
+            - text: 🟡
+            - strong [ref=e673]: UNKNOWN
+            - text: "[INCLUSION] — Signed informed consent"
+          - group [ref=e676]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e677] [cursor=pointer]':
+              - generic [ref=e678]:
+                - generic [ref=e680]: keyboard_arrow_right
+                - paragraph [ref=e683]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e686]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e687] [cursor=pointer]':
+              - generic [ref=e688]:
+                - generic [ref=e690]: keyboard_arrow_right
+                - paragraph [ref=e693]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e698]:
+            - text: 🔴
+            - strong [ref=e699]: NOT_MET
+            - text: "[INCLUSION] — Availability of familiar and/or personal anamnestic data of cancer"
+          - group [ref=e702]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e703] [cursor=pointer]':
+              - generic [ref=e704]:
+                - generic [ref=e706]: keyboard_arrow_right
+                - paragraph [ref=e709]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e712]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e713] [cursor=pointer]':
+              - generic [ref=e714]:
+                - generic [ref=e716]: keyboard_arrow_right
+                - paragraph [ref=e719]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e724]:
+            - text: 🔴
+            - strong [ref=e725]: NOT_MET
+            - text: "[EXCLUSION] — Unavailability of familiar and/or personal anamnestic data of cancer"
+          - group [ref=e728]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e729] [cursor=pointer]':
+              - generic [ref=e730]:
+                - generic [ref=e732]: keyboard_arrow_right
+                - paragraph [ref=e735]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e738]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e739] [cursor=pointer]':
+              - generic [ref=e740]:
+                - generic [ref=e742]: keyboard_arrow_right
+                - paragraph [ref=e745]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e750]:
+            - text: 🔴
+            - strong [ref=e751]: NOT_MET
+            - text: "[EXCLUSION] — Patient's refusal"
+          - group [ref=e754]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e755] [cursor=pointer]':
+              - generic [ref=e756]:
+                - generic [ref=e758]: keyboard_arrow_right
+                - paragraph [ref=e761]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e764]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e765] [cursor=pointer]':
+              - generic [ref=e766]:
+                - generic [ref=e768]: keyboard_arrow_right
+                - paragraph [ref=e771]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e776]:
+            - strong [ref=e777]: "Trial verdict: EXCLUDED"
+          - separator [ref=e782]
+          - paragraph [ref=e787]:
+            - strong [ref=e788]: NCT06074588
+          - paragraph [ref=e793]:
+            - text: 🔴
+            - strong [ref=e794]: NOT_MET
+            - text: "[INCLUSION] — Histologically- or cytologically-documented advanced (Stage III not eligible for resection or curati"
+          - group [ref=e797]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e798] [cursor=pointer]':
+              - generic [ref=e799]:
+                - generic [ref=e801]: keyboard_arrow_right
+                - paragraph [ref=e804]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e807]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e808] [cursor=pointer]':
+              - generic [ref=e809]:
+                - generic [ref=e811]: keyboard_arrow_right
+                - paragraph [ref=e814]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e819]:
+            - text: 🔴
+            - strong [ref=e820]: NOT_MET
+            - text: "[INCLUSION] — Documentation of locally assessed radiological disease progression while on or after last treatment"
+          - group [ref=e823]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e824] [cursor=pointer]':
+              - generic [ref=e825]:
+                - generic [ref=e827]: keyboard_arrow_right
+                - paragraph [ref=e830]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e833]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e834] [cursor=pointer]':
+              - generic [ref=e835]:
+                - generic [ref=e837]: keyboard_arrow_right
+                - paragraph [ref=e840]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e845]:
+            - text: 🟡
+            - strong [ref=e846]: UNKNOWN
+            - text: "[INCLUSION] — Participants with genome mutations must have received 1 or 2 prior lines of epidermal growth factor"
+          - group [ref=e849]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e850] [cursor=pointer]':
+              - generic [ref=e851]:
+                - generic [ref=e853]: keyboard_arrow_right
+                - paragraph [ref=e856]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e859]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e860] [cursor=pointer]':
+              - generic [ref=e861]:
+                - generic [ref=e863]: keyboard_arrow_right
+                - paragraph [ref=e866]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e871]:
+            - text: 🟡
+            - strong [ref=e872]: UNKNOWN
+            - text: "[INCLUSION] — Measurable disease per RECIST 1.1 as assessed by the local site investigator."
+          - group [ref=e875]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e876] [cursor=pointer]':
+              - generic [ref=e877]:
+                - generic [ref=e879]: keyboard_arrow_right
+                - paragraph [ref=e882]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e885]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e886] [cursor=pointer]':
+              - generic [ref=e887]:
+                - generic [ref=e889]: keyboard_arrow_right
+                - paragraph [ref=e892]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e897]:
+            - text: 🟢
+            - strong [ref=e898]: MET
+            - text: "[INCLUSION] — Archival tumor tissue sample or newly obtained core, incisional, or excisional biopsy of a tumor les"
+          - group [ref=e901]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e902] [cursor=pointer]':
+              - generic [ref=e903]:
+                - generic [ref=e905]: keyboard_arrow_right
+                - paragraph [ref=e908]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e911]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e912] [cursor=pointer]':
+              - generic [ref=e913]:
+                - generic [ref=e915]: keyboard_arrow_right
+                - paragraph [ref=e918]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e923]:
+            - text: 🟡
+            - strong [ref=e924]: UNKNOWN
+            - text: "[INCLUSION] — Participants who have AEs due to previous anticancer therapies must have recovered to Grade ≤1 or ba"
+          - group [ref=e927]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e928] [cursor=pointer]':
+              - generic [ref=e929]:
+                - generic [ref=e931]: keyboard_arrow_right
+                - paragraph [ref=e934]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e937]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e938] [cursor=pointer]':
+              - generic [ref=e939]:
+                - generic [ref=e941]: keyboard_arrow_right
+                - paragraph [ref=e944]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e949]:
+            - text: 🟡
+            - strong [ref=e950]: UNKNOWN
+            - text: "[INCLUSION] — Participants who are hepatitis B surface antigen (HBsAg) positive are eligible if they have received"
+          - group [ref=e953]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e954] [cursor=pointer]':
+              - generic [ref=e955]:
+                - generic [ref=e957]: keyboard_arrow_right
+                - paragraph [ref=e960]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e963]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e964] [cursor=pointer]':
+              - generic [ref=e965]:
+                - generic [ref=e967]: keyboard_arrow_right
+                - paragraph [ref=e970]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e975]:
+            - text: 🟡
+            - strong [ref=e976]: UNKNOWN
+            - text: "[INCLUSION] — Human immunodeficiency virus (HIV)-infected participants must have well controlled HIV on antiretrov"
+          - group [ref=e979]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e980] [cursor=pointer]':
+              - generic [ref=e981]:
+                - generic [ref=e983]: keyboard_arrow_right
+                - paragraph [ref=e986]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e989]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e990] [cursor=pointer]':
+              - generic [ref=e991]:
+                - generic [ref=e993]: keyboard_arrow_right
+                - paragraph [ref=e996]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1001]:
+            - text: 🟡
+            - strong [ref=e1002]: UNKNOWN
+            - text: "[INCLUSION] — Have an ECOG performance status of 0 or 1 within 3 days before randomization."
+          - group [ref=e1005]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1006] [cursor=pointer]':
+              - generic [ref=e1007]:
+                - generic [ref=e1009]: keyboard_arrow_right
+                - paragraph [ref=e1012]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1015]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1016] [cursor=pointer]':
+              - generic [ref=e1017]:
+                - generic [ref=e1019]: keyboard_arrow_right
+                - paragraph [ref=e1022]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1027]:
+            - text: 🔴
+            - strong [ref=e1028]: NOT_MET
+            - text: "[EXCLUSION] — Has predominantly squamous cell histology NSCLC."
+          - group [ref=e1031]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1032] [cursor=pointer]':
+              - generic [ref=e1033]:
+                - generic [ref=e1035]: keyboard_arrow_right
+                - paragraph [ref=e1038]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1041]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1042] [cursor=pointer]':
+              - generic [ref=e1043]:
+                - generic [ref=e1045]: keyboard_arrow_right
+                - paragraph [ref=e1048]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1053]:
+            - strong [ref=e1054]: "Trial verdict: EXCLUDED"
+          - separator [ref=e1059]
+          - paragraph [ref=e1064]:
+            - strong [ref=e1065]: NCT00301119
+          - paragraph [ref=e1070]:
+            - text: 🟢
+            - strong [ref=e1071]: MET
+            - text: "[INCLUSION] — DISEASE CHARACTERISTICS:"
+          - group [ref=e1074]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1075] [cursor=pointer]':
+              - generic [ref=e1076]:
+                - generic [ref=e1078]: keyboard_arrow_right
+                - paragraph [ref=e1081]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1084]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1085] [cursor=pointer]':
+              - generic [ref=e1086]:
+                - generic [ref=e1088]: keyboard_arrow_right
+                - paragraph [ref=e1091]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1096]:
+            - text: 🟡
+            - strong [ref=e1097]: UNKNOWN
+            - text: "[INCLUSION] — Screening Cohort"
+          - group [ref=e1100]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1101] [cursor=pointer]':
+              - generic [ref=e1102]:
+                - generic [ref=e1104]: keyboard_arrow_right
+                - paragraph [ref=e1107]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1110]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1111] [cursor=pointer]':
+              - generic [ref=e1112]:
+                - generic [ref=e1114]: keyboard_arrow_right
+                - paragraph [ref=e1117]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1122]:
+            - text: 🟡
+            - strong [ref=e1123]: UNKNOWN
+            - text: "[INCLUSION] — At high- or low-risk for lung cancer"
+          - group [ref=e1126]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1127] [cursor=pointer]':
+              - generic [ref=e1128]:
+                - generic [ref=e1130]: keyboard_arrow_right
+                - paragraph [ref=e1133]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1136]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1137] [cursor=pointer]':
+              - generic [ref=e1138]:
+                - generic [ref=e1140]: keyboard_arrow_right
+                - paragraph [ref=e1143]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1148]:
+            - text: 🔴
+            - strong [ref=e1149]: NOT_MET
+            - text: "[INCLUSION] — Smoking history ≥ 20 pack years*"
+          - group [ref=e1152]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1153] [cursor=pointer]':
+              - generic [ref=e1154]:
+                - generic [ref=e1156]: keyboard_arrow_right
+                - paragraph [ref=e1159]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1162]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1163] [cursor=pointer]':
+              - generic [ref=e1164]:
+                - generic [ref=e1166]: keyboard_arrow_right
+                - paragraph [ref=e1169]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1174]:
+            - text: 🟡
+            - strong [ref=e1175]: UNKNOWN
+            - text: "[INCLUSION] — With or without workplace exposure to asbestos"
+          - group [ref=e1178]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1179] [cursor=pointer]':
+              - generic [ref=e1180]:
+                - generic [ref=e1182]: keyboard_arrow_right
+                - paragraph [ref=e1185]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1188]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1189] [cursor=pointer]':
+              - generic [ref=e1190]:
+                - generic [ref=e1192]: keyboard_arrow_right
+                - paragraph [ref=e1195]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1200]:
+            - text: 🔴
+            - strong [ref=e1201]: NOT_MET
+            - text: "[INCLUSION] — NOTE: * Participants with < 20 pack years of smoking are eligible if 50 years of age or older"
+          - group [ref=e1204]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1205] [cursor=pointer]':
+              - generic [ref=e1206]:
+                - generic [ref=e1208]: keyboard_arrow_right
+                - paragraph [ref=e1211]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1214]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1215] [cursor=pointer]':
+              - generic [ref=e1216]:
+                - generic [ref=e1218]: keyboard_arrow_right
+                - paragraph [ref=e1221]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1226]:
+            - text: 🟢
+            - strong [ref=e1227]: MET
+            - text: "[INCLUSION] — Rule-Out Lung cancer group"
+          - group [ref=e1230]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1231] [cursor=pointer]':
+              - generic [ref=e1232]:
+                - generic [ref=e1234]: keyboard_arrow_right
+                - paragraph [ref=e1237]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1240]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1241] [cursor=pointer]':
+              - generic [ref=e1242]:
+                - generic [ref=e1244]: keyboard_arrow_right
+                - paragraph [ref=e1247]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1252]:
+            - text: 🟢
+            - strong [ref=e1253]: MET
+            - text: "[INCLUSION] — Referred for evaluation of suspicious nodules with 1 of the following diagnoses:"
+          - group [ref=e1256]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1257] [cursor=pointer]':
+              - generic [ref=e1258]:
+                - generic [ref=e1260]: keyboard_arrow_right
+                - paragraph [ref=e1263]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1266]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1267] [cursor=pointer]':
+              - generic [ref=e1268]:
+                - generic [ref=e1270]: keyboard_arrow_right
+                - paragraph [ref=e1273]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1278]:
+            - text: 🟢
+            - strong [ref=e1279]: MET
+            - text: "[INCLUSION] — Lung cancer"
+          - group [ref=e1282]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1283] [cursor=pointer]':
+              - generic [ref=e1284]:
+                - generic [ref=e1286]: keyboard_arrow_right
+                - paragraph [ref=e1289]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1292]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1293] [cursor=pointer]':
+              - generic [ref=e1294]:
+                - generic [ref=e1296]: keyboard_arrow_right
+                - paragraph [ref=e1299]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1304]:
+            - text: 🟡
+            - strong [ref=e1305]: UNKNOWN
+            - text: "[INCLUSION] — Nonmalignant nodules (control group)"
+          - group [ref=e1308]:
+            - 'generic "keyboard_arrow_right Stage 1: MedGemma Medical Reasoning" [ref=e1309] [cursor=pointer]':
+              - generic [ref=e1310]:
+                - generic [ref=e1312]: keyboard_arrow_right
+                - paragraph [ref=e1315]: "Stage 1: MedGemma Medical Reasoning"
+          - group [ref=e1318]:
+            - 'generic "keyboard_arrow_right Stage 2: Gemini Label Assignment" [ref=e1319] [cursor=pointer]':
+              - generic [ref=e1320]:
+                - generic [ref=e1322]: keyboard_arrow_right
+                - paragraph [ref=e1325]: "Stage 2: Gemini Label Assignment"
+          - paragraph [ref=e1330]:
+            - strong [ref=e1331]: "Trial verdict: EXCLUDED"
+          - separator [ref=e1336]
+          - paragraph [ref=e1341]: "Evaluation mode: Two-Stage (MedGemma → Gemini)"
+      - separator [ref=e409]
+      - heading "Results" [level=3] [ref=e414]:
+        - text: Results
+        - generic [ref=e415]:
+          - link "Link to heading":
+            - /url: "#results"
+            - img
+      - paragraph [ref=e420]:
+        - strong [ref=e1342]: EXCLUDED
+        - text: "|"
+        - link "NCT06196424" [ref=e1343] [cursor=pointer]:
+          - /url: https://clinicaltrials.gov/study/NCT06196424
+        - text: "| A Study to Investigate the Family History of Cancer in Patients With Non-small C | Criteria: 2/6"
+      - paragraph [ref=e1348]:
+        - strong [ref=e1349]: EXCLUDED
+        - text: "|"
+        - link "NCT06074588" [ref=e1350] [cursor=pointer]:
+          - /url: https://clinicaltrials.gov/study/NCT06074588
+        - text: "| Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Adva | Criteria: 1/10"
+      - paragraph [ref=e1355]:
+        - strong [ref=e1356]: EXCLUDED
+        - text: "|"
+        - link "NCT00301119" [ref=e1357] [cursor=pointer]:
+          - /url: https://clinicaltrials.gov/study/NCT00301119
+        - text: "| Lung Cancer Biomarkers and Screening | Criteria: 4/10"
+      - separator [ref=e1362]
+      - paragraph [ref=e1367]: "Evaluated 3 trials with Two-Stage (MedGemma → Gemini). Pipeline mode: cached."

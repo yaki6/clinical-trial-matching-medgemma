@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "runs": [
+    {
+      "run_id": "phase0-gemini-3-pro-preview-20260221-220301",
+      "label": "Gemini 3 Pro"
+    },
+    {
+      "run_id": "phase0-medgemma-27b+gemini-pro-two-stage-v4-20260222-124953",
+      "label": "MedGemma 27B + Gemini (two-stage v4)"
+    },
+    {
+      "run_id": "phase0-medgemma-4b+gemini-pro-two-stage-20260222-145904",
+      "label": "MedGemma 4B + Gemini (two-stage)"
+    }
+  ]
+}

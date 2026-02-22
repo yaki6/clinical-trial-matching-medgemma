@@ -1,0 +1,44 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - list [ref=e10]:
+      - listitem [ref=e11]:
+        - link "app" [ref=e13] [cursor=pointer]:
+          - /url: http://localhost:8501/
+          - generic [ref=e14]: app
+      - listitem [ref=e15]:
+        - link "Pipeline Demo" [ref=e17] [cursor=pointer]:
+          - /url: http://localhost:8501/Pipeline_Demo
+          - generic [ref=e18]: Pipeline Demo
+      - listitem [ref=e19]:
+        - link "Benchmark" [ref=e21] [cursor=pointer]:
+          - /url: http://localhost:8501/Benchmark
+          - generic [ref=e22]: Benchmark
+    - heading "TrialMatch Pipeline" [level=1] [ref=e30]
+  - generic [ref=e3]:
+    - banner [ref=e33]:
+      - generic [ref=e36]:
+        - button "Deploy" [ref=e38] [cursor=pointer]:
+          - generic [ref=e40]: Deploy
+        - button [ref=e42] [cursor=pointer]:
+          - img [ref=e43]
+    - alert [ref=e49]:
+      - generic [ref=e52]:
+        - generic [ref=e53]: "TypeError: expected string or bytes-like object, got 'dict'"
+        - generic [ref=e54]:
+          - generic [ref=e55]: "Traceback:"
+          - code [ref=e58]:
+            - generic [ref=e59]: File "/Users/yaqi/Downloads/clinical_trial_matching_medgemma/demo/pages/1_Pipeline_Demo.py", line 323, in <module> selected_topic = st.sidebar.selectbox( ^^^^^^^^^^^^^^^^^^^^^
+            - generic [ref=e60]: File "/Users/yaqi/Downloads/clinical_trial_matching_medgemma/.venv/lib/python3.11/site-packages/streamlit/runtime/metrics_util.py", line 532, in wrapped_func result = non_optional_func(*args, **kwargs) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            - generic [ref=e61]: File "/Users/yaqi/Downloads/clinical_trial_matching_medgemma/.venv/lib/python3.11/site-packages/streamlit/elements/widgets/selectbox.py", line 492, in selectbox return self._selectbox( ^^^^^^^^^^^^^^^^
+            - generic [ref=e62]: File "/Users/yaqi/Downloads/clinical_trial_matching_medgemma/.venv/lib/python3.11/site-packages/streamlit/elements/widgets/selectbox.py", line 560, in _selectbox formatted_options, formatted_option_to_option_index = create_mappings( ^^^^^^^^^^^^^^^^
+            - generic [ref=e63]: File "/Users/yaqi/Downloads/clinical_trial_matching_medgemma/.venv/lib/python3.11/site-packages/streamlit/elements/lib/options_selector_utils.py", line 278, in create_mappings formatted_option = format_func(option) ^^^^^^^^^^^^^^^^^^^
+            - generic [ref=e64]: "File \"/Users/yaqi/Downloads/clinical_trial_matching_medgemma/demo/pages/1_Pipeline_Demo.py\", line 326, in <lambda> format_func=lambda tid: _friendly_patient_label(profile_map[tid]), ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+            - generic [ref=e65]: "File \"/Users/yaqi/Downloads/clinical_trial_matching_medgemma/demo/pages/1_Pipeline_Demo.py\", line 110, in _friendly_patient_label suffix = extract_friendly_label(profile) # e.g. \" (43F, Lung Adenocarcinoma)\" ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+            - generic [ref=e66]: File "/Users/yaqi/Downloads/clinical_trial_matching_medgemma/demo/components/patient_card.py", line 30, in extract_friendly_label age_match = re.search(r"age:\s*(\d+)", value, re.IGNORECASE) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            - generic [ref=e67]: File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/re/__init__.py", line 176, in search return _compile(pattern, flags).search(string) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        - generic [ref=e68]:
+          - button "Copy" [ref=e69] [cursor=pointer]
+          - link "Ask Google" [ref=e70] [cursor=pointer]:
+            - /url: https://www.google.com/search?q=TypeError%3A%20expected%20string%20or%20bytes-like%20object%2C%20got%20'dict'
+          - link "Ask ChatGPT" [ref=e71] [cursor=pointer]:
+            - /url: https://chatgpt.com/?q=TypeError%3A%20expected%20string%20or%20bytes-like%20object%2C%20got%20'dict'%0A%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2Fdemo%2Fpages%2F1_Pipeline_Demo.py%22%2C%20line%20323%2C%20in%20%3Cmodule%3E%0A%20%20%20%20selected_topic%20%3D%20st.sidebar.selectbox(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2F.venv%2Flib%2Fpython3.11%2Fsite-packages%2Fstreamlit%2Fruntime%2Fmetrics_util.py%22%2C%20line%20532%2C%20in%20wrapped_func%0A%20%20%20%20result%20%3D%20non_optional_func(*args%2C%20**kwargs)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2F.venv%2Flib%2Fpython3.11%2Fsite-packages%2Fstreamlit%2Felements%2Fwidgets%2Fselectbox.py%22%2C%20line%20492%2C%20in%20selectbox%0A%20%20%20%20return%20self._selectbox(%0A%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2F.venv%2Flib%2Fpython3.11%2Fsite-packages%2Fstreamlit%2Felements%2Fwidgets%2Fselectbox.py%22%2C%20line%20560%2C%20in%20_selectbox%0A%20%20%20%20formatted_options%2C%20formatted_option_to_option_index%20%3D%20create_mappings(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2F.venv%2Flib%2Fpython3.11%2Fsite-packages%2Fstreamlit%2Felements%2Flib%2Foptions_selector_utils.py%22%2C%20line%20278%2C%20in%20create_mappings%0A%20%20%20%20formatted_option%20%3D%20format_func(option)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2Fdemo%2Fpages%2F1_Pipeline_Demo.py%22%2C%20line%20326%2C%20in%20%3Clambda%3E%0A%20%20%20%20format_func%3Dlambda%20tid%3A%20_friendly_patient_label(profile_map%5Btid%5D)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2Fdemo%2Fpages%2F1_Pipeline_Demo.py%22%2C%20line%20110%2C%20in%20_friendly_patient_label%0A%20%20%20%20suffix%20%3D%20extract_friendly_label(profile)%20%20%23%20e.g.%20%22%20(43F%2C%20Lung%20Adenocarcinoma)%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fyaqi%2FDownloads%2Fclinical_trial_matching_medgemma%2Fdemo%2Fcomponents%2Fpatient_card.py%22%2C%20line%2030%2C%20in%20extract_friendly_label%0A%20%20%20%20age_match%20%3D%20re.search(r%22age%3A%5Cs*(%5Cd%2B)%22%2C%20value%2C%20re.IGNORECASE)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FLibrary%2FFrameworks%2FPython.framework%2FVersions%2F3.11%2Flib%2Fpython3.11%2Fre%2F__init__.py%22%2C%20line%20176%2C%20in%20search%0A%20%20%20%20return%20_compile(pattern%2C%20flags).search(string)%0A%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E
