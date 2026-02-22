@@ -37,6 +37,7 @@ from trialmatch.evaluation.multimodal_metrics import (
 )
 from trialmatch.models.gemini import GeminiAdapter
 from trialmatch.models.medgemma import MedGemmaAdapter
+from trialmatch.models.vertex_medgemma import VertexMedGemmaAdapter
 
 logger = structlog.get_logger()
 
@@ -79,11 +80,12 @@ Respond ONLY with valid JSON:
 
 async def run_single_case(
     case: dict,
-    medgemma: MedGemmaAdapter,
+    medgemma,
     gemini: GeminiAdapter,
     prompt: str,
     case_idx: int,
     total: int,
+    medgemma_max_tokens: int = 512,
 ) -> dict:
     """Run both models on a single case and return raw responses."""
     image_path = Path(case["image_path"])
@@ -106,7 +108,7 @@ async def run_single_case(
     try:
         logger.info("calling_medgemma", uid=case["uid"])
         medgemma_response = await medgemma.generate_with_image(
-            prompt=prompt, image_path=image_path, max_tokens=512
+            prompt=prompt, image_path=image_path, max_tokens=medgemma_max_tokens
         )
         logger.info(
             "medgemma_done",
@@ -330,11 +332,24 @@ async def main() -> None:
     api_key = os.environ.get("GOOGLE_API_KEY", "")
 
     medgemma_cfg = config["models"]["medgemma_4b"]
-    medgemma = MedGemmaAdapter(
-        hf_token=hf_token,
-        endpoint_url=medgemma_cfg["endpoint_url"],
-        model_name=medgemma_cfg["model_name"],
-    )
+    provider = medgemma_cfg.get("provider", "huggingface")
+
+    if provider == "vertex":
+        medgemma = VertexMedGemmaAdapter(
+            project_id=medgemma_cfg["project_id"],
+            region=medgemma_cfg["region"],
+            endpoint_id=medgemma_cfg["endpoint_id"],
+            model_name=medgemma_cfg.get("model_name", "medgemma-4b-vertex"),
+            gpu_hourly_rate=medgemma_cfg.get("gpu_hourly_rate", 1.15),
+        )
+    else:
+        medgemma = MedGemmaAdapter(
+            hf_token=hf_token,
+            endpoint_url=medgemma_cfg["endpoint_url"],
+            model_name=medgemma_cfg["model_name"],
+        )
+
+    medgemma_max_tokens = medgemma_cfg.get("max_tokens", 512)
 
     gemini_cfg = config["models"]["gemini_pro"]
     gemini = GeminiAdapter(api_key=api_key, model=gemini_cfg["model_id"])
@@ -366,7 +381,10 @@ async def main() -> None:
     raw_results = []
     for i, case in enumerate(cases):
         prompt = PROMPT_TEMPLATE.format(history=case["history"])
-        result = await run_single_case(case, medgemma, gemini, prompt, i, len(cases))
+        result = await run_single_case(
+            case, medgemma, gemini, prompt, i, len(cases),
+            medgemma_max_tokens=medgemma_max_tokens,
+        )
         raw_results.append(result)
 
     # Save raw responses

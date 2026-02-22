@@ -1,0 +1,39 @@
+benchmark: medpix_multimodal
+budget:
+  max_cost_usd: 10.0
+  warn_at_usd: 5.0
+data:
+  benchmark_file: data/benchmark/medpix_thorax_10.json
+  phase: 1
+description: Compare MedGemma 4B (Vertex AI, multimodal) vs Gemini 3 Flash on radiology
+  image analysis
+evaluation:
+  metrics:
+  - diagnosis_exact_match
+  - diagnosis_substring_match
+  - diagnosis_llm_judge
+  - findings_rouge_l_recall
+  - findings_rouge_l_precision
+  - findings_rouge_l_f1
+judge:
+  description: Gemini 2.0 Flash as LLM-as-judge for diagnosis semantic equivalence
+  model_id: gemini-2.0-flash
+models:
+  gemini_pro:
+    max_concurrent: 1
+    max_tokens: 2048
+    model_id: gemini-2.0-flash
+    provider: google
+  medgemma_4b:
+    endpoint_id: '923518299076034560'
+    gpu_hourly_rate: 1.15
+    max_concurrent: 1
+    max_tokens: 1024
+    model_name: medgemma-4b-vertex
+    project_id: gen-lang-client-0517724223
+    provider: vertex
+    region: us-central1
+output:
+  run_dir: runs/
+  save_per_case_scores: true
+  save_raw_responses: true

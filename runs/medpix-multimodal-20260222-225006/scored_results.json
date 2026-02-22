@@ -1,0 +1,312 @@
+[
+  {
+    "uid": "MPX1452",
+    "title": "Pulmonary valve stenosis",
+    "gold_diagnosis": "Pulmonary valve stenosis",
+    "medgemma": {
+      "predicted_diagnosis": "Pulmonary Arteriovenous Malformation (AVM)**",
+      "predicted_findings": "**Location and Laterality:** The abnormality is located in the right pulmonary artery, appearing as a filling defect within the vessel.\n*   **Size and Morphology:** The lesion appears to be a relative",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Pulmonary valve stenosis and Pulmonary Arteriovenous Malformation (AVM) are distinct conditions affecting different structures in the pulmonary circulation.",
+      "rouge_recall": 0.1388888888888889,
+      "rouge_precision": 0.0970873786407767,
+      "rouge_fmeasure": 0.11428571428571428,
+      "latency_ms": 14103.60958299134,
+      "cost": 0.004505319727900011
+    },
+    "gemini": {
+      "predicted_diagnosis": "Normal mediastinum and lung parenchyma.",
+      "predicted_findings": "This is an axial CT image of the chest at the level of the upper mediastinum.\n\n*   **Mediastinum:** The mediastinal structures appear normal in size and configuration. The ascending aorta and pulmonar",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model predicts a normal chest, while the gold standard indicates pulmonary valve stenosis, a heart condition. These are unrelated findings.",
+      "rouge_recall": 0.125,
+      "rouge_precision": 0.1232876712328767,
+      "rouge_fmeasure": 0.12413793103448276,
+      "latency_ms": 2412.2943329857662,
+      "cost": 0.00371875
+    }
+  },
+  {
+    "uid": "MPX1063",
+    "title": "thoracic aortic dissection",
+    "gold_diagnosis": "thoracic aortic dissection",
+    "medgemma": {
+      "predicted_diagnosis": "Aortic Dissection",
+      "predicted_findings": "**Location and Laterality:** The abnormality is located in the aortic arch, specifically involving the ascending aorta.\n*   **Size and Morphology:** There is a clear intimal flap within the aortic lum",
+      "exact_match": false,
+      "substring_match": true,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The model prediction 'Aortic Dissection' is a valid synonym for the gold standard diagnosis 'thoracic aortic dissection'.",
+      "rouge_recall": 0.2558139534883721,
+      "rouge_precision": 0.1134020618556701,
+      "rouge_fmeasure": 0.15714285714285714,
+      "latency_ms": 10498.569249990396,
+      "cost": 0.00335370962152471
+    },
+    "gemini": {
+      "predicted_diagnosis": "Aortic Dissection, Type A.",
+      "predicted_findings": "**Aorta:** There is a clearly visible dissection flap within the ascending aorta. The aortic diameter is significantly enlarged, and a large saccular outpouching of the aorta consistent with pseudoane",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "Thoracic aortic dissection falls under the broader category of Aortic Dissection and Type A specifies the location within the thoracic aorta.",
+      "rouge_recall": 0.3023255813953488,
+      "rouge_precision": 0.11304347826086956,
+      "rouge_fmeasure": 0.16455696202531644,
+      "latency_ms": 3003.4107079263777,
+      "cost": 0.0031175
+    }
+  },
+  {
+    "uid": "MPX2015",
+    "title": "Hiatal Hernia",
+    "gold_diagnosis": "Hiatal Hernia",
+    "medgemma": {
+      "predicted_diagnosis": "Right-sided pleural effusion with possible underlying lung mass.",
+      "predicted_findings": "**Location and Laterality:** The image shows a significant pleural effusion on the right side. The fluid appears to be obscuring the right lung base.\n*   **Size and Morphology:** The effusion appears ",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Hiatal hernia involves the stomach protruding into the chest cavity, while a pleural effusion is fluid accumulation in the pleural space, and a lung mass suggests a tumor or other growth within the lung itself. These are distinct conditions.",
+      "rouge_recall": 0.1299638989169675,
+      "rouge_precision": 0.2926829268292683,
+      "rouge_fmeasure": 0.17999999999999997,
+      "latency_ms": 17065.53212495055,
+      "cost": 0.005451489428803648
+    },
+    "gemini": {
+      "predicted_diagnosis": "Right-sided Pneumonia with Parapneumonic Effusion.",
+      "predicted_findings": "**Right Lung:** There is a large area of consolidation in the right lung, most prominently in the lower lobe. This consolidation appears dense and homogenous, consistent with pneumonia. There is evide",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Hiatal Hernia and Right-sided Pneumonia with Parapneumonic Effusion are distinct and unrelated conditions.",
+      "rouge_recall": 0.148014440433213,
+      "rouge_precision": 0.36607142857142855,
+      "rouge_fmeasure": 0.21079691516709512,
+      "latency_ms": 4597.303499933332,
+      "cost": 0.00493875
+    }
+  },
+  {
+    "uid": "MPX1938",
+    "title": "Nonspecific Interstitial Pneumonitis",
+    "gold_diagnosis": "Nonspecific Interstitial Pneumonitis",
+    "medgemma": {
+      "predicted_diagnosis": "Possible Pneumonia**",
+      "predicted_findings": "**Location and Laterality:** The abnormality appears to be localized to the right lower lobe of the lung.\n*   **Size and Morphology:** The lesion is approximately 3.5 cm in diameter. It has a somewhat",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "partial",
+      "llm_judge_explanation": "Nonspecific Interstitial Pneumonitis is a type of pneumonia. The prediction is related but not precise.",
+      "rouge_recall": 0.10526315789473684,
+      "rouge_precision": 0.0449438202247191,
+      "rouge_fmeasure": 0.06299212598425197,
+      "latency_ms": 15295.914667076431,
+      "cost": 0.00488619496309386
+    },
+    "gemini": {
+      "predicted_diagnosis": "Normal Chest CT",
+      "predicted_findings": "The image is an axial CT scan of the chest.  The lungs are well-aerated, and there are no focal opacities, consolidations, or masses identified. The pulmonary vasculature appears normal in caliber and",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model predicted a normal chest CT, but the gold standard diagnosis is Nonspecific Interstitial Pneumonitis, indicating a lung disease. These are not aligned.",
+      "rouge_recall": 0.13157894736842105,
+      "rouge_precision": 0.06329113924050633,
+      "rouge_fmeasure": 0.08547008547008547,
+      "latency_ms": 2504.9085828941315,
+      "cost": 0.0037275
+    }
+  },
+  {
+    "uid": "MPX1873",
+    "title": "Coarctation of the Aorta",
+    "gold_diagnosis": "Coarctation of the Aorta",
+    "medgemma": {
+      "predicted_diagnosis": "Aortic Dissection",
+      "predicted_findings": "**Location and Laterality:** The abnormality appears to be located in the thoracic aorta, specifically in the region of the aortic arch. It is on the left side.\n*   **Size and Morphology:** The abnorm",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Coarctation of the aorta is a congenital narrowing of the aorta, while aortic dissection is a tear in the wall of the aorta. These are distinct conditions.",
+      "rouge_recall": 0.2625,
+      "rouge_precision": 0.17073170731707318,
+      "rouge_fmeasure": 0.20689655172413796,
+      "latency_ms": 15002.920583006926,
+      "cost": 0.004792599630682767
+    },
+    "gemini": {
+      "predicted_diagnosis": "Mediastinal Mass, likely Lymphoma.",
+      "predicted_findings": "A large, well-defined mediastinal mass is present in the anterior mediastinum. The mass is located centrally and appears to compress or displace adjacent structures, including the trachea and great ve",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Coarctation of the aorta is a heart defect while a mediastinal mass is a lesion in the chest, indicating the prediction is incorrect.",
+      "rouge_recall": 0.225,
+      "rouge_precision": 0.21428571428571427,
+      "rouge_fmeasure": 0.2195121951219512,
+      "latency_ms": 2779.9299160251394,
+      "cost": 0.00380625
+    }
+  },
+  {
+    "uid": "MPX1481",
+    "title": "Aberrant Right Subclavian Artery",
+    "gold_diagnosis": "Aberrant Right Subclavian Artery",
+    "medgemma": {
+      "predicted_diagnosis": "Aortic Dissection**",
+      "predicted_findings": "**Location and Laterality:** The abnormality is located in the aortic arch, specifically in the proximal ascending aorta. The dissection flap appears to be extending from the aortic root.\n*   **Size a",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Aortic dissection is a different condition than an aberrant right subclavian artery.",
+      "rouge_recall": 0.25,
+      "rouge_precision": 0.06153846153846154,
+      "rouge_fmeasure": 0.09876543209876544,
+      "latency_ms": 12709.106042049825,
+      "cost": 0.004059853318988138
+    },
+    "gemini": {
+      "predicted_diagnosis": "Right subclavian artery aneurysm with possible thrombus.",
+      "predicted_findings": "**Location:**  The image is an axial CT scan of the chest at the level of the clavicles. On the right side of the patient (left side of the image), just inferior to the clavicle, there is a markedly e",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "An aberrant right subclavian artery is a type of anatomical variation, but can present with aneurysm/thrombus.",
+      "rouge_recall": 0.34375,
+      "rouge_precision": 0.0718954248366013,
+      "rouge_fmeasure": 0.11891891891891893,
+      "latency_ms": 3377.834042068571,
+      "cost": 0.00500875
+    }
+  },
+  {
+    "uid": "MPX1355",
+    "title": "Nodular Sclerosing Hodgkin\u2019s Lymphoma",
+    "gold_diagnosis": "Nodular Sclerosing Hodgkin\u2019s Lymphoma",
+    "medgemma": {
+      "predicted_diagnosis": "Mediastinal Mass, likely Lymphoma**",
+      "predicted_findings": "**Location and Laterality:** The mass is located in the mediastinum, specifically in the superior mediastinum, centered around the great vessels (aorta and superior vena cava). It appears to be on the",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The model correctly identifies the likelihood of lymphoma in the mediastinum, which aligns with the diagnosis of Nodular Sclerosing Hodgkin's Lymphoma",
+      "rouge_recall": 0.6363636363636364,
+      "rouge_precision": 0.047619047619047616,
+      "rouge_fmeasure": 0.08860759493670886,
+      "latency_ms": 15111.07424995862,
+      "cost": 0.004827148718736781
+    },
+    "gemini": {
+      "predicted_diagnosis": "Hodgkin Lymphoma",
+      "predicted_findings": "*   The CT image is a transaxial view of the chest.\n*   There is significant mediastinal lymphadenopathy. Multiple enlarged lymph nodes are seen in the mediastinum, particularly in the prevascular, pa",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "Hodgkin Lymphoma is a broader term that includes Nodular Sclerosing Hodgkin\u2019s Lymphoma.",
+      "rouge_recall": 0.36363636363636365,
+      "rouge_precision": 0.04040404040404041,
+      "rouge_fmeasure": 0.07272727272727274,
+      "latency_ms": 2872.5338330259547,
+      "cost": 0.00465875
+    }
+  },
+  {
+    "uid": "MPX1307",
+    "title": "Benign Metastasizing Leiomyoma",
+    "gold_diagnosis": "Benign Metastasizing Leiomyoma",
+    "medgemma": {
+      "predicted_diagnosis": "Multiple pulmonary nodules, likely metastatic disease.**",
+      "predicted_findings": "**Location and Laterality:** The nodules are scattered throughout both lungs, with a higher density observed in the right lung.\n*   **Size and Morphology:** The nodules vary in size, ranging from appr",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "The model correctly identifies the likely metastatic nature of the disease, consistent with Benign Metastasizing Leiomyoma.",
+      "rouge_recall": 0.38461538461538464,
+      "rouge_precision": 0.033112582781456956,
+      "rouge_fmeasure": 0.06097560975609756,
+      "latency_ms": 18545.081333024427,
+      "cost": 0.005924123203605025
+    },
+    "gemini": {
+      "predicted_diagnosis": "Pulmonary Nodules, likely granulomas or old infections.",
+      "predicted_findings": "The CT image is a transverse section through the mid-thorax. The lungs are largely clear with normal bronchovascular markings. There are several small, well-defined nodules scattered throughout both l",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model predicts pulmonary nodules (likely granulomas or old infections), while the gold standard diagnosis is Benign Metastasizing Leiomyoma. These are different conditions.",
+      "rouge_recall": 0.3076923076923077,
+      "rouge_precision": 0.042105263157894736,
+      "rouge_fmeasure": 0.07407407407407407,
+      "latency_ms": 2735.2630409877747,
+      "cost": 0.0043275
+    }
+  },
+  {
+    "uid": "MPX2391",
+    "title": "Pneumothorax",
+    "gold_diagnosis": "Pneumothorax",
+    "medgemma": {
+      "predicted_diagnosis": "Right Lower Lobe Pneumonia with possible Bronchiectasis",
+      "predicted_findings": "*   **Location and Laterality:** The abnormality is located in the right lower lobe of the lung.\n*   **Size and Morphology:** There is a consolidation/opacification in the right lower lobe, which coul",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model prediction of 'Right Lower Lobe Pneumonia with possible Bronchiectasis' is different from the gold standard diagnosis of 'Pneumothorax'.",
+      "rouge_recall": 0.13392857142857142,
+      "rouge_precision": 0.13157894736842105,
+      "rouge_fmeasure": 0.1327433628318584,
+      "latency_ms": 16952.4091250496,
+      "cost": 0.005415352914946399
+    },
+    "gemini": {
+      "predicted_diagnosis": "Right lung necrotizing pneumonia with associated pneumothorax and post-operative changes related to pacemaker placement.",
+      "predicted_findings": "**Lungs:** The right lung exhibits extensive consolidation with cavitary lesions, suggestive of necrotizing pneumonia. These are primarily located in the lower and middle lobes of the right lung. Ther",
+      "exact_match": false,
+      "substring_match": true,
+      "llm_judge_score": "correct",
+      "llm_judge_explanation": "Both identify pneumothorax.",
+      "rouge_recall": 0.15178571428571427,
+      "rouge_precision": 0.17525773195876287,
+      "rouge_fmeasure": 0.16267942583732056,
+      "latency_ms": 3176.5385839389637,
+      "cost": 0.00491625
+    }
+  },
+  {
+    "uid": "MPX1067",
+    "title": "Takayasu&#34;s Arteritis",
+    "gold_diagnosis": "Takayasu\"s Arteritis",
+    "medgemma": {
+      "predicted_diagnosis": "The image appears to be a chest X-ray. There are no obvious acute findings.",
+      "predicted_findings": "The lungs are clear bilaterally. The heart size is within normal limits. The mediastinum is unremarkable. The bony structures of the chest wall are intact. The vasculature is normal.",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model did not identify the condition.",
+      "rouge_recall": 0.09322033898305085,
+      "rouge_precision": 0.3793103448275862,
+      "rouge_fmeasure": 0.14965986394557823,
+      "latency_ms": 6915.869958000258,
+      "cost": 0.0022092362365834155
+    },
+    "gemini": {
+      "predicted_diagnosis": "Coarctation of the Aorta",
+      "predicted_findings": "The image is an angiogram of the chest and neck region. A narrowed segment of the aorta is clearly visible distal to the origin of the left subclavian artery.  This is classic for a coarctation of the",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "partial",
+      "llm_judge_explanation": "Coarctation of the aorta is a related condition as it can be a complication or manifestation of Takayasu's Arteritis, specifically when the inflammation affects the aorta.",
+      "rouge_recall": 0.2033898305084746,
+      "rouge_precision": 0.2891566265060241,
+      "rouge_fmeasure": 0.23880597014925373,
+      "latency_ms": 2592.210332979448,
+      "cost": 0.00369625
+    }
+  }
+]

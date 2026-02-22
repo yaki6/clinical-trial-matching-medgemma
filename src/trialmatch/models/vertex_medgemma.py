@@ -134,17 +134,34 @@ class VertexMedGemmaAdapter(ModelAdapter):
 
     @staticmethod
     def _extract_text_and_usage(data: dict) -> tuple[str, int, int, bool]:
-        """Parse Vertex prediction response into text and token counts."""
+        """Parse Vertex prediction response into text and token counts.
+
+        Vertex returns predictions in nested formats depending on endpoint type:
+        - Dedicated: {"predictions": [{"choices": [...], "usage": {...}}]}
+        - Shared (chatCompletions): {"predictions": [[{"message": {...}, ...}]]}
+        The second format wraps choices in an extra list layer.
+        """
         predictions = data["predictions"]
 
-        # Dedicated endpoints return predictions as a dict;
-        # shared endpoints return a list. Normalize to a single prediction.
+        # Normalize: get the first prediction element.
         if isinstance(predictions, list):
             prediction = predictions[0]
         else:
             prediction = predictions
 
-        # Try chatCompletions format first.
+        # Unwrap nested list: predictions[0] may itself be a list of choices.
+        # e.g. [[{"index": 0, "message": {"content": "..."}, ...}]]
+        if isinstance(prediction, list) and prediction:
+            # This is a list of choice objects — extract content directly.
+            choice = prediction[0]
+            if isinstance(choice, dict) and "message" in choice:
+                text = choice["message"].get("content", "")
+                token_count_estimated = True
+                input_tokens = len(text) // 4
+                output_tokens = len(text) // 4
+                return text, input_tokens, output_tokens, token_count_estimated
+
+        # Standard chatCompletions format: {"choices": [...], "usage": {...}}
         token_count_estimated = False
         if isinstance(prediction, dict) and "choices" in prediction:
             text = prediction["choices"][0]["message"]["content"]
