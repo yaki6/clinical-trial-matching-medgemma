@@ -1,0 +1,312 @@
+[
+  {
+    "uid": "MPX1452",
+    "title": "Pulmonary valve stenosis",
+    "gold_diagnosis": "Pulmonary valve stenosis",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 51327.41770800203,
+      "cost": 0.012159999999999999
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 30641.91466604825,
+      "cost": 0.00669875
+    }
+  },
+  {
+    "uid": "MPX1063",
+    "title": "thoracic aortic dissection",
+    "gold_diagnosis": "thoracic aortic dissection",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 26284.571958938614,
+      "cost": 0.01099
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  },
+  {
+    "uid": "MPX2015",
+    "title": "Hiatal Hernia",
+    "gold_diagnosis": "Hiatal Hernia",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 26730.048290919513,
+      "cost": 0.01907
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 100107.81029204372,
+      "cost": 0.00585875
+    }
+  },
+  {
+    "uid": "MPX1938",
+    "title": "Nonspecific Interstitial Pneumonitis",
+    "gold_diagnosis": "Nonspecific Interstitial Pneumonitis",
+    "medgemma": {
+      "predicted_diagnosis": "Right lower lobe pneumonia.",
+      "predicted_findings": "- There is an ill-defined opacity in the right lower lobe, consistent with consolidation.\n- The opacity obscures the right hemidiaphragm.\n- There is no pleural effusion.\n- The heart size is normal.\n- ",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Nonspecific Interstitial Pneumonitis is a form of chronic interstitial lung disease, while pneumonia is an acute infection of the lung parenchyma. These are distinct pathologies.",
+      "rouge_recall": 0.10526315789473684,
+      "rouge_precision": 0.08888888888888889,
+      "rouge_fmeasure": 0.09638554216867469,
+      "latency_ms": 26119.757332955487,
+      "cost": 0.019710000000000002
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  },
+  {
+    "uid": "MPX1873",
+    "title": "Coarctation of the Aorta",
+    "gold_diagnosis": "Coarctation of the Aorta",
+    "medgemma": {
+      "predicted_diagnosis": "Pulmonary Alveolar Proteinosis (PAP)",
+      "predicted_findings": "The chest",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model predicted Pulmonary Alveolar Proteinosis, a lung disease, which is unrelated to Coarctation of the Aorta, a cardiovascular condition.",
+      "rouge_recall": 0.025,
+      "rouge_precision": 1.0,
+      "rouge_fmeasure": 0.04878048780487806,
+      "latency_ms": 25784.3847500626,
+      "cost": 0.018500000000000003
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  },
+  {
+    "uid": "MPX1481",
+    "title": "Aberrant Right Subclavian Artery",
+    "gold_diagnosis": "Aberrant Right Subclavian Artery",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 25945.491582970135,
+      "cost": 0.01771
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  },
+  {
+    "uid": "MPX1355",
+    "title": "Nodular Sclerosing Hodgkin\u2019s Lymphoma",
+    "gold_diagnosis": "Nodular Sclerosing Hodgkin\u2019s Lymphoma",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 25863.512250012718,
+      "cost": 0.01949
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  },
+  {
+    "uid": "MPX1307",
+    "title": "Benign Metastasizing Leiomyoma",
+    "gold_diagnosis": "Benign Metastasizing Leiomyoma",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 26361.68779199943,
+      "cost": 0.02048
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  },
+  {
+    "uid": "MPX2391",
+    "title": "Pneumothorax",
+    "gold_diagnosis": "Pneumothorax",
+    "medgemma": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 26084.937916020863,
+      "cost": 0.01924
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  },
+  {
+    "uid": "MPX1067",
+    "title": "Takayasu&#34;s Arteritis",
+    "gold_diagnosis": "Takayasu\"s Arteritis",
+    "medgemma": {
+      "predicted_diagnosis": "Left renal cyst.",
+      "predicted_findings": "*   **Location:** Left kidney, interpolar region.\n*   **Laterality:** Left.\n*   **Size:** 2.5 cm.\n*   **Morphology:** Well-circumscribed, round, homogenous, hypodense lesion.\n*   **Associated Findings",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "The model prediction of a renal cyst is unrelated to the gold standard diagnosis of Takayasu's Arteritis, which is a systemic vasculitis.",
+      "rouge_recall": 0.01694915254237288,
+      "rouge_precision": 0.03636363636363636,
+      "rouge_fmeasure": 0.023121387283236997,
+      "latency_ms": 27276.80554194376,
+      "cost": 0.015870000000000002
+    },
+    "gemini": {
+      "predicted_diagnosis": "",
+      "predicted_findings": "",
+      "exact_match": false,
+      "substring_match": false,
+      "llm_judge_score": "incorrect",
+      "llm_judge_explanation": "Empty prediction",
+      "rouge_recall": 0.0,
+      "rouge_precision": 0.0,
+      "rouge_fmeasure": 0.0,
+      "latency_ms": 0,
+      "cost": 0
+    }
+  }
+]
