@@ -1,0 +1,36 @@
+benchmark: medpix_multimodal
+budget:
+  max_cost_usd: 5.0
+  warn_at_usd: 2.0
+data:
+  benchmark_file: data/benchmark/medpix_thorax_10.json
+  phase: 1
+description: Compare MedGemma 4B (medical SigLIP) vs Gemini 3 Flash on radiology image
+  analysis
+evaluation:
+  metrics:
+  - diagnosis_exact_match
+  - diagnosis_substring_match
+  - diagnosis_llm_judge
+  - findings_rouge_l_recall
+  - findings_rouge_l_precision
+  - findings_rouge_l_f1
+judge:
+  description: LLM-as-judge for diagnosis semantic equivalence
+  model_id: gemini-3-flash-preview
+models:
+  gemini_pro:
+    max_concurrent: 1
+    max_tokens: 2048
+    model_id: gemini-3-flash-preview
+    provider: google
+  medgemma_4b:
+    endpoint_url: https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud
+    max_concurrent: 1
+    max_tokens: 512
+    model_name: medgemma-4b-multimodal
+    provider: huggingface
+output:
+  run_dir: runs/
+  save_per_case_scores: true
+  save_raw_responses: true
