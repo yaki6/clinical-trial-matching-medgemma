@@ -1,5 +1,6 @@
-"""Gemini 3 Pro adapter via Google AI Studio (google-genai SDK).
+"""Gemini adapter via Google AI Studio (google-genai SDK).
 
+Supports both thinking models (Pro) and non-thinking models (Flash).
 Uses structured JSON output with Pydantic-style schema.
 """
 
@@ -16,15 +17,18 @@ from trialmatch.models.schema import ModelResponse
 
 logger = structlog.get_logger()
 
-DEFAULT_MODEL = "gemini-3-pro-preview"
+DEFAULT_MODEL = "gemini-3-flash-preview"
 
 # Pricing per 1M tokens (approximate)
 COST_PER_1M_INPUT = 1.25
 COST_PER_1M_OUTPUT = 10.00
 
 
+THINKING_MODELS = {"gemini-3-pro-preview", "gemini-3-pro", "gemini-3-flash-preview"}
+
+
 class GeminiAdapter(ModelAdapter):
-    """Adapter for Gemini 3 Pro via Google AI Studio."""
+    """Adapter for Gemini models via Google AI Studio."""
 
     def __init__(
         self,
@@ -36,6 +40,7 @@ class GeminiAdapter(ModelAdapter):
     ):
         self._client = genai.Client(api_key=api_key)
         self._model = model
+        self._is_thinking_model = model in THINKING_MODELS
         self._max_retries = max_retries
         self._retry_backoff = retry_backoff
         self._max_wait = max_wait
@@ -48,11 +53,14 @@ class GeminiAdapter(ModelAdapter):
         """Generate with Gemini, tracking cost. Retries on transient 503/429 errors."""
         start = time.perf_counter()
 
-        # Gemini 3 Pro is a thinking model — max_output_tokens includes both
-        # internal thinking tokens AND visible response tokens. With low budgets
-        # (e.g. 512), thinking can consume nearly all tokens, leaving only 3-9
-        # tokens for the actual JSON response. Floor at 8192 to prevent this.
-        effective_max_tokens = max(max_tokens, 8192)
+        # Thinking models (Pro): max_output_tokens includes both internal
+        # thinking tokens AND visible response tokens. Thinking alone can
+        # consume 8000+ tokens, so the floor must be high enough.
+        # Non-thinking models (Flash): max_output_tokens = visible output only.
+        if self._is_thinking_model:
+            effective_max_tokens = max(max_tokens, 32768)
+        else:
+            effective_max_tokens = max_tokens
 
         for attempt in range(self._max_retries):
             try:

@@ -10,7 +10,7 @@ from trialmatch.models.schema import ModelResponse
 def test_gemini_adapter_name():
     with patch("trialmatch.models.gemini.genai.Client"):
         adapter = GeminiAdapter(api_key="fake")
-        assert adapter.name == "gemini-3-pro-preview"
+        assert adapter.name == "gemini-3-flash-preview"
 
 
 @patch("trialmatch.models.gemini.genai.Client")
