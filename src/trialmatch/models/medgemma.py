@@ -26,6 +26,12 @@ logger = structlog.get_logger()
 
 ENDPOINT_URL = "https://pcmy7bkqtqesrrzd.us-east-1.aws.endpoints.huggingface.cloud"
 
+_CUDA_KERNEL_FAULT_MARKERS = (
+    "misaligned address",
+    "device-side assertions",
+    "TORCH_USE_CUDA_DSA",
+)
+
 
 def format_gemma_prompt(system: str, user: str) -> str:
     """Format prompt using Gemma chat template.
@@ -68,6 +74,12 @@ class MedGemmaAdapter(ModelAdapter):
     @property
     def name(self) -> str:
         return self._model_name
+
+    @staticmethod
+    def _is_cuda_kernel_fault(err_str: str) -> bool:
+        """Detect non-recoverable CUDA kernel faults from endpoint errors."""
+        lower = err_str.lower()
+        return any(marker in lower for marker in _CUDA_KERNEL_FAULT_MARKERS)
 
     def _call_text_generation(self, prompt: str, max_tokens: int) -> tuple[str, int]:
         """TGI backend: text_generation with Gemma template tags.
@@ -119,6 +131,18 @@ class MedGemmaAdapter(ModelAdapter):
                 )
             except Exception as e:
                 err_str = str(e)
+                if self._is_cuda_kernel_fault(err_str):
+                    logger.error(
+                        "medgemma_endpoint_kernel_fault",
+                        attempt=attempt + 1,
+                        error=err_str[:160],
+                    )
+                    msg = (
+                        "MedGemma endpoint kernel fault (CUDA misaligned address). "
+                        "Restart the endpoint and retry."
+                    )
+                    raise RuntimeError(msg) from e
+
                 is_transient = (
                     "503" in err_str
                     or "Service Unavailable" in err_str
@@ -214,6 +238,18 @@ class MedGemmaAdapter(ModelAdapter):
                 )
             except Exception as e:
                 err_str = str(e)
+                if self._is_cuda_kernel_fault(err_str):
+                    logger.error(
+                        "medgemma_image_endpoint_kernel_fault",
+                        attempt=attempt + 1,
+                        error=err_str[:160],
+                    )
+                    msg = (
+                        "MedGemma endpoint kernel fault (CUDA misaligned address). "
+                        "Restart the endpoint and retry."
+                    )
+                    raise RuntimeError(msg) from e
+
                 is_transient = (
                     "503" in err_str
                     or "Service Unavailable" in err_str
