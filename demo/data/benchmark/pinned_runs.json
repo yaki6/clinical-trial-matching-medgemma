@@ -1,17 +1,22 @@
 {
-  "schema_version": "1",
+  "schema_version": "2",
+  "multi_seed": true,
   "runs": [
     {
-      "run_id": "phase0-gemini-3-pro-preview-20260221-220301",
-      "label": "Gemini 3 Pro"
-    },
-    {
       "run_id": "phase0-medgemma-27b+gemini-pro-two-stage-v4-20260222-124953",
-      "label": "MedGemma 27B + Gemini (two-stage v4)"
+      "label": "MedGemma 27B + Gemini Pro (v4, seed=42)"
     },
     {
-      "run_id": "phase0-medgemma-4b+gemini-pro-two-stage-20260222-145904",
-      "label": "MedGemma 4B + Gemini (two-stage)"
+      "run_id": "phase0-medgemma-27b+gemini-pro-two-stage-v4-20260222-202114",
+      "label": "MedGemma 27B + Gemini Pro (v4, seed=123)"
+    },
+    {
+      "run_id": "phase0-medgemma-27b+gemini-pro-two-stage-v4-20260222-202323",
+      "label": "MedGemma 27B + Gemini Pro (v4, seed=7)"
+    },
+    {
+      "run_id": "phase0-medgemma-27b+gemini-pro-two-stage-v4-20260222-202038",
+      "label": "MedGemma 27B + Gemini Pro (v4, seed=99)"
     }
   ]
 }

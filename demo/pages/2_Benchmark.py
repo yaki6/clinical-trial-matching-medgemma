@@ -1,4 +1,4 @@
-"""Benchmark Dashboard -- pinned Phase 0 demo results."""
+"""Benchmark Dashboard -- Multi-seed Phase 0 v4 results (MedGemma 27B + Gemini Pro vs GPT-4)."""
 
 from __future__ import annotations
 
@@ -14,7 +14,10 @@ import streamlit as st
 # Allow importing demo/benchmark_loader.py when running from project root.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from benchmark_loader import BenchmarkRunData, load_pinned_benchmark_runs
+from benchmark_loader import (
+    compute_aggregate_stats,
+    load_pinned_benchmark_runs,
+)
 
 RUNS_DIR = Path(__file__).resolve().parents[2] / "runs"
 PINNED_RUNS_PATH = Path(__file__).resolve().parents[1] / "data" / "benchmark" / "pinned_runs.json"
@@ -51,7 +54,7 @@ def create_confusion_matrix_figure(
 
 
 def _format_pct(value: float) -> str:
-    return f"{value:.0%}"
+    return f"{value:.1%}"
 
 
 def _format_delta(value: float) -> str:
@@ -59,68 +62,24 @@ def _format_delta(value: float) -> str:
     return f"{sign}{value * 100:.1f}pp"
 
 
-def _find_run(runs: list[BenchmarkRunData], token: str) -> BenchmarkRunData | None:
-    token_lower = token.lower()
-    for run in runs:
-        if token_lower in run.run_id.lower() or token_lower in run.label.lower():
-            return run
-    return None
+def _per_class_f1_from_cm(cm: list[list[int]], labels: list[str]) -> dict[str, float]:
+    """Compute per-class F1 from a confusion matrix."""
+    result = {}
+    for i, label in enumerate(labels):
+        tp = cm[i][i]
+        fp = sum(cm[j][i] for j in range(len(labels))) - tp
+        fn = sum(cm[i][j] for j in range(len(labels))) - tp
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+        result[label] = f1
+    return result
 
 
-def _render_key_findings(runs: list[BenchmarkRunData]) -> None:
-    """Render data-derived findings to avoid stale hardcoded narrative."""
-    st.header("Key Findings")
-
-    if not runs:
-        st.info("No pinned runs loaded.")
-        return
-
-    by_acc = sorted(runs, key=lambda r: r.metrics.get("accuracy", 0.0), reverse=True)
-    best = by_acc[0]
-    gpt4_baseline = best.metrics.get("gpt4_baseline_accuracy")
-
-    med27 = _find_run(runs, "27b")
-    med4 = _find_run(runs, "4b")
-    gemini = _find_run(runs, "gemini-3-pro-preview")
-
-    findings: list[str] = []
-    findings.append(
-        f"**Top pinned run:** {best.label} at "
-        f"{_format_pct(best.metrics.get('accuracy', 0.0))} accuracy "
-        f"(F1 macro {best.metrics.get('f1_macro', 0.0):.3f}, "
-        f"kappa {best.metrics.get('cohens_kappa', 0.0):.3f})."
-    )
-
-    if gpt4_baseline is not None:
-        delta = best.metrics.get("accuracy", 0.0) - float(gpt4_baseline)
-        relation = "above" if delta >= 0 else "below"
-        findings.append(
-            f"**Best run vs GPT-4 baseline:** {_format_delta(delta)} {relation} "
-            f"(baseline {_format_pct(float(gpt4_baseline))})."
-        )
-
-    if med27 and med4:
-        delta = med27.metrics.get("accuracy", 0.0) - med4.metrics.get("accuracy", 0.0)
-        relation = "higher" if delta >= 0 else "lower"
-        findings.append(
-            f"**27B vs 4B:** {med27.label} is {_format_delta(delta)} {relation} "
-            f"in this pinned comparison."
-        )
-
-    if med27 and gemini:
-        delta = med27.metrics.get("accuracy", 0.0) - gemini.metrics.get("accuracy", 0.0)
-        relation = "higher" if delta >= 0 else "lower"
-        findings.append(
-            f"**MedGemma 27B two-stage vs Gemini single-stage:** "
-            f"{_format_delta(delta)} {relation} on the same sampled pair set."
-        )
-
-    for bullet in findings:
-        st.markdown(f"- {bullet}")
-
+# ── Page Header ──────────────────────────────────────────────────────────────
 
 st.title("Benchmark Dashboard")
-st.caption("Phase 0 criterion-level evaluation -- pinned and reproducible demo runs")
+st.caption("Phase 0 Criterion-Level Evaluation -- Multi-Seed Analysis (n=80)")
 
 try:
     run_data = load_pinned_benchmark_runs(
@@ -131,86 +90,106 @@ except Exception as exc:
     st.error(f"Benchmark data is blocked: {exc}")
     st.stop()
 
-st.caption(
-    f"Pinned config: `{PINNED_RUNS_PATH.name}` | "
-    f"Seed: {run_data[0].seed} | "
-    f"Pair set hash: `{run_data[0].pair_set_hash}`"
+agg = compute_aggregate_stats(run_data)
+
+# ── Headline Metrics ─────────────────────────────────────────────────────────
+
+st.header("Aggregate Results (n=80, 4 seeds)")
+
+col1, col2, col3 = st.columns(3)
+col1.metric(
+    "v4 (27B+Pro) Accuracy",
+    _format_pct(agg.v4_accuracy),
+)
+col2.metric(
+    "GPT-4 Accuracy",
+    _format_pct(agg.gpt4_accuracy),
+)
+col3.metric(
+    "Delta",
+    _format_delta(agg.v4_accuracy - agg.gpt4_accuracy),
 )
 
-st.header("Model Comparison")
-comparison_rows = []
-gpt4_row_added = False
+subcol1, subcol2 = st.columns(2)
+subcol1.metric("v4 Macro-F1", f"{agg.v4_f1_macro:.4f}")
+subcol2.metric("v4 Cohen's kappa", f"{agg.v4_kappa:.4f}")
 
-for run in run_data:
-    m = run.metrics
-    comparison_rows.append(
+# ── Per-Seed Comparison Table ────────────────────────────────────────────────
+
+st.header("Per-Seed Breakdown")
+
+seed_rows = []
+for ps in sorted(agg.per_seed, key=lambda x: x["seed"] or 0):
+    v4_acc = ps["v4_accuracy"]
+    gpt4_acc = ps["gpt4_accuracy"]
+    delta = v4_acc - gpt4_acc
+    seed_rows.append(
         {
-            "Model": run.label,
-            "Run ID": run.run_id,
-            "Accuracy": _format_pct(m.get("accuracy", 0.0)),
-            "F1 Macro": f"{m.get('f1_macro', 0.0):.3f}",
-            "F1 MET/NOT_MET": f"{m.get('f1_met_not_met', 0.0):.3f}",
-            "Cohen's Kappa": f"{m.get('cohens_kappa', 0.0):.3f}",
+            "Seed": ps["seed"],
+            "v4 Acc": _format_pct(v4_acc),
+            "GPT-4 Acc": _format_pct(gpt4_acc),
+            "Delta": _format_delta(delta),
+            "v4 F1": f"{ps['v4_f1_macro']:.3f}",
+            "v4 kappa": f"{ps['v4_kappa']:.3f}",
         }
     )
-    if not gpt4_row_added and "gpt4_baseline_accuracy" in m:
-        comparison_rows.append(
-            {
-                "Model": "GPT-4 (baseline)",
-                "Run ID": "HF dataset baseline",
-                "Accuracy": _format_pct(float(m["gpt4_baseline_accuracy"])),
-                "F1 Macro": f"{float(m.get('gpt4_baseline_f1_macro', 0.0)):.3f}",
-                "F1 MET/NOT_MET": "--",
-                "Cohen's Kappa": "--",
-            }
-        )
-        gpt4_row_added = True
 
-comparison_df = pd.DataFrame(comparison_rows)
-st.dataframe(comparison_df, use_container_width=True, hide_index=True)
+seed_df = pd.DataFrame(seed_rows)
+st.dataframe(seed_df, use_container_width=True, hide_index=True)
 
-st.header("Confusion Matrices")
-with_matrix = [
-    run for run in run_data if "confusion_matrix" in run.metrics and "confusion_matrix_labels" in run.metrics
-]
-if with_matrix:
-    cols = st.columns(len(with_matrix))
-    for col, run in zip(cols, with_matrix, strict=True):
-        fig = create_confusion_matrix_figure(
-            run.metrics["confusion_matrix"],
-            run.metrics["confusion_matrix_labels"],
-            run.label,
-        )
-        col.plotly_chart(fig, use_container_width=True)
+st.caption(
+    "Each seed selects a different random 20-pair subset from the TrialGPT HF dataset (n=1015). "
+    "Variance across seeds (80-95%) illustrates the instability of small-sample evaluation."
+)
 
-st.header("Per-Class F1 Scores")
+# ── Aggregate Confusion Matrices ─────────────────────────────────────────────
+
+st.header("Aggregate Confusion Matrices")
+
+cm_col1, cm_col2 = st.columns(2)
+with cm_col1:
+    fig_v4 = create_confusion_matrix_figure(agg.v4_confusion, agg.labels, "v4 (27B+Pro)")
+    st.plotly_chart(fig_v4, use_container_width=True)
+
+with cm_col2:
+    fig_gpt4 = create_confusion_matrix_figure(agg.gpt4_confusion, agg.labels, "GPT-4 (baseline)")
+    st.plotly_chart(fig_gpt4, use_container_width=True)
+
+# ── Per-Class F1 Bar Chart ───────────────────────────────────────────────────
+
+st.header("Per-Class F1 Scores (Aggregate)")
+
+v4_f1 = _per_class_f1_from_cm(agg.v4_confusion, agg.labels)
+gpt4_f1 = _per_class_f1_from_cm(agg.gpt4_confusion, agg.labels)
+
 f1_rows = []
-for run in run_data:
-    f1_per_class = run.metrics.get("f1_per_class", {})
-    for cls, score in f1_per_class.items():
-        f1_rows.append({"Model": run.label, "Class": cls, "F1": score})
+for cls in agg.labels:
+    f1_rows.append({"Model": "v4 (27B+Pro)", "Class": cls, "F1": v4_f1[cls]})
+    f1_rows.append({"Model": "GPT-4", "Class": cls, "F1": gpt4_f1[cls]})
 
-if f1_rows:
-    f1_df = pd.DataFrame(f1_rows)
-    fig = px.bar(
-        f1_df,
-        x="Class",
-        y="F1",
-        color="Model",
-        barmode="group",
-        title="F1 Score by Class and Model",
-        range_y=[0, 1],
-    )
-    fig.update_layout(height=400)
-    st.plotly_chart(fig, use_container_width=True)
+f1_df = pd.DataFrame(f1_rows)
+fig_f1 = px.bar(
+    f1_df,
+    x="Class",
+    y="F1",
+    color="Model",
+    barmode="group",
+    title="F1 Score by Class (v4 vs GPT-4, n=80)",
+    range_y=[0, 1],
+)
+fig_f1.update_layout(height=400)
+st.plotly_chart(fig_f1, use_container_width=True)
+
+# ── Cost & Latency ───────────────────────────────────────────────────────────
 
 st.header("Cost & Latency")
+
 cost_rows = []
 for run in run_data:
     c = run.cost
     cost_rows.append(
         {
-            "Model": run.label,
+            "Seed": str(run.seed),
             "Run ID": run.run_id,
             "Pairs": c.get("total_pairs", "--"),
             "Cost ($)": f"${c.get('total_cost_usd', 0):.4f}",
@@ -220,13 +199,35 @@ for run in run_data:
         }
     )
 
+cost_rows.append(
+    {
+        "Seed": "ALL",
+        "Run ID": "Aggregate (4 seeds)",
+        "Pairs": agg.n,
+        "Cost ($)": f"${agg.total_cost_usd:.4f}",
+        "Input Tokens": f"{agg.total_input_tokens:,}",
+        "Output Tokens": f"{agg.total_output_tokens:,}",
+        "Avg Latency (ms)": "--",
+    }
+)
+
 cost_df = pd.DataFrame(cost_rows)
 st.dataframe(cost_df, use_container_width=True, hide_index=True)
 
-_render_key_findings(run_data)
+# ── Statistical Caveat ───────────────────────────────────────────────────────
+
+st.header("Statistical Caveat")
+st.warning(
+    "All results are on n=80 pairs (4 seeds x 20 pairs). "
+    "95% CI for 87.5% accuracy at n=80 is approximately [78%, 94%]. "
+    "Single-seed results range from 80% to 95%, illustrating high variance. "
+    "Tier A evaluation (n=1024) is needed for statistical significance."
+)
+
+# ── Audit Tables ─────────────────────────────────────────────────────────────
 
 st.header("Audit Tables")
 for run in run_data:
     if run.audit_table:
-        with st.expander(f"{run.label} -- Audit Table", expanded=False):
+        with st.expander(f"Seed {run.seed} -- Audit Table", expanded=False):
             st.markdown(run.audit_table)
