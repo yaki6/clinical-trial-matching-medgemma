@@ -591,32 +591,56 @@ def test_build_reasoning_prompt_contains_cwa():
 
 
 def test_build_reasoning_prompt_contains_cwa_exception():
-    """Stage 1 CWA has exceptions for procedural/safety requirements."""
+    """Stage 1 CWA has principled exceptions, not just specific examples."""
     prompt = build_reasoning_prompt(
         patient_note="Note",
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
-    assert "EXCEPTION" in prompt
-    assert "Procedural" in prompt or "procedural" in prompt.lower()
+    # General principle: CWA applies to medical conditions
+    assert "CWA APPLIES to" in prompt or "CWA applies to" in prompt.lower()
+    assert "CWA DOES NOT APPLY" in prompt
     assert "INSUFFICIENT DATA" in prompt
-    assert "contraception" in prompt.lower()
+    # Broad categories, not just benchmark-specific examples
+    assert "compliance" in prompt.lower() or "behaviors" in prompt.lower()
+    assert "lab values" in prompt.lower() or "test results" in prompt.lower()
+    assert "lifestyle" in prompt.lower() or "social history" in prompt.lower()
 
 
 def test_build_reasoning_prompt_contains_severity_subquestion():
-    """Stage 1 asks severity/specificity sub-question (Q4) after general condition."""
+    """Stage 1 asks severity/specificity sub-question (Q4) with N/A escape."""
     prompt = build_reasoning_prompt(
         patient_note="Note",
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
     assert "GENERAL condition" in prompt
-    assert "SPECIFIC requirements" in prompt
+    assert "SPECIFIC qualifiers" in prompt or "specific qualifiers" in prompt.lower()
     assert "MATCHES" in prompt
     assert "DOES NOT MATCH" in prompt
-    # Severity examples
-    assert "mild" in prompt.lower()
-    assert "severe" in prompt.lower()
+    # N/A escape hatch for simple criteria
+    assert "N/A" in prompt
+
+
+def test_build_reasoning_prompt_contains_negation_guidance():
+    """Stage 1 has guidance for negated criteria."""
+    prompt = build_reasoning_prompt(
+        patient_note="Note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "negat" in prompt.lower()
+    assert "UNDERLYING CONDITION" in prompt or "underlying condition" in prompt.lower()
+
+
+def test_build_reasoning_prompt_enforces_exact_keywords():
+    """Stage 1 requires exact YES/NO/INSUFFICIENT DATA keywords."""
+    prompt = build_reasoning_prompt(
+        patient_note="Note",
+        criterion_text="Criterion",
+        criterion_type="inclusion",
+    )
+    assert "MUST use exactly" in prompt or "must use exactly" in prompt.lower()
 
 
 def test_build_labeling_prompt_contains_reasoning():
@@ -672,14 +696,27 @@ def test_build_labeling_prompt_contains_mapping_rules():
 
 
 def test_build_labeling_prompt_contains_contradiction_check():
-    """Stage 2 prompt has contradiction detection instruction."""
+    """Stage 2 contradiction check flags inconsistencies without re-deriving."""
     prompt = build_labeling_prompt(
         stage1_reasoning="Analysis",
         criterion_text="Criterion",
         criterion_type="inclusion",
     )
     assert "CONTRADICTION CHECK" in prompt
-    assert "REASONING CONTENT" in prompt
+    # Must NOT re-derive conclusions — only flag obvious inconsistencies
+    assert "Do NOT re-derive" in prompt or "do NOT re-derive" in prompt.lower()
+
+
+def test_build_labeling_prompt_exclusion_has_full_mapping():
+    """Exclusion mapping has all 5 branches like inclusion mapping."""
+    prompt = build_labeling_prompt(
+        stage1_reasoning="Analysis",
+        criterion_text="Active hepatitis",
+        criterion_type="exclusion",
+    )
+    # Exclusion should handle YES+MATCHES, YES+DOES NOT MATCH, YES+INSUFFICIENT
+    assert "DOES NOT MATCH" in prompt
+    assert "N/A" in prompt
 
 
 def test_build_labeling_prompt_contains_abstention_guardrail():
@@ -689,8 +726,8 @@ def test_build_labeling_prompt_contains_abstention_guardrail():
         criterion_text="Criterion",
         criterion_type="exclusion",
     )
-    assert "Do NOT downgrade" in prompt
-    assert "HIGH confidence" in prompt
+    assert "do NOT downgrade" in prompt or "Do NOT downgrade" in prompt
+    assert "definitive" in prompt.lower() or "HIGH confidence" in prompt
 
 
 # --- Two-stage evaluate function tests ---

@@ -104,14 +104,18 @@ evidence_sentences: JSON array of integer sentence indices from the patient note
 STAGE1_REASONING_PROMPT = """You are a medical expert analyzing a patient's clinical note.
 
 Closed World Assumption (CWA):
-If the note does not mention a MEDICAL CONDITION, assume the patient does NOT have it
-(e.g., no mention of allergies = no known allergies; no mention of diabetes = no diabetes).
+CWA APPLIES to: medical conditions, diagnoses, symptoms, allergies, and
+disease history. If the note does not mention a medical condition, assume
+the patient does not have it (e.g., no mention of diabetes = no diabetes).
 
-EXCEPTION — Do NOT apply CWA to:
-- Procedural/safety requirements (contraception use, pregnancy tests, informed consent)
-- Active treatments or scheduled interventions (currently on medication X, scheduled for surgery Y)
-- Test results not yet obtained (spirometry values, specific imaging modality results)
-For these, if not documented, answer INSUFFICIENT DATA.
+CWA DOES NOT APPLY to:
+- Actions, behaviors, or compliance (contraception use, willingness to
+  follow up, substance abstinence, diet adherence)
+- Test results, lab values, or diagnostic findings not in this note
+- Ongoing treatments, concomitant medications, or procedures
+- Prior surgeries or procedures (silence ≠ never happened)
+- Lifestyle or social history (smoking, alcohol, occupation)
+For any of these, if not documented, answer INSUFFICIENT DATA.
 
 Criterion Type: {criterion_type}
 Criterion: {criterion_text}
@@ -119,25 +123,32 @@ Criterion: {criterion_text}
 Patient Note:
 {patient_note}
 
-Analyze this criterion against the patient note. Answer these questions:
+Analyze this criterion against the patient note:
 
 1. What does this criterion specifically require?
    Note any severity, staging, timing, or specificity requirements.
+   If negated (e.g., "No history of X"), identify the UNDERLYING
+   CONDITION being checked (e.g., "history of X"). Q3 should be
+   about the underlying condition, not the negation.
 
 2. What does the patient note explicitly state about this?
    Cite specific sentences by index.
 
-3. Does the patient have the GENERAL condition described in this criterion?
+3. Does the patient have the GENERAL condition described?
    Answer: YES / NO / INSUFFICIENT DATA
 
-4. If YES to #3: Does it match the SPECIFIC requirements?
-   - Severity match? (e.g., "mild" vs "severe")
-   - Type/staging match? (e.g., "Rutherford stage 2")
-   - Modality/test match? (e.g., "on CT scan")
-   Answer: MATCHES / DOES NOT MATCH / INSUFFICIENT DATA
+4. If YES to #3: Does the criterion have SPECIFIC qualifiers
+   beyond the general condition?
+   - If yes, does the patient match them?
+     (severity/grade, subtype, timing/recency, threshold)
+     Answer: MATCHES / DOES NOT MATCH / INSUFFICIENT DATA
+   - If the criterion has no specific qualifiers: Answer: N/A
    If NO to #3, skip this question.
 
 5. How confident are you? HIGH / MEDIUM / LOW
+
+You MUST use exactly YES, NO, or INSUFFICIENT DATA for Q3
+and MATCHES, DOES NOT MATCH, INSUFFICIENT DATA, or N/A for Q4.
 
 Respond in plain text (no JSON). Focus on clinical accuracy."""
 
@@ -158,23 +169,27 @@ Medical Analysis:
 LABEL MAPPING RULES:
 
 For INCLUSION criteria:
-- Analysis says YES + MATCHES specifics → "eligible"
-- Analysis says YES + DOES NOT MATCH specifics → "not eligible"
+- Analysis says YES + MATCHES (or N/A) → "eligible"
+- Analysis says YES + DOES NOT MATCH → "not eligible"
 - Analysis says YES + INSUFFICIENT DATA on specifics → "unknown"
 - Analysis says NO → "not eligible"
 - Analysis says INSUFFICIENT DATA → "unknown"
 
 For EXCLUSION criteria:
-- Analysis says YES (patient HAS the excluded condition) → "not eligible"
-- Analysis says NO (patient does NOT have it) → "eligible"
+- Analysis says YES + MATCHES (or N/A) → "not eligible"
+- Analysis says YES + DOES NOT MATCH → "eligible"
+- Analysis says YES + INSUFFICIENT DATA on specifics → "unknown"
+- Analysis says NO → "eligible"
 - Analysis says INSUFFICIENT DATA → "unknown"
 
 IMPORTANT RULES:
-1. When the analysis gives a clear NO with HIGH confidence, output "not eligible" (inclusion)
-   or "eligible" (exclusion). Do NOT downgrade to "unknown" unless you find a specific error.
-2. CONTRADICTION CHECK: If the analysis conclusion (YES/NO) contradicts its own reasoning
-   (e.g., says "NO" but reasoning describes the patient HAS the condition), rely on the
-   REASONING CONTENT, not the conclusion. If ambiguous, output "unknown".
+1. When the analysis gives a clear NO with HIGH confidence,
+   do NOT downgrade to "unknown". Respect definitive findings.
+2. CONTRADICTION CHECK: If the YES/NO answer is clearly
+   inconsistent with the cited evidence (e.g., says "NO" but
+   every cited sentence describes the patient having the
+   condition), flag the inconsistency and output "unknown".
+   Do NOT re-derive the clinical conclusion yourself.
 
 Respond ONLY with valid JSON:
 {{
