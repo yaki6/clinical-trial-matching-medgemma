@@ -4,10 +4,9 @@ This module owns:
   1. The Gemini function-calling schemas (what the model sees).
   2. The async tool executor (what actually runs when the model calls a tool).
 
-The three tools exposed to Gemini are:
+The two tools exposed to Gemini are:
   - search_trials       → CT.gov API v2 /studies search
   - get_trial_details   → CT.gov API v2 /studies/{nct_id}
-  - normalize_medical_terms → MedGemma: correct nomenclature + CT.gov search variants
 
 Design note: tool schemas are purposefully kept narrow.  Gemini should
 not be handed every CT.gov query parameter — just the ones that produce
@@ -16,17 +15,13 @@ reliable results (validated against the live API).
 
 from __future__ import annotations
 
-import json
 import time
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import structlog
 from google.genai import types as genai_types
 
 from trialmatch.prescreen.ctgov_client import CTGovClient, parse_search_results, parse_study_summary
-
-if TYPE_CHECKING:
-    from trialmatch.models.base import ModelAdapter
 
 logger = structlog.get_logger()
 
@@ -124,9 +119,17 @@ _SEARCH_TRIALS_DECL = genai_types.FunctionDeclaration(
                 enum=["MALE", "FEMALE", "ALL"],
                 description="Patient's sex for eligibility filtering. Default ALL.",
             ),
+            "study_type": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                enum=["INTERVENTIONAL", "OBSERVATIONAL", "EXPANDED_ACCESS"],
+                description=(
+                    "Filter by study type. Default: INTERVENTIONAL (clinical trials "
+                    "patients can enroll in). Use OBSERVATIONAL only if specifically needed."
+                ),
+            ),
             "page_size": genai_types.Schema(
                 type=genai_types.Type.INTEGER,
-                description="Number of results to return. Default 20. Max 100.",
+                description="Number of results to return. Default 20. Max 50.",
             ),
         },
     ),
@@ -152,51 +155,22 @@ _GET_DETAILS_DECL = genai_types.FunctionDeclaration(
     ),
 )
 
-_NORMALIZE_TERMS_DECL = genai_types.FunctionDeclaration(
-    name="normalize_medical_terms",
-    description=(
-        "Ask MedGemma (a specialized medical language model) to produce "
-        "clinically correct search variants for a medical term. "
-        "Use this BEFORE searching when the patient profile contains:\n"
-        "  - A biomarker or mutation (e.g. 'EGFR L858R') — get HUGO/HGVS notation "
-        "    and synonym variants ranked from most-specific to broadest.\n"
-        "  - A drug name (e.g. 'Tagrisso') — get INN + brand name variants.\n"
-        "  - A diagnosis (e.g. 'lung cancer') — get MeSH-preferred terms and common "
-        "    CT.gov-indexed synonyms.\n"
-        "  - A clinical phenotype (e.g. 'non-smoker') — get the exact phrasing used "
-        "    in eligibility criteria text.\n"
-        "Returns a JSON list of search_variants ordered from most specific to broadest, "
-        "and disambiguation notes (e.g. EGFR gene vs eGFR renal function)."
-    ),
-    parameters=genai_types.Schema(
-        type=genai_types.Type.OBJECT,
-        required=["raw_term", "term_type"],
-        properties={
-            "raw_term": genai_types.Schema(
-                type=genai_types.Type.STRING,
-                description="The term as extracted from the patient profile, e.g. 'EGFR L858R'.",
-            ),
-            "term_type": genai_types.Schema(
-                type=genai_types.Type.STRING,
-                enum=["biomarker", "condition", "drug", "phenotype"],
-                description="Category of the term — determines normalization rules applied.",
-            ),
-            "patient_context": genai_types.Schema(
-                type=genai_types.Type.STRING,
-                description=(
-                    "Brief patient context to help MedGemma disambiguate. "
-                    "E.g. 'NSCLC patient with EGFR mutation, never smoker, post-TKI'."
-                ),
-            ),
-        },
-    ),
-)
+# --- Commented out: normalize_medical_terms adds ~25s/call via MedGemma with
+# --- near-zero value (echoes input unchanged). May revisit with better prompts.
+# _NORMALIZE_TERMS_DECL = genai_types.FunctionDeclaration(
+#     name="normalize_medical_terms",
+#     description=(
+#         "Ask MedGemma (a specialized medical language model) to produce "
+#         "clinically correct search variants for a medical term. "
+#         ...
+#     ),
+#     parameters=genai_types.Schema(...),
+# )
 
 PRESCREEN_TOOLS = genai_types.Tool(
     function_declarations=[
         _SEARCH_TRIALS_DECL,
         _GET_DETAILS_DECL,
-        _NORMALIZE_TERMS_DECL,
     ]
 )
 
@@ -204,31 +178,23 @@ PRESCREEN_TOOLS = genai_types.Tool(
 # 2. Tool executor
 # ---------------------------------------------------------------------------
 
-MEDGEMMA_NORMALIZE_SYSTEM = (
-    "You are a medical terminology expert specializing in clinical trial search.\n"
-    "Given a medical term and its type, return a JSON object with:\n"
-    '- "normalized": the canonical form (HUGO gene name, INN drug name, MeSH disease term, etc.)\n'
-    '- "search_variants": list of strings, most-to-least specific, for CT.gov eligibility search\n'
-    '- "disambiguation": important notes (e.g. EGFR gene vs eGFR renal, drug brand vs generic)\n'
-    '- "avoid": terms that look similar but mean something different (false-positive risk)\n'
-    "\nReturn only valid JSON, no other text."
-)
-
-MEDGEMMA_NORMALIZE_USER = """Term: {raw_term}
-Type: {term_type}
-Patient context: {patient_context}
-
-Return JSON with normalized, search_variants (list, most→least specific), disambiguation, avoid."""
+# --- Commented out: MedGemma normalize prompts (see _NORMALIZE_TERMS_DECL above)
+# MEDGEMMA_NORMALIZE_SYSTEM = (
+#     "You are a medical terminology expert specializing in clinical trial search.\n"
+#     ...
+# )
+# MEDGEMMA_NORMALIZE_USER = """Term: {raw_term} ..."""
 
 
 class ToolExecutor:
-    """Dispatches Gemini tool calls to CT.gov API or MedGemma.
+    """Dispatches Gemini tool calls to CT.gov API.
 
     Keeps running totals for cost/latency tracking.
     """
 
-    def __init__(self, ctgov: CTGovClient, medgemma: ModelAdapter):
+    def __init__(self, ctgov: CTGovClient, medgemma: Any = None):
         self._ctgov = ctgov
+        # medgemma kept as optional param for backward compat; not used currently
         self._medgemma = medgemma
         self.medgemma_calls: int = 0
         self.medgemma_cost: float = 0.0
@@ -243,8 +209,7 @@ class ToolExecutor:
             return await self._search_trials(**args)
         if tool_name == "get_trial_details":
             return await self._get_trial_details(**args)
-        if tool_name == "normalize_medical_terms":
-            return await self._normalize_medical_terms(**args)
+        # normalize_medical_terms commented out — see bottom of file
         raise ValueError(f"Unknown tool: {tool_name}")
 
     async def _search_trials(
@@ -258,6 +223,7 @@ class ToolExecutor:
         min_age: str | None = None,
         max_age: str | None = None,
         sex: str | None = None,
+        study_type: str | None = None,
         page_size: int = 20,
         **_ignored: Any,
     ) -> tuple[dict, str]:
@@ -272,7 +238,8 @@ class ToolExecutor:
             sex=sex,
             min_age=min_age,
             max_age=max_age,
-            page_size=min(int(page_size), 100),
+            study_type=study_type or "INTERVENTIONAL",
+            page_size=min(int(page_size), 50),
         )
         latency = (time.perf_counter() - start) * 1000
 
@@ -325,51 +292,14 @@ class ToolExecutor:
         logger.info("ctgov_details_fetched", nct_id=nct_id)
         return result, summary
 
-    async def _normalize_medical_terms(
-        self,
-        raw_term: str,
-        term_type: str,
-        patient_context: str = "",
-        **_ignored: Any,
-    ) -> tuple[dict, str]:
-        prompt = MEDGEMMA_NORMALIZE_USER.format(
-            raw_term=raw_term,
-            term_type=term_type,
-            patient_context=patient_context or "not specified",
-        )
-        full_prompt = f"{MEDGEMMA_NORMALIZE_SYSTEM}\n\n{prompt}"
-
-        start = time.perf_counter()
-        response = await self._medgemma.generate(full_prompt, max_tokens=512)
-        latency = (time.perf_counter() - start) * 1000
-
-        self.medgemma_calls += 1
-        self.medgemma_cost += response.estimated_cost
-
-        # Try to parse MedGemma's JSON response
-        try:
-            # Strip markdown fences if present
-            text = response.text.strip()
-            if text.startswith("```"):
-                text = text.split("```")[1]
-                if text.startswith("json"):
-                    text = text[4:]
-            result = json.loads(text)
-        except (json.JSONDecodeError, IndexError):
-            # Return raw text if JSON parsing fails
-            result = {
-                "normalized": raw_term,
-                "search_variants": [raw_term],
-                "disambiguation": "",
-                "avoid": [],
-                "raw_response": response.text,
-            }
-
-        summary = (
-            f"MedGemma normalized '{raw_term}' ({term_type}): "
-            f"variants={result.get('search_variants', [])}, latency {latency:.0f}ms"
-        )
-        logger.info(
-            "medgemma_normalize_complete", term=raw_term, variants=result.get("search_variants")
-        )
-        return result, summary
+    # --- Commented out: normalize_medical_terms adds ~25s/call with near-zero value.
+    # --- May revisit with better MedGemma prompts for search term generation.
+    # async def _normalize_medical_terms(
+    #     self, raw_term: str, term_type: str, patient_context: str = "", **_ignored: Any,
+    # ) -> tuple[dict, str]:
+    #     prompt = MEDGEMMA_NORMALIZE_USER.format(...)
+    #     response = await self._medgemma.generate(full_prompt, max_tokens=512)
+    #     self.medgemma_calls += 1
+    #     self.medgemma_cost += response.estimated_cost
+    #     ... (see git history for full implementation)
+    #     return result, summary

@@ -38,6 +38,14 @@ _SEX_AGG_MAP: dict[str, str] = {
     "FEMALE": "sex:f",
 }
 
+# CT.gov API v2 does NOT have a filter.studyType parameter.
+# Study type must be filtered via AREA[StudyType] in query.term (Essie syntax).
+_STUDY_TYPE_AREA_MAP: dict[str, str] = {
+    "INTERVENTIONAL": "Interventional",
+    "OBSERVATIONAL": "Observational",
+    "EXPANDED_ACCESS": "Expanded Access",
+}
+
 
 class CTGovClient:
     """Async HTTP client for ClinicalTrials.gov API v2.
@@ -101,6 +109,7 @@ class CTGovClient:
         min_age: str | None = None,
         max_age: str | None = None,
         advanced_query: str | None = None,
+        study_type: str | None = None,
         page_size: int = 20,
         page_token: str | None = None,
     ) -> dict:
@@ -120,17 +129,25 @@ class CTGovClient:
         if eligibility_keywords:
             params["query.term"] = eligibility_keywords
 
-        # Age filtering via Essie advanced query AREA expressions
-        age_clauses: list[str] = []
-        if min_age:
-            age_clauses.append(f"AREA[MinimumAge]RANGE[MIN, {min_age}]")
-        if max_age:
-            age_clauses.append(f"AREA[MaximumAge]RANGE[{max_age}, MAX]")
-        age_query = " AND ".join(age_clauses) if age_clauses else ""
+        # AREA-based filtering via Essie advanced query expressions
+        area_clauses: list[str] = []
 
-        # Compose advanced_query + age clauses into query.term
+        # Study type (INTERVENTIONAL by default)
+        if study_type:
+            area_val = _STUDY_TYPE_AREA_MAP.get(study_type, study_type)
+            area_clauses.append(f"AREA[StudyType]{area_val}")
+
+        # Age bounds
+        if min_age:
+            area_clauses.append(f"AREA[MinimumAge]RANGE[MIN, {min_age}]")
+        if max_age:
+            area_clauses.append(f"AREA[MaximumAge]RANGE[{max_age}, MAX]")
+
+        area_query = " AND ".join(area_clauses) if area_clauses else ""
+
+        # Compose advanced_query + AREA clauses into query.term
         combined_advanced = " AND ".join(
-            part for part in [advanced_query or "", age_query] if part
+            part for part in [advanced_query or "", area_query] if part
         )
         if combined_advanced:
             existing_term = params.get("query.term", "")

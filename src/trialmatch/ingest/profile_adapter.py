@@ -25,6 +25,11 @@ def adapt_profile_for_prescreen(profile: dict) -> tuple[str, dict[str, Any]]:
         value = kf["value"]
 
         if isinstance(value, dict):
+            # Promote demographics fields to top-level for API filter injection
+            if field == "demographics":
+                for k, v in value.items():
+                    if v is not None:
+                        key_facts[k] = str(v)
             # Flatten nested dict to readable string
             parts = []
             for k, v in value.items():

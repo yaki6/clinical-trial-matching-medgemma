@@ -407,6 +407,12 @@ async def run_phase0(config: dict, dry_run: bool = False):
                         hf_token=hf_token,
                         model_name=stage1_cfg["name"],
                     )
+                elif stage1_cfg.get("provider") == "google":
+                    s1_api_key = os.environ.get("GOOGLE_API_KEY", "")
+                    reasoning_adapter = GeminiAdapter(
+                        api_key=s1_api_key,
+                        model=stage1_cfg.get("name", "gemini-3-pro-preview"),
+                    )
                 else:
                     click.echo(f"ERROR: Unknown stage1 provider: {stage1_cfg.get('provider')}", err=True)
                     continue

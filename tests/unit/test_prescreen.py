@@ -531,6 +531,7 @@ class TestToolExecutorDispatch:
         assert "NSCLC" in result["eligibility_criteria"]
         assert "NCT11111111" in summary
 
+    @pytest.mark.skip(reason="normalize_medical_terms commented out — may revisit with better MedGemma prompts")
     def test_normalize_medical_terms_parses_json(self):
         executor = _make_executor()
         result, summary = asyncio.run(
@@ -545,6 +546,7 @@ class TestToolExecutorDispatch:
         assert executor.medgemma_calls == 1
         assert "EGFR L858R" in summary
 
+    @pytest.mark.skip(reason="normalize_medical_terms commented out — may revisit with better MedGemma prompts")
     def test_normalize_falls_back_on_invalid_json(self):
         ctgov = AsyncMock(spec=CTGovClient)
         medgemma = MagicMock()
