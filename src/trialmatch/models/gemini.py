@@ -2,15 +2,18 @@
 
 Supports both thinking models (Pro) and non-thinking models (Flash).
 Uses structured JSON output with Pydantic-style schema.
+Multimodal: generate_with_image() for clinical image analysis.
 """
 
 from __future__ import annotations
 
 import asyncio
 import time
+from pathlib import Path
 
 import structlog
 from google import genai
+from google.genai import types as genai_types
 
 from trialmatch.models.base import ModelAdapter
 from trialmatch.models.schema import ModelResponse
@@ -114,6 +117,109 @@ class GeminiAdapter(ModelAdapter):
                 raise
 
         msg = f"Gemini failed after {self._max_retries} retries"
+        raise RuntimeError(msg)
+
+    async def generate_with_image(
+        self, prompt: str, image_path: Path, max_tokens: int = 512
+    ) -> ModelResponse:
+        """Multimodal generation: image + text prompt -> findings.
+
+        Image is placed FIRST in the contents list (before the text prompt)
+        per MedGemma/Gemini best practices.
+
+        Does NOT use response_mime_type: "application/json" because it breaks
+        multimodal analysis — the model tries to force JSON structure instead
+        of describing clinical findings naturally.
+        """
+        start = time.perf_counter()
+
+        # Read image bytes and determine MIME type
+        image_path = Path(image_path)
+        image_bytes = image_path.read_bytes()
+
+        ext = image_path.suffix.lower()
+        mime_map = {
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".gif": "image/gif",
+            ".webp": "image/webp",
+            ".bmp": "image/bmp",
+        }
+        mime_type = mime_map.get(ext, "image/png")
+
+        # Build multimodal contents: image FIRST, then text
+        contents = [
+            genai_types.Part(
+                inline_data=genai_types.Blob(data=image_bytes, mime_type=mime_type),
+            ),
+            genai_types.Part.from_text(text=prompt),
+        ]
+
+        # Thinking models need a higher token floor for internal reasoning
+        if self._is_thinking_model:
+            effective_max_tokens = max(max_tokens, 32768)
+        else:
+            effective_max_tokens = max_tokens
+
+        for attempt in range(self._max_retries):
+            try:
+                response = await asyncio.to_thread(
+                    self._client.models.generate_content,
+                    model=self._model,
+                    contents=contents,
+                    config={
+                        "max_output_tokens": effective_max_tokens,
+                    },
+                )
+                elapsed = (time.perf_counter() - start) * 1000
+
+                text = response.text or ""
+                input_tokens = 0
+                output_tokens = 0
+
+                if hasattr(response, "usage_metadata") and response.usage_metadata:
+                    input_tokens = (
+                        getattr(response.usage_metadata, "prompt_token_count", 0) or 0
+                    )
+                    output_tokens = (
+                        getattr(response.usage_metadata, "candidates_token_count", 0) or 0
+                    )
+
+                cost = (
+                    input_tokens * COST_PER_1M_INPUT + output_tokens * COST_PER_1M_OUTPUT
+                ) / 1_000_000
+
+                return ModelResponse(
+                    text=text,
+                    input_tokens=input_tokens,
+                    output_tokens=output_tokens,
+                    latency_ms=elapsed,
+                    estimated_cost=cost,
+                )
+            except Exception as e:
+                err_str = str(e)
+                is_transient = (
+                    "503" in err_str
+                    or "UNAVAILABLE" in err_str
+                    or "429" in err_str
+                    or "RESOURCE_EXHAUSTED" in err_str
+                    or "high demand" in err_str
+                )
+                if is_transient and attempt < self._max_retries - 1:
+                    wait = min(self._retry_backoff**attempt, self._max_wait)
+                    logger.warning(
+                        "gemini_api_transient_error",
+                        attempt=attempt + 1,
+                        wait_seconds=wait,
+                        error=err_str[:120],
+                        method="generate_with_image",
+                    )
+                    await asyncio.sleep(wait)
+                    continue
+                raise
+
+        msg = f"Gemini generate_with_image failed after {self._max_retries} retries"
         raise RuntimeError(msg)
 
     async def health_check(self) -> bool:

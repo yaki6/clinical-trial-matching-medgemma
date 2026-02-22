@@ -1,0 +1,102 @@
+[
+  {
+    "uid": "MPX1452",
+    "history": "21 y.o. asymptomatic man with an  incidental finding on a screening chest radiograph",
+    "gold_diagnosis": "Pulmonary valve stenosis",
+    "gold_findings": "Chest radiograph findings:\n- Left mediastinal mass, a prominent pulmonary artery\n\nCardiac gated CT (with and without contrast) findings:\n- Enlarged main pulmonary artery measuring 4.4cm\n- Enlarged left pulmonary artery measuring 3.9cm\n- Normal right pulmonary artery measuring 2.2 cm\n- Pulmonary valve stenosis without subpulmonic membrane. Pulmonary valve is diffusely thickened. \n\nThere is incomplete coaptation of the valve in diastole with a regurgitant area of 0.16 cm2.\n- Enlarged inferior vena cava",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1452_synpic58265.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "The main and left pulmonary arteries are enlarged, but the right pulmonary artery is spared from the high-pressure jet created by flow through the stenotic pulmonary valve and therefore retains is normal diameter",
+    "title": "Pulmonary valve stenosis"
+  },
+  {
+    "uid": "MPX1063",
+    "history": "76 year-old woman with long history of hypertension, with acute-onset chest pain.",
+    "gold_diagnosis": "thoracic aortic dissection",
+    "gold_findings": "Multiple axial CT images of the chest with intravenous contrast material demonstrates a Stanford type A thoracic aortic dissection, with a clear intimal flap separating the true and false lumens of the ascending aorta.  Additionally, the pericardium full of dense fluid, likely hemopericardium.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1063_synpic22165.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "Multiple axial CT images of the chest with intravenous contrast material demonstrates a Stanford type A thoracic aortic dissection, with a clear intimal flap separating the true and false lumens of the ascending aorta.  Additionally, a pericardial effusion is noted suspicious for hemopericardium.",
+    "title": "thoracic aortic dissection"
+  },
+  {
+    "uid": "MPX2015",
+    "history": "83 y.o. woman with shortness of breath.",
+    "gold_diagnosis": "Hiatal Hernia",
+    "gold_findings": "PA and lateral radiographs of the chest. \nFINDINGS:\n-There is near complete opacification of the left hemidiaphragm. There is consolidation and/or atelectasis with accompanying effusion present on the \nleft. Small right basilar opacities are present with a small right effusion. There is no evidence of pneumothorax.  The cardiac silhouette is stable.  A \nlarge hiatal hernia is present. Calcifications are seen within the thoracic aorta. The remainder of the visualized bones and soft tissues are remarkable \nfor degenerative changes to the acromioclavicular joint and spine.  \n \nIMPRESSION: \n1. LEFT LUNG BASE CONSOLIDATION AND/OR ATELECTASIS WITH ACCOMPANYING EFFUSION WITH SMALLER BASILAR RIGHT OPACITY AND EFFUSION.  \n2. LARGE HIATAL HERNIA.  \n\n\nCT chest PE protocol.  \nFINDINGS:  \n-The study is somewhat limited by motion artifact.  The mediastinal, hilar and pulmonary parenchyma vasculature appear widely patent and normal in\ncourse, caliber and contour without evidence of filling defects. There is a large hiatal hernia.  Otherwise, there are no mediastinal or hilar masses\nidentified, and no adenopathy is evident. Atherosclerotic calcific changes of the aorta and coronary arteries are present. There is no evidence of\naneurysmal dilation. \n \nLeft greater than right-sided simple-appearing pleural effusions are present with underlying compressive atelectasis. The lungs are otherwise clear and \nevenly aerated without evidence of mass, calcification or pulmonary parenchymal disease.  The airways appear normal, and no thickening is evident.  \n \nMultilevel degenerative changes of the thoracic spine are seen.  The visualized upper abdomen as well as the remainder of the visualized soft tissues and osseous structures are unremarkable.   \nIMPRESSION: \n1. NO COMPUTED TOMOGRAPHIC EVIDENCE OF PULMONARY EMBOLISM.  \n2. LEFT GREATER THAN RIGHT-SIDED SIMPLE-APPEARING PLEURAL EFFUSIONS WITH SUBJACENT COMPRESSIVE ATELECTASIS.  \n3. LARGE HIATAL HERNIA.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX2015_synpic50876.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "-The study is somewhat limited by motion artifact.  The mediastinal, hilar and pulmonary parenchyma vasculature appear widely patent and normal in\ncourse, caliber and contour without evidence of filling defects. There is a large hiatal hernia.  Otherwise, there are no mediastinal or hilar masses\nidentified, and no adenopathy is evident. Atherosclerotic calcific changes of the aorta and coronary arteries are present. There is no evidence of\naneurysmal dilation. \n\nLeft greater than right-sided simple-appearing pleural effusions are present with underlying compressive atelectasis. The lungs are otherwise clear and \nevenly aerated without evidence of mass, calcification or pulmonary parenchymal disease.  The airways appear normal, and no thickening is evident.  \n\nMultilevel degenerative changes of the thoracic spine are seen.  The visualized upper abdomen as well as the remainder of the visualized soft tissues and osseous structures are unremarkable.",
+    "title": "Hiatal Hernia"
+  },
+  {
+    "uid": "MPX1938",
+    "history": "Worsening chronic cough and mild dyspnea.",
+    "gold_diagnosis": "Nonspecific Interstitial Pneumonitis",
+    "gold_findings": "Initial chest radiographs interpreted as normal. Subsequent chest radiographs 3 months later showed bibasilar interstitial opacities. \nHigh resolution chest CT revealed predominantly mid and lower lung zone ground-glass opacities and prominent but not enlarged mediastinal lymph nodes.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1938_synpic22899.png",
+    "image_modality": "CT - noncontrast",
+    "image_caption": "Follow-up CT",
+    "title": "Nonspecific Interstitial Pneumonitis"
+  },
+  {
+    "uid": "MPX1873",
+    "history": "14 year old male with chronic shortness of breath",
+    "gold_diagnosis": "Coarctation of the Aorta",
+    "gold_findings": "PA view of the chest demonstrates an abnormal contour to the aortic knob, with a focal indentation, with prominence of the descending aorta distal to this region.\n\nAxial contrast-enhanced CT examination of the chest demonstrates a focal narrowing of the aorta just distal to the ostium of the left subclavian artery with post-stenotic dilation of the descending thoracic aorta, consistent with coarctation of the aorta.  Note also the enlarged collateral vessels in the internal mammary and subcostal distributions.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1873_synpic28988.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "Contrast-enhanced axial CT images and oblique sagittal reconstructed images of the chest demonstrates a focal narrowing of the aorta just distal to the ostium of the left subclavian artery with post-stenotic dilation of the descending thoracic aorta, consistent with coarctation of the aorta.",
+    "title": "Coarctation of the Aorta"
+  },
+  {
+    "uid": "MPX1481",
+    "history": "54 year-old female with acute onset chest pain.",
+    "gold_diagnosis": "Aberrant Right Subclavian Artery",
+    "gold_findings": "CT examination of the chest performed with IV contrast according to a PE/DVT protocol demonstrated an aberrant right subclavian artery.  The mediastinum was otherwise unremarkable.  There was no pulmonary embolism detected.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1481_synpic30242.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "CT examination of the chest with IV contrast performed accoring to a PE/DVT protocol demonstrated an aberrant right subclavian artery.  The mediastinum was otherwise unremarkable.  There was no pulmonary embolism detected.",
+    "title": "Aberrant Right Subclavian Artery"
+  },
+  {
+    "uid": "MPX1355",
+    "history": "A previously healthy 23 y/o woman presents with a 4-month history of itchy skin, night sweats, and a 20-lb unintentional weight loss.",
+    "gold_diagnosis": "Nodular Sclerosing Hodgkin\u2019s Lymphoma",
+    "gold_findings": "\u2022  Anterior (superior) mediastinal mass, surrounding the great vessels and aortic arch.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1355_synpic55466.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "There is a large soft-tissue mass, surrounding the great vessels (R innominate, L common carotid, L subclavian).",
+    "title": "Nodular Sclerosing Hodgkin\u2019s Lymphoma"
+  },
+  {
+    "uid": "MPX1307",
+    "history": "48 year old female presents for Computed Tomography after notifying her primary care provider that years earlier she was told she had a nodule in her lung on chest x-ray.\n\nSurgical History: \nCholecystectomy at age 35\nHysterectomy at age 43 (for fibroids)",
+    "gold_diagnosis": "Benign Metastasizing Leiomyoma",
+    "gold_findings": "Multiple bilateral well circumscribed pulmonary nodules, without spiculations or irregularities. No pathologic lymphadenopathy.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1307_synpic20064.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "Contrast Enhanced CT",
+    "title": "Benign Metastasizing Leiomyoma"
+  },
+  {
+    "uid": "MPX2391",
+    "history": "Patient admitted originally for hemoptysis. She has a history of chronic lung disease and bronchiectasis. During the course of hospitalization, she required the introduction of a pacemaker.",
+    "gold_diagnosis": "Pneumothorax",
+    "gold_findings": "Image 1 shows the pre-pacer portable cxr with evidence of chronic lung disease and scarring in both bases. Images 2,3, and 4 demonstrate the left medial pneumothorax which occurred during pacemaker placement. Image 5 demonstrates reduction of the pneumothorax by a small lumen anterioly placed chest catheter. Image 6 and 7 demonstrates acute left hemothorax which occurred immediately after removal of the chest catheter. Her left internal thoracic artery had been lacerated but tamponaded during chest tube insertion. Removal of the chest tube released the tamponade resulting in acute hemorrhage. Image 8 demonstrates successful embolization of the hemorrhage and introduction of a pigtail chest tube catheter to drain the hemothorax.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX2391_synpic17893.png",
+    "image_modality": "CT - noncontrast",
+    "image_caption": "Axial CT image through the mid-thorax demonstrates that the pneumothorax is loculated medially and extends anteriorly to posteriorly. Though CT was not needed to diagnose the pneumothorax, it was obtained by interventional radiology to document placement of the chest catheter.",
+    "title": "Pneumothorax"
+  },
+  {
+    "uid": "MPX1067",
+    "history": "22 y.o. woman with hypertension.",
+    "gold_diagnosis": "Takayasu\"s Arteritis",
+    "gold_findings": "ABDOMINAL AORTA:  There is narrowing of the abdominal aorta, both above and below the renal arteries.  The superior mesenteric artery is occluded at its origin, and not seen on the lateral view.  There is a large Arc of Riolan from the IMA, which reconstitutes the SMA distribution.  The celiac axis is patent, however, there is a 50% stenosis at the origin.  There are single renal arteries bilaterally, both of which demonstrate stenoses.  On the right, there is a long segment stenosis with approximately 50% narrowing.  On the left, there is 60% to 70% stenosis at the origin of the vessel, extending to an early bifurcation, with an early upper pole branch.  This is also stenotic at its origin.",
+    "image_path": "ingest_design/MedPix-2-0/images/MPX1067_synpic16962.png",
+    "image_modality": "CT w/contrast (IV)",
+    "image_caption": "Carotid stenosis",
+    "title": "Takayasu&#34;s Arteritis"
+  }
+]
