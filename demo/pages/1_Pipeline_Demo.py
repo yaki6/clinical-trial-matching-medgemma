@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 # Add demo root to path for component imports
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from trialmatch.evaluation.metrics import aggregate_to_trial_verdict
 from trialmatch.live_runtime import (
     HealthCheckResult,
     create_prescreen_adapters,
@@ -274,36 +275,18 @@ def parse_eligibility_criteria(criteria_text: str) -> list[dict]:
 
 
 def _compute_trial_verdict(results: list[tuple[dict, object]]) -> str:
-    """Compute trial-level eligibility verdict from criterion results.
+    """Aggregate criterion verdicts to trial-level using the benchmark logic.
 
-    ELIGIBLE: all inclusion MET, no exclusion NOT_MET
-    EXCLUDED: any exclusion NOT_MET or critical inclusion NOT_MET
-    UNCERTAIN: any UNKNOWN on critical criteria
+    Delegates to aggregate_to_trial_verdict() so demo and benchmark stay in sync.
     """
-    has_unknown = False
-    for criterion, cr in results:
-        verdict_val = cr.verdict.value
-        ctype = criterion["type"]
-
-        if ctype == "exclusion" and verdict_val == "NOT_MET":
-            # NOT_MET on exclusion means patient does NOT have the exclusion trait = good
-            pass
-        elif ctype == "exclusion" and verdict_val == "MET":
-            # MET on exclusion means patient HAS the exclusion trait = excluded
-            return "EXCLUDED"
-        elif ctype == "inclusion" and verdict_val == "NOT_MET":
-            return "EXCLUDED"
-        elif verdict_val == "UNKNOWN":
-            has_unknown = True
-
-    if has_unknown:
-        return "UNCERTAIN"
-    return "ELIGIBLE"
+    criterion_tuples = [(cr.verdict, criterion["type"]) for criterion, cr in results]
+    return aggregate_to_trial_verdict(criterion_tuples).value
 
 
 VERDICT_BADGES = {
     "ELIGIBLE": ":green[ELIGIBLE]",
     "EXCLUDED": ":red[EXCLUDED]",
+    "NOT_RELEVANT": ":red[NOT RELEVANT]",
     "UNCERTAIN": ":orange[UNCERTAIN]",
 }
 
