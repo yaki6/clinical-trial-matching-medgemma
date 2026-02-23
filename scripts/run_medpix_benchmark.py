@@ -117,9 +117,11 @@ async def run_single_case(
     # MedGemma 4B (multimodal)
     try:
         logger.info("calling_medgemma", uid=case["uid"])
-        medgemma_response = await medgemma.generate_with_image(
-            prompt=medgemma_prompt, image_path=image_path, max_tokens=medgemma_max_tokens
-        )
+        # Pass system message if adapter supports it (Vertex only)
+        kwargs = {"prompt": medgemma_prompt, "image_path": image_path, "max_tokens": medgemma_max_tokens}
+        if hasattr(medgemma, '_preprocess_image'):  # Vertex adapter
+            kwargs["system_message"] = "You are a board-certified radiologist. Analyze the medical image."
+        medgemma_response = await medgemma.generate_with_image(**kwargs)
         logger.info(
             "medgemma_done",
             uid=case["uid"],

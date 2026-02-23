@@ -203,38 +203,80 @@ class VertexMedGemmaAdapter(ModelAdapter):
             token_count_estimated=token_count_estimated,
         )
 
+    @staticmethod
+    def _preprocess_image(image_path) -> str:
+        """Preprocess image for SigLIP encoder: RGB, square pad, 8-bit normalize.
+
+        MedGemma's SigLIP encoder expects 3-channel RGB input at 896x896.
+        Medical images (CT/X-ray PNGs) may be grayscale, 16-bit, or non-square.
+        """
+        import io
+
+        from PIL import Image as _PILImage
+
+        img = _PILImage.open(image_path)
+
+        # Normalize 16-bit to 8-bit (CT exports from DICOM)
+        if img.mode in ("I", "I;16", "I;16B"):
+            import numpy as np
+            arr = np.array(img, dtype=np.float32)
+            arr = (arr - arr.min()) / (arr.max() - arr.min() + 1e-8) * 255
+            img = _PILImage.fromarray(arr.astype(np.uint8), mode="L")
+
+        # Convert to RGB (grayscale, RGBA, palette → RGB)
+        img = img.convert("RGB")
+
+        # Pad to square (SigLIP expects square input)
+        w, h = img.size
+        if w != h:
+            max_dim = max(w, h)
+            square = _PILImage.new("RGB", (max_dim, max_dim), (0, 0, 0))
+            square.paste(img, ((max_dim - w) // 2, (max_dim - h) // 2))
+            img = square
+
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        return base64.b64encode(buf.getvalue()).decode("utf-8")
+
     async def generate_with_image(
         self,
         prompt: str,
         image_path,
         max_tokens: int = 512,
+        system_message: str | None = None,
     ) -> ModelResponse:
         """Generate text from image + prompt via Vertex chatCompletions payload."""
         from pathlib import Path as _Path
 
         start = time.perf_counter()
         image_path = _Path(image_path)
-        mime_type = mimetypes.guess_type(str(image_path))[0] or "image/png"
 
-        with open(image_path, "rb") as f:
-            image_b64 = base64.b64encode(f.read()).decode("utf-8")
+        # Preprocess: RGB, square pad, 8-bit normalize for SigLIP encoder
+        image_b64 = self._preprocess_image(image_path)
+
+        messages = []
+        # System message (multimodal requires content block array format)
+        if system_message:
+            messages.append({
+                "role": "system",
+                "content": [{"type": "text", "text": system_message}],
+            })
+        messages.append({
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{image_b64}"},
+                },
+                {"type": "text", "text": prompt},
+            ],
+        })
 
         payload = {
             "instances": [
                 {
                     "@requestFormat": "chatCompletions",
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": [
-                                {
-                                    "type": "image_url",
-                                    "image_url": {"url": f"data:{mime_type};base64,{image_b64}"},
-                                },
-                                {"type": "text", "text": prompt},
-                            ],
-                        }
-                    ],
+                    "messages": messages,
                     "max_tokens": max_tokens,
                     "temperature": 0.0,
                 }
