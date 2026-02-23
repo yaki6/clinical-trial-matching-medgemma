@@ -36,13 +36,15 @@ UI: **Streamlit** (no separate backend). Narrative: multi-model orchestration (n
 
 ### Models Available
 
+**Default deployment: Vertex AI Model Garden** (HF Inference is unstable — legacy fallback only).
+
 | Model | Endpoint | Use Case | Status |
 |-------|----------|----------|--------|
-| MedGemma 4B | HF Inference (`pcmy7bkqtqesrrzd`) | Multimodal (EHR + images) | Working (max_tokens=512 limit) |
-| MedGemma 27B | HF Inference (`wu5nclwms3ctrwd1`) | Text-only (higher accuracy) | Failed — TGI 3.0 chat template incompatible |
-| MedGemma 4B | Vertex AI Model Garden | Multimodal (EHR + images) | Configured, untested |
-| MedGemma 27B | Vertex AI Model Garden (int8) | Text-only (higher accuracy) | **Benchmarked** — 70% accuracy, endpoint torn down |
+| MedGemma 4B | **Vertex AI Model Garden** (default) | Multimodal (EHR + images) | **Recommended** — stable, no token limit issues |
+| MedGemma 27B | **Vertex AI Model Garden** (int8, default) | Text-only (higher accuracy) | **Recommended** — benchmarked 70% standalone, 87.5% two-stage |
 | Gemini 3 Pro | Google AI Studio API | General-purpose baseline | Working |
+| MedGemma 4B | HF Inference (`pcmy7bkqtqesrrzd`) | Legacy fallback | Unstable — TGI CUDA bugs, max_tokens=512 limit |
+| MedGemma 27B | HF Inference (`wu5nclwms3ctrwd1`) | Legacy fallback | **Broken** — TGI 3.0 chat template incompatible |
 
 ### Phase 0 Benchmark Results (Feb 21-22, 2026)
 
@@ -192,7 +194,12 @@ data/
 
 Note: TrialGPT HF dataset (ADR-006) is the primary data source. Expert labels (`expert_eligibility`) serve as ground truth. GPT-4 predictions (`gpt4_eligibility`) serve as built-in baseline.
 
-## HF Inference Endpoint Operations
+## HF Inference Endpoint Operations (LEGACY — NOT RECOMMENDED)
+
+> **Use Vertex AI Model Garden instead.** HF Inference Endpoints are unstable for MedGemma
+> due to TGI CUDA bugs (4B) and chat template incompatibilities (27B). Vertex AI is the
+> default deployment for both models. The HF adapter (`MedGemmaAdapter`) is retained only
+> as an opt-in fallback via `TRIALMATCH_FORCE_HF_MEDGEMMA=1`.
 
 ### Known Issues — TGI + MedGemma CUDA Bug
 
@@ -238,23 +245,23 @@ curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/
 | TGI (custom framework) | HF Inference Endpoint | Works for inference, but TGI 3.0 chat template breaks Gemma 3 format |
 | vLLM (custom Docker) | HF Inference Endpoint | Image build failed, custom container not supported |
 
-**Decision**: Abandon HF Inference for 27B. Use Vertex AI Model Garden instead (configured but untested).
+**Decision**: Abandoned HF Inference for both 4B and 27B. Vertex AI Model Garden is the default.
 
 ## Concurrency Constraints
 
 ### Constraint Stack (all endpoints)
 
-| Layer | MedGemma 4B (HF TGI) | MedGemma 27B (Vertex AI) | Gemini (AI Studio) | CT.gov API |
-|-------|----------------------|--------------------------|-------------------|------------|
-| **Platform limit** | N/A | No QPS limit (dedicated endpoint) | 10 concurrent | 40 req/min |
-| **GPU / hardware** | CUDA bug (see below) | **4 concurrent** (KV cache ceiling) | N/A | N/A |
-| **Software config** | max_tokens=512 | `--max-num-seqs=4` | max_output_tokens=32768 | 1.5s interval |
+| Layer | MedGemma 4B (Vertex AI, default) | MedGemma 27B (Vertex AI, default) | Gemini (AI Studio) | CT.gov API |
+|-------|----------------------------------|-----------------------------------|-------------------|------------|
+| **Platform limit** | No QPS limit (dedicated endpoint) | No QPS limit (dedicated endpoint) | 10 concurrent | 40 req/min |
+| **GPU / hardware** | **4 concurrent** (KV cache ceiling) | **4 concurrent** (KV cache ceiling) | N/A | N/A |
+| **Software config** | `--max-num-seqs=4` | `--max-num-seqs=4` | max_output_tokens=32768 | 1.5s interval |
 | **App config** | `max_concurrent: 1` | `max_concurrent: 1` | `max_concurrent: 1` | Single client |
-| **Binding constraint** | CUDA bug → 1 | GPU VRAM → 4 | Platform → 10 | API → 40 rpm |
+| **Binding constraint** | GPU VRAM → 4 | GPU VRAM → 4 | Platform → 10 | API → 40 rpm |
 
-### MedGemma 4B (HF Inference) — Hard limit: 1
+### MedGemma 4B (HF Inference, legacy fallback) — Hard limit: 1
 
-TGI CUDA bug forces `max_concurrent: 1` and `max_tokens: 512`. Not a quota — a kernel-level crash. Concurrency > 1 increases crash probability, and a single crash poisons the GPU until full endpoint restart. See "HF Inference Endpoint Operations" section for details.
+TGI CUDA bug forces `max_concurrent: 1` and `max_tokens: 512`. Not a quota — a kernel-level crash. Concurrency > 1 increases crash probability, and a single crash poisons the GPU until full endpoint restart. **Use Vertex AI instead.**
 
 ### MedGemma 27B (Vertex AI) — Hard limit: 4 concurrent sequences
 
@@ -350,7 +357,11 @@ uv run pytest tests/bdd/ --collect-only -q 2>/dev/null | grep -c "scenario"
 ```
 
 
-## HF Inference Endpoint Operations
+## HF Inference Endpoint Operations (LEGACY — NOT RECOMMENDED)
+
+> **Vertex AI is the default.** This section documents legacy HF operations for
+> reference only. Do not use HF endpoints unless Vertex is unavailable and you
+> explicitly set `TRIALMATCH_FORCE_HF_MEDGEMMA=1`.
 
 ### Known Issues — TGI + MedGemma CUDA Bug
 
@@ -394,7 +405,7 @@ Two deployment approaches failed for MedGemma 27B:
 1. **TGI 3.0**: Does not support Gemma 3 chat template — generates garbled output with prompt echo
 2. **vLLM custom image**: Custom Docker image deployment on HF Inference failed to start
 
-**Recommendation**: Use Vertex AI Model Garden for 27B access instead of self-hosted HF endpoints.
+**Decision**: Abandoned HF Inference for both 4B and 27B. Vertex AI Model Garden is the default.
 
 ## MedGemma Model Behavior Notes
 

@@ -1,7 +1,8 @@
 # Model Connectivity Report: MedGemma 4B & Gemini 3 Pro
 
-> **Date:** 2026-02-18
+> **Date:** 2026-02-18 (updated 2026-02-23)
 > **Status:** Both endpoints verified and operational
+> **Default deployment:** Vertex AI Model Garden (HF Inference is legacy fallback — unstable)
 > **Next step:** Implement `src/trialmatch/models/` adapters using TDD
 
 ---
@@ -19,7 +20,11 @@ Both model endpoints have been validated with medical diagnostic prompts. This d
 
 ## 2. MedGemma 1.5 4B
 
-### 2.1 Endpoint Details
+> **NOTE:** HF Inference Endpoints are unstable for MedGemma (TGI CUDA bugs,
+> max_tokens=512 limit). **Use Vertex AI Model Garden as the default.**
+> See `scripts/deploy_vertex_4b.py` for Vertex deployment.
+
+### 2.1 HF Endpoint Details (LEGACY FALLBACK)
 
 | Property | Value |
 |----------|-------|
@@ -29,6 +34,7 @@ Both model endpoints have been validated with medical diagnostic prompts. This d
 | API style | Raw `text_generation()` — NOT TGI, `/v1/chat/completions` returns 404 |
 | Concurrency | 5 concurrent (HF Inference limit) |
 | Cold-start | Endpoint may sleep; returns 503 — retry with exponential backoff |
+| **Stability** | **Unstable** — CUDA CUBLAS crashes with max_tokens > 512 |
 
 ### 2.2 Critical Constraints
 

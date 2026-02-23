@@ -1,4 +1,8 @@
-"""Vertex AI Model Garden adapter for MedGemma.
+"""Vertex AI Model Garden adapter for MedGemma (DEFAULT deployment).
+
+This is the recommended adapter for both MedGemma 4B and 27B. HF Inference
+Endpoints are unstable (TGI CUDA bugs, chat template incompatibilities) and
+should only be used as a legacy fallback.
 
 Uses google-auth ADC + httpx REST calls — avoids heavy google-cloud-aiplatform SDK.
 Supports chatCompletions request format (vLLM on Vertex).
@@ -23,9 +27,10 @@ logger = structlog.get_logger()
 
 
 class VertexMedGemmaAdapter(ModelAdapter):
-    """Adapter for MedGemma deployed on Vertex AI Model Garden.
+    """DEFAULT adapter for MedGemma deployed on Vertex AI Model Garden.
 
-    Uses ADC credentials and direct REST calls via httpx to avoid
+    This is the recommended deployment for both MedGemma 4B (imaging) and 27B
+    (reasoning). Uses ADC credentials and direct REST calls via httpx to avoid
     the heavy google-cloud-aiplatform SDK dependency.
     """
 
@@ -204,39 +209,47 @@ class VertexMedGemmaAdapter(ModelAdapter):
         )
 
     @staticmethod
-    def _preprocess_image(image_path) -> str:
-        """Preprocess image for SigLIP encoder: RGB, square pad, 8-bit normalize.
+    def _encode_image(image_path) -> tuple[str, str]:
+        """Encode image to base64 with minimal preprocessing.
 
-        MedGemma's SigLIP encoder expects 3-channel RGB input at 896x896.
-        Medical images (CT/X-ray PNGs) may be grayscale, 16-bit, or non-square.
+        Follows HuggingFace reference implementation: send the image as-is
+        and let vLLM's internal MedGemmaProcessor / SigLIP handle resize,
+        normalization, and tokenization. Only convert when the raw format
+        is incompatible (16-bit DICOM exports, grayscale, RGBA, palette).
+
+        Returns (base64_data, mime_type).
         """
         import io
 
         from PIL import Image as _PILImage
 
         img = _PILImage.open(image_path)
+        needs_reencode = False
 
-        # Normalize 16-bit to 8-bit (CT exports from DICOM)
+        # 16-bit medical images (DICOM exports) — must normalize to 8-bit
         if img.mode in ("I", "I;16", "I;16B"):
             import numpy as np
             arr = np.array(img, dtype=np.float32)
             arr = (arr - arr.min()) / (arr.max() - arr.min() + 1e-8) * 255
             img = _PILImage.fromarray(arr.astype(np.uint8), mode="L")
+            needs_reencode = True
 
-        # Convert to RGB (grayscale, RGBA, palette → RGB)
-        img = img.convert("RGB")
+        # Non-RGB modes — convert so vLLM doesn't choke on palette/RGBA/L
+        if img.mode != "RGB":
+            img = img.convert("RGB")
+            needs_reencode = True
 
-        # Pad to square (SigLIP expects square input)
-        w, h = img.size
-        if w != h:
-            max_dim = max(w, h)
-            square = _PILImage.new("RGB", (max_dim, max_dim), (0, 0, 0))
-            square.paste(img, ((max_dim - w) // 2, (max_dim - h) // 2))
-            img = square
+        if needs_reencode:
+            # Only re-encode when we had to modify pixel data
+            buf = io.BytesIO()
+            img.save(buf, format="PNG")
+            return base64.b64encode(buf.getvalue()).decode("utf-8"), "image/png"
 
-        buf = io.BytesIO()
-        img.save(buf, format="PNG")
-        return base64.b64encode(buf.getvalue()).decode("utf-8")
+        # Image is already RGB in a web-compatible format — send raw bytes
+        # to avoid any re-encoding artifacts
+        raw_bytes = image_path.read_bytes() if hasattr(image_path, 'read_bytes') else open(image_path, 'rb').read()
+        mime = mimetypes.guess_type(str(image_path))[0] or "image/png"
+        return base64.b64encode(raw_bytes).decode("utf-8"), mime
 
     async def generate_with_image(
         self,
@@ -245,28 +258,32 @@ class VertexMedGemmaAdapter(ModelAdapter):
         max_tokens: int = 512,
         system_message: str | None = None,
     ) -> ModelResponse:
-        """Generate text from image + prompt via Vertex chatCompletions payload."""
+        """Generate text from image + prompt via Vertex chatCompletions payload.
+
+        Image handling follows HuggingFace reference: minimal client-side
+        preprocessing, correct MIME type, no square padding. vLLM's internal
+        MedGemmaProcessor handles SigLIP resize/normalize/tokenize.
+        """
         from pathlib import Path as _Path
 
         start = time.perf_counter()
         image_path = _Path(image_path)
 
-        # Preprocess: RGB, square pad, 8-bit normalize for SigLIP encoder
-        image_b64 = self._preprocess_image(image_path)
+        # Encode with minimal preprocessing — let vLLM handle SigLIP internally
+        image_b64, mime_type = self._encode_image(image_path)
 
         messages = []
-        # System message (multimodal requires content block array format)
         if system_message:
             messages.append({
                 "role": "system",
-                "content": [{"type": "text", "text": system_message}],
+                "content": system_message,
             })
         messages.append({
             "role": "user",
             "content": [
                 {
                     "type": "image_url",
-                    "image_url": {"url": f"data:image/png;base64,{image_b64}"},
+                    "image_url": {"url": f"data:{mime_type};base64,{image_b64}"},
                 },
                 {"type": "text", "text": prompt},
             ],

@@ -31,6 +31,8 @@ VALIDATE_MODE_TWO_STAGE = "Two-Stage (MedGemma → Gemini)"
 VALIDATE_MODE_GEMINI_SINGLE = "Gemini 3 Pro (single)"
 VALIDATE_MODE_MEDGEMMA_SINGLE = "MedGemma 4B (single)"
 
+# HF Inference is an opt-in legacy fallback. Vertex AI is the default for
+# both MedGemma 4B and 27B due to HF TGI CUDA instability.
 _FORCE_HF_MEDGEMMA_ENV = "TRIALMATCH_FORCE_HF_MEDGEMMA"
 _VERTEX_PROJECT_ENV = "GCP_PROJECT_ID"
 _VERTEX_REGION_ENV = "GCP_REGION"
@@ -83,7 +85,11 @@ def should_use_vertex_imaging() -> bool:
 
 
 def create_reasoning_adapter(hf_token: str = "") -> ModelAdapter:
-    """Create MedGemma adapter for medical reasoning tasks."""
+    """Create MedGemma adapter for medical reasoning tasks.
+
+    Default: Vertex AI 27B. Falls back to HF only when Vertex is not
+    configured or TRIALMATCH_FORCE_HF_MEDGEMMA=1 is set.
+    """
     if should_use_vertex_reasoning():
         project_id = os.environ.get(_VERTEX_PROJECT_ENV, "")
         region = os.environ.get(_VERTEX_REGION_ENV, "us-central1")
@@ -100,15 +106,25 @@ def create_reasoning_adapter(hf_token: str = "") -> ModelAdapter:
 
     if not hf_token:
         msg = (
-            "HF_TOKEN not set. Required for MedGemma reasoning when Vertex 27B "
-            "is not configured."
+            "Vertex AI not configured for MedGemma 27B reasoning (recommended). "
+            "Set GCP_PROJECT_ID + VERTEX_ENDPOINT_ID_27B, or set HF_TOKEN "
+            "for legacy HF fallback."
         )
         raise ValueError(msg)
+    logger.warning(
+        "medgemma_using_hf_fallback",
+        component="reasoning",
+        reason="Vertex not configured or force-HF enabled",
+    )
     return MedGemmaAdapter(hf_token=hf_token)
 
 
 def create_imaging_adapter(hf_token: str = "") -> ModelAdapter:
-    """Create MedGemma adapter for imaging tasks."""
+    """Create MedGemma adapter for imaging tasks.
+
+    Default: Vertex AI 4B. Falls back to HF only when Vertex is not
+    configured or TRIALMATCH_FORCE_HF_MEDGEMMA=1 is set.
+    """
     if should_use_vertex_imaging():
         project_id = os.environ.get(_VERTEX_PROJECT_ENV, "")
         region = os.environ.get(_VERTEX_REGION_ENV, "us-central1")
@@ -125,10 +141,16 @@ def create_imaging_adapter(hf_token: str = "") -> ModelAdapter:
 
     if not hf_token:
         msg = (
-            "HF_TOKEN not set. Required for MedGemma imaging when Vertex 4B "
-            "is not configured."
+            "Vertex AI not configured for MedGemma 4B imaging (recommended). "
+            "Set GCP_PROJECT_ID + VERTEX_ENDPOINT_ID, or set HF_TOKEN "
+            "for legacy HF fallback."
         )
         raise ValueError(msg)
+    logger.warning(
+        "medgemma_using_hf_fallback",
+        component="imaging",
+        reason="Vertex not configured or force-HF enabled",
+    )
     return MedGemmaAdapter(hf_token=hf_token)
 
 

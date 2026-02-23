@@ -1,4 +1,9 @@
-"""MedGemma adapter for HuggingFace Inference Endpoint.
+"""MedGemma adapter for HuggingFace Inference Endpoint (LEGACY FALLBACK).
+
+DEPRECATED: HF Inference Endpoints are unstable for MedGemma due to TGI CUDA
+bugs and chat template incompatibilities. Use VertexMedGemmaAdapter (Vertex AI
+Model Garden) as the default for both 4B and 27B. This adapter is retained only
+as an opt-in fallback via TRIALMATCH_FORCE_HF_MEDGEMMA=1.
 
 Supports two backend modes:
 - TGI (4B): text_generation with Gemma chat template tags
@@ -42,7 +47,10 @@ def format_gemma_prompt(system: str, user: str) -> str:
 
 
 class MedGemmaAdapter(ModelAdapter):
-    """Adapter for MedGemma on HF Inference Endpoint.
+    """LEGACY adapter for MedGemma on HF Inference Endpoint.
+
+    WARNING: HF deployments are unstable — prefer VertexMedGemmaAdapter.
+    This adapter is retained as an opt-in fallback (TRIALMATCH_FORCE_HF_MEDGEMMA=1).
 
     For TGI backends (4B), uses text_generation with manual Gemma template.
     For vLLM backends (27B), uses chat_completion (OpenAI-compatible API).

@@ -156,7 +156,7 @@ def test_create_reasoning_adapter_prefers_vertex_27b_when_configured():
     assert adapter is vertex_instance
 
 
-def test_create_reasoning_adapter_requires_hf_token_when_no_vertex():
+def test_create_reasoning_adapter_requires_vertex_or_hf_token():
     with patch.dict(
         os.environ,
         {
@@ -166,7 +166,7 @@ def test_create_reasoning_adapter_requires_hf_token_when_no_vertex():
         },
         clear=False,
     ):
-        with pytest.raises(ValueError, match="HF_TOKEN not set"):
+        with pytest.raises(ValueError, match="Vertex AI not configured"):
             create_validate_adapters(
                 VALIDATE_MODE_MEDGEMMA_SINGLE,
                 hf_token="",

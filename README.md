@@ -13,19 +13,23 @@ uv sync
 2. Set required environment variables:
 
 ```bash
-export GOOGLE_API_KEY="..."
-export HF_TOKEN="..."
+# Vertex AI — default MedGemma deployment (recommended, stable)
 export GCP_PROJECT_ID="..."
 export GCP_REGION="us-central1"
 export VERTEX_ENDPOINT_ID="..."       # MedGemma 4B imaging endpoint
 export VERTEX_ENDPOINT_ID_27B="..."   # MedGemma 27B reasoning endpoint
+
+# Google AI Studio
+export GOOGLE_API_KEY="..."
+
+# HF Inference — legacy fallback only (unstable, not recommended)
+# export HF_TOKEN="..."
 ```
 
-If Vertex endpoint vars are present, runtime routes MedGemma calls as:
-- imaging tasks -> Vertex MedGemma 4B (`VERTEX_ENDPOINT_ID`)
-- medical reasoning tasks -> Vertex MedGemma 27B (`VERTEX_ENDPOINT_ID_27B`)
-
-Set `TRIALMATCH_FORCE_HF_MEDGEMMA=1` to force HF MedGemma fallback.
+Vertex AI is the **default** deployment for both MedGemma 4B and 27B.
+HF Inference Endpoints are unstable (TGI CUDA bugs, chat template incompatibilities)
+and only used as a legacy fallback when Vertex is not configured.
+Set `TRIALMATCH_FORCE_HF_MEDGEMMA=1` to explicitly force HF fallback.
 
 3. Generate demo-safe cached artifacts for curated patients:
 
