@@ -62,6 +62,15 @@ FINDINGS: [Detailed description of the imaging findings, including:
 
 DIFFERENTIAL: [Top 2-3 differential diagnoses if the primary diagnosis is uncertain]"""
 
+# Simplified prompt for MedGemma 4B — optimized for small model instruction-following
+PROMPT_TEMPLATE_SIMPLE = """Clinical history: {history}
+
+Based on the image and clinical history, provide:
+
+DIAGNOSIS: [single primary diagnosis]
+
+FINDINGS: [key imaging findings]"""
+
 JUDGE_PROMPT_TEMPLATE = """You are an expert medical evaluation judge.
 
 Compare the MODEL PREDICTION against the GOLD STANDARD diagnosis.
@@ -82,7 +91,8 @@ async def run_single_case(
     case: dict,
     medgemma,
     gemini: GeminiAdapter,
-    prompt: str,
+    medgemma_prompt: str,
+    gemini_prompt: str,
     case_idx: int,
     total: int,
     medgemma_max_tokens: int = 512,
@@ -104,11 +114,11 @@ async def run_single_case(
     medgemma_response = None
     gemini_response = None
 
-    # MedGemma 4B (HF Inference — multimodal)
+    # MedGemma 4B (multimodal)
     try:
         logger.info("calling_medgemma", uid=case["uid"])
         medgemma_response = await medgemma.generate_with_image(
-            prompt=prompt, image_path=image_path, max_tokens=medgemma_max_tokens
+            prompt=medgemma_prompt, image_path=image_path, max_tokens=medgemma_max_tokens
         )
         logger.info(
             "medgemma_done",
@@ -120,11 +130,11 @@ async def run_single_case(
     except Exception as e:
         logger.error("medgemma_failed", uid=case["uid"], error=str(e)[:200])
 
-    # Gemini 3 Pro (AI Studio — multimodal)
+    # Gemini Flash (AI Studio — multimodal)
     try:
         logger.info("calling_gemini", uid=case["uid"])
         gemini_response = await gemini.generate_with_image(
-            prompt=prompt, image_path=image_path, max_tokens=2048
+            prompt=gemini_prompt, image_path=image_path, max_tokens=2048
         )
         logger.info(
             "gemini_done",
@@ -136,12 +146,25 @@ async def run_single_case(
     except Exception as e:
         logger.error("gemini_failed", uid=case["uid"], error=str(e)[:200])
 
+    # Image metadata for trace completeness
+    img_size = image_path.stat().st_size
+    try:
+        from PIL import Image as _Image
+        with _Image.open(image_path) as img:
+            img_meta = {"width": img.width, "height": img.height, "mode": img.mode}
+    except Exception:
+        img_meta = {}
+
     return {
         "uid": case["uid"],
         "title": case.get("title", ""),
         "gold_diagnosis": case["gold_diagnosis"],
         "gold_findings": case["gold_findings"],
         "image_path": str(image_path),
+        "image_size_bytes": img_size,
+        "image_meta": img_meta,
+        "medgemma_prompt": medgemma_prompt,
+        "gemini_prompt": gemini_prompt,
         "medgemma_raw": medgemma_response.text if medgemma_response else "",
         "medgemma_latency_ms": medgemma_response.latency_ms if medgemma_response else 0,
         "medgemma_cost": medgemma_response.estimated_cost if medgemma_response else 0,
@@ -395,12 +418,18 @@ async def main() -> None:
     logger.info("benchmark_start", run_id=run_id, n_cases=len(cases))
     start_time = time.perf_counter()
 
+    # Select prompt template: simplified for MedGemma 4B, full for Gemini
+    use_simple_prompt = config.get("prompt", {}).get("medgemma_simple", False)
+    medgemma_template = PROMPT_TEMPLATE_SIMPLE if use_simple_prompt else PROMPT_TEMPLATE
+    logger.info("prompt_selection", medgemma_simple=use_simple_prompt)
+
     # Process cases sequentially (respect concurrency limits)
     raw_results = []
     for i, case in enumerate(cases):
-        prompt = PROMPT_TEMPLATE.format(history=case["history"])
+        medgemma_prompt = medgemma_template.format(history=case["history"])
+        gemini_prompt = PROMPT_TEMPLATE.format(history=case["history"])
         result = await run_single_case(
-            case, medgemma, gemini, prompt, i, len(cases),
+            case, medgemma, gemini, medgemma_prompt, gemini_prompt, i, len(cases),
             medgemma_max_tokens=medgemma_max_tokens,
         )
         raw_results.append(result)

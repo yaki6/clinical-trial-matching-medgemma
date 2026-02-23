@@ -186,7 +186,7 @@ class VertexMedGemmaAdapter(ModelAdapter):
                     "@requestFormat": "chatCompletions",
                     "messages": [{"role": "user", "content": prompt}],
                     "max_tokens": max_tokens,
-                    "temperature": 0.2,
+                    "temperature": 0.0,
                 }
             ]
         }
@@ -227,16 +227,16 @@ class VertexMedGemmaAdapter(ModelAdapter):
                         {
                             "role": "user",
                             "content": [
-                                {"type": "text", "text": prompt},
                                 {
                                     "type": "image_url",
                                     "image_url": {"url": f"data:{mime_type};base64,{image_b64}"},
                                 },
+                                {"type": "text", "text": prompt},
                             ],
                         }
                     ],
                     "max_tokens": max_tokens,
-                    "temperature": 0.2,
+                    "temperature": 0.0,
                 }
             ]
         }

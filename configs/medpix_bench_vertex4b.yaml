@@ -3,7 +3,10 @@
 # No TGI CUDA bug — can use higher max_tokens and better multimodal support
 
 benchmark: medpix_multimodal
-description: "MedGemma 4B (Vertex AI vLLM) vs Gemini 3 Flash on radiology image analysis"
+description: "MedGemma 4B (Vertex AI vLLM) vs Gemini 3 Flash — v2: image-first + simple prompt + temp=0"
+
+prompt:
+  medgemma_simple: true  # Use simplified prompt for MedGemma 4B (better instruction-following)
 
 data:
   benchmark_file: data/benchmark/medpix_thorax_10.json
