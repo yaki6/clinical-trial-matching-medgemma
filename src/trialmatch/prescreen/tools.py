@@ -4,9 +4,10 @@ This module owns:
   1. The Gemini function-calling schemas (what the model sees).
   2. The async tool executor (what actually runs when the model calls a tool).
 
-The two tools exposed to Gemini are:
-  - search_trials       → CT.gov API v2 /studies search
-  - get_trial_details   → CT.gov API v2 /studies/{nct_id}
+The three tools exposed to Gemini are:
+  - search_trials            → CT.gov API v2 /studies search
+  - get_trial_details        → CT.gov API v2 /studies/{nct_id}
+  - consult_medical_expert   → MedGemma 27B on-demand clinical expertise
 
 Design note: tool schemas are purposefully kept narrow.  Gemini should
 not be handed every CT.gov query parameter — just the ones that produce
@@ -138,7 +139,8 @@ _SEARCH_TRIALS_DECL = genai_types.FunctionDeclaration(
                 enum=["INTERVENTIONAL", "OBSERVATIONAL", "EXPANDED_ACCESS"],
                 description=(
                     "Filter by study type. Omit to search all study types. "
-                    "Use INTERVENTIONAL for clinical trials, OBSERVATIONAL for observational studies."
+                    "Use INTERVENTIONAL for clinical trials, "
+                    "OBSERVATIONAL for observational studies."
                 ),
             ),
             "page_size": genai_types.Schema(
@@ -169,35 +171,48 @@ _GET_DETAILS_DECL = genai_types.FunctionDeclaration(
     ),
 )
 
-# --- Commented out: normalize_medical_terms adds ~25s/call via MedGemma with
-# --- near-zero value (echoes input unchanged). May revisit with better prompts.
-# _NORMALIZE_TERMS_DECL = genai_types.FunctionDeclaration(
-#     name="normalize_medical_terms",
-#     description=(
-#         "Ask MedGemma (a specialized medical language model) to produce "
-#         "clinically correct search variants for a medical term. "
-#         ...
-#     ),
-#     parameters=genai_types.Schema(...),
-# )
+_CONSULT_EXPERT_DECL = genai_types.FunctionDeclaration(
+    name="consult_medical_expert",
+    description=(
+        "Ask a specialized medical AI (MedGemma 27B) a clinical question. "
+        "Use this when you need domain expertise that you're uncertain about:\n"
+        "- What condition terms or synonyms to search for a diagnosis\n"
+        "- Whether a specific biomarker is relevant to the patient's condition\n"
+        "- What comorbidities or clinical presentations are associated with the diagnosis\n"
+        "- Whether a trial's intervention is appropriate for the patient's treatment line\n"
+        "- Medical terminology clarification for eligibility criteria interpretation\n\n"
+        "COST: Each call takes ~8-15 seconds. Use judiciously — 2-3 calls per patient "
+        "is typical. Do NOT call this for every search result or minor question."
+    ),
+    parameters=genai_types.Schema(
+        type=genai_types.Type.OBJECT,
+        required=["question"],
+        properties={
+            "question": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description=(
+                    "The clinical question to ask. Be specific and include patient context. "
+                    "Good: 'What condition terms should I search on CT.gov for a 61-year-old "
+                    "male with epithelioid mesothelioma? Include related presentations and "
+                    "broader categories.' "
+                    "Bad: 'What is mesothelioma?'"
+                ),
+            ),
+        },
+    ),
+)
 
 PRESCREEN_TOOLS = genai_types.Tool(
     function_declarations=[
         _SEARCH_TRIALS_DECL,
         _GET_DETAILS_DECL,
+        _CONSULT_EXPERT_DECL,
     ]
 )
 
 # ---------------------------------------------------------------------------
 # 2. Tool executor
 # ---------------------------------------------------------------------------
-
-# --- Commented out: MedGemma normalize prompts (see _NORMALIZE_TERMS_DECL above)
-# MEDGEMMA_NORMALIZE_SYSTEM = (
-#     "You are a medical terminology expert specializing in clinical trial search.\n"
-#     ...
-# )
-# MEDGEMMA_NORMALIZE_USER = """Term: {raw_term} ..."""
 
 
 class ToolExecutor:
@@ -208,7 +223,6 @@ class ToolExecutor:
 
     def __init__(self, ctgov: CTGovClient, medgemma: Any = None):
         self._ctgov = ctgov
-        # medgemma kept as optional param for backward compat; not used currently
         self._medgemma = medgemma
         self.medgemma_calls: int = 0
         self.medgemma_cost: float = 0.0
@@ -223,7 +237,8 @@ class ToolExecutor:
             return await self._search_trials(**args)
         if tool_name == "get_trial_details":
             return await self._get_trial_details(**args)
-        # normalize_medical_terms commented out — see bottom of file
+        if tool_name == "consult_medical_expert":
+            return await self._consult_medical_expert(**args)
         raise ValueError(f"Unknown tool: {tool_name}")
 
     async def _search_trials(
@@ -295,7 +310,9 @@ class ToolExecutor:
         result = {
             "nct_id": nct_id,
             "title": id_mod.get("briefTitle", ""),
-            "eligibility_criteria": _truncate_eligibility(eligibility.get("eligibilityCriteria", "")),
+            "eligibility_criteria": _truncate_eligibility(
+                eligibility.get("eligibilityCriteria", "")
+            ),
             "minimum_age": eligibility.get("minimumAge", ""),
             "maximum_age": eligibility.get("maximumAge", ""),
             "sex": eligibility.get("sex", ""),
@@ -306,14 +323,32 @@ class ToolExecutor:
         logger.info("ctgov_details_fetched", nct_id=nct_id)
         return result, summary
 
-    # --- Commented out: normalize_medical_terms adds ~25s/call with near-zero value.
-    # --- May revisit with better MedGemma prompts for search term generation.
-    # async def _normalize_medical_terms(
-    #     self, raw_term: str, term_type: str, patient_context: str = "", **_ignored: Any,
-    # ) -> tuple[dict, str]:
-    #     prompt = MEDGEMMA_NORMALIZE_USER.format(...)
-    #     response = await self._medgemma.generate(full_prompt, max_tokens=512)
-    #     self.medgemma_calls += 1
-    #     self.medgemma_cost += response.estimated_cost
-    #     ... (see git history for full implementation)
-    #     return result, summary
+    async def _consult_medical_expert(self, question: str, **_ignored: Any) -> tuple[dict, str]:
+        """Call MedGemma 27B for on-demand clinical expertise."""
+        if self._medgemma is None:
+            return (
+                {"error": "Medical expert not available. "
+                 "Proceed with your own clinical knowledge."},
+                "MedGemma unavailable — skipped",
+            )
+
+        prompt = (
+            "You are a clinical expert advising a clinical trial search agent.\n"
+            "Answer concisely and actionably. Focus on specific medical terms, "
+            "synonyms, and CT.gov condition vocabulary.\n\n"
+            f"Question: {question}"
+        )
+        start = time.perf_counter()
+        response = await self._medgemma.generate(prompt, max_tokens=1024)
+        latency_ms = (time.perf_counter() - start) * 1000
+
+        self.medgemma_calls += 1
+        self.medgemma_cost += response.estimated_cost
+
+        summary = f"MedGemma ({latency_ms:.0f}ms): {response.text[:150]}..."
+        logger.info(
+            "medgemma_expert_consulted",
+            question=question[:100],
+            latency_ms=f"{latency_ms:.0f}",
+        )
+        return {"answer": response.text}, summary
