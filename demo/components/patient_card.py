@@ -107,10 +107,13 @@ def render_medical_image(
     plane = image_meta.get("plane", "")
     location = image_meta.get("location", "")
 
+    # Avoid full-width upscaling so medical images remain compact on laptop screens.
+    display_width: int | str = "content"
+
     if dev_mode:
         label = f"Medical Image: {modality} ({plane}) -- {location}"
         with st.expander(label, expanded=True):
-            st.image(str(image_path), use_container_width=True)
+            st.image(str(image_path), width=display_width)
             st.caption(image_meta.get("caption", ""))
             st.caption(f"File: `{image_path.name}`")
     else:
@@ -119,7 +122,7 @@ def render_medical_image(
             parts.append(plane)
         label = " -- ".join(parts)
         with st.expander(f"Medical Image: {label}", expanded=True):
-            st.image(str(image_path), use_container_width=True)
+            st.image(str(image_path), width=display_width)
             if image_meta.get("caption"):
                 st.caption(image_meta["caption"])
 

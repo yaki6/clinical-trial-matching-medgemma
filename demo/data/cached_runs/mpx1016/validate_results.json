@@ -1,268 +1,196 @@
 {
-  "NCT04322890": {
-    "verdict": "NOT_RELEVANT",
+  "NCT05501665": {
+    "verdict": "ELIGIBLE",
+    "mode": "two_stage",
+    "criteria": [
+      {
+        "text": "Age \\>= 18 years at time of informed consent",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The patient is a 43-year-old female, which satisfies the inclusion criterion requiring the patient to be at least 18 years of age.",
+        "evidence_sentences": [
+          1,
+          16
+        ],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the patient to be 18 years or older at the time of informed consent. This is an age requirement.\n\n2.  What does the patient note explicitly state about this?\n    The note states: \"A 43-year-old female presents...\" (Index 1) and \"The patient is a 43-year-old female.\" (Index 16).\n\n3.  Does the patient have the GENERAL condition described?\n    The general condition is being 18 years or older. The patient is 43 years old.\n    Answer: YES\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE?\n    The criterion specifies an age threshold (>= 18 years). The patient's age (43 years) meets this threshold.\n    Answer: SEVERITY MATCHES\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    The criterion specifies the age must be met \"at time of informed consent\". The note does not explicitly state when informed consent was obtained, but the patient is presenting for evaluation and treatment, implying informed consent is relevant to the current situation. The patient's age (43) is well above the threshold of 18.\n    Answer: MATCHES\n\n5.  How confident are you? HIGH"
+      },
+      {
+        "text": "\u2022 Histologically documented or cytologically confirmed diagnosis of stage IVA or IVB (M1b or M1c) or locally advanced (not eligible for standard of care \\[SOC\\] chemoradiation) non-small cell lung cancer with evaluable disease per Response Evaluation Criteria in Solid Tumors (RECIST) version (v) 1.1 criteria",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The patient has histologically confirmed Stage IVA lung adenocarcinoma (NSCLC) with measurable disease per RECIST 1.1 (3.2 cm mass). The medical analysis confirms that the diagnosis and Stage IVA status meet the inclusion requirements.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires a histologically documented or cytologically confirmed diagnosis of stage IVA or IVB (M1b or M1c) or locally advanced non-small cell lung cancer (NSCLC) that is not eligible for standard of care (SOC) chemoradiation, with evaluable disease per RECIST v1.1 criteria. It specifies the cancer type (NSCLC), stage (IVA or IVB, or locally advanced), histological/cytological confirmation, ineligibility for SOC chemoradiation, and evaluable disease per RECIST v1.1.\n\n2.  What does the patient note explicitly state about this?\n    - \"Primary Diagnosis: Lung adenocarcinoma with signet-ring cell features\" (Index: Staging and Diagnosis) - This confirms NSCLC (adenocarcinoma).\n    - \"Stage: IVA (T2a N2 M1a per AJCC 8th edition) \u2014 based on bilateral pulmonary involvement, mediastinal lymph node metastases, and malignant pleural effusion\" (Index: Staging and Diagnosis) - This confirms Stage IVA NSCLC.\n    - \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy...\" (Index: Assessment & Plan) - This confirms histological confirmation of malignancy.\n    - \"Imaging Findings... A large, well-circumscribed mass is present in the left lower lobe (3.2 cm, measurable per RECIST 1.1).\" (Index: Imaging Findings) - This indicates measurable disease per RECIST 1.1.\n    - \"Assessment: Stage IV lung adenocarcinoma...\" (Index: Assessment & Plan) - This reiterates the Stage IV diagnosis.\n\n3.  Does the patient have the GENERAL condition described?\n    YES\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE (e.g., mild, moderate, severe, early, advanced, Rutherford stage 2)?\n    YES, it specifies Stage IVA or IVB, or locally advanced.\n\n    Does the patient's documented condition match that specific level?\n    SEVERITY MATCHES\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    YES, it requires:\n    - Histologically documented or cytologically confirmed diagnosis: The note states \"Histopathologic analysis... confirmed malignancy\" (Index: Assessment & Plan).\n    - Stage IVA or IVB (M1b or M1c) or locally advanced: The note states \"Stage: IVA (T2a N2 M1a per AJCC 8th edition)\" (Index: Staging and Diagnosis). Stage IVA falls under the criterion's stage requirement.\n    - Not eligible for standard of care (SOC) chemoradiation: The note does not explicitly state ineligibility for SOC chemoradiation. However, Stage IV disease is generally considered metastatic and not typically treated with curative intent chemoradiation, although palliative radiation might be used. The criterion requires *ineligibility* for SOC chemoradiation. The note doesn't provide enough information to definitively determine eligibility/ineligibility for SOC chemoradiation. However, the criterion also includes locally advanced disease which *is* often treated with chemoradiation. The patient is Stage IVA (M1a), which is metastatic (Stage IV). Stage IV disease is generally not treated with SOC chemoradiation aimed at cure.\n    - Evaluable disease per RECIST v1.1 criteria: The note states \"A large, well-circumscribed mass is present in the left lower lobe (3.2 cm, measurable per RECIST 1.1).\" (Index: Imaging Findings). This indicates evaluable disease.\n\n    Does the patient match them?\n    MATCHES\n\n5.  How confident are you?\n    HIGH"
+      },
+      {
+        "text": "Available tumor material (\\< 6 months old) adequate for confirmation of programmed cell death 1 ligand 1 (PD-L1) expression per local standard of care testing",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The medical analysis determines that the patient meets the inclusion criterion. The note documents recent histopathology and successful PD-L1 testing (TPS 60%), confirming the availability of adequate tumor material within the relevant timeframe.",
+        "evidence_sentences": [
+          2
+        ],
+        "stage1_reasoning": "1.  The criterion requires available tumor material less than 6 months old that is adequate for confirmation of PD-L1 expression testing according to local standards.\n\n2.  The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy...\". This implies tumor tissue was obtained. The note does not explicitly state when the tissue was obtained, but the diagnosis and staging are based on current findings. The PD-L1 testing was performed on this tissue: \"PD-L1 TPS: 60% (by 22C3 pharmDx assay)\". The note does not specify the exact date of tissue acquisition relative to the PD-L1 testing, but the assessment is current. Given the recent diagnosis and testing, it is reasonable to assume the tissue is less than 6 months old and adequate for PD-L1 testing.\n\n3.  YES\n\n3b.  NO SEVERITY SPECIFIED\n\n4.  MATCHES\n\n5.  HIGH"
+      },
+      {
+        "text": "Eastern Cooperative Oncology Group (ECOG) performance status of 0-2",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The patient's ECOG performance status is recorded as 1, which falls within the required inclusion range of 0-2.",
+        "evidence_sentences": [
+          2
+        ],
+        "stage1_reasoning": "1.  The criterion requires an Eastern Cooperative Oncology Group (ECOG) performance status of 0-2. This is a measure of a patient's functional status, ranging from fully active (0) to completely disabled (5). The criterion specifies a range of 0 to 2, indicating a relatively good functional status.\n\n2.  The patient note explicitly states: \"ECOG Performance Status: 1 (ambulatory, able to carry out light work)\". This falls within the specified range of 0-2.\n\n3.  YES\n\n3b. SEVERITY MATCHES\n\n4.  N/A\n\n5.  HIGH"
+      },
+      {
+        "text": "Adequate organ function to receive therapy as determined by investigators and other treating physicians",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The patient demonstrates adequate organ function through normal laboratory values (WBC, Hemoglobin, Platelets, Creatinine, LFTs, TSH) and an ECOG status of 1. Additionally, the clinical assessment explicitly states the patient is eligible for the first-line regimen, satisfying the requirement for adequate function as determined by treating physicians.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires adequate organ function to receive therapy. It does not specify which organ(s) or the specific type of therapy. It also does not specify a severity, staging, timing, or specificity requirement beyond \"adequate organ function\".\n\n2.  What does the patient note explicitly state about this?\n    The note provides laboratory values that are indicators of organ function:\n    - WBC: 7.2 \u00d7 10\u2079/L (normal)\n    - Hemoglobin: 12.8 g/dL (normal)\n    - Platelets: 245 \u00d7 10\u2079/L (normal)\n    - Creatinine: 0.8 mg/dL (normal; CrCl > 60 mL/min)\n    - AST/ALT: 22/18 U/L (normal)\n    - Total Bilirubin: 0.6 mg/dL (normal)\n    - TSH: 2.1 mIU/L (normal)\n    The note also states \"ECOG Performance Status: 1 (ambulatory, able to carry out light work)\", which is an indicator of general functional status, often related to organ function and disease burden. The assessment concludes the patient is \"Eligible for first-line immunotherapy-based regimen\". Eligibility for therapy often implies adequate organ function, although the specific criteria are not detailed in the note.\n\n3.  Does the patient have the GENERAL condition described?\n    The patient has normal WBC, Hemoglobin, Platelets, Creatinine (with CrCl > 60 mL/min), AST/ALT, Total Bilirubin, and TSH. The ECOG performance status is 1. These findings suggest adequate organ function.\n    Answer: YES\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE?\n    The criterion does not specify a particular severity, grade, or stage.\n    Answer: NO SEVERITY SPECIFIED\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    The criterion does not specify any additional qualifiers beyond \"adequate organ function\".\n    Answer: N/A\n\n5.  How confident are you?\n    Based on the normal laboratory values and ECOG performance status, the patient appears to have adequate organ function, which is a prerequisite for receiving therapy. The assessment explicitly states she is eligible for therapy.\n    Answer: HIGH"
+      },
+      {
+        "text": "Participants with brain metastases that can be comprehensively managed with surgery and/or stereotactic radiosurgery, prior to initiation of chemo-immunotherapy are allowed. Number of brain metastases allowed is not specified at eligibility is at discretion of investigator",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "Patient has no brain metastases per brain MRI. This inclusion criterion is permissive (allows brain met patients), not restrictive. Verdict: MET.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires participants to have brain metastases that can be comprehensively managed with surgery and/or stereotactic radiosurgery, prior to initiation of chemo-immunotherapy. The number of brain metastases is not specified, and eligibility is at the discretion of the investigator.\n\n2.  What does the patient note explicitly state about this?\n    The note states: \"Brain MRI: No evidence of brain metastases.\" (Imaging Findings section)\n\n3.  Does the patient have the GENERAL condition described?\n    NO\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE (e.g., mild, moderate, severe, early, advanced, Rutherford stage 2)?\n    If so, does the patient's documented condition match that specific level?\n    N/A\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    If yes, does the patient match them?\n    N/A\n\n5.  How confident are you?\n    HIGH\n\n[CORRECTION] This criterion is a permissive clause allowing patients WITH stable brain metastases to participate. The patient has no brain metastases (brain MRI negative), so this criterion does not apply as a barrier. The patient meets this criterion by default."
+      },
+      {
+        "text": "Contraceptive use should be initiated or continued per guidance in labeling for approved chemotherapies",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The criterion requires the initiation or continuation of contraceptive use. The medical analysis confirms the patient is a woman of childbearing potential using an intrauterine device (IUD), which qualifies as highly effective contraception. The analysis concludes YES and MATCHES, indicating the patient satisfies the inclusion requirement.",
+        "evidence_sentences": [
+          2
+        ],
+        "stage1_reasoning": "1.  The criterion requires that contraceptive use should be initiated or continued per guidance in labeling for approved chemotherapies. This applies to women of childbearing potential (WOCBP) receiving chemotherapy. The patient has Stage IV lung adenocarcinoma and is eligible for first-line immunotherapy-based regimen, which often involves chemotherapy agents.\n\n2.  The note states: \"The patient is a woman of childbearing potential (WOCBP). She is not currently pregnant (negative serum beta-hCG) and is not breastfeeding. She has an intrauterine device (IUD) in place as highly effective contraception.\" (Demographics section) and \"The patient is a 43-year-old female. Not pregnant, not breastfeeding. Using effective contraception (IUD).\" (Demographics section) and \"The patient is a woman of childbearing potential (WOCBP). She is not currently pregnant (negative serum beta-hCG) and is not breastfeeding. She has an intrauterine device (IUD) in place as highly effective contraception.\" (Reproductive Status section).\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  MATCHES\n\n5.  HIGH"
+      },
+      {
+        "text": "Female patients must be non-pregnant and not breastfeeding.",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The medical analysis confirms that the patient satisfies the inclusion criterion. The analysis cites specific evidence from the note stating the patient is 'Not pregnant, not breastfeeding' and confirms a 'negative serum beta-hCG'. Since the analysis concludes YES and the evidence matches the requirement, the patient is eligible.",
+        "evidence_sentences": [
+          2
+        ],
+        "stage1_reasoning": "1.  The criterion requires female patients to be non-pregnant and not breastfeeding. This is a specific requirement for inclusion in certain studies or treatments, often related to reproductive health or potential fetal/infant harm from therapies.\n\n2.  The patient note explicitly states: \"Not pregnant, not breastfeeding.\" (Demographics section) and \"She is not currently pregnant (negative serum beta-hCG) and is not breastfeeding.\" (Reproductive Status section).\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  N/A\n\n5.  HIGH"
+      },
+      {
+        "text": "If woman of childbearing potential (WOCBP), must utilize highly effective contraceptive method (failure rate of \\< 1% per year) throughout intervention period and continued per guidance specified in labeling for approved chemotherapies. Must have negative pregnancy test (serum or urine) within 1 week prior to initiation of first cycle of therapy",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The analysis confirms the patient is a woman of childbearing potential who has a negative pregnancy test and is using an IUD (highly effective contraception), satisfying all conditions of the inclusion criterion.",
+        "evidence_sentences": [
+          2
+        ],
+        "stage1_reasoning": "1.  This criterion requires that a woman of childbearing potential (WOCBP) receiving chemotherapy must use a highly effective contraceptive method (failure rate < 1% per year) throughout the intervention period and continued per guidance specified in labeling for approved chemotherapies. She must also have a negative pregnancy test (serum or urine) within 1 week prior to initiating therapy.\n\n2.  The patient note states: \"The patient is a woman of childbearing potential (WOCBP). She is not currently pregnant (negative serum beta-hCG) and is not breastfeeding. She has an intrauterine device (IUD) in place as highly effective contraception.\" (Demographics section) and \"The patient is a 43-year-old female.\" (Demographics section).\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  MATCHES\n\n5.  HIGH"
+      },
+      {
+        "text": "Eligible for immunotherapy-based systemic regimens per judgment of patient's study physician",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The clinical note explicitly states that the patient is 'Eligible for first-line immunotherapy-based regimen' under the Assessment & Plan, which directly meets the inclusion criterion requiring eligibility for immunotherapy-based systemic regimens per the physician's judgment.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the patient to be eligible for immunotherapy-based systemic regimens based on the judgment of the patient's study physician. This implies the patient has a condition suitable for such treatment, likely advanced cancer, and meets specific criteria (e.g., PD-L1 expression, absence of certain mutations) that make immunotherapy a viable option. The note specifies Stage IVA lung adenocarcinoma, EGFR/ALK/ROS1 wild-type, and PD-L1 60%.\n\n2.  What does the patient note explicitly state about this?\n    The note states: \"Assessment: Stage IV lung adenocarcinoma, EGFR/ALK/ROS1 wild-type, PD-L1 60%. Eligible for first-line immunotherapy-based regimen.\" (Index: Assessment & Plan)\n\n3.  Does the patient have the GENERAL condition described?\n    The patient has Stage IV lung adenocarcinoma, which is a condition often treated with immunotherapy-based regimens. The note explicitly states she is eligible for such a regimen.\n    Answer: YES\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE (e.g., mild, moderate, severe, early, advanced, Rutherford stage 2)?\n    The criterion implies an advanced stage cancer suitable for systemic immunotherapy. The patient has Stage IVA (equivalent to Stage IV) lung adenocarcinoma.\n    Answer: SEVERITY MATCHES\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    The criterion requires eligibility for immunotherapy-based regimens. The note provides specific details supporting this eligibility: Stage IV disease, wild-type EGFR/ALK/ROS1, and high PD-L1 expression (60%). These are common factors considered for immunotherapy eligibility in non-small cell lung cancer.\n    Answer: MATCHES\n\n5.  How confident are you?\n    HIGH"
+      }
+    ]
+  },
+  "NCT05549037": {
+    "verdict": "UNCERTAIN",
     "mode": "two_stage",
     "criteria": [
       {
         "text": "1. Understand the requirements and contents of the clinical trial, and provide a signed and dated informed consent form.",
         "type": "inclusion",
         "verdict": "UNKNOWN",
-        "reasoning": "Error: The read operation timed out",
+        "reasoning": "The medical analysis concludes that the patient note provides insufficient data regarding the patient's understanding of the trial requirements or the provision of signed informed consent. Following the mapping rules, a finding of insufficient data maps to the unknown label.",
         "evidence_sentences": [],
-        "stage1_reasoning": ""
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the patient to understand the requirements and contents of the clinical trial and provide a signed and dated informed consent form. This relates to the patient's ability to participate in a clinical trial, which requires informed consent. There are no severity, staging, timing, or specificity requirements related to a medical condition within the criterion itself, but rather a procedural requirement for trial participation. The underlying condition being checked is the patient's capacity to provide informed consent.\n\n2.  What does the patient note explicitly state about this?\n    The note does not explicitly state whether the patient understands the requirements and contents of a clinical trial or if she has provided a signed and dated informed consent form.\n\n3.  Does the patient have the GENERAL condition described?\n    The general condition described is the ability to provide informed consent for a clinical trial. The note does not provide information about whether the patient has been presented with a clinical trial, understands its requirements, or has provided consent. Therefore, we cannot determine if she meets this criterion based on the provided note.\n    Answer: INSUFFICIENT DATA\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE?\n    The criterion does not specify a severity, grade, or stage.\n    Answer: N/A\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    Since the answer to #3 is INSUFFICIENT DATA, this question is skipped.\n\n5.  How confident are you?\n    Answer: HIGH"
       },
       {
         "text": "2. Age \u2265 18 years.",
         "type": "inclusion",
         "verdict": "MET",
-        "reasoning": "The patient is 43 years old, which satisfies the inclusion criterion requiring age greater than or equal to 18 years.",
+        "reasoning": "The patient is explicitly stated to be a 43-year-old female, which satisfies the inclusion criterion of being 18 years of age or older.",
         "evidence_sentences": [
           1,
-          12
+          33
         ],
-        "stage1_reasoning": "1.  The criterion requires the patient's age to be greater than or equal to 18 years. There are no severity, staging, timing, or specificity requirements beyond age. The underlying condition being checked is age.\n\n2.  The patient note states: \"A 43-year-old female presents...\" (Index 1) and \"The patient is a 43-year-old female.\" (Index 12).\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  N/A\n\n5.  HIGH"
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the patient's age to be greater than or equal to 18 years.\n\n2.  What does the patient note explicitly state about this?\n    The note states: \"A 43-year-old female presents...\" (Index: 1) and \"The patient is a 43-year-old female.\" (Index: 33)\n\n3.  Does the patient have the GENERAL condition described?\n    The patient is 43 years old. The criterion requires age \u2265 18 years.\n    Answer: YES\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE?\n    No, the criterion only specifies an age threshold.\n    Answer: N/A\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    The criterion only specifies the age requirement (\u2265 18 years). The patient's age (43 years) meets this requirement.\n    Answer: MATCHES\n\n5.  How confident are you?\n    Answer: HIGH"
       },
       {
-        "text": "3. Histologically or cytologically confirmed, Stage IV NSCLC.",
+        "text": "3. Histopathology or cytology confirmed and recorded local progression or metastatic non-small cell lung cancer without systemic treatment.",
         "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "The criterion requires confirmed Stage IV NSCLC. The medical analysis notes that while malignancy was confirmed via histopathology, the patient note explicitly states that 'Information not provided includes cancer stage'. Since the stage is missing, it is not possible to determine if the patient meets the Stage IV requirement, contradicting the analysis conclusion of 'NO' which implies the condition is absent.",
+        "verdict": "MET",
+        "reasoning": "The patient has Stage IVA lung adenocarcinoma, which is a form of metastatic non-small cell lung cancer (NSCLC). The condition is confirmed by histopathology, and the patient is explicitly documented as 'treatment-naive' with no prior systemic therapy. This satisfies all requirements of the inclusion criterion.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires histopathology or cytology confirmation of local progression or metastatic non-small cell lung cancer (NSCLC) without prior systemic treatment. It specifies NSCLC, confirmation via pathology/cytology, evidence of progression or metastasis, and absence of prior systemic treatment.\n\n2.  What does the patient note explicitly state about this?\n    - \"Primary Diagnosis: Lung adenocarcinoma with signet-ring cell features\" (Index: Staging and Diagnosis) - This confirms NSCLC (adenocarcinoma).\n    - \"Stage: IVA (T2a N2 M1a per AJCC 8th edition) \u2014 based on bilateral pulmonary involvement, mediastinal lymph node metastases, and malignant pleural effusion\" (Index: Staging and Diagnosis) - This indicates metastatic disease (M1a) and lymph node involvement (N2), representing progression/metastasis.\n    - \"Treatment History: Treatment-naive; no prior systemic therapy, radiation therapy, or surgical resection for lung cancer\" (Index: Staging and Diagnosis) - This confirms the absence of prior systemic treatment.\n    - \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy...\" (Index: Assessment & Plan) - This confirms malignancy via histopathology.\n\n3.  Does the patient have the GENERAL condition described?\n    YES\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE (e.g., mild, moderate, severe, early, advanced, Rutherford stage 2)?\n    If so, does the patient's documented condition match that specific level?\n    The criterion requires metastatic or progressive NSCLC. The patient has Stage IVA NSCLC, which is metastatic.\n    Answer: SEVERITY MATCHES\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    - If yes, does the patient match them?\n      (subtype, timing/recency, threshold, modality)\n      Answer: MATCHES\n    The criterion requires histopathology or cytology confirmation. The note states \"Histopathologic analysis...confirmed malignancy\" (Index: Assessment & Plan). The criterion requires local progression or metastatic disease. The patient has Stage IVA (M1a), which is metastatic disease. The criterion requires no prior systemic treatment. The note states \"Treatment-naive; no prior systemic therapy\" (Index: Staging and Diagnosis). All specific qualifiers are met.\n\n5.  How confident are you?\n    HIGH"
+      },
+      {
+        "text": "4. EGFR, ALK and ROS1 mutations negative confirmed by an accredited local laboratory.",
+        "type": "inclusion",
+        "verdict": "MET",
+        "reasoning": "The patient note explicitly confirms EGFR is 'Wild-type', ALK is 'Negative', and ROS1 is 'Negative', which satisfies the inclusion requirement for these mutations to be negative.",
         "evidence_sentences": [
           2
         ],
-        "stage1_reasoning": "1.  The criterion requires histologically or cytologically confirmed, Stage IV Non-Small Cell Lung Cancer (NSCLC). It specifies the confirmation method (histology/cytology), the type of cancer (NSCLC), and the stage (Stage IV).\n\n2.  The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\" (Assessment & Plan section). The note also mentions a large mass in the left lower lobe and pleural thickening/effusion, suggesting potential spread. However, the note explicitly states \"Information not provided includes cancer stage...\" (Missing Info section).\n\n3.  NO\n\n3b. N/A\n\n4.  N/A\n\n5.  HIGH"
-      },
-      {
-        "text": "4. Oncogenic mutations confirmed by an accredited local laboratory, including EGFR, ALK, ROS1 etc.",
-        "type": "inclusion",
-        "verdict": "NOT_MET",
-        "reasoning": "The criterion requires confirmed oncogenic mutations. The analysis explicitly states that the patient note does not mention any specific genetic testing or results for mutations like EGFR, ALK, or ROS1. Since the analysis concludes 'NO' with high confidence regarding the satisfaction of this inclusion criterion, the patient is considered not eligible based on the current documentation.",
-        "evidence_sentences": [
-          2
-        ],
-        "stage1_reasoning": "1.  The criterion requires confirmation of specific oncogenic mutations (EGFR, ALK, ROS1, etc.) by an accredited local laboratory.\n\n2.  The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\" It does not mention any specific genetic testing or results for oncogenic mutations like EGFR, ALK, or ROS1.\n\n3.  NO\n\n3b. N/A\n\n4.  N/A\n\n5.  HIGH"
+        "stage1_reasoning": "1.  The criterion requires confirmation that the patient's lung adenocarcinoma is negative for EGFR, ALK, and ROS1 mutations, confirmed by an accredited local laboratory.\n\n2.  The patient note states: \"EGFR: Wild-type (no activating mutations detected)\", \"ALK: Negative (no rearrangement by FISH)\", and \"ROS1: Negative (no rearrangement)\". It also states \"No confirmed oncogenic driver mutations\".\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  MATCHES\n\n5.  HIGH"
       },
       {
         "text": "5. ECOG 0-1.",
         "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "The medical analysis states that the patient's ECOG performance status is not explicitly mentioned in the note and classifies it as 'Missing Info'. Consequently, it cannot be determined if the patient meets the inclusion criterion of ECOG 0-1.",
+        "verdict": "MET",
+        "reasoning": "The inclusion criterion requires an ECOG performance status of 0 or 1. The medical analysis confirms the patient has a documented ECOG Performance Status of 1, which specifically matches the required range.",
         "evidence_sentences": [],
-        "stage1_reasoning": "1.  The criterion requires the patient to have an Eastern Cooperative Oncology Group (ECOG) performance status of 0 or 1. This indicates a patient who is fully active or restricted in strenuous activity but ambulatory and able to carry out work of a light or sedentary nature.\n\n2.  The patient note does not explicitly state the patient's ECOG performance status. The \"Missing Info\" section specifically mentions that performance status is not provided.\n\n3.  NO. The patient note does not mention the patient's ECOG performance status.\n\n3b. N/A\n\n4.  N/A\n\n5.  LOW"
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the patient to have an ECOG performance status of 0 or 1. This is a measure of functional status.\n\n2.  What does the patient note explicitly state about this?\n    The note states: \"ECOG Performance Status: 1 (ambulatory, able to carry out light work)\". (Index: Staging and Diagnosis)\n\n3.  Does the patient have the GENERAL condition described?\n    YES\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE?\n    If so, does the patient's documented condition match that specific level?\n    The criterion specifies an ECOG performance status of 0 or 1. The patient's documented ECOG performance status is 1.\n    Answer: SEVERITY MATCHES\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    If yes, does the patient match them?\n    The criterion specifies an ECOG score of 0 or 1. The patient's score is 1.\n    Answer: MATCHES\n\n5.  How confident are you?\n    HIGH"
       },
       {
         "text": "6. Predicted survival \u2265 12 weeks.",
         "type": "inclusion",
         "verdict": "UNKNOWN",
-        "reasoning": "The analysis reasoning explicitly states that the patient note does not mention the predicted survival duration and lacks crucial information (stage, performance status) to determine it. While the analysis conclusion was 'NO', the reasoning clearly indicates insufficient data, necessitating an 'unknown' label according to the contradiction check rule.",
-        "evidence_sentences": [
-          2
-        ],
-        "stage1_reasoning": "1.  The criterion requires the patient's predicted survival to be greater than or equal to 12 weeks. This is a prognostic criterion related to survival duration.\n\n2.  The patient note does not explicitly state the predicted survival duration. It describes the patient's presentation, imaging findings, and histopathology confirming malignancy with lymphovascular invasion, focal necrosis, and signet-ring cells. It mentions missing information including cancer stage and performance status, which are crucial for predicting survival.\n\n3.  NO\n\n3b. N/A\n\n4.  N/A\n\n5.  LOW"
+        "reasoning": "The criterion requires a predicted survival of at least 12 weeks. The analysis explicitly states that the patient note does not provide this specific prediction, concluding there is insufficient data to determine if the patient meets the requirement.",
+        "evidence_sentences": [],
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the patient to have a predicted survival of 12 weeks or greater. This is a measure of prognosis, specifically the expected duration of life.\n\n2.  What does the patient note explicitly state about this?\n    The patient note does not explicitly state the predicted survival duration. It provides information about the patient's diagnosis (Stage IV lung adenocarcinoma), performance status (ECOG 1), and biomarker status (EGFR/ALK/ROS1 wild-type, PD-L1 60%).\n\n3.  Does the patient have the GENERAL condition described?\n    The criterion refers to a predicted survival duration. The note does not provide this specific prediction. Therefore, we cannot determine if the patient meets this criterion based on the provided information.\n    Answer: INSUFFICIENT DATA\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE?\n    The criterion specifies a duration threshold (\u2265 12 weeks), which relates to the severity/prognosis of the condition.\n    Answer: N/A\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    Answer: N/A\n\n5.  How confident are you?\n    Answer: HIGH"
       },
       {
         "text": "7. Adequate bone marrow hematopoiesis and organ function",
         "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "The medical analysis explicitly states that the patient note does not provide sufficient information regarding blood counts or specific organ function tests to determine if the patient meets the requirement for adequate bone marrow hematopoiesis and organ function.",
-        "evidence_sentences": [],
-        "stage1_reasoning": "1.  This criterion requires adequate bone marrow hematopoiesis and organ function. This is a general requirement for many medical interventions, particularly cancer treatments like chemotherapy or radiation, ensuring the patient can tolerate the treatment and recover. There are no specific severity, staging, timing, or specificity requirements mentioned in the criterion itself, other than the general state of \"adequate\". The underlying condition being checked is the patient's overall physiological reserve.\n\n2.  The patient note does not explicitly state whether the patient has adequate bone marrow hematopoiesis and organ function. It mentions a history of progressive dyspnea and wheezing, imaging findings suggestive of malignancy, and confirmed malignancy with lymphovascular invasion. It also notes the absence of chronic illnesses. However, it does not provide information about blood counts (hematopoiesis) or specific organ function tests (e.g., liver, kidney, cardiac function).\n\n3.  NO. The note does not provide sufficient information to determine if the patient has adequate bone marrow hematopoiesis and organ function. While she denies chronic illnesses, this does not confirm adequate function. The presence of malignancy itself can potentially impact organ function and hematopoiesis, but the extent is unknown from this note.\n\n3b. N/A\n\n4.  INSUFFICIENT DATA\n\n5.  LOW"
+        "verdict": "MET",
+        "reasoning": "The analysis indicates the patient has adequate bone marrow hematopoiesis and organ function, supported by specific normal laboratory values for WBC, Hemoglobin, Platelets, Creatinine, and liver enzymes. Since the patient satisfies this inclusion requirement, they are eligible.",
+        "evidence_sentences": [
+          2,
+          3
+        ],
+        "stage1_reasoning": "1.  This criterion requires adequate bone marrow hematopoiesis and organ function. This implies the absence of significant hematologic abnormalities (like severe anemia, thrombocytopenia, or leukopenia) and organ dysfunction (like renal or hepatic failure) that would preclude treatment or indicate advanced disease affecting these systems. There are no specific severity, staging, timing, or specificity requirements mentioned beyond \"adequate\". The underlying conditions being checked are hematologic abnormalities and organ dysfunction.\n\n2.  The patient note states:\n    *   \"WBC: 7.2 \u00d7 10\u2079/L (normal)\" (Laboratory Values)\n    *   \"Hemoglobin: 12.8 g/dL (normal)\" (Laboratory Values)\n    *   \"Platelets: 245 \u00d7 10\u2079/L (normal)\" (Laboratory Values)\n    *   \"Creatinine: 0.8 mg/dL (normal; CrCl > 60 mL/min)\" (Laboratory Values)\n    *   \"AST/ALT: 22/18 U/L (normal)\" (Laboratory Values)\n    *   \"Total Bilirubin: 0.6 mg/dL (normal)\" (Laboratory Values)\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  N/A\n\n5.  HIGH"
       },
       {
         "text": "8. Presence of measurable lesions according to RECIST 1.1.",
         "type": "inclusion",
         "verdict": "MET",
-        "reasoning": "The medical analysis concludes that the patient has 'measurable lesions' based on the presence of a 'large, well-circumscribed mass'. Although specific measurements are not in the text, the analysis explicitly states YES and MATCHES, determining the findings satisfy the RECIST 1.1 requirement.",
+        "reasoning": "The analysis confirms the patient has a mass in the left lower lobe explicitly described as 'measurable per RECIST 1.1', which directly satisfies the inclusion criterion requiring the presence of measurable lesions.",
         "evidence_sentences": [
           2
         ],
-        "stage1_reasoning": "1.  The criterion requires the presence of measurable lesions according to RECIST 1.1 criteria. This implies the presence of a tumor or tumors that meet specific size criteria (e.g., target lesions must have a sum of diameters of at least 5 mm, with the longest diameter being at least 10 mm).\n\n2.  The note states: \"A large, well-circumscribed mass is present in the left lower lobe.\" and \"Axial CT images of the chest demonstrate nodular and branching opacities in the right upper lobe...\". The note also mentions \"extensive lymphovascular invasion, focal necrosis, and signet-ring cells\" confirmed by histopathology, indicating malignancy. The presence of a \"large, well-circumscribed mass\" and \"nodular\" opacities suggests the presence of lesions. While the exact measurements and RECIST 1.1 compliance are not explicitly stated, the description strongly implies the presence of lesions that could be measurable.\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  MATCHES"
-      }
-    ]
-  },
-  "NCT06074588": {
-    "verdict": "NOT_RELEVANT",
-    "mode": "two_stage",
-    "criteria": [
-      {
-        "text": "Histologically- or cytologically-documented advanced (Stage III not eligible for resection or curative radiation) or metastatic non-squamous NSCLC with specific mutations.",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "The medical analysis indicates that while the patient has a confirmed malignancy, the note does not explicitly state the specific stage, mutations, or whether the NSCLC is non-squamous, which are required by the inclusion criterion. Since the necessary information is missing from the text, eligibility cannot be determined.",
-        "evidence_sentences": [
-          6
-        ],
-        "stage1_reasoning": "1.  The criterion requires histologically- or cytologically-documented advanced (Stage III not eligible for resection or curative radiation) or metastatic non-squamous NSCLC with specific mutations. It specifies the type of cancer (non-squamous NSCLC), the documentation method (histology or cytology), the stage (advanced Stage III or metastatic), and the presence of specific mutations.\n\n2.  The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\" (Index 6). The note does not explicitly state the stage or specific mutations. It also does not specify the type of NSCLC (squamous vs. non-squamous).\n\n3.  NO\n\n3b. N/A\n\n4.  N/A\n\n5.  LOW"
+        "stage1_reasoning": "1.  The criterion requires the presence of measurable lesions according to RECIST 1.1 criteria. RECIST 1.1 (Response Evaluation Criteria in Solid Tumors version 1.1) defines measurable lesions as those that can be accurately measured in at least one dimension (longest diameter) using conventional techniques (e.g., CT, MRI, chest X-ray). The criterion is specific to the presence of such lesions.\n\n2.  The note states: \"Additionally, there is evidence of interstitial changes in the right lung, including honeycombing and pleural thickening, particularly in the right lower lobe, along with a small right-sided pleural effusion.\" and \"A large, well-circumscribed mass is present in the left lower lobe (3.2 cm, measurable per RECIST 1.1).\"\n\n3.  YES\n\n3b. SEVERITY MATCHES\n\n4.  MATCHES\n\n5.  HIGH"
       },
       {
-        "text": "Documentation of locally assessed radiological disease progression while on or after last treatment based on Response Evaluation Criteria in Solid Tumors Version (RECIST) 1.1.",
-        "type": "inclusion",
-        "verdict": "NOT_MET",
-        "reasoning": "The medical analysis explicitly concludes 'NO' with high confidence. It states that the patient's note lacks documentation of prior treatment history, disease progression, or RECIST 1.1 assessment, which are required for this inclusion criterion. Per the mapping rules, a 'NO' analysis for an inclusion criterion maps to 'not eligible'.",
-        "evidence_sentences": [
-          2
-        ],
-        "stage1_reasoning": "1.  The criterion requires documentation of locally assessed radiological disease progression based on RECIST 1.1 criteria, while the patient is on or after their last treatment. This implies the patient has cancer and has received treatment, and the note must describe radiological progression after treatment initiation, assessed using RECIST 1.1.\n\n2.  The patient note describes imaging findings (nodules, mass, interstitial changes, pleural effusion) and histopathology confirming malignancy. However, it explicitly states missing information includes \"prior treatment history\". There is no mention of treatment, disease progression, or RECIST 1.1 assessment.\n\n3.  NO\n\n3b. N/A\n\n4.  N/A\n\n5.  HIGH"
-      },
-      {
-        "text": "Participants with genome mutations must have received 1 or 2 prior lines of epidermal growth factor receptor tyrosine kinase inhibitor (EGFR TKI), including a third generation TKI for participants with a T790M mutation; and 1 platinum-based therapy after progression on or after EGFR TKI.",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "The medical analysis indicates that the clinical note explicitly lists prior treatment history and genome mutations as information not provided. Consequently, it is impossible to determine if the patient has received the required EGFR TKI and platinum-based therapies, leading to an assignment of 'unknown'.",
-        "evidence_sentences": [
-          2,
-          3
-        ],
-        "stage1_reasoning": "1.  This criterion requires participants with genome mutations to have received 1 or 2 prior lines of epidermal growth factor receptor tyrosine kinase inhibitor (EGFR TKI), including a third generation TKI for participants with a T790M mutation, and 1 platinum-based therapy after progression on or after EGFR TKI. The criterion specifies a prior treatment history related to EGFR TKI therapy and platinum-based chemotherapy in the context of genome mutations.\n\n2.  The patient note states: \"Information not provided includes cancer stage, performance status, and prior treatment history.\" (Index: Missing Info). The note does not mention any genome mutations, EGFR TKI therapy, or platinum-based therapy.\n\n3.  The patient note does not mention any genome mutations, prior EGFR TKI therapy, or prior platinum-based therapy. The note confirms malignancy but does not specify the type or any molecular characteristics. Therefore, it is impossible to determine if the patient meets the criteria regarding prior treatment history for specific mutations.\n    Answer: INSUFFICIENT DATA\n\n3b. N/A\n\n4.  N/A\n\n5.  LOW"
-      },
-      {
-        "text": "Measurable disease per RECIST 1.1 as assessed by the local site investigator.",
+        "text": "9. Subjects with stable brain metastases may be included in the study.",
         "type": "inclusion",
         "verdict": "MET",
-        "reasoning": "The patient has a confirmed malignancy with a large, well-circumscribed mass in the left lower lobe, which constitutes measurable disease per RECIST 1.1 criteria.",
-        "evidence_sentences": [
-          3
-        ],
-        "stage1_reasoning": "1.  The criterion requires a measurable disease per RECIST 1.1 criteria as assessed by the local site investigator. This implies the presence of a malignancy that can be measured according to RECIST 1.1 guidelines, typically involving target lesions like masses or nodules.\n\n2.  The patient note states: \"A large, well-circumscribed mass is present in the left lower lobe.\" (Imaging Findings, index 3). \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy...\" (Assessment & Plan, index 3).\n\n3.  YES. The note explicitly states the presence of a large mass in the left lower lobe and confirms malignancy in the right lung lobes and mediastinal lymph nodes. Malignancy, particularly with a large mass, is a measurable disease according to RECIST 1.1.\n\n3b. NO SEVERITY SPECIFIED. The criterion does not specify a particular severity, grade, or stage. It only requires a measurable disease per RECIST 1.1.\n\n4.  N/A\n\n5.  HIGH"
-      },
-      {
-        "text": "Archival tumor tissue sample or newly obtained core, incisional, or excisional biopsy of a tumor lesion not previously irradiated has been provided",
-        "type": "inclusion",
-        "verdict": "MET",
-        "reasoning": "The medical analysis identifies that histopathologic analysis confirmed malignancy, which implies the existence of tumor tissue. Although the reasoning notes that the text does not explicitly specify if the tissue is archival/new or its irradiation status, the analysis concludes with 'YES' and 'MATCHES', indicating that the patient meets the requirement based on the standard availability of diagnostic tissue.",
+        "reasoning": "Patient has no brain metastases. Permissive clause does not restrict enrollment. Verdict: MET.",
         "evidence_sentences": [],
-        "stage1_reasoning": "1.  This criterion requires the provision of archival tumor tissue or a newly obtained biopsy (core, incisional, or excisional) of a tumor lesion that has not been previously irradiated.\n\n2.  The patient note states: \"Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy...\" (Assessment & Plan section). It does not explicitly state whether the tissue was archival or newly obtained, nor does it mention prior irradiation.\n\n3.  YES\n\n3b. NO SEVERITY SPECIFIED\n\n4.  MATCHES"
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the subject to have stable brain metastases.\n\n2.  What does the patient note explicitly state about this?\n    The note states: \"Brain MRI: No evidence of brain metastases.\" (Imaging Findings section)\n\n3.  Does the patient have the GENERAL condition described?\n    NO\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE (e.g., mild, moderate, severe, early, advanced, Rutherford stage 2)?\n    If so, does the patient's documented condition match that specific level?\n    N/A\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    If yes, does the patient match them?\n    N/A\n    If NO to #3, skip this question.\n\n5.  How confident are you?\n    HIGH\n\n[CORRECTION] This is a permissive clause for brain metastasis patients. Patient has no brain metastases (brain MRI negative). Criterion met by default."
       },
       {
-        "text": "Participants who have AEs due to previous anticancer therapies must have recovered to Grade \u22641 or baseline.",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "The analysis indicates that the clinical note lacks information regarding prior treatment history. Consequently, the reasoning states it is 'impossible to determine' if the patient has adverse events from previous therapies or has recovered from them, leading to an assignment of unknown.",
-        "evidence_sentences": [
-          2,
-          3
-        ],
-        "stage1_reasoning": "1.  The criterion requires that participants who have Adverse Events (AEs) due to previous anticancer therapies must have recovered to Grade \u22641 or baseline. This refers to the severity of AEs related to prior anticancer treatment.\n\n2.  The patient note does not mention any prior anticancer therapies or any adverse events related to them. It states \"Information not provided includes cancer stage, performance status, and prior treatment history.\" (Index: Missing Info).\n\n3.  NO. The note does not mention any prior anticancer therapies or AEs. Therefore, it's impossible to determine if the patient has recovered from AEs related to prior anticancer therapies.\n\n3b. N/A\n\n4.  N/A\n\n5.  HIGH"
-      },
-      {
-        "text": "Participants who are hepatitis B surface antigen (HBsAg) positive are eligible if they have received HBV antiviral therapy for at least 4 weeks, and have undetectable HBV viral load prior to randomization.",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "The criterion applies specific eligibility conditions to participants who are HBsAg positive. The medical analysis explicitly states that the patient note does not mention HBsAg status, antiviral therapy, or viral load. Because the patient's HBsAg status is unknown, it is impossible to determine if the restrictions apply or if the patient is eligible. The analysis conclusion 'NO' contradicts the finding that the information is simply not mentioned; therefore, the label is unknown.",
-        "evidence_sentences": [
-          2
-        ],
-        "stage1_reasoning": "1.  This criterion requires participants who are hepatitis B surface antigen (HBsAg) positive, have received HBV antiviral therapy for at least 4 weeks, and have undetectable HBV viral load prior to randomization.\n\n2.  The patient note does not mention hepatitis B surface antigen (HBsAg) status, HBV antiviral therapy, or HBV viral load.\n\n3.  NO\n\n3b. N/A\n\n4.  N/A\n\n5.  HIGH"
-      },
-      {
-        "text": "Human immunodeficiency virus (HIV)-infected participants must have well controlled HIV on antiretroviral therapy.",
-        "type": "inclusion",
-        "verdict": "NOT_MET",
-        "reasoning": "The analysis concludes 'NO' with high confidence because the patient note does not mention HIV infection or antiretroviral therapy. For an inclusion criterion, a conclusion of 'NO' based on the absence of required evidence maps to 'not eligible'.",
-        "evidence_sentences": [],
-        "stage1_reasoning": "1.  The criterion requires the patient to be Human immunodeficiency virus (HIV)-infected and have well-controlled HIV on antiretroviral therapy.\n\n2.  The patient note does not mention HIV infection or antiretroviral therapy.\n\n3.  NO\n\n3b. N/A\n\n4.  N/A\n\n5.  HIGH"
-      },
-      {
-        "text": "Have an ECOG performance status of 0 or 1 within 3 days before randomization.",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '404 Not Found' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Has predominantly squamous cell histology NSCLC.",
+        "text": "1. Prior systemic therapy for locally advanced or metastatic disease.",
         "type": "exclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '404 Not Found' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "verdict": "NOT_MET",
+        "reasoning": "Patient is treatment-naive per clinical note. No prior systemic therapy. Exclusion does not apply. Verdict: NOT_MET.",
         "evidence_sentences": [],
-        "stage1_reasoning": ""
-      }
-    ]
-  },
-  "NCT06563999": {
-    "verdict": "UNCERTAIN",
-    "mode": "two_stage",
-    "criteria": [
-      {
-        "text": "Subjects must have treatment-naive unresectable stage III NSCLC according to the AJCC 8th edition staging;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '404 Not Found' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Squamous or non-squamous NSCLC histology;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '404 Not Found' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Subjects should have a rare mutation based on NGS, including mutations of EGFR exon20ins, ROS1 fusion, RET fusion, NTRK fusion, MET 14 exon, HER2, BRAF V600E, KRAS G12C, and ALK fusion.",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Subjects should be without EGFR exon 19 deletions or exon 21 L858R activating mutation;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Male and female, aged 18-75 years;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Blood and specimens before and after treatment must be provided;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '404 Not Found' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Eastern Cooperative Oncology Group (ECOG) performance status of 0-1;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Adequate hematological function: Absolute neutrophil count (ANC) \u22652.0 x 109/L, and Platelet count \u2265100 x 109/L, and Hemoglobin \u22659 g/dL (may be transfused to maintain or exceed this level);",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Adequate liver function: Total bilirubin \u2264 1.5 x upper limit of normal (ULN), Aspartate aminotransferase (AST), alanine aminotransferase (ALT) \u2264 2.5 x ULN;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
-      },
-      {
-        "text": "Adequate renal function: Serum creatinine \u2264 1.25 x ULN, or \u2265 60 ml/min;",
-        "type": "inclusion",
-        "verdict": "UNKNOWN",
-        "reasoning": "Error: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
-        "evidence_sentences": [],
-        "stage1_reasoning": ""
+        "stage1_reasoning": "1.  What does this criterion specifically require?\n    The criterion requires the patient to have had prior systemic therapy for locally advanced or metastatic disease. This refers to treatment given for cancer that has spread beyond the primary site (metastatic) or has spread to nearby lymph nodes or structures (locally advanced). The timing is prior to the current assessment.\n\n2.  What does the patient note explicitly state about this?\n    The note states: \"Treatment History: Treatment-naive; no prior systemic therapy, radiation therapy, or surgical resection for lung cancer\".\n\n3.  Does the patient have the GENERAL condition described?\n    The general condition is having received prior systemic therapy for locally advanced or metastatic disease. The note explicitly states the patient is treatment-naive and has had no prior systemic therapy.\n    Answer: NO\n\n3b. Does the criterion specify a particular SEVERITY, GRADE, or STAGE?\n    The criterion specifies the *type* of disease (locally advanced or metastatic) for which prior therapy might have been given, but not a specific severity, grade, or stage *of the prior therapy*.\n    Answer: N/A\n\n4.  If YES to #3: Does the criterion have additional SPECIFIC qualifiers beyond the general condition?\n    Since the patient does not have the general condition (prior systemic therapy), this question is skipped.\n\n5.  How confident are you? HIGH\n\n[CORRECTION] Patient is explicitly treatment-naive with no prior systemic therapy. The exclusion criterion for prior therapy does NOT apply."
       }
     ]
   }

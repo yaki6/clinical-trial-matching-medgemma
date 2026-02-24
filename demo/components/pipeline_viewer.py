@@ -26,7 +26,11 @@ def _friendly_field(field: str) -> str:
     return _FRIENDLY_FIELD_NAMES.get(field, field.replace("_", " ").title())
 
 
-def render_ingest_step(key_facts: dict, dev_mode: bool = False) -> None:
+def render_ingest_step(
+    key_facts: dict,
+    dev_mode: bool = False,
+    has_image_input: bool = False,
+) -> None:
     """Render the INGEST step showing extracted key facts.
 
     Args:
@@ -38,7 +42,10 @@ def render_ingest_step(key_facts: dict, dev_mode: bool = False) -> None:
         caption = "Key clinical facts extracted from patient record"
     else:
         title = "Your Clinical Profile (AI-extracted)"
-        caption = "Here's what we extracted from your medical record:"
+        input_desc = "EHR + medical image" if has_image_input else "EHR only"
+        caption = (
+            f"Input: {input_desc}. Output: structured patient facts for trial matching."
+        )
 
     with st.expander(title, expanded=True):
         st.caption(caption)
@@ -103,10 +110,10 @@ def render_validate_placeholder(dev_mode: bool = False) -> None:
     """
     if dev_mode:
         title = "Step 3: VALIDATE -- Eligibility Check"
-        message = "Eligibility evaluation will run after PRESCREEN finds candidate trials."
+        message = "Click 'Validate Trials' after PRESCREEN finds candidate trials."
     else:
         title = "Checking Your Eligibility"
-        message = "Eligibility evaluation will begin after matching trials are found."
+        message = "Click 'Validate Trials' after matching trials are found."
 
     with st.expander(title, expanded=False):
         st.info(message)

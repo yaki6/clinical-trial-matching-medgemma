@@ -83,8 +83,17 @@ _MEDICAL_DISCLAIMER = (
 # ---------------------------------------------------------------------------
 PROFILES_PATH = Path(__file__).resolve().parents[2] / "nsclc_trial_profiles.json"
 CACHED_RUNS_DIR = Path(__file__).resolve().parents[1] / "data" / "cached_runs"
-IMAGE_CACHE_DIR = (
-    Path(__file__).resolve().parents[2] / "data" / "sot" / "ingest" / "medgemma_image_cache"
+_IMAGE_CACHE_DIR_CANDIDATES = [
+    Path(__file__).resolve().parents[2] / "data" / "sot" / "ingest" / "medgemma_image_cache",
+    Path(__file__).resolve().parents[2]
+    / "data"
+    / "harness schema"
+    / "ingest"
+    / "medgemma_image_cache",
+]
+IMAGE_CACHE_DIR = next(
+    (candidate for candidate in _IMAGE_CACHE_DIR_CANDIDATES if candidate.exists()),
+    _IMAGE_CACHE_DIR_CANDIDATES[0],
 )
 
 try:
@@ -131,11 +140,30 @@ except ImportError:
         return patient_note, key_facts
 
     def get_image_path(patient: dict, base_dir=None):
-        """Fallback: resolve image path."""
+        """Fallback: resolve image path (first image for backward compat)."""
+        if patient.get("images"):
+            base = Path(base_dir) if base_dir else Path(__file__).resolve().parents[2]
+            return base / patient["images"][0]["file_path"]
         if not patient.get("image"):
             return None
         base = Path(base_dir) if base_dir else Path(__file__).resolve().parents[2]
         return base / patient["image"]["file_path"]
+
+
+
+# ---------------------------------------------------------------------------
+# Image helpers (always at module scope)
+# ---------------------------------------------------------------------------
+
+
+def get_all_image_paths(patient: dict, base_dir=None):
+    """Return list of (path, meta) for all images."""
+    base = Path(base_dir) if base_dir else Path(__file__).resolve().parents[2]
+    if patient.get("images"):
+        return [(base / img["file_path"], img) for img in patient["images"]]
+    if patient.get("image"):
+        return [(base / patient["image"]["file_path"], patient["image"])]
+    return []
 
 
 # ---------------------------------------------------------------------------
@@ -333,6 +361,7 @@ if st.session_state.get("force_live"):
 else:
     pipeline_mode = None
     run_button = False
+validate_button = False
 
 # ---------------------------------------------------------------------------
 # Sidebar
@@ -378,7 +407,19 @@ if DEV_MODE:
         st.sidebar.caption(f"Cached: {len(cached_patients)} patients ({label}{suffix})")
 
     if not run_button:
-        run_button = st.sidebar.button("Run Pipeline", type="primary", use_container_width=True)
+        run_button = st.sidebar.button("Search Trials", type="primary", use_container_width=True)
+
+    prescreen_ready = (
+        bool(st.session_state.get("prescreen_result"))
+        and st.session_state["prescreen_result"].topic_id == selected_topic
+        and bool(st.session_state["prescreen_result"].candidates)
+    )
+    if not prescreen_ready:
+        st.sidebar.caption("Run search first to enable validation.")
+    validate_button = st.sidebar.button(
+        "Validate Trials",
+        use_container_width=True,
+    )
 
 else:
     # ----- Patient mode sidebar: simplified -----
@@ -411,6 +452,18 @@ else:
             "Search for Trials", type="primary", use_container_width=True
         )
 
+    prescreen_ready = (
+        bool(st.session_state.get("prescreen_result"))
+        and st.session_state["prescreen_result"].topic_id == selected_topic
+        and bool(st.session_state["prescreen_result"].candidates)
+    )
+    if not prescreen_ready:
+        st.sidebar.caption("Search for trials first, then validate.")
+    validate_button = st.sidebar.button(
+        "Validate Trials",
+        use_container_width=True,
+    )
+
 # Settings expander at bottom of sidebar (always visible)
 with st.sidebar.expander("Settings", expanded=False, icon=":material/settings:"):
     dev_toggle = st.checkbox(
@@ -441,13 +494,15 @@ profile = profile_map[selected_topic]
 render_patient_card(profile, dev_mode=DEV_MODE)
 
 # -- Medical image for multimodal patients --
-is_multimodal = profile.get("ingest_mode") == "multimodal"
-image_cache = _load_image_cache(selected_topic) if is_multimodal else None
+is_multimodal = profile.get("ingest_mode") == "multimodal" or bool(profile.get("images")) or bool(profile.get("image"))
+image_cache = _load_image_cache(selected_topic)
+has_image_input = bool(profile.get("images")) or bool(profile.get("image")) or bool(image_cache)
 
 if is_multimodal:
-    image_path = get_image_path(profile)
-    if image_path and image_path.exists():
-        render_medical_image(image_path, profile["image"], dev_mode=DEV_MODE)
+    all_images = get_all_image_paths(profile)
+    for img_path, img_meta in all_images:
+        if img_path.exists():
+            render_medical_image(img_path, img_meta, dev_mode=DEV_MODE)
 
 st.divider()
 
@@ -470,7 +525,7 @@ if not DEV_MODE:
 # Don't merge image cache into display key_facts (shown separately below).
 # PRESCREEN live runs merge image context via adapt_harness_patient(profile, image_cache).
 patient_note, key_facts = adapt_harness_patient(profile)
-render_ingest_step(key_facts, dev_mode=DEV_MODE)
+render_ingest_step(key_facts, dev_mode=DEV_MODE, has_image_input=has_image_input)
 
 # -- MedGemma image findings for multimodal patients --
 if image_cache:
@@ -488,15 +543,17 @@ if run_button and pipeline_mode == "cached" and not DEV_MODE:
     with st.status(
         "Step 1: INGEST — MedGemma 1.5 4B analyzing patient data...", expanded=True
     ) as ingest_status:
-        st.write("Reading clinical note...")
+        st.write("Input: patient EHR record received")
         time.sleep(0.8)
-        st.write("Extracting structured key facts...")
-        time.sleep(0.5)
-        if is_multimodal and image_cache:
-            st.write("MedGemma 1.5 4B analyzing CT image...")
-            time.sleep(1.5)
-            st.write("Merging image findings with clinical profile...")
+        if has_image_input:
+            st.write("Input: medical image received")
             time.sleep(0.5)
+            st.write("MedGemma 1.5 4B processing EHR + image context...")
+        else:
+            st.write("MedGemma 1.5 4B processing EHR context...")
+        time.sleep(0.5)
+        st.write("Output: structured patient facts generated")
+        time.sleep(0.5)
         ingest_status.update(
             label="INGEST complete — Patient profile extracted", state="complete"
         )
@@ -711,7 +768,6 @@ if run_button and pipeline_mode == "live":
                         ingest_source="gold",
                         gemini_adapter=gemini_adapter,
                         medgemma_adapter=medgemma_adapter,
-                        require_clinical_guidance=True,
                         topic_id=selected_topic,
                         trace_callback=live_trace.record if live_trace else None,
                     )
@@ -846,7 +902,12 @@ else:
 # ---------------------------------------------------------------------------
 prescreen_result = st.session_state.get("prescreen_result")
 
-if run_button and pipeline_mode == "cached" and prescreen_result and prescreen_result.candidates:
+if validate_button and not prescreen_result:
+    if DEV_MODE:
+        st.warning("Run search first. No PRESCREEN candidates are available yet.")
+    else:
+        st.info("Please click 'Search for Trials' first, then run 'Validate Trials'.")
+elif validate_button and pipeline_mode == "cached" and prescreen_result and prescreen_result.candidates:
     # -- Cached VALIDATE path --
     cached_validate = load_validate_results(selected_topic)
     if cached_validate:
@@ -937,7 +998,7 @@ if run_button and pipeline_mode == "cached" and prescreen_result and prescreen_r
         else:
             st.info("Eligibility evaluation results are not yet available for this patient.")
 
-elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_result.candidates:
+elif validate_button and pipeline_mode == "live" and prescreen_result and prescreen_result.candidates:
     from trialmatch.validate.evaluator import evaluate_criterion, evaluate_criterion_two_stage
 
     is_two_stage = validate_mode == "Two-Stage (MedGemma \u2192 Gemini)"
@@ -1400,7 +1461,7 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
     if DEV_MODE:
         st.caption("VALIDATE results cached for replay")
 
-elif run_button and prescreen_result and not prescreen_result.candidates:
+elif validate_button and prescreen_result and not prescreen_result.candidates:
     empty_validate_path = save_validate_results(selected_topic, {})
     manifest_path = save_cached_manifest(
         topic_id=selected_topic,
@@ -1422,7 +1483,7 @@ elif run_button and prescreen_result and not prescreen_result.candidates:
             st.warning("No candidate trials found by PRESCREEN. Nothing to validate.")
     else:
         st.info("No matching clinical trials were found for your condition.")
-elif not run_button:
+elif not validate_button and not st.session_state.get("trial_verdicts"):
     render_validate_placeholder(dev_mode=DEV_MODE)
 
 # ---------------------------------------------------------------------------
@@ -1594,13 +1655,28 @@ if trial_verdicts and prescreen_for_results:
         st.divider()
         st.caption(_MEDICAL_DISCLAIMER)
 
-elif run_button:
+elif run_button and prescreen_for_results and prescreen_for_results.candidates:
+    if DEV_MODE:
+        st.info("PRESCREEN complete. Click 'Validate Trials' in the sidebar to run eligibility.")
+    else:
+        st.info("Search complete. Click 'Validate Trials' to check eligibility for the top trials.")
+elif run_button and prescreen_for_results and not prescreen_for_results.candidates:
+    if DEV_MODE:
+        st.info("No candidate trials found by PRESCREEN.")
+    else:
+        st.info("No matching clinical trials were found for your condition.")
+elif validate_button and not prescreen_for_results:
+    if DEV_MODE:
+        st.info("Run search first to load PRESCREEN candidates.")
+    else:
+        st.info("Please click 'Search for Trials' first.")
+elif validate_button:
     if DEV_MODE:
         st.info("No results to display. Check pipeline output above for details.")
     else:
         st.info("No matching results found. Please try a different patient or run a live search.")
 else:
     if DEV_MODE:
-        st.caption("Run the pipeline to see matching results.")
+        st.caption("Click 'Search Trials' to start. Then click 'Validate Trials' to run eligibility.")
     else:
-        st.caption("Click 'Search for Trials' above to find matching clinical trials.")
+        st.caption("Click 'Search for Trials' first, then 'Validate Trials' to see eligibility results.")

@@ -54,15 +54,26 @@ def load_profiles(path: Path | str | None = None) -> list[dict]:
     return data.get("profiles", data if isinstance(data, list) else [])
 
 
-# Default path for demo harness
-_DEFAULT_HARNESS_PATH = (
-    Path(__file__).resolve().parents[3] / "data" / "sot" / "ingest" / "nsclc_demo_harness.json"
-)
+# Default path candidates for demo harness
+_DEFAULT_HARNESS_PATHS = [
+    Path(__file__).resolve().parents[3] / "data" / "sot" / "ingest" / "nsclc_demo_harness.json",
+    Path(__file__).resolve().parents[3]
+    / "data"
+    / "harness schema"
+    / "ingest"
+    / "nsclc_demo_harness.json",
+]
 
 
 def load_demo_harness(path: Path | str | None = None) -> list[dict]:
     """Load nsclc_demo_harness.json — 5 curated patients."""
-    p = Path(path) if path else _DEFAULT_HARNESS_PATH
+    if path:
+        p = Path(path)
+    else:
+        p = next((candidate for candidate in _DEFAULT_HARNESS_PATHS if candidate.exists()), None)
+        if p is None:
+            # Keep deterministic error messages by preserving primary default path.
+            p = _DEFAULT_HARNESS_PATHS[0]
     with open(p) as f:
         data = json.load(f)
     return data.get("patients", [])

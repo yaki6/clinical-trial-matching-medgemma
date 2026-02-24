@@ -96,6 +96,22 @@
           "notes": null
         }
       ],
+      "images": [
+        {
+          "file_path": "ingest_design/MedPix-2-0/images/MPX1016_synpic34317.png",
+          "modality": "CT w/contrast (IV)",
+          "plane": "Axial",
+          "location": "Chest, Pulmonary",
+          "caption": "Contrast enhanced chest CT (upper chest): nodular and branching opacities in the right upper lobe with tree-in-bud pattern and interstitial changes."
+        },
+        {
+          "file_path": "ingest_design/MedPix-2-0/images/MPX1016_synpic34318.png",
+          "modality": "CT w/contrast (IV)",
+          "plane": "Axial",
+          "location": "Chest, Pulmonary",
+          "caption": "Contrast enhanced chest CT (lower chest): large well-defined mass in the left lower lobe with right-sided pleural effusion and pleural thickening."
+        }
+      ],
       "image": {
         "file_path": "ingest_design/MedPix-2-0/images/MPX1016_synpic34317.png",
         "modality": "CT w/contrast (IV)",

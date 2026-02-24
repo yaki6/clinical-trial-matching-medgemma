@@ -288,7 +288,9 @@ with takeaways_tab:
     st.subheader("3) Benchmark Positioning: competitive with TrialGPT baseline on multi-seed aggregate")
     st.markdown(
         "Across 4 seeds (n=80 pairs), two-stage v4 remains close to the TrialGPT baseline labels and "
-        "shows a slight aggregate edge under this machine-evaluated protocol."
+        "shows a slight aggregate edge under this machine-evaluated protocol. "
+        "For external context, the TrialGPT paper is our latest published SoTA reference for this task "
+        "and reports 87.3% criterion-level accuracy under physician evaluation."
     )
     sec3_col1, sec3_col2, sec3_col3 = st.columns(3)
     sec3_col1.metric("Two-stage v4 accuracy (n=80)", _format_pct(agg.v4_accuracy))
@@ -374,9 +376,11 @@ with takeaways_tab:
         st.plotly_chart(fig_type, use_container_width=True)
 
     st.caption(
-        "TrialGPT baseline (published SoTA): 87.3% criterion accuracy in the TrialGPT paper "
-        "(physician evaluation). This is context only; protocol differs from the machine label "
-        "comparison above."
+        "Published SoTA reference: TrialGPT paper, "
+        "[Matching patients to clinical trials with large language models](https://www.nature.com/articles/s41467-024-53081-z) "
+        "(Nature Communications, Nov 18, 2024; doi:10.1038/s41467-024-53081-z), reports 87.3% "
+        "criterion-level accuracy under physician evaluation. This is context only; protocol differs "
+        "from the machine label comparison above."
     )
 
 # ---------------------------------------------------------------------------

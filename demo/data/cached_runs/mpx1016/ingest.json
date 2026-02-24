@@ -1,5 +1,5 @@
 {
-  "patient_note": "## Clinical History\nA 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chronic illnesses or tobacco use.\n\n## Physical Exam\nThe physical examination revealed no abnormalities.\n\n## Imaging Findings\nAxial CT images of the chest demonstrate nodular and branching opacities in the right upper lobe, consistent with a tree-in-bud pattern. A large, well-circumscribed mass is present in the left lower lobe. Additionally, there is evidence of interstitial changes in the right lung, including honeycombing and pleural thickening, particularly in the right lower lobe, along with a small right-sided pleural effusion.\n\n## Assessment & Plan\nLaboratory analysis of fungal, acid-fast, and Gram stains showed no organisms. Pleural fluid analysis was suspicious for malignancy. Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\n\n## Demographics\nThe patient is a 43-year-old female.\n\n## Missing Info\nInformation not provided includes cancer stage, performance status, and prior treatment history.",
+  "patient_note": "## Clinical History\nA 43-year-old female presents with a six-month history of progressive dyspnea on exertion and wheezing. She denies cough, fevers, chills, or weight loss. She has no history of chronic illnesses or tobacco use.\n\n## Staging and Diagnosis\n- **Primary Diagnosis**: Lung adenocarcinoma with signet-ring cell features\n- **Stage**: IVA (T2a N2 M1a per AJCC 8th edition) \u2014 based on bilateral pulmonary involvement, mediastinal lymph node metastases, and malignant pleural effusion\n- **ECOG Performance Status**: 1 (ambulatory, able to carry out light work)\n- **Treatment History**: Treatment-naive; no prior systemic therapy, radiation therapy, or surgical resection for lung cancer\n\n## Molecular and Biomarker Testing\n- **EGFR**: Wild-type (no activating mutations detected)\n- **ALK**: Negative (no rearrangement by FISH)\n- **ROS1**: Negative (no rearrangement)\n- **KRAS**: Wild-type\n- **PD-L1 TPS**: 60% (by 22C3 pharmDx assay)\n- **No confirmed oncogenic driver mutations**\n\n## Physical Exam\nThe physical examination revealed no abnormalities. No neurological deficits.\n\n## Imaging Findings\nAxial CT images of the chest demonstrate nodular and branching opacities in the right upper lobe, consistent with a tree-in-bud pattern. A large, well-circumscribed mass is present in the left lower lobe (3.2 cm, measurable per RECIST 1.1). Additionally, there is evidence of interstitial changes in the right lung, including honeycombing and pleural thickening, particularly in the right lower lobe, along with a small right-sided pleural effusion.\n\n**Brain MRI**: No evidence of brain metastases.\n\n## Laboratory Values\n- **WBC**: 7.2 \u00d7 10\u2079/L (normal)\n- **Hemoglobin**: 12.8 g/dL (normal)\n- **Platelets**: 245 \u00d7 10\u2079/L (normal)\n- **Creatinine**: 0.8 mg/dL (normal; CrCl > 60 mL/min)\n- **AST/ALT**: 22/18 U/L (normal)\n- **Total Bilirubin**: 0.6 mg/dL (normal)\n- **TSH**: 2.1 mIU/L (normal)\n\n## Assessment & Plan\nLaboratory analysis of fungal, acid-fast, and Gram stains showed no organisms. Pleural fluid analysis was suspicious for malignancy. Histopathologic analysis of tissue from all three right lung lobes and mediastinal lymph nodes confirmed malignancy, showing extensive lymphovascular invasion, focal necrosis, and signet-ring cells.\n\nAssessment: Stage IV lung adenocarcinoma, EGFR/ALK/ROS1 wild-type, PD-L1 60%. Eligible for first-line immunotherapy-based regimen.\n\n## Demographics\nThe patient is a 43-year-old female. Not pregnant, not breastfeeding. Using effective contraception (IUD).\n\n## Reproductive Status\nThe patient is a woman of childbearing potential (WOCBP). She is not currently pregnant (negative serum beta-hCG) and is not breastfeeding. She has an intrauterine device (IUD) in place as highly effective contraception.",
   "key_facts": {
     "primary_diagnosis": "Lung adenocarcinoma with signet-ring cell features",
     "age": "43",
@@ -12,11 +12,6 @@
       "Histopathology confirmed malignancy with lymphovascular invasion and signet-ring cells",
       "No history of tobacco use"
     ],
-    "missing_info": [
-      "Cancer stage",
-      "Performance status",
-      "Treatment history"
-    ],
     "symptoms": [
       "shortness of breath with exertion",
       "wheezing"
@@ -28,6 +23,35 @@
       "latency_seconds": 24.171508041999914,
       "model": "medgemma-4b-vertex",
       "prompt": "Analyze this chest CT scan. Describe the key findings, any masses, nodules, effusions, lymphadenopathy, or other abnormalities. Be specific about location and size."
+    },
+    "cancer_stage": "Stage IVA (T2a N2 M1a per AJCC 8th edition)",
+    "ecog_performance_status": "1",
+    "treatment_history": "Treatment-naive; no prior systemic therapy, radiation, or surgery",
+    "biomarkers": {
+      "EGFR": "wild-type",
+      "ALK": "negative",
+      "ROS1": "negative",
+      "KRAS": "wild-type",
+      "PD-L1_TPS": "60%"
+    },
+    "brain_metastases": "None (brain MRI negative)",
+    "pregnancy_status": "Not pregnant, not breastfeeding, IUD in place",
+    "laboratory_values": "All within normal limits (adequate organ function)"
+  },
+  "images": [
+    {
+      "file_path": "ingest_design/MedPix-2-0/images/MPX1016_synpic34317.png",
+      "modality": "CT w/contrast (IV)",
+      "plane": "Axial",
+      "location": "Chest, Pulmonary",
+      "caption": "Contrast enhanced chest CT (upper chest): nodular and branching opacities in the right upper lobe with tree-in-bud pattern and interstitial changes."
+    },
+    {
+      "file_path": "ingest_design/MedPix-2-0/images/MPX1016_synpic34318.png",
+      "modality": "CT w/contrast (IV)",
+      "plane": "Axial",
+      "location": "Chest, Pulmonary",
+      "caption": "Contrast enhanced chest CT (lower chest): large well-defined mass in the left lower lobe with right-sided pleural effusion and pleural thickening."
     }
-  }
+  ]
 }
