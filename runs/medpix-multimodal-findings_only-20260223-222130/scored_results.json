@@ -1,0 +1,582 @@
+[
+  {
+    "uid": "MPX1467",
+    "title": "Heterotopic gray matter",
+    "location_category": "Head",
+    "gold_diagnosis": "Heterotopic gray matter",
+    "gold_findings": "Broad strip of soft tissue which follows gray matter on all pulse sequences, extending off the left anterior ventricle and into the high left frontal gray matter.  Focal thickening of the cortical gray matter and volume loss is associated.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormalities are located within the brain parenchyma, specifically within the cerebral hemispheres.\n- Size, shape, and density/signal characteristics of lesions: There are no discrete lesions identified within the cerebral hemispheres. The brain parenchyma appears homogeneous in signal characteristics.\n- Associated findings: There are no associated findings such as effusions, lymphadenopathy, or calcifications.\n- Normal structures and their appearance: The ventricles, sulci, and basal cisterns appear within normal limits. The corpus callosum is intact. The midline structures (falx, septum pellucidum, third ventricle) are unremarkable. The brainstem and cerebellum are unremarkable.\n- Any incidental findings: There are no incidental findings.\n\nOverall, the brain parenchyma appears unremarkable on this axial T1-weighted image.",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The gold standard reports a distinct structural abnormality (likely gray matter heterotopia) characterized by a broad strip of tissue extending from the left anterior ventricle to the frontal cortex, accompanied by cortical thickening. The model failed to identify this, explicitly stating there are no discrete lesions and describing the brain parenchyma as unremarkable.",
+      "rouge_recall": 0.1794871794871795,
+      "rouge_precision": 0.061946902654867256,
+      "rouge_fmeasure": 0.09210526315789473,
+      "latency_ms": 18240.84079199929,
+      "cost": 0.005826935252999772
+    },
+    "gemini": {
+      "predicted_findings": "*   **Parenchymal Signal and Morphology:** \n    *   Numerous small, nodular foci are scattered bilaterally within the subcortical and periventricular white matter. \n    *   These nodules are isointense (having the same signal intensity) to the cortical gray matter.\n    *   The gray-white matter junction appears indistinct or blurred in multiple regions, particularly in the bifrontal and parietal lobes.\n    *   In some areas, the cortical ribbon appears mildly thickened.\n\n*   **Ventricles and Midline:**\n    *   The lateral ventricles are visualized and appear normal in size, shape, and symmetry for the patient's age.\n    *   The midline structures are centered, with no evidence of midline shift or mass effect.\n\n*   **Extra-axial Spaces:**\n    *   The cortical sulci and cisterns are visible and appear within normal limits, with no evidence of focal widening, effacement, or abnormal fluid collections.\n\n*   **Associated Findings:**\n    *   There are no obvious intracranial masses, hemorrha",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.28205128205128205,
+      "rouge_precision": 0.0650887573964497,
+      "rouge_fmeasure": 0.10576923076923077,
+      "latency_ms": 9074.62220799971,
+      "cost": 0.00454125
+    }
+  },
+  {
+    "uid": "MPX1357",
+    "title": "Unilateral Coronal Synostosis\r\nHelical CT with 3-D reconstructions.",
+    "location_category": "Head",
+    "gold_diagnosis": "Unilateral Coronal Synostosis\nHelical CT with 3-D reconstructions.",
+    "gold_findings": "See Captions.\n\nSaggital suture is displaced laterally and obliquely angled.  The labdoid suture is displaced left posteriorly.  The right coronal suture is fused.\nThere is a white matter cleft in the right frontal lobe c/w schizencephaly.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormality is located in the left side of the head.\n- Size, shape, and density/signal characteristics of lesions: The abnormality is a large, rounded, and well-defined lesion occupying the left cerebral hemisphere. The lesion appears isodense to the surrounding brain parenchyma.\n- Associated findings: No associated effusions, lymphadenopathy, or calcifications are identified.\n- Normal structures and their appearance: The right cerebral hemisphere, cerebellum, brainstem, and ventricles appear within normal limits. The skull and calvarium are intact.\n- Any incidental findings: No incidental findings are identified.\n\n**Note:** This analysis is based solely on the provided image and clinical history. A definitive diagnosis requires a comprehensive evaluation by a qualified medical professional, including correlation with clinical findings and potentially additional imaging studies.",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The gold standard identifies right coronal suture fusion (craniosynostosis) and right frontal schizencephaly. The model incorrectly describes a large lesion in the left hemisphere, claims the right hemisphere is normal, and states the skull is intact, thereby missing both the specific bony abnormality and the brain malformation.",
+      "rouge_recall": 0.24324324324324326,
+      "rouge_precision": 0.07258064516129033,
+      "rouge_fmeasure": 0.11180124223602486,
+      "latency_ms": 7539.014750000206,
+      "cost": 0.002408296378472288
+    },
+    "gemini": {
+      "predicted_findings": "*   **Skull Morphology:** The overall shape of the calvarium is significantly altered. It demonstrates marked elongation in the anteroposterior (front-to-back) dimension and is notably narrow in the transverse (lateral) dimension. \n*   **Sutural Findings:** \n    *   Along the superior midline of the cranium, the expected lucent line of the sagittal suture is not visible. \n    *   In its place, there is a continuous, thickened ridge of dense bone (hyperostosis). This ridge appears sclerotic (bright/high attenuation) and represents a fusion of the adjacent parietal bones in the midline.\n    *   The visible portions of the posterior sutures (likely lambdoid) appear patent and open.\n*   **Location and Laterality:** The primary abnormality is midline and centered along the superior aspect of the cranial vault. The elongation and narrowing are bilateral and symmetric.\n*   **Density Characteristics:** The thickened midline ridge consists of high-attenuation cortical bone. The rest of the calv",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model incorrectly identified the pathology as sagittal synostosis (scaphocephaly) with a fused sagittal suture and symmetric elongation, whereas the gold standard describes right coronal synostosis (plagiocephaly) with displaced sutures. Furthermore, the model missed the schizencephaly.",
+      "rouge_recall": 0.35135135135135137,
+      "rouge_precision": 0.05138339920948617,
+      "rouge_fmeasure": 0.0896551724137931,
+      "latency_ms": 11407.382499999585,
+      "cost": 0.00570875
+    }
+  },
+  {
+    "uid": "MPX1086",
+    "title": "Pilocytic astrocytoma",
+    "location_category": "Head",
+    "gold_diagnosis": "Pilocytic astrocytoma",
+    "gold_findings": "Large, solid mass in the left cerebellar hemisphere with ill-defined margins and significant surrounding T2 signal abnormality representing vasogenic edema.  This exerts mass effect upon and displaces the 4th ventricle.  Mild hydrocephalus.  Diffuse, heterogeneous enhancement following IV gadolinium infusion.  CT scan demonstrates a notably low attenuation mass, and inferior displacement of the cerebellar tonsils to the level of the foramen magnum.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormality is located in the posterior fossa, specifically involving the cerebellum.\n- Size, shape, and density/signal characteristics of lesions: There is a rounded, hypodense lesion in the posterior fossa, likely representing a cyst or fluid collection. The lesion appears to be approximately 2.5 cm in diameter.\n- Associated findings: No significant effusions, lymphadenopathy, or calcifications are identified.\n- Normal structures and their appearance: The cerebral hemispheres, ventricles, basal ganglia, and brainstem appear within normal limits. The calvarium is intact.\n- Any incidental findings: No incidental findings are noted.\n\n**Disclaimer:** This analysis is based solely on the provided image and clinical history. It is not a substitute for a professional medical evaluation. A definitive diagnosis requires correlation with clinical findings and potentially further imaging or laboratory tests.",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.1774193548387097,
+      "rouge_precision": 0.08461538461538462,
+      "rouge_fmeasure": 0.11458333333333336,
+      "latency_ms": 7713.042291999955,
+      "cost": 0.00246388850994443
+    },
+    "gemini": {
+      "predicted_findings": "*   **Location and Laterality:** There is a large, midline lesion located within the posterior fossa. It primarily involves the cerebellar vermis and extends laterally into both the left and right cerebellar hemispheres.\n*   **Size, Shape, and Density:** The lesion is large and roughly oval in shape. It is predominantly hypodense (darker) relative to the surrounding normal brain parenchyma. The internal density of the lesion is somewhat heterogeneous. No evidence of acute hemorrhage (hyperdensity) or gross calcification is seen within the lesion on this slice.\n*   **Mass Effect and Associated Findings:**\n    *   The lesion exerts significant mass effect on surrounding structures. \n    *   There is near-complete effacement (compression) of the fourth ventricle. \n    *   The surrounding basal cisterns appear narrowed or obscured.\n    *   The temporal horns of the lateral ventricles are visualized and appear mildly prominent, which may indicate early obstructive hydrocephalus secondary to",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identifies the primary abnormality: a large, hypodense mass in the posterior fossa (cerebellum) causing mass effect on the fourth ventricle and mild hydrocephalus. Although there is a slight discrepancy in exact localization (Gold Standard specifies left hemisphere vs. Model specifying midline/vermis extending bilaterally), the main pathology and its complications are accurately described.",
+      "rouge_recall": 0.3225806451612903,
+      "rouge_precision": 0.10695187165775401,
+      "rouge_fmeasure": 0.1606425702811245,
+      "latency_ms": 9067.955082999106,
+      "cost": 0.00453875
+    }
+  },
+  {
+    "uid": "MPX2084",
+    "title": "Chondrosarcoma metastatic to Brain",
+    "location_category": "Head",
+    "gold_diagnosis": "Chondrosarcoma metastatic to Brain",
+    "gold_findings": "Multiple lesions within the brain. The most prominent were in the left frontal and parietal region. The lesions were very hyperintense on T2, and demonstrated only peripheral enhancement",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormalities are located in the left cerebral hemisphere, specifically involving the left temporal lobe and extending into the left parietal lobe.\n- Size, shape, and density/signal characteristics of lesions: There is a large, irregularly shaped, heterogeneously enhancing mass occupying a significant portion of the left temporal lobe and extending into the left parietal lobe. The mass appears predominantly hyperdense on the pre-contrast images, suggesting a high cellularity or calcification. There are multiple smaller, less defined areas of increased density/signal intensity scattered within the mass. The mass appears to be partially exophytic, extending into the left lateral ventricle. The mass is partially effaced the adjacent sulci.\n- Associated findings: There is no evidence of significant surrounding edema or mass effect on the adjacent brain structures. There is no evidence of hydrocephalus. There is no evidence of associated hemor",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.35714285714285715,
+      "rouge_precision": 0.0425531914893617,
+      "rouge_fmeasure": 0.07604562737642585,
+      "latency_ms": 12122.002207999685,
+      "cost": 0.0038723062608887883
+    },
+    "gemini": {
+      "predicted_findings": "*   **Location and Laterality:** There are multiple intracranial lesions located within the left cerebral hemisphere. A large, complex lesion is situated in the left parietal lobe. A second, smaller, discrete lesion is seen more anteriorly in the left frontal lobe.\n*   **Size, Shape, and Signal Characteristics:**\n    *   **Parietal Lesion:** This is a large, irregularly shaped, and multiloculated lesion. It contains several internal septations that divide it into multiple cystic components. On this T1-weighted sequence, the lesion is markedly hypointense, with a signal intensity similar to cerebrospinal fluid (CSF).\n    *   **Frontal Lesion:** This is a smaller, well-circumscribed, oval-shaped lesion measuring approximately 1.5 cm in its greatest dimension. It is also markedly hypointense on this T1-weighted image.\n*   **Associated Findings:**\n    *   **Mass Effect:** There is a significant mass effect resulting in a rightward shift of the midline structures (midline shift).\n    *   **",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identified the primary abnormality: multiple lesions located in the left frontal and parietal lobes. It accurately described the location and multiplicity, matching the gold standard.",
+      "rouge_recall": 0.5357142857142857,
+      "rouge_precision": 0.06787330316742081,
+      "rouge_fmeasure": 0.12048192771084337,
+      "latency_ms": 7742.616249999628,
+      "cost": 0.00532625
+    }
+  },
+  {
+    "uid": "MPX2015",
+    "title": "Hiatal Hernia",
+    "location_category": "Thorax",
+    "gold_diagnosis": "Hiatal Hernia",
+    "gold_findings": "PA and lateral radiographs of the chest. \nFINDINGS:\n-There is near complete opacification of the left hemidiaphragm. There is consolidation and/or atelectasis with accompanying effusion present on the \nleft. Small right basilar opacities are present with a small right effusion. There is no evidence of pneumothorax.  The cardiac silhouette is stable.  A \nlarge hiatal hernia is present. Calcifications are seen within the thoracic aorta. The remainder of the visualized bones and soft tissues are remarkable \nfor degenerative changes to the acromioclavicular joint and spine.  \n \nIMPRESSION: \n1. LEFT LUNG BASE CONSOLIDATION AND/OR ATELECTASIS WITH ACCOMPANYING EFFUSION WITH SMALLER BASILAR RIGHT OPACITY AND EFFUSION.  \n2. LARGE HIATAL HERNIA.  \n\n\nCT chest PE protocol.  \nFINDINGS:  \n-The study is somewhat limited by motion artifact.  The mediastinal, hilar and pulmonary parenchyma vasculature appear widely patent and normal in\ncourse, caliber and contour without evidence of filling defects. There is a large hiatal hernia.  Otherwise, there are no mediastinal or hilar masses\nidentified, and no adenopathy is evident. Atherosclerotic calcific changes of the aorta and coronary arteries are present. There is no evidence of\naneurysmal dilation. \n \nLeft greater than right-sided simple-appearing pleural effusions are present with underlying compressive atelectasis. The lungs are otherwise clear and \nevenly aerated without evidence of mass, calcification or pulmonary parenchymal disease.  The airways appear normal, and no thickening is evident.  \n \nMultilevel degenerative changes of the thoracic spine are seen.  The visualized upper abdomen as well as the remainder of the visualized soft tissues and osseous structures are unremarkable.   \nIMPRESSION: \n1. NO COMPUTED TOMOGRAPHIC EVIDENCE OF PULMONARY EMBOLISM.  \n2. LEFT GREATER THAN RIGHT-SIDED SIMPLE-APPEARING PLEURAL EFFUSIONS WITH SUBJACENT COMPRESSIVE ATELECTASIS.  \n3. LARGE HIATAL HERNIA.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormality is located in the left hemithorax.\n- Size, shape, and density/signal characteristics of lesions: There is a large opacity in the left lower lung field, obscuring the left hemidiaphragm. The opacity appears somewhat lobulated and has a density that is greater than the surrounding lung tissue. There is also a small opacity in the left upper lung field.\n- Associated findings: There is a moderate to large left pleural effusion, obscuring the left costophrenic angle. There is no obvious associated lymphadenopathy.\n- Normal structures and their appearance: The right lung appears relatively clear. The right hemidiaphragm is visible. The heart size appears within normal limits. The mediastinum appears unremarkable. The visualized bony structures appear intact.\n- Any incidental findings: No significant incidental findings are noted.\n\n**Note:** This analysis is based solely on the provided image and does not constitute a medical diagnos",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identified the primary abnormality, which is the large opacity in the left lower lung and the associated left pleural effusion obscuring the hemidiaphragm. However, it failed to identify the smaller right-sided findings (opacity and effusion) and missed the large hiatal hernia described in the gold standard.",
+      "rouge_recall": 0.148014440433213,
+      "rouge_precision": 0.26282051282051283,
+      "rouge_fmeasure": 0.18937644341801385,
+      "latency_ms": 9142.311083000095,
+      "cost": 0.0029204604848472523
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial CT scan of the chest at the level of the lower thorax, the following findings are observed:\n\n**Mediastinum and Great Vessels:**\n*   **Posterior Mediastinal Lesion:** There is a large, irregularly shaped, air-containing structure located in the posterior mediastinum, posterior to the heart and anterior to the spine. It measures approximately [estimate size based on vertebral body, e.g., 8-10 cm] in its greatest transverse dimension. This structure has a distinct, relatively thin wall and contains gas. It significantly displaces the heart and other mediastinal structures anteriorly.\n*   **Heart:** The cardiac silhouette is displaced anteriorly and compressed against the sternum by the large posterior mediastinal air-filled structure.\n*   **Aorta:** The descending thoracic aorta is visible to the left of the midline, posterior to the air-filled structure. It contains a focal area of calcified atherosclerotic plaque in its wall.\n*   **Anterior Mediastinum:** The",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identifies the major findings present in the Gold Standard. Specifically, it accurately describes the 'large hiatal hernia' as a large air-containing structure in the posterior mediastinum displacing the heart, and correctly identifies the bilateral pleural effusions (left greater than right) with associated compressive atelectasis.",
+      "rouge_recall": 0.19494584837545126,
+      "rouge_precision": 0.19424460431654678,
+      "rouge_fmeasure": 0.19459459459459458,
+      "latency_ms": 10615.79887500011,
+      "cost": 0.00716
+    }
+  },
+  {
+    "uid": "MPX1938",
+    "title": "Nonspecific Interstitial Pneumonitis",
+    "location_category": "Thorax",
+    "gold_diagnosis": "Nonspecific Interstitial Pneumonitis",
+    "gold_findings": "Initial chest radiographs interpreted as normal. Subsequent chest radiographs 3 months later showed bibasilar interstitial opacities. \nHigh resolution chest CT revealed predominantly mid and lower lung zone ground-glass opacities and prominent but not enlarged mediastinal lymph nodes.",
+    "medgemma": {
+      "predicted_findings": "- The image is a chest X-ray.\n- The lungs are clear bilaterally.\n- The heart size is normal.\n- The mediastinum is normal.\n- The visualized osseous structures are unremarkable.\n- There is no pleural effusion.\n- There is no pneumothorax.\n- There is no lymphadenopathy.\n- There are no calcifications.",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.05263157894736842,
+      "rouge_precision": 0.045454545454545456,
+      "rouge_fmeasure": 0.04878048780487805,
+      "latency_ms": 4842.9652499999065,
+      "cost": 0.0015470583437499701
+    },
+    "gemini": {
+      "predicted_findings": "*   **Bone (Manubrium/Sternum):** \n    *   There is a prominent, asymmetric abnormality involving the manubrium and upper sternum. \n    *   The bone is markedly expanded and demonstrates extensive sclerosis, particularly on the right side. \n    *   The cortex is thickened and irregular, and the internal trabecular pattern appears coarsened and disorganized. \n    *   This bony enlargement extends toward the right sternoclavicular joint region, which appears deformed.\n\n*   **Lungs:** \n    *   The visualized lung parenchyma shows mild, fine reticular opacities scattered peripherally in both upper lobes. \n    *   No focal consolidations, large masses, or suspicious pulmonary nodules are identified on this slice. \n    *   Lung volumes appear within normal limits.\n\n*   **Mediastinum:** \n    *   The trachea is patent and midline. \n    *   The visualized portions of the great vessels (including the brachiocephalic veins and arteries) appear to have a normal caliber for this level. \n    *   The",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model describes a severe bony abnormality of the manubrium and sternum which is not present in the gold standard. Additionally, the model incorrectly identifies the lung pathology as upper lobe reticular opacities, whereas the gold standard describes predominantly mid and lower zone ground-glass opacities.",
+      "rouge_recall": 0.13157894736842105,
+      "rouge_precision": 0.025906735751295335,
+      "rouge_fmeasure": 0.04329004329004328,
+      "latency_ms": 9505.194542000027,
+      "cost": 0.0052775
+    }
+  },
+  {
+    "uid": "MPX1873",
+    "title": "Coarctation of the Aorta",
+    "location_category": "Thorax",
+    "gold_diagnosis": "Coarctation of the Aorta",
+    "gold_findings": "PA view of the chest demonstrates an abnormal contour to the aortic knob, with a focal indentation, with prominence of the descending aorta distal to this region.\n\nAxial contrast-enhanced CT examination of the chest demonstrates a focal narrowing of the aorta just distal to the ostium of the left subclavian artery with post-stenotic dilation of the descending thoracic aorta, consistent with coarctation of the aorta.  Note also the enlarged collateral vessels in the internal mammary and subcostal distributions.",
+    "medgemma": {
+      "predicted_findings": "- The image is a CT scan of the chest.\n- The lungs appear clear bilaterally.\n- The heart size is normal.\n- The mediastinum is unremarkable.\n- There is no pleural effusion.\n- There is no pneumothorax.\n- There is no lymphadenopathy.\n- There are no calcifications.\n- The visualized bones are unremarkable.\n- There are no incidental findings.",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The gold standard identifies coarctation of the aorta with focal narrowing, post-stenotic dilation, and collateral vessels. The model completely misses this, describing the mediastinum as unremarkable and the bones as unremarkable, failing to note the significant vascular pathology.",
+      "rouge_recall": 0.125,
+      "rouge_precision": 0.2,
+      "rouge_fmeasure": 0.15384615384615385,
+      "latency_ms": 5136.058000000048,
+      "cost": 0.00164068519444446
+    },
+    "gemini": {
+      "predicted_findings": "*   **Location and laterality of abnormalities:**\n    *   There is an anomalous, vertically oriented, contrast-enhancing vascular structure located in the left superior mediastinum.\n    *   This structure is positioned lateral to the aortic arch and anterior to the left main bronchus.\n    *   A normally positioned superior vena cava (SVC) is also present on the right side of the mediastinum.\n\n*   **Size, shape, and density/signal characteristics of lesions:**\n    *   The left-sided vascular structure is tubular in longitudinal course (though seen in cross-section here) and circular in shape on this axial slice.\n    *   Its diameter is approximately 10-12 mm, which is similar to, though slightly smaller than, the diameter of the right-sided SVC.\n    *   The density of this structure is uniform and matches the contrast enhancement seen in the right SVC and the aorta, confirming it is a vascular channel.\n\n*   **Associated findings:**\n    *   No pleural effusions are identified.\n    *   No",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.325,
+      "rouge_precision": 0.09737827715355805,
+      "rouge_fmeasure": 0.14985590778097985,
+      "latency_ms": 9122.02116700064,
+      "cost": 0.0060775
+    }
+  },
+  {
+    "uid": "MPX1481",
+    "title": "Aberrant Right Subclavian Artery",
+    "location_category": "Thorax",
+    "gold_diagnosis": "Aberrant Right Subclavian Artery",
+    "gold_findings": "CT examination of the chest performed with IV contrast according to a PE/DVT protocol demonstrated an aberrant right subclavian artery.  The mediastinum was otherwise unremarkable.  There was no pulmonary embolism detected.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormality is located in the superior mediastinum, on the right side.\n- Size, shape, and density/signal characteristics of lesions: There is a well-defined, round, hypodense lesion measuring approximately 1.5 cm in diameter.\n- Associated findings: No associated effusions, lymphadenopathy, or calcifications are identified.\n- Normal structures and their appearance: The lungs are clear bilaterally. The heart size is normal. The mediastinal contours are unremarkable. The visualized osseous structures are intact.\n- Any incidental findings: No incidental findings are noted.",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The Gold Standard identifies an aberrant right subclavian artery. The model fails to identify this vascular anomaly and instead hallucinates a specific hypodense lesion in the superior mediastinum.",
+      "rouge_recall": 0.1875,
+      "rouge_precision": 0.07142857142857142,
+      "rouge_fmeasure": 0.10344827586206898,
+      "latency_ms": 7363.226833000226,
+      "cost": 0.0023521419049861835
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial CT image of the upper thorax at the level of the superior mediastinum (Window 1502, Level 420), the following findings are observed:\n\n**Bony Structures:**\n*   **Sternum:** The manubrium of the sternum demonstrates significant abnormalities, including cortical irregularity, fragmentation, and architectural distortion. There are focal areas of cortical loss and a heterogeneous internal density.\n*   **Vertebrae:** The visualized upper thoracic vertebral body and its posterior elements (laminae, spinous process, transverse processes) appear intact with normal cortical margins and trabecular pattern on this slice.\n*   **Ribs and Scapulae:** The visualized posterior portions of the upper ribs and the scapulae appear unremarkable without evidence of gross fracture or destructive lesions.\n\n**Mediastinum:**\n*   **Vascular Structures:** There is an intensely hyperdense, well-circumscribed circular structure in the right paratracheal region, measuring approximately 12 ",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model failed to identify the aberrant right subclavian artery, which was the primary finding reported in the gold standard. Instead, the model described a vascular structure as likely being the right brachiocephalic vein and hallucinated significant sternal abnormalities (fragmentation, distortion) that were not present in the gold standard.",
+      "rouge_recall": 0.3125,
+      "rouge_precision": 0.03816793893129771,
+      "rouge_fmeasure": 0.06802721088435375,
+      "latency_ms": 14515.72616699923,
+      "cost": 0.00592875
+    }
+  },
+  {
+    "uid": "MPX1289",
+    "title": "Persistent Ceco-Abdominal Fecal Fistula",
+    "location_category": "Abdomen",
+    "gold_diagnosis": "Persistent Ceco-Abdominal Fecal Fistula",
+    "gold_findings": "Image 1: Lower abdominal fluid collection s/p appendectomy\nImage 2: Successful drain placement\nImage 3: Fistula from abscess pocket and drainage catheter tip to cecum\nImage 4: Persistent fistula from abscess pocket and drainage catheter tip to cecum",
+    "medgemma": {
+      "predicted_findings": "- The image is a CT scan of the abdomen and pelvis.\n- There is a large fluid collection in the right lower quadrant, likely representing a postoperative seroma or hematoma.\n- The collection measures approximately 8.5 cm in transverse dimension and 6.0 cm in craniocaudal dimension.\n- The collection is associated with a small amount of free fluid in the pelvis.\n- There is no evidence of bowel obstruction or pneumoperitoneum.\n- The visualized portions of the small bowel and colon appear normal.\n- The liver, spleen, pancreas, and kidneys appear normal.\n- The bladder is unremarkable.\n- There is no evidence of lymphadenopathy.\n- The visualized portions of the bones are unremarkable.\n- There are no incidental findings.\n\nNormal structures and their appearance:\n- The abdominal wall is intact.\n- The bowel loops are normal in appearance.\n- The liver, spleen, pancreas, and kidneys are normal in appearance.\n- The bladder is unremarkable.\n- The visualized portions of the bones are unremarkable.\n\nAss",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identified the primary abnormality, which is the large fluid collection in the right lower quadrant. However, it failed to identify the presence of the drainage catheter and the fistula communicating with the cecum.",
+      "rouge_recall": 0.1282051282051282,
+      "rouge_precision": 0.02857142857142857,
+      "rouge_fmeasure": 0.04672897196261682,
+      "latency_ms": 10565.505540998856,
+      "cost": 0.003375092047819079
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial CT image of the pelvis with intravenous contrast, the following findings are observed:\n\n### **Location and Laterality of Abnormalities**\n*   There is a large, complex abnormality centrally located in the pelvis and lower abdomen, extending predominantly into the right lower quadrant (RLQ) and the right side of the pelvic cavity.\n\n### **Size, Shape, and Density Characteristics**\n*   **Collection:** A large, multiloculated, and irregularly shaped collection is present. It exhibits heterogeneous internal low attenuation, consistent with fluid-density material.\n*   **Enhancement:** The collection is characterized by a thick, peripherally enhancing rim (rim enhancement) following intravenous contrast administration.\n*   **Internal Features:** Multiple small, focal areas of gas (air pockets) are visible within the fluid collection.\n\n### **Associated Findings**\n*   **Fat Stranding:** Extensive and marked fat stranding is observed in the surrounding pelvic mesentery",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.23076923076923078,
+      "rouge_precision": 0.03543307086614173,
+      "rouge_fmeasure": 0.06143344709897611,
+      "latency_ms": 11177.164832999551,
+      "cost": 0.0058625
+    }
+  },
+  {
+    "uid": "MPX1241",
+    "title": "Crohns Disease",
+    "location_category": "Abdomen",
+    "gold_diagnosis": "Crohns Disease",
+    "gold_findings": "CT demonstrates homogeneous density of thickened bowel wall with intestinal lumen surrounded by edematous mucosa.  The distal jejunum and terminal ileum were involve.  Intervening segments of bowel were unremarkable.\nSubsequent colonoscopy demonstrated nodularity within the terminal ileum.\nSmall bowel follow through revealed delayed transit time with persistent narrowing and thickening of the distal jejunum and terminal ileum.",
+    "medgemma": {
+      "predicted_findings": "- The image is a CT scan of the abdomen, axial plane.\n- The visualized portions of the abdominal wall, mesentery, and bowel appear unremarkable.\n- The liver, spleen, kidneys, and adrenal glands are not clearly visualized in this limited field of view.\n- The visualized portion of the stomach and duodenum appear unremarkable.\n- The visualized portion of the small bowel appears unremarkable.\n- The visualized portion of the colon appears unremarkable.\n- No significant free fluid is identified.\n- No lymphadenopathy is identified.\n- No calcifications are identified.\n- The visualized bony structures appear unremarkable.\n- There is a small fat-containing umbilical hernia.\n- There is a small fat-containing right inguinal hernia.\n- There is a small fat-containing left inguinal hernia.\n- There is a small fat-containing supraumbilical hernia.\n- There is a small fat-containing infraumbilical hernia.\n- There is a small fat-containing periumbilical hernia.\n- There is a small fat-containing supraumbil",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model missed the primary pathology described in the gold standard, specifically the thickened bowel wall and edema in the distal jejunum and terminal ileum, explicitly stating the bowel appeared unremarkable. Furthermore, the model output degenerated into repetitive hallucinations concerning various hernias.",
+      "rouge_recall": 0.21052631578947367,
+      "rouge_precision": 0.010554089709762533,
+      "rouge_fmeasure": 0.02010050251256281,
+      "latency_ms": 71895.62512500015,
+      "cost": 0.022966658026041715
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial CT image of the abdomen at the level of the lower lumbar spine, the following findings are observed:\n\n**Primary Imaging Findings:**\n*   **Abnormal Bowel Configuration:** In the right-to-mid abdomen, there is a prominent soft tissue structure demonstrating a concentric, multi-layered \"target\" or \"bowel-within-bowel\" appearance. This finding consists of an outer bowel wall encompassing an inner segment of bowel and associated mesenteric fat. The walls of the involved bowel segments appear thickened.\n*   **Contrast Distribution:** Hyperdense (bright) oral or rectal contrast is present within several loops of bowel throughout the abdomen. Some segments of bowel are also filled with gas.\n\n**Associated and Normal Structures:**\n*   **Musculature:** The psoas muscles and paraspinal (erector spinae) muscles are symmetric and robust. The abdominal wall musculature, including the rectus abdominis and oblique muscles, appears unremarkable.\n*   **Vasculature:** The abdom",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identified the primary abnormality: abnormal, thickened bowel loops in the right/mid-abdomen demonstrating a 'target' appearance. This aligns well with the gold standard's description of thickened bowel wall with edematous mucosa surrounding the lumen (which creates a target sign). Although the model's specific descriptor 'bowel-within-bowel' suggests intussusception\u2014which differs from the inflammatory etiology implied by the gold standard\u2014the visual detection and morphological description of the concentric abnormality are accurate.",
+      "rouge_recall": 0.2807017543859649,
+      "rouge_precision": 0.0622568093385214,
+      "rouge_fmeasure": 0.1019108280254777,
+      "latency_ms": 11007.046875000015,
+      "cost": 0.00524125
+    }
+  },
+  {
+    "uid": "MPX2442",
+    "title": "Celiac, Abdominal Aorta, & Common Iliac Aneurysms",
+    "location_category": "Abdomen",
+    "gold_diagnosis": "Celiac, Abdominal Aorta, & Common Iliac Aneurysms",
+    "gold_findings": "The axial CT image demonstrates a 2.4-cm fusiform aneurysm of the celiac artery.  The origin of this aneurysm is patent.  Also seen within the celiac aneurysm is an extensive mural thrombosis in the distal half of the aneurysm.  The splenic and\ngastroduodenal arteries are patent.  \n\nThere also is a fusiform infrarenal aortic aneurysm identified measuring 4 cm.  There is also an intimal flap along the abdominal aortic vasculature.  The aorta returns to normal diameter of 2 cm just prior to the bifurcation of the common iliac arteries.  \n \nIn addition there is also a distal left common iliac artery dilation with a diameter of 1.5 cm.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The image shows a cross-sectional view of the abdomen. There are no obvious abnormalities in the visualized portions of the liver, spleen, pancreas, adrenal glands, kidneys, or bowel. The aorta and IVC are unremarkable. The visualized portions of the stomach and duodenum appear normal. The visualized portions of the thoracic spine appear normal.\n- Size, shape, and density/signal characteristics of lesions: No discrete lesions are identified.\n- Associated findings (effusions, lymphadenopathy, calcifications): No significant effusions, lymphadenopathy, or calcifications are identified.\n- Normal structures and their appearance: The liver appears normal in size and contour. The spleen is not well visualized. The pancreas appears normal in size and contour. The adrenal glands are unremarkable. The kidneys appear normal in size and contour. The bowel loops are unremarkable. The aorta and IVC are unremarkable. The visualized portions of the thoracic",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model described the study as normal with an 'unremarkable' aorta and no discrete lesions, completely missing the significant vascular pathology present in the gold standard, including a celiac artery aneurysm with thrombosis, a fusiform infrarenal aortic aneurysm, and an intimal flap.",
+      "rouge_recall": 0.2037037037037037,
+      "rouge_precision": 0.1437908496732026,
+      "rouge_fmeasure": 0.1685823754789272,
+      "latency_ms": 71909.57383300156,
+      "cost": 0.02297111386331994
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial contrast-enhanced CT image of the upper abdomen, the imaging findings are as follows:\n\n**ABDOMINAL VASCULATURE**\n*   **Superior Mesenteric Artery (SMA):** There is a linear, low-density flap dividing the lumen of the SMA into two distinct contrast-filled channels (true and false lumens). The vessel appears mildly prominent in caliber at this level.\n*   **Abdominal Aorta:** The visualized portion of the abdominal aorta anterior to the vertebral body is normal in caliber. No obvious intimal flap is seen within the main aortic lumen on this single slice. There are minimal mural calcifications.\n*   **Other vessels:** The celiac axis and renal arteries are not fully characterized on this single axial image.\n\n**HEPATOBILIARY SYSTEM**\n*   **Gallbladder:** Within the gallbladder lumen, there is a focal, hyperdense (calcified) structure measuring approximately 1.2 cm, consistent with a gallstone. The gallbladder wall does not appear thickened, and there is no obvious",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model completely missed the primary diagnoses: a fusiform aneurysm of the celiac artery and a 4 cm infrarenal aortic aneurysm. Instead, the model incorrectly stated the aorta was normal in caliber and described a dissection in the superior mesenteric artery (SMA), which was not present in the gold standard.",
+      "rouge_recall": 0.3425925925925926,
+      "rouge_precision": 0.13028169014084506,
+      "rouge_fmeasure": 0.18877551020408162,
+      "latency_ms": 8663.544540999283,
+      "cost": 0.00628875
+    }
+  },
+  {
+    "uid": "MPX1136",
+    "title": "Situs Inversus Totalis",
+    "location_category": "Abdomen",
+    "gold_diagnosis": "Situs Inversus Totalis",
+    "gold_findings": "\u2022  CXR - dextrocardia, bronchus intermedius on the left side of the chest\n\u2022  KUB- Liver edge on the left, gastric bubble on the right\n\u2022  Abd CT- complete mirror image of all abdominal organs.  No evidence of nephrolithiasis on non-contrast CT",
+    "medgemma": {
+      "predicted_findings": "- The image is a CT scan of the abdomen.\n- There is a large, heterogeneous mass in the right upper quadrant of the abdomen, displacing the liver and displacing the right kidney inferiorly.\n- The mass appears to be predominantly solid.\n- The mass is located in the right upper quadrant, extending towards the right lobe of the liver.\n- The mass is displacing the right kidney inferiorly.\n- The mass is displacing the liver superiorly and to the left.\n- The mass is displacing the stomach to the left.\n- The mass is displacing the duodenum to the left.\n- The mass is displacing the transverse colon to the left.\n- The mass is displacing the ascending colon to the left.\n- The mass is displacing the descending colon to the left.\n- The mass is displacing the sigmoid colon to the left.\n- The mass is displacing the rectum to the left.\n- The mass is displacing the bladder to the left.\n- The mass is displacing the small bowel to the left.\n- The mass is displacing the large bowel to the left.\n- The mass",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The Gold Standard diagnosis is Situs Inversus Totalis (complete mirror image of organs). The model completely missed this anatomical variation and instead hallucinated a large, heterogeneous mass in the right upper quadrant with extensive organ displacement, likely misinterpreting the transposed anatomy as pathology.",
+      "rouge_recall": 0.20512820512820512,
+      "rouge_precision": 0.005544005544005544,
+      "rouge_fmeasure": 0.010796221322537112,
+      "latency_ms": 71650.29120799954,
+      "cost": 0.022888287469222075
+    },
+    "gemini": {
+      "predicted_findings": "*   **Kidneys:** Both the right and left kidneys are markedly enlarged in size. The normal renal parenchyma is almost entirely replaced by innumerable, well-circumscribed, low-attenuation (water-density) cystic lesions. These lesions vary significantly in size, ranging from a few millimeters to several centimeters in diameter. The outer contour of both kidneys is lobulated and distorted by the presence of these multiple cysts.\n*   **Liver:** The liver is enlarged (hepatomegaly). There are multiple scattered, well-defined, low-attenuation cystic lesions throughout the liver parenchyma, similar in density to those seen in the kidneys.\n*   **Spleen:** The spleen appears enlarged (splenomegaly) on this axial section.\n*   **Other Abdominal Structures:** \n    *   The visualized portions of the bowel are displaced by the massively enlarged kidneys.\n    *   No gross calcifications are definitively identified within the cystic lesions on this single slice.\n    *   There is no evidence of large-",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The gold standard describes Situs Inversus Totalis (mirror image arrangement of organs including dextrocardia and left-sided liver) with no nephrolithiasis. The model findings describe severe Autosomal Dominant Polycystic Kidney Disease (ADPKD) with massive cystic enlargement of kidneys and liver, which is a completely different and unrelated diagnosis. The model failed to identify the situs anomaly and hallucinated a different pathology.",
+      "rouge_recall": 0.3076923076923077,
+      "rouge_precision": 0.06382978723404255,
+      "rouge_fmeasure": 0.10572687224669604,
+      "latency_ms": 10708.865791999415,
+      "cost": 0.00453125
+    }
+  },
+  {
+    "uid": "MPX1227",
+    "title": "Parosteal Osteogenic Sarcoma",
+    "location_category": "Spine and Muscles",
+    "gold_diagnosis": "Parosteal Osteogenic Sarcoma",
+    "gold_findings": "Radiographically it is a broad-based, juxtacortical, densely ossified mass, the periphery somewhat less dense that the base. CT scan is most useful and can demonstrate a radiolucent zone of periosteum and fibrous tissue trapped between the tumor and cortex. The lesion may consist of three layers: at the cortical surface it is dense and compact, it has a middle layer of amorphous dense bone, and the outer layer there are dense spicules extending into the periphery. These tumors typically have a low signal intensity on T1-weighted images and a high signal intensity on T2-weighted images.  The lesion may eventually progress to cortical destruction and medullary invasion, MRI can be used to grade the extent of tumor extension and cortical disruption.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormality is located in the distal femur, specifically in the anterior aspect. It is a right-sided abnormality.\n- Size, shape, and density/signal characteristics of lesions: There is a well-defined, rounded mass located in the anterior aspect of the distal femur. The mass appears to be isodense to the surrounding bone on this non-contrast CT scan.\n- Associated findings: There is no evidence of associated soft tissue swelling, fluid collection, or lymphadenopathy. There is no evidence of calcification within the mass.\n- Normal structures and their appearance: The surrounding bone appears normal. The joint space is unremarkable. The visualized portions of the tibia and fibula appear normal.\n- Any incidental findings: There is a small bone island noted in the distal femur.\n\n**Note:** This analysis is based solely on the provided image and clinical history. A definitive diagnosis requires correlation with the patient's clinical presentation",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identified the primary abnormality: a mass located in the distal femur. It correctly described the density as 'isodense to surrounding bone', which corresponds to the 'densely ossified' nature described in the gold standard. While it did not explicitly describe the juxtacortical position or the radiolucent zone (string sign), the detection and general characterization of the bone-forming mass were successful.",
+      "rouge_recall": 0.21138211382113822,
+      "rouge_precision": 0.15757575757575756,
+      "rouge_fmeasure": 0.18055555555555552,
+      "latency_ms": 9003.062290999878,
+      "cost": 0.002875978231847183
+    },
+    "gemini": {
+      "predicted_findings": "*   **Location and laterality:** The image shows a cross-section of the lower leg. There is a prominent abnormality involving the anterior and medial aspect of the tibial shaft.\n*   **Size, shape, and density characteristics of the lesion:**\n    *   There is focal, exuberant cortical thickening and ossification on the anterior surface of the tibia.\n    *   The lesion measures approximately 1.5 to 2 cm in maximal thickness from the expected cortical margin. \n    *   The abnormality consists of dense, sclerotic bone that appears to merge with the native cortex. \n    *   Centrally within this area of dense ossification, there is a relatively well-circumscribed, small, hypo-attenuating (lucent) area. \n    *   The outer margin of the new bone formation has a somewhat irregular, slightly \"cloud-like\" or fluffy appearance as it extends into the adjacent soft tissues, though it remains relatively contained.\n*   **Associated findings:**\n    *   There is focal bulging of the overlying subcutaneo",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identifies the primary abnormality: a prominent, dense, ossified mass arising from the cortical surface of the tibia. It accurately describes the juxtacortical nature, the sclerotic bone formation, and the irregular margins extending into soft tissue, which aligns well with the gold standard description of a surface-based osteosarcoma.",
+      "rouge_recall": 0.24390243902439024,
+      "rouge_precision": 0.11673151750972763,
+      "rouge_fmeasure": 0.15789473684210525,
+      "latency_ms": 9862.158750000162,
+      "cost": 0.00567625
+    }
+  },
+  {
+    "uid": "MPX1457",
+    "title": "Burst Fracture of L1",
+    "location_category": "Spine and Muscles",
+    "gold_diagnosis": "Burst Fracture of L1",
+    "gold_findings": "Radiograph of L-spine:\nCompression fracture involving the posterior aspect of L1 with posterior displacement of the fracture fragment--concern for burst fracture\n\nCT:\nL1 burst fracture\nKnown polycystic kidney disease incidentally imaged",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The image displays a sagittal view of the lumbar spine. There are no apparent abnormalities in the visualized portions of the spinal cord, conus medullaris, or cauda equina. The visualized portions of the vertebral bodies appear intact. The visualized portions of the intervertebral discs appear intact. The visualized portions of the facet joints appear intact. The visualized portions of the paraspinal muscles appear intact. The visualized portions of the abdominal aorta and inferior vena cava appear intact. The visualized portions of the kidneys appear intact. The visualized portions of the liver appear intact. The visualized portions of the spleen appear intact. The visualized portions of the pancreas appear intact. The visualized portions of the adrenal glands appear intact. The visualized portions of the kidneys appear intact. The visualized portions of the liver appear intact. The visualized portions of the spleen appear intact. The visua",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model completely failed to identify the L1 burst fracture, explicitly stating that the vertebral bodies appeared intact. It also suffered from a significant repetition error in the text generation.",
+      "rouge_recall": 0.21212121212121213,
+      "rouge_precision": 0.003863134657836645,
+      "rouge_fmeasure": 0.0075880758807588084,
+      "latency_ms": 71871.25354199998,
+      "cost": 0.02295887265924999
+    },
+    "gemini": {
+      "predicted_findings": "*   **Location and laterality of abnormalities:** \n    *   The primary abnormalities are localized to a single vertebral level, involving both the vertebral body and the posterior elements bilaterally. \n*   **Size, shape, and density/signal characteristics of lesions:**\n    *   **Vertebral Body:** The vertebral body demonstrates multiple linear radiolucencies (fracture lines) extending through its substance. There is a prominent vertical fracture line traversing the body from anterior to posterior. The normal circular/oval shape of the vertebral body is distorted and expanded.\n    *   **Posterior Elements:** Linear radiolucencies are visible traversing the left lamina. There is also irregularity and potential lucency involving the right lamina and the junctions with the pedicles.\n    *   **Density:** The vertebral body shows heterogeneous density, with some areas of increased attenuation suggestive of bony impaction adjacent to the radiolucent fracture lines.\n*   **Associated findings:",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model accurately identifies the primary abnormality, describing a burst fracture with specific features such as retropulsion of a posterior bone fragment, spinal canal stenosis, and involvement of the posterior elements (lamina/pedicles). This matches the gold standard diagnosis of an L1 burst fracture.",
+      "rouge_recall": 0.3333333333333333,
+      "rouge_precision": 0.040892193308550186,
+      "rouge_fmeasure": 0.0728476821192053,
+      "latency_ms": 9299.538916999154,
+      "cost": 0.00611125
+    }
+  },
+  {
+    "uid": "MPX2007",
+    "title": "Gorlin Syndrome",
+    "location_category": "Spine and Muscles",
+    "gold_diagnosis": "Gorlin Syndrome",
+    "gold_findings": "Hands:   Multiple well circumscribed elongated (flame shaped) cortical lucencies throughout both hands. Nondisplaced fracture at the base of the right second proximal phalanx.\nFoot:  Healed fractures of the second/third metatarsals. Multiple lucencies of hindfoot and distal tibia/fibula. \nBone Scan: Multiple areas of focal increased and decreased uptake. Increased uptake along the falx cerebri. \nHead CT: Calcifications along the falx and tentorium.",
+    "medgemma": {
+      "predicted_findings": "- The image is a CT scan of the head, specifically focusing on the temporal bone region.\n- There is a small, well-defined, low-attenuation lesion located in the posterior aspect of the right temporal bone, near the mastoid air cells.\n- The lesion appears slightly lobulated in shape.\n- The lesion measures approximately 1.2 cm in its greatest dimension.\n- The lesion demonstrates low attenuation compared to the surrounding bone, consistent with a fluid collection or cystic lesion.\n- There is no evidence of calcification or ossification within the lesion.\n- The surrounding bone appears intact without evidence of fracture or erosion.\n- The adjacent structures, including the inner ear structures and the temporal lobe, appear unremarkable.\n- No significant effusions or lymphadenopathy are identified in the visualized regions.\n- The overall appearance of the visualized brain parenchyma is normal.\n- No incidental findings are apparent in the visualized portions of the skull.\n\nImage quality is a",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model completely missed the primary findings described in the gold standard. The gold standard notes calcifications along the falx and tentorium on Head CT, whereas the model explicitly states 'No evidence of calcification' and instead describes a specific low-attenuation lesion in the temporal bone not mentioned in the gold standard. Additionally, the model fails to address the findings in the hands, feet, or bone scan included in the gold standard.",
+      "rouge_recall": 0.3492063492063492,
+      "rouge_precision": 0.013897662665824383,
+      "rouge_fmeasure": 0.026731470230862697,
+      "latency_ms": 71893.5637500017,
+      "cost": 0.022965999531250544
+    },
+    "gemini": {
+      "predicted_findings": "*   **Calvarium:**\n    *   **Location and Laterality:** There is diffuse, bilateral involvement of the visualized portions of the skull, including the frontal, parietal, and occipital bones.\n    *   **Size and Shape:** The entire calvarium demonstrates significant, diffuse thickening and expansion.\n    *   **Internal Architecture and Density:** There is a loss of the normal trilaminar appearance of the skull (the distinct layers of the inner table, diploic space, and outer table). The bone exhibits a heterogeneous, mottled, and granular internal density. The trabecular pattern appears coarsened throughout the expanded diploic space. \n    *   **Margins:** The margins of both the inner and outer tables are poorly defined and appear \"shaggy\" or blurred in several areas.\n\n*   **Intracranial Contents:**\n    *   **Midline:** The midline structures appear centered, with no evidence of midline shift at this level.\n    *   **Calcifications:** Small, bilateral, relatively symmetric hyperdense fo",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model describes significant pathology (diffuse thickening and expansion of the calvarium resembling Paget's disease) that is not present in the gold standard. Additionally, the model misses the specific positive finding listed in the gold standard for the Head CT: calcifications along the falx and tentorium.",
+      "rouge_recall": 0.23809523809523808,
+      "rouge_precision": 0.07142857142857142,
+      "rouge_fmeasure": 0.10989010989010987,
+      "latency_ms": 9202.22666599875,
+      "cost": 0.005165
+    }
+  },
+  {
+    "uid": "MPX2046",
+    "title": "Citrobacter koseri osteomyelitis/discitis",
+    "location_category": "Spine and Muscles",
+    "gold_diagnosis": "Citrobacter koseri osteomyelitis/discitis",
+    "gold_findings": "-Plain radiograph one week later showed decreased disk space between T10-T11 \n\n-On fat-suppressed MRI (STIR and FSE T2-weighted with fat sat MRI), high-signal -ntensity mass anterior to thoracic vertebrae, high signal intensity in the disc space and in the thoracic vertebrae at this level are consistent with infection. These areas enhance after contrast on the contrast-enhanced fat-saturated  T1-weighted MR images.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormalities are located in the cervical spine, specifically involving the C5-C6 and C6-C7 intervertebral discs.\n- Size, shape, and density/signal characteristics of lesions: There is evidence of disc degeneration in the C5-C6 and C6-C7 intervertebral discs. The discs appear to have decreased signal intensity on T1-weighted images and increased signal intensity on T2-weighted images, consistent with degenerative changes. There is no evidence of a focal mass lesion or significant herniation.\n- Associated findings: There is no evidence of significant spinal canal stenosis or neural foraminal narrowing. There is no evidence of epidural abscess or significant inflammation.\n- Normal structures and their appearance: The vertebral bodies, spinal cord, and surrounding soft tissues appear within normal limits. The spinal canal appears adequately patent.\n- Any incidental findings: There is a small amount of subcutaneous fat in the prevertebral sof",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.23880597014925373,
+      "rouge_precision": 0.07881773399014778,
+      "rouge_fmeasure": 0.11851851851851854,
+      "latency_ms": 10985.617708000063,
+      "cost": 0.003509294545611131
+    },
+    "gemini": {
+      "predicted_findings": "*   **Location:** The abnormalities involve the lower cervical, thoracic, and upper lumbar spine.\n*   **Vertebral Bodies:** \n    *   There is a diffuse and heterogeneous decrease in T1 signal within the vertebral bodies, starting from approximately C7 and extending through the visualized lumbar spine. \n    *   This abnormal low signal replaces the normal high-signal (bright) fatty marrow seen in the upper cervical vertebrae. \n    *   The endplates of multiple thoracic vertebrae appear irregular and poorly defined. \n    *   While the signal is abnormal, the overall height of the vertebral bodies is relatively preserved without gross compression fractures in this view.\n*   **Intervertebral Discs:** \n    *   Multiple intervertebral disc spaces in the thoracic region appear narrowed. \n    *   There is a loss of clear demarcation between the discs and the adjacent vertebral endplates in areas where the marrow signal is most abnormal.\n*   **Spinal Canal:** \n    *   An extensive, longitudinal",
+      "findings_judge_score": "error",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "timeout",
+      "rouge_recall": 0.29850746268656714,
+      "rouge_precision": 0.0684931506849315,
+      "rouge_fmeasure": 0.11142061281337047,
+      "latency_ms": 11433.402208000189,
+      "cost": 0.0063
+    }
+  },
+  {
+    "uid": "MPX2269",
+    "title": "Single Kidney - Renal Agenesis",
+    "location_category": "Reproductive and Urinary System",
+    "gold_diagnosis": "Single Kidney - Renal Agenesis",
+    "gold_findings": "Bone scan demonstrates no osteoblastic metastatic disease.  The right kidney is not visualized.  A CT scan demonstrates absence of the right kidney, but the right adrenal gland is intact and normal in appearance.  The patient reports no history of right nephrectomy.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: There are no significant abnormalities identified in the visualized portions of the abdomen and pelvis.\n- Size, shape, and density/signal characteristics of lesions: No discrete lesions are identified.\n- Associated findings (effusions, lymphadenopathy, calcifications): No significant associated findings are identified.\n- Normal structures and their appearance: The liver, spleen, kidneys, adrenal glands, pancreas, stomach, small bowel, colon, and bladder appear within normal limits. The visualized portions of the abdominal aorta and inferior vena cava are unremarkable.\n- Any incidental findings: No incidental findings are identified.",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model failed to identify the primary finding: the absence of the right kidney (renal agenesis). Instead, the model incorrectly reported that the kidneys appeared within normal limits.",
+      "rouge_recall": 0.2926829268292683,
+      "rouge_precision": 0.13793103448275862,
+      "rouge_fmeasure": 0.18749999999999997,
+      "latency_ms": 6759.067709001101,
+      "cost": 0.0021591466292642403
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial CT image of the upper abdomen, the following imaging findings are observed:\n\n### **Location and Laterality of Abnormalities**\n*   **Right Retroperitoneum:** There is a large, well-circumscribed mass located in the right retroperitoneum, occupying the expected anatomical position of the right kidney.\n*   **Contralateral Side:** The left kidney is present and appears normal in its expected location.\n\n### **Size, Shape, and Density Characteristics of Lesions**\n*   **Size and Shape:** The mass is large and roughly oval or reniform (kidney-shaped). It occupies a significant portion of the right posterior abdominal cavity at this level.\n*   **Density:** The mass exhibits relatively homogeneous soft-tissue density, which is slightly lower than or similar to the adjacent liver. It lacks the typical internal architecture and corticomedullary differentiation visible in the contralateral left kidney.\n\n### **Associated Findings**\n*   **Right Kidney:** Normal right renal",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The Gold Standard indicates the absence of the right kidney (renal agenesis). The model incorrectly identifies a 'large, well-circumscribed mass' in the right renal fossa. The model has hallucinated a mass where there is anatomical absence.",
+      "rouge_recall": 0.4146341463414634,
+      "rouge_precision": 0.061371841155234655,
+      "rouge_fmeasure": 0.10691823899371068,
+      "latency_ms": 11569.396209000843,
+      "cost": 0.0066725
+    }
+  },
+  {
+    "uid": "MPX2444",
+    "title": "Autosomal Dominant (Adult) Polycystic Kidney Disease (ADPKD)",
+    "location_category": "Reproductive and Urinary System",
+    "gold_diagnosis": "Autosomal Dominant (Adult) Polycystic Kidney Disease (ADPKD)",
+    "gold_findings": "Multiple bilateral renal cysts consistent with the diagnosis of Adult Polycystic Kidney Disease",
+    "medgemma": {
+      "predicted_findings": "- The image is a CT scan of the abdomen.\n- There is a small amount of free fluid in the pelvis.\n- There is no evidence of lymphadenopathy.\n- The liver, spleen, pancreas, and adrenal glands appear normal.\n- The kidneys are normal in size and shape.\n- The aorta and inferior vena cava are normal.\n- The bowel loops are unremarkable.\n- There are no calcifications.\n- There are no incidental findings.",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The gold standard diagnoses Adult Polycystic Kidney Disease with multiple bilateral renal cysts, but the model incorrectly describes the kidneys as normal in size and shape.",
+      "rouge_recall": 0.23076923076923078,
+      "rouge_precision": 0.046153846153846156,
+      "rouge_fmeasure": 0.07692307692307693,
+      "latency_ms": 5576.718165999409,
+      "cost": 0.0017814516363609224
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial CT image of the abdomen, the following imaging findings are observed:\n\n**Kidneys:**\n*   **Location/Laterality:** There are significant bilateral abnormalities affecting both kidneys.\n*   **Size/Shape:** Both kidneys are markedly enlarged and have lost their normal smooth reniform contours, appearing bulky and lobulated.\n*   **Density:** The renal parenchyma is extensively infiltrated or replaced by multiple, ill-defined, low-attenuation (hypodense) masses. These lesions do not show evidence of internal calcification or significant enhancement relative to normal renal tissue on this single image.\n\n**Retroperitoneum:**\n*   **Location:** Central retroperitoneum, anterior and lateral to the lumbar vertebral body.\n*   **Findings:** There is a large, confluent, bulky soft tissue mass consistent with extensive lymphadenopathy. This mass surrounds and likely displaces the major abdominal vessels (aorta and inferior vena cava).\n*   **Density:** The soft tissue mass i",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identifies the main abnormality: significant bilateral renal enlargement with extensive infiltration by multiple low-attenuation lesions, which corresponds to the gold standard of multiple bilateral renal cysts (ADPKD). While the model describes these as 'masses' and incorrectly hallucinates retroperitoneal lymphadenopathy, the primary visual findings of the renal pathology are accurately described.",
+      "rouge_recall": 0.46153846153846156,
+      "rouge_precision": 0.022813688212927757,
+      "rouge_fmeasure": 0.04347826086956522,
+      "latency_ms": 9167.463249999855,
+      "cost": 0.00573375
+    }
+  },
+  {
+    "uid": "MPX1012",
+    "title": "Ovarian torsion",
+    "location_category": "Reproductive and Urinary System",
+    "gold_diagnosis": "Ovarian torsion",
+    "gold_findings": "CT: Large heterogeneous pelvic mass displacing the uterus anteriorly.\n\nUS: Enlarged right ovary with central cystic component.  Absent blood flow.",
+    "medgemma": {
+      "predicted_findings": "- The image is a CT scan of the pelvis.\n- There is a large, heterogeneous, mixed density mass in the right adnexa, measuring approximately 6.5 x 5.5 x 6.0 cm.\n- The mass appears to be arising from the right ovary.\n- The left adnexa appears normal.\n- The uterus is unremarkable.\n- The bladder is unremarkable.\n- There is no free fluid in the pelvis.\n- There is no lymphadenopathy.\n- There are no calcifications.\n- The visualized bowel loops are unremarkable.\n- The osseous structures are unremarkable.\n- There are no incidental findings.",
+      "findings_judge_score": "good",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identified the primary abnormality: a large, heterogeneous mass in the right adnexa/ovary. This matches the gold standard's description of a large heterogeneous pelvic mass. While the model missed the specific detail of the uterus being displaced anteriorly (describing the uterus as unremarkable), the identification and characterization of the mass itself are accurate.",
+      "rouge_recall": 0.35,
+      "rouge_precision": 0.08045977011494253,
+      "rouge_fmeasure": 0.1308411214953271,
+      "latency_ms": 7676.662040999872,
+      "cost": 0.002452267040874959
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided axial CT image of the pelvis, the following findings are observed:\n\n### **FINDINGS:**\n\n**Location and Laterality of Abnormalities:**\n*   **Right Pelvis/Adnexa:** There is a well-circumscribed, oval-shaped soft tissue lesion located in the right adnexal region, medial to the right iliac bone and posterior to the bladder area.\n*   **Dependent Pelvis:** A significant volume of free fluid is present within the dependent portions of the pelvis, including the rectouterine (Pouch of Douglas) or rectovesical space. This fluid tracks along the pelvic side walls bilaterally.\n\n**Size, Shape, and Density/Signal Characteristics:**\n*   **Right Adnexal Lesion:** The lesion is oval in shape and measures approximately 3.5 x 2.5 cm in this axial plane. It exhibits heterogeneous internal density, with areas of slightly lower attenuation interspersed with soft-tissue density.\n*   **Pelvic Fluid:** The free fluid occupies a large portion of the deep pelvis. Its attenuation appears hig",
+      "findings_judge_score": "partial",
+      "findings_judge_key_finding": true,
+      "findings_judge_explanation": "The model correctly identifies pathology in the right adnexa and pelvis. However, there is a discrepancy in characterization: the Gold Standard describes a 'large heterogeneous pelvic mass' displacing the uterus, while the model interprets the findings as a smaller right adnexal lesion (3.5 cm) surrounded by a 'significant volume of free fluid.' The model likely misinterpreted the heterogeneous mass as complex fluid, although the localization is correct.",
+      "rouge_recall": 0.3,
+      "rouge_precision": 0.021352313167259787,
+      "rouge_fmeasure": 0.0398671096345515,
+      "latency_ms": 10957.507041999634,
+      "cost": 0.0060775
+    }
+  },
+  {
+    "uid": "MPX2326",
+    "title": "Cortical nephrocalcinosis due to acute renal cortical necrosis",
+    "location_category": "Reproductive and Urinary System",
+    "gold_diagnosis": "Cortical nephrocalcinosis due to acute renal cortical necrosis",
+    "gold_findings": "Abnormal Study With Development Of Thin Cortical Calcifications, Which Extend Into The Medullary Spaces Along The Columns Of Bertin, As Well As Heterogeneous Enhancement Of The Kidneys And Minimal Delayed Excretion.\n\nThe Overall Pattern Is Compatible With Acute Cortical Necrosis.",
+    "medgemma": {
+      "predicted_findings": "- Location and laterality of abnormalities: The abnormalities are located in the retroperitoneum, specifically in the left retroperitoneum.\n- Size, shape, and density/signal characteristics of lesions: There is a well-defined, round, low-density lesion measuring approximately 1.5 cm in diameter, located in the left retroperitoneum.\n- Associated findings: No associated effusions, lymphadenopathy, or calcifications are identified.\n- Normal structures and their appearance: The kidneys, ureters, bladder, and surrounding abdominal structures appear grossly normal. The bowel loops are unremarkable.\n- Any incidental findings: There is a small amount of free fluid in the pelvis.\n\n**Disclaimer:** This analysis is based solely on the provided image and clinical history. It is not a substitute for a professional medical evaluation. A definitive diagnosis requires correlation with the patient's clinical presentation, physical examination, and potentially further investigations.",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model described the kidneys as 'grossly normal' and explicitly stated that 'no... calcifications are identified', whereas the gold standard highlights thin cortical calcifications, heterogeneous enhancement, and delayed excretion indicative of acute cortical necrosis. The model missed the primary pathology entirely.",
+      "rouge_recall": 0.275,
+      "rouge_precision": 0.08396946564885496,
+      "rouge_fmeasure": 0.1286549707602339,
+      "latency_ms": 8291.909292000128,
+      "cost": 0.0026488043571667075
+    },
+    "gemini": {
+      "predicted_findings": "Based on the provided non-contrast axial CT image of the abdomen at the level of the kidneys, the findings are as follows:\n\n**Abdominal Wall**\n*   **Location:** Midline anterior abdominal wall.\n*   **Finding:** There is a focal defect in the midline abdominal fascia (linea alba) measuring approximately 2.0 cm in width. \n*   **Characteristics:** Protruding through this defect is a small volume of tissue with fat attenuation (-50 to -100 Hounsfield units), consistent with mesenteric or omental fat, extending into the subcutaneous fat layer.\n\n**Retroperitoneum and Vasculature**\n*   **Location:** Midline and para-aortic regions.\n*   **Finding:** Multiple small, hyperdense metallic-density structures are noted in the retroperitoneal space, consistent with surgical clips.\n*   **Vessels:** The abdominal aorta demonstrates extensive, circumferential high-density calcifications within its wall. The inferior vena cava is partially visualized and appears patent on this slice.\n\n**Urinary System**\n",
+      "findings_judge_score": "poor",
+      "findings_judge_key_finding": false,
+      "findings_judge_explanation": "The model missed the primary diagnosis of Acute Cortical Necrosis. The gold standard describes specific pathological findings including thin cortical calcifications extending into the medullary spaces, whereas the model incorrectly characterizes the renal parenchyma as homogeneous and explicitly states no hyperdense calculi or lesions are identified.",
+      "rouge_recall": 0.3,
+      "rouge_precision": 0.04428044280442804,
+      "rouge_fmeasure": 0.07717041800643086,
+      "latency_ms": 18941.02795800063,
+      "cost": 0.005985
+    }
+  }
+]

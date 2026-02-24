@@ -69,3 +69,7 @@ class PresearchResult(BaseModel):
     medgemma_calls: int = 0
     medgemma_estimated_cost: float = 0.0
     latency_ms: float = 0.0
+    medgemma_guidance_raw: str = ""
+    medgemma_condition_terms: list[str] = Field(default_factory=list)
+    medgemma_eligibility_keywords: list[str] = Field(default_factory=list)
+    condition_terms_searched: list[str] = Field(default_factory=list)

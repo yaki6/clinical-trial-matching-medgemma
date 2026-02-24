@@ -25,6 +25,20 @@ from trialmatch.prescreen.ctgov_client import CTGovClient, parse_search_results,
 
 logger = structlog.get_logger()
 
+MAX_ELIGIBILITY_CHARS = 2000  # ~500 tokens — captures first ~20 criteria lines
+
+
+def _truncate_eligibility(text: str) -> str:
+    """Truncate eligibility criteria to prevent context window bloat."""
+    if len(text) <= MAX_ELIGIBILITY_CHARS:
+        return text
+    truncated = text[:MAX_ELIGIBILITY_CHARS]
+    last_newline = truncated.rfind('\n')
+    if last_newline > MAX_ELIGIBILITY_CHARS * 0.7:
+        truncated = truncated[:last_newline]
+    return truncated + "\n[... truncated for brevity]"
+
+
 # ---------------------------------------------------------------------------
 # 1. Tool schemas (Gemini function declarations)
 # ---------------------------------------------------------------------------
@@ -123,13 +137,13 @@ _SEARCH_TRIALS_DECL = genai_types.FunctionDeclaration(
                 type=genai_types.Type.STRING,
                 enum=["INTERVENTIONAL", "OBSERVATIONAL", "EXPANDED_ACCESS"],
                 description=(
-                    "Filter by study type. Default: INTERVENTIONAL (clinical trials "
-                    "patients can enroll in). Use OBSERVATIONAL only if specifically needed."
+                    "Filter by study type. Omit to search all study types. "
+                    "Use INTERVENTIONAL for clinical trials, OBSERVATIONAL for observational studies."
                 ),
             ),
             "page_size": genai_types.Schema(
                 type=genai_types.Type.INTEGER,
-                description="Number of results to return. Default 20. Max 50.",
+                description="Number of results to return. Default 50. Max 100.",
             ),
         },
     ),
@@ -224,7 +238,7 @@ class ToolExecutor:
         max_age: str | None = None,
         sex: str | None = None,
         study_type: str | None = None,
-        page_size: int = 20,
+        page_size: int = 50,
         **_ignored: Any,
     ) -> tuple[dict, str]:
         start = time.perf_counter()
@@ -238,8 +252,8 @@ class ToolExecutor:
             sex=sex,
             min_age=min_age,
             max_age=max_age,
-            study_type=study_type or "INTERVENTIONAL",
-            page_size=min(int(page_size), 50),
+            study_type=study_type or None,
+            page_size=min(int(page_size), 100),
         )
         latency = (time.perf_counter() - start) * 1000
 
@@ -281,7 +295,7 @@ class ToolExecutor:
         result = {
             "nct_id": nct_id,
             "title": id_mod.get("briefTitle", ""),
-            "eligibility_criteria": eligibility.get("eligibilityCriteria", ""),
+            "eligibility_criteria": _truncate_eligibility(eligibility.get("eligibilityCriteria", "")),
             "minimum_age": eligibility.get("minimumAge", ""),
             "maximum_age": eligibility.get("maximumAge", ""),
             "sex": eligibility.get("sex", ""),

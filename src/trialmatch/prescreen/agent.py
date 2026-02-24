@@ -12,6 +12,7 @@ is disease-agnostic — Gemini adapts its search strategy to any patient profile
 from __future__ import annotations
 
 import asyncio
+import re
 import time
 from typing import TYPE_CHECKING, Any
 
@@ -27,7 +28,7 @@ if TYPE_CHECKING:
 
 logger = structlog.get_logger()
 
-MAX_TOOL_CALLS_DEFAULT = 8
+MAX_TOOL_CALLS_DEFAULT = 20
 
 # Imported from gemini.py pricing constants (kept in sync)
 _COST_PER_1M_INPUT = 1.25
@@ -36,51 +37,43 @@ _COST_PER_1M_OUTPUT = 10.00
 TraceCallback = Any
 
 PRESCREEN_SYSTEM_PROMPT = """\
-You are a clinical trial search specialist. Your job: find the TOP 5-15 most \
-relevant recruiting trials for a patient — quality over quantity.
+You are a clinical trial search specialist. Your job: find ALL potentially \
+relevant trials for a patient on ClinicalTrials.gov — maximize recall.
 
-## Search Strategy — BROAD FIRST, then NARROW
+## Search Execution Plan
 
-You MUST follow this layered approach. Do NOT combine many filters on a single search.
+You will receive a Search Checklist with condition terms from MedGemma \
+(a medical AI). You MUST search EACH term systematically:
 
-### Search 1: BROAD condition search (NO eligibility_keywords)
-- Use the standard disease term for the condition field \
-  (e.g., "non-small cell lung cancer", NOT "NSCLC adenocarcinoma")
-- Pass age and sex filters to exclude ineligible trials
-- Do NOT add eligibility_keywords — this first search establishes the baseline
+For EACH condition term in the checklist:
+1. Call search_trials with that term as the condition parameter
+2. Do NOT use age or sex filters — many trials lack structured age data \
+   and the filter silently excludes them, hurting recall
 
-### Search 2: Histology/subtype search
-- Use a more specific condition term (e.g., "lung adenocarcinoma")
-- Still use age/sex filters, but NO eligibility_keywords yet
+After exhausting all condition terms:
+3. Run 2-3 eligibility_keywords-only searches (no condition) for biomarkers \
+   or treatment status from the checklist
+4. Call get_trial_details for the 5-10 most promising trials across all searches
 
-### Search 3-4: Targeted eligibility keyword searches
-- NOW add eligibility_keywords for specific clinical features:
-  - Biomarkers/mutations: "EGFR", "ALK", "treatment naive", "first line"
-  - Clinical phenotype: relevant to patient profile
-- Use broad condition (e.g., "NSCLC" or "non-small cell lung cancer")
-- Age/sex filters optional here (they may over-restrict combined with keywords)
+## Why This Matters
 
-### Search 5 (if needed): Intervention-based
-- Search by prior therapy or drug class if patient has treatment history
+CT.gov indexes trials under diverse condition terms. A patient's relevant \
+trials may be indexed under the specific diagnosis, a broader disease family, \
+a clinical presentation, an anatomical category, or a broad umbrella term. \
+A single search term misses trials indexed under different vocabulary. \
+MedGemma provides diverse terms — search ALL of them.
 
-## Demographic Filters
-
-The patient's age and sex are provided. Use them on broad searches (Search 1-2) \
-to exclude ineligible trials. Format: "43 Years" for age. \
-On narrow keyword searches (Search 3+), age/sex filters are optional — \
-the eligibility_keywords already restrict results.
-
-## Key Rules
-
-- Use standard CT.gov terms for condition: "non-small cell lung cancer" (not "NSCLC \
-  adenocarcinoma"), "breast cancer" (not "breast carcinoma"), etc.
-- Keep page_size at 10
-- Call get_trial_details for the 3-5 most promising trials only
-- Stop after 4-6 searches or when you have 5+ relevant trials
+## Tool Use Rules
+- Call search_trials ONCE per condition term — one term per call
+- Use page_size=50 for all searches to maximize coverage
+- Do NOT combine multiple condition terms in one search call
+- Do NOT stop after finding a few trials — exhaust ALL checklist terms
+- Call get_trial_details for AT MOST 3 trials — prioritize MORE searches over details
+- Every search call you skip to fetch details is ~50 trials you'll never see
 
 ## Final Response
-
-Summarize: search strategy, top 5 candidates with fit reasoning, key unknowns.
+Summarize: condition terms searched, total unique trials found, top \
+candidates with fit reasoning, and key eligibility unknowns.\
 """
 
 PRESCREEN_USER_TEMPLATE = """\
@@ -98,11 +91,10 @@ PRESCREEN_USER_TEMPLATE = """\
 
 {clinical_guidance_section}
 
-Search ClinicalTrials.gov for the TOP 5-15 recruiting trials this patient may be eligible for.
+{search_checklist}
 
-Remember: Start with a BROAD condition-only search (Search 1), then narrow. \
-Use age="{age} Years" and sex="{sex_api}" on broad searches. \
-Do NOT combine eligibility_keywords with age/sex on the same search.\
+Search ClinicalTrials.gov for ALL potentially relevant trials for this patient.
+Do NOT use age or sex filters — they exclude trials with missing structured data.\
 """
 
 # ---------------------------------------------------------------------------
@@ -110,29 +102,38 @@ Do NOT combine eligibility_keywords with age/sex on the same search.\
 # ---------------------------------------------------------------------------
 
 CLINICAL_REASONING_PROMPT = """\
-You are a clinical oncology expert analyzing a patient profile to guide \
-clinical trial search on ClinicalTrials.gov.
+You are a clinical expert guiding clinical trial search on ClinicalTrials.gov.
 
-Given the patient profile below, provide a concise clinical reasoning summary:
+Given this patient, generate search guidance in EXACTLY this format:
 
-1. **Standard CT.gov condition terms**: What are the 2-3 best condition search \
-   terms for this patient? Use standard terms indexed by ClinicalTrials.gov \
-   (e.g., "non-small cell lung cancer", "lung adenocarcinoma").
+CONDITION TERMS (list 12-15, most specific to most broad):
+1. [exact diagnosis subtype]
+2. [standard disease name]
+3. [broader disease family or related condition]
+4. [key clinical presentation or complication — e.g., "Malignant Pleural Effusion"]
+5. [another clinical presentation if relevant]
+6. [related procedure or treatment that trials target — e.g., "Pleurodesis"]
+7. [anatomical/organ-based category]
+8. [MeSH heading for the condition — e.g., "Lung Neoplasms" for lung cancer]
+9. [key complication with qualifier — e.g., "Malignant" + the complication]
+10. [related disease that shares treatment — e.g., "Pleural Diseases"]
+11. [broadest umbrella for basket trials — e.g., "Solid Tumor", "Neoplasms"]
+12. [another broad umbrella — e.g., "Metastatic Cancer", "Advanced Cancer"]
+13-15. [any additional MeSH terms, procedures, or synonyms — more is better]
 
-2. **Most likely molecular drivers**: Based on the patient's demographics, \
-   histology, and smoking status, what are the most probable oncogenic driver \
-   mutations? Rank by probability. For example, a young female never-smoker \
-   with lung adenocarcinoma has ~50-60% probability of EGFR activating mutation.
+ELIGIBILITY KEYWORDS (3-5 terms commonly found in trial eligibility criteria):
+- [biomarker or mutation relevant to this patient]
+- [treatment status keyword]
+- [histology or clinical phenotype keyword]
 
-3. **Priority eligibility keywords**: What 3-5 eligibility_keywords should be \
-   searched on CT.gov? These should be terms commonly found in trial eligibility \
-   criteria text (e.g., "EGFR", "treatment naive", "first line").
+TREATMENT LINE: [treatment-naive / first-line / second-line / later-line]
 
-4. **Treatment line**: Is this patient treatment-naive, first-line, or later-line? \
-   This determines which trials are appropriate.
-
-5. **Clinical phenotype hints**: Any distinctive features (rare histology, \
-   specific comorbidities) that should guide or constrain the search.
+CLINICAL REASONING:
+- Primary diagnosis with key supporting evidence
+- Molecular/genomic considerations (likely driver mutations based on histology, \
+demographics, smoking status)
+- Key comorbidities that may affect trial eligibility
+- Any distinctive features that should guide or constrain the search
 
 Patient Profile:
 {patient_note}
@@ -140,7 +141,138 @@ Patient Profile:
 Key Facts:
 {key_facts_text}
 
-Respond in plain text, concise bullet points. Focus on actionable search guidance."""
+IMPORTANT: Each condition term becomes a SEPARATE CT.gov search query. \
+Trials are indexed under many different vocabulary terms. A search for a \
+clinical presentation may find trials that a search for the primary \
+diagnosis misses entirely. Be comprehensive — list every term that could \
+surface relevant trials.\
+"""
+
+FALLBACK_SEARCH_CHECKLIST = """\
+## Search Checklist
+MedGemma guidance was unavailable. Search broadly using the patient profile:
+1. Search the primary diagnosis from the key facts
+2. Search broader disease family terms
+3. Search key clinical presentations or complications
+4. Search broad umbrella categories (e.g., the organ system, "solid tumor")
+5. Run 2-3 eligibility keyword searches for biomarkers or treatment status
+"""
+
+
+def _parse_clinical_guidance(guidance_text: str) -> dict[str, Any]:
+    """Parse MedGemma's structured output into components.
+
+    Extracts condition terms, eligibility keywords, and treatment line
+    from the structured format. Returns empty lists on parse failure
+    (Gemini still gets the raw text as unstructured guidance).
+    """
+    result: dict[str, Any] = {
+        "condition_terms": [],
+        "eligibility_keywords": [],
+        "treatment_line": "",
+        "raw_text": guidance_text,
+    }
+    if not guidance_text:
+        return result
+
+    # Extract numbered items after CONDITION header
+    cond_match = re.search(
+        r"CONDITION\s+TERMS?\s*[:(].*?\)?\s*:?\s*\n(.*?)(?=\nELIGIBILITY|\nTREATMENT|\nCLINICAL|\Z)",
+        guidance_text,
+        re.DOTALL | re.IGNORECASE,
+    )
+    if cond_match:
+        block = cond_match.group(1)
+        # Match numbered items: "1. term" or "1) term" or "- term"
+        terms = re.findall(r"(?:^\d+[\.\)]\s*|^-\s+)(.+)", block, re.MULTILINE)
+        result["condition_terms"] = [t.strip().strip('"').strip("'") for t in terms if t.strip()]
+
+    # Extract dash-prefixed items after ELIGIBILITY header
+    elig_match = re.search(
+        r"ELIGIBILITY\s+KEYWORDS?\s*[:(].*?\)?\s*:?\s*\n(.*?)(?=\nTREATMENT|\nCLINICAL|\Z)",
+        guidance_text,
+        re.DOTALL | re.IGNORECASE,
+    )
+    if elig_match:
+        block = elig_match.group(1)
+        keywords = re.findall(r"(?:^-\s+|^\d+[\.\)]\s*)(.+)", block, re.MULTILINE)
+        result["eligibility_keywords"] = [k.strip().strip('"').strip("'") for k in keywords if k.strip()]
+
+    # Extract treatment line
+    tl_match = re.search(r"TREATMENT\s+LINE\s*:\s*(.+)", guidance_text, re.IGNORECASE)
+    if tl_match:
+        result["treatment_line"] = tl_match.group(1).strip()
+
+    return result
+
+
+def _build_search_checklist(parsed: dict[str, Any]) -> str:
+    """Generate an explicit search checklist from parsed MedGemma guidance.
+
+    Terms are dynamically populated from MedGemma output — no hardcoded diseases.
+    """
+    lines = ["## Search Checklist (search EACH term):"]
+    for term in parsed.get("condition_terms", []):
+        lines.append(f'- [ ] Condition: "{term}"')
+
+    keywords = parsed.get("eligibility_keywords", [])
+    if keywords:
+        lines.append("\n## Eligibility Keyword Searches:")
+        for kw in keywords:
+            lines.append(f'- [ ] Keywords: "{kw}"')
+
+    return "\n".join(lines)
+
+
+async def _get_gemini_fallback_guidance(
+    gemini_adapter: Any,
+    patient_note: str,
+    key_facts_text: str,
+    topic_id: str = "",
+    trace_callback: TraceCallback | None = None,
+) -> str:
+    """Use Gemini as fallback when MedGemma is unavailable.
+
+    Calls Gemini with the same CLINICAL_REASONING_PROMPT to generate
+    condition terms and search guidance.
+    """
+    prompt = CLINICAL_REASONING_PROMPT.format(
+        patient_note=patient_note.strip(),
+        key_facts_text=key_facts_text,
+    )
+    _emit_trace(
+        trace_callback,
+        "gemini_fallback_guidance_prompt",
+        {"topic_id": topic_id, "prompt_len": len(prompt)},
+    )
+    try:
+        start = time.perf_counter()
+        response = await asyncio.to_thread(
+            gemini_adapter._client.models.generate_content,
+            model=gemini_adapter._model,
+            contents=prompt,
+        )
+        latency_ms = (time.perf_counter() - start) * 1000
+        text = response.text or ""
+        logger.info(
+            "gemini_fallback_guidance_complete",
+            topic_id=topic_id,
+            latency_ms=f"{latency_ms:.0f}",
+            guidance_len=len(text),
+        )
+        _emit_trace(
+            trace_callback,
+            "gemini_fallback_guidance_response",
+            {"topic_id": topic_id, "latency_ms": latency_ms, "guidance": text[:500]},
+        )
+        return text.strip()
+    except Exception as exc:
+        logger.warning(
+            "gemini_fallback_guidance_failed",
+            topic_id=topic_id,
+            error=str(exc)[:200],
+        )
+        return ""
 
 
 async def run_prescreen_agent(
@@ -149,7 +281,7 @@ async def run_prescreen_agent(
     ingest_source: str,
     gemini_adapter: GeminiAdapter,
     medgemma_adapter: Any | None = None,
-    require_clinical_guidance: bool = False,
+    allow_gemini_fallback: bool = False,
     max_tool_calls: int = MAX_TOOL_CALLS_DEFAULT,
     topic_id: str = "",
     on_tool_call: Any | None = None,
@@ -164,7 +296,8 @@ async def run_prescreen_agent(
         ingest_source: "gold" | "model_medgemma" | "model_gemini" — for cache isolation.
         gemini_adapter: Configured GeminiAdapter (provides raw genai.Client access).
         medgemma_adapter: If provided, used for clinical reasoning pre-search step.
-        require_clinical_guidance: If True, PRESCREEN fails when MedGemma guidance fails.
+        allow_gemini_fallback: If True, uses Gemini for guidance when MedGemma unavailable.
+            If False and no medgemma_adapter provided, raises ValueError.
         max_tool_calls: Hard cap on total tool calls (safety budget guard).
         topic_id: Patient/topic identifier for tracing.
         on_tool_call: Optional sync callback(ToolCallRecord) — invoked after each tool execution.
@@ -185,10 +318,12 @@ async def run_prescreen_agent(
         sex_raw = str(key_facts.get("sex", key_facts.get("gender", "unknown"))).strip()
         sex_api = _normalize_sex(sex_raw)
 
-        # MedGemma clinical reasoning pre-search step (optional)
+        # MedGemma clinical reasoning pre-search step (required unless fallback allowed)
         clinical_guidance = ""
+        parsed_guidance: dict[str, Any] = {}
         medgemma_calls = 0
         medgemma_cost = 0.0
+
         if medgemma_adapter is not None:
             clinical_guidance, medgemma_calls, medgemma_cost = await _get_clinical_guidance(
                 medgemma_adapter=medgemma_adapter,
@@ -196,16 +331,48 @@ async def run_prescreen_agent(
                 key_facts_text=_format_key_facts(key_facts),
                 topic_id=topic_id,
                 on_agent_text=on_agent_text,
-                require_success=require_clinical_guidance,
+                require_success=not allow_gemini_fallback,
                 trace_callback=trace_callback,
             )
+            if clinical_guidance:
+                parsed_guidance = _parse_clinical_guidance(clinical_guidance)
+        elif allow_gemini_fallback:
+            logger.warning("prescreen_no_medgemma_using_gemini_fallback", topic_id=topic_id)
+            clinical_guidance = await _get_gemini_fallback_guidance(
+                gemini_adapter, patient_note, _format_key_facts(key_facts),
+                topic_id=topic_id, trace_callback=trace_callback,
+            )
+            if clinical_guidance:
+                parsed_guidance = _parse_clinical_guidance(clinical_guidance)
+        else:
+            raise ValueError(
+                "MedGemma adapter required for PRESCREEN. "
+                "Pass medgemma_adapter or set allow_gemini_fallback=True."
+            )
 
+        _emit_trace(
+            trace_callback,
+            "medgemma_guidance_parsed",
+            {
+                "topic_id": topic_id,
+                "condition_terms": parsed_guidance.get("condition_terms", []),
+                "eligibility_keywords": parsed_guidance.get("eligibility_keywords", []),
+                "parse_success": bool(parsed_guidance.get("condition_terms")),
+            },
+        )
+
+        # Build user message sections
         clinical_guidance_section = ""
         if clinical_guidance:
             clinical_guidance_section = (
-                "## MedGemma Clinical Reasoning (use this to guide your search strategy)\n\n"
-                + clinical_guidance
+                "## MedGemma Clinical Reasoning\n\n" + clinical_guidance
             )
+
+        search_checklist = (
+            _build_search_checklist(parsed_guidance)
+            if parsed_guidance.get("condition_terms")
+            else FALLBACK_SEARCH_CHECKLIST
+        )
 
         user_message = PRESCREEN_USER_TEMPLATE.format(
             patient_note=patient_note.strip(),
@@ -214,6 +381,7 @@ async def run_prescreen_agent(
             sex=sex_raw,
             sex_api=sex_api,
             clinical_guidance_section=clinical_guidance_section,
+            search_checklist=search_checklist,
         )
         _emit_trace(
             trace_callback,
@@ -449,6 +617,13 @@ async def run_prescreen_agent(
         # Build final candidate list
         candidates = _build_candidates(candidates_by_nct, found_by_query)
 
+        # Collect condition terms actually searched by Gemini
+        condition_terms_searched = [
+            tc.args.get("condition", "")
+            for tc in tool_call_records
+            if tc.tool_name == "search_trials" and tc.args.get("condition")
+        ]
+
         gemini_cost = (
             total_input_tokens * _COST_PER_1M_INPUT + total_output_tokens * _COST_PER_1M_OUTPUT
         ) / 1_000_000
@@ -499,6 +674,10 @@ async def run_prescreen_agent(
             medgemma_calls=total_medgemma_calls,
             medgemma_estimated_cost=total_medgemma_cost,
             latency_ms=total_latency_ms,
+            medgemma_guidance_raw=clinical_guidance,
+            medgemma_condition_terms=parsed_guidance.get("condition_terms", []),
+            medgemma_eligibility_keywords=parsed_guidance.get("eligibility_keywords", []),
+            condition_terms_searched=condition_terms_searched,
         )
 
     finally:
@@ -534,13 +713,12 @@ async def _get_clinical_guidance(
         {
             "topic_id": topic_id,
             "prompt": prompt,
-            "max_tokens": 512,
         },
     )
 
     try:
         start = time.perf_counter()
-        response = await medgemma_adapter.generate(prompt, max_tokens=512)
+        response = await medgemma_adapter.generate(prompt)
         latency_ms = (time.perf_counter() - start) * 1000
 
         # Clean MedGemma output (strip chat markers, thinking tokens)
@@ -694,7 +872,7 @@ def _describe_query(args: dict[str, Any]) -> str:
     return ", ".join(parts) or "broad search"
 
 
-MAX_CANDIDATES = 20  # Hard cap — downstream VALIDATE is expensive per trial
+MAX_CANDIDATES = 200  # High for recall — downstream VALIDATE filters
 
 
 def _score_candidate(data: dict[str, Any], query_count: int) -> float:

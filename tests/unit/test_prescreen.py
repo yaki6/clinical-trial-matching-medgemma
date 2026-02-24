@@ -19,10 +19,13 @@ import pytest
 
 from trialmatch.prescreen.agent import (
     _build_candidates,
+    _build_search_checklist,
     _describe_query,
     _format_key_facts,
+    _parse_clinical_guidance,
     run_prescreen_agent,
 )
+from trialmatch.prescreen.tools import _truncate_eligibility
 from trialmatch.prescreen.ctgov_client import CTGovClient, parse_search_results, parse_study_summary
 from trialmatch.prescreen.schema import PresearchResult, TrialCandidate
 from trialmatch.prescreen.tools import ToolExecutor
@@ -707,6 +710,16 @@ def _make_gemini_adapter(turns: list[dict]):
     return adapter
 
 
+def _make_mock_medgemma():
+    """Build a mock MedGemma adapter with async generate that returns minimal guidance."""
+    mock = MagicMock()
+    mock.name = "medgemma-27b-mock"
+    mock.generate = AsyncMock(
+        return_value=MagicMock(text="No structured guidance.", estimated_cost=0.001)
+    )
+    return mock
+
+
 class TestRunPresearchAgent:
     def test_agent_no_tool_calls(self):
         """Gemini immediately returns text with no tool calls → empty candidates."""
@@ -716,7 +729,7 @@ class TestRunPresearchAgent:
 
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+        mock_medgemma = _make_mock_medgemma()
 
         with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
             result = asyncio.run(
@@ -751,7 +764,10 @@ class TestRunPresearchAgent:
         mock_ctgov.aclose = AsyncMock()
         events: list[tuple[str, dict]] = []
 
-        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+        with (
+            patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov),
+            patch("trialmatch.prescreen.agent._get_gemini_fallback_guidance", return_value=""),
+        ):
             asyncio.run(
                 run_prescreen_agent(
                     patient_note="NSCLC patient",
@@ -759,6 +775,7 @@ class TestRunPresearchAgent:
                     ingest_source="gold",
                     gemini_adapter=adapter,
                     medgemma_adapter=None,
+                    allow_gemini_fallback=True,
                     topic_id="trace-test-001",
                     trace_callback=lambda event, payload: events.append((event, payload)),
                 )
@@ -773,13 +790,41 @@ class TestRunPresearchAgent:
         assert tool_payload["tool_name"] == "search_trials"
         assert tool_payload["result"]["count"] == 2
 
-    def test_guidance_required_fails_when_medgemma_fails(self):
-        """When guidance is required, MedGemma failure should abort PRESCREEN."""
+    def test_no_adapter_no_fallback_raises_value_error(self):
+        """No medgemma_adapter + allow_gemini_fallback=False should raise ValueError."""
         adapter = _make_gemini_adapter([{"text": "unused", "function_calls": []}])
 
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+
+        with (
+            patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov),
+            pytest.raises(
+                ValueError,
+                match="MedGemma adapter required",
+            ),
+        ):
+            asyncio.run(
+                run_prescreen_agent(
+                    patient_note="NSCLC patient",
+                    key_facts={"diagnosis": "NSCLC"},
+                    ingest_source="gold",
+                    gemini_adapter=adapter,
+                    medgemma_adapter=None,
+                    allow_gemini_fallback=False,
+                    topic_id="test-no-adapter-no-fallback",
+                )
+            )
+
+        mock_ctgov.aclose.assert_awaited_once()
+
+    def test_adapter_fails_no_fallback_raises(self):
+        """MedGemma adapter provided but fails + allow_gemini_fallback=False should raise."""
+        adapter = _make_gemini_adapter([{"text": "unused", "function_calls": []}])
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.aclose = AsyncMock()
+        mock_medgemma = _make_mock_medgemma()
         mock_medgemma.generate = AsyncMock(side_effect=RuntimeError("guidance endpoint down"))
 
         with (
@@ -796,40 +841,41 @@ class TestRunPresearchAgent:
                     ingest_source="gold",
                     gemini_adapter=adapter,
                     medgemma_adapter=mock_medgemma,
-                    require_clinical_guidance=True,
-                    topic_id="test-guidance-required",
+                    allow_gemini_fallback=False,
+                    topic_id="test-adapter-fails-no-fallback",
                 )
             )
 
         mock_ctgov.aclose.assert_awaited_once()
 
-    def test_guidance_optional_continues_when_medgemma_fails(self):
-        """When guidance is optional, MedGemma failure should not abort PRESCREEN."""
+    def test_no_adapter_with_fallback_continues(self):
+        """No medgemma_adapter + allow_gemini_fallback=True should warn but work."""
         adapter = _make_gemini_adapter(
-            [{"text": "Completed with optional guidance fallback.", "function_calls": []}]
+            [{"text": "Completed with Gemini fallback guidance.", "function_calls": []}]
         )
 
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
-        mock_medgemma.generate = AsyncMock(side_effect=RuntimeError("guidance endpoint down"))
 
-        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+        with (
+            patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov),
+            patch("trialmatch.prescreen.agent._get_gemini_fallback_guidance", return_value=""),
+        ):
             result = asyncio.run(
                 run_prescreen_agent(
                     patient_note="NSCLC patient",
                     key_facts={"diagnosis": "NSCLC"},
                     ingest_source="gold",
                     gemini_adapter=adapter,
-                    medgemma_adapter=mock_medgemma,
-                    require_clinical_guidance=False,
-                    topic_id="test-guidance-optional",
+                    medgemma_adapter=None,
+                    allow_gemini_fallback=True,
+                    topic_id="test-no-adapter-with-fallback",
                 )
             )
 
         assert isinstance(result, PresearchResult)
         assert result.total_api_calls == 0
-        assert "optional guidance fallback" in result.agent_reasoning
+        assert "Gemini fallback" in result.agent_reasoning
         mock_ctgov.aclose.assert_awaited_once()
 
     def test_agent_single_search_tool_call(self, sample_search_response):
@@ -844,7 +890,7 @@ class TestRunPresearchAgent:
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.search = AsyncMock(return_value=sample_search_response)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+        mock_medgemma = _make_mock_medgemma()
 
         with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
             result = asyncio.run(
@@ -883,7 +929,7 @@ class TestRunPresearchAgent:
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.search = AsyncMock(return_value=sample_search_response)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+        mock_medgemma = _make_mock_medgemma()
 
         with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
             result = asyncio.run(
@@ -907,7 +953,7 @@ class TestRunPresearchAgent:
 
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+        mock_medgemma = _make_mock_medgemma()
 
         with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
             result = asyncio.run(
@@ -937,7 +983,7 @@ class TestRunPresearchAgent:
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.search = AsyncMock(return_value=sample_search_response)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+        mock_medgemma = _make_mock_medgemma()
 
         with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
             result = asyncio.run(
@@ -968,7 +1014,7 @@ class TestRunPresearchAgent:
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.search = AsyncMock(return_value=sample_search_response)
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+        mock_medgemma = _make_mock_medgemma()
 
         # Capture a shallow copy of the contents list on each generate_content call.
         # Shallow copy is essential: the agent mutates the same list in-place by appending
@@ -1041,7 +1087,7 @@ class TestRunPresearchAgent:
         mock_ctgov = MagicMock(spec=CTGovClient)
         mock_ctgov.search = AsyncMock(side_effect=RuntimeError("CT.gov 503 error"))
         mock_ctgov.aclose = AsyncMock()
-        mock_medgemma = MagicMock()
+        mock_medgemma = _make_mock_medgemma()
 
         with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
             result = asyncio.run(
@@ -1058,3 +1104,118 @@ class TestRunPresearchAgent:
         assert result.tool_call_trace[0].error is not None
         assert "503" in result.tool_call_trace[0].error
         assert result.candidates == []
+
+
+# ---------------------------------------------------------------------------
+# Parser, checklist, and truncation tests
+# ---------------------------------------------------------------------------
+
+
+class TestParseClinicalGuidance:
+    def test_parse_numbered_list(self):
+        """Parser extracts numbered condition terms correctly."""
+        guidance = """\
+CONDITION TERMS (list 8-12, most specific to most broad):
+1. malignant pleural mesothelioma
+2. mesothelioma
+3. pleural neoplasm
+4. pleural effusion
+5. lung cancer
+6. thoracic cancer
+7. solid tumor
+8. advanced cancer
+
+ELIGIBILITY KEYWORDS (3-5 terms):
+- asbestos exposure
+- treatment naive
+- epithelioid
+
+TREATMENT LINE: treatment-naive
+
+CLINICAL REASONING:
+- Patient has confirmed mesothelioma
+"""
+        parsed = _parse_clinical_guidance(guidance)
+        assert len(parsed["condition_terms"]) == 8
+        assert "malignant pleural mesothelioma" in parsed["condition_terms"]
+        assert "advanced cancer" in parsed["condition_terms"]
+        assert len(parsed["eligibility_keywords"]) == 3
+        assert "asbestos exposure" in parsed["eligibility_keywords"]
+        assert parsed["treatment_line"] == "treatment-naive"
+        assert parsed["raw_text"] == guidance
+
+    def test_parse_with_bullets(self):
+        """Parser handles bullet-point format for condition terms."""
+        guidance = """\
+CONDITION TERMS (list 8-12):
+- breast cancer
+- HER2 positive breast cancer
+- metastatic breast cancer
+
+ELIGIBILITY KEYWORDS:
+- HER2
+- trastuzumab
+
+TREATMENT LINE: second-line
+"""
+        parsed = _parse_clinical_guidance(guidance)
+        assert len(parsed["condition_terms"]) == 3
+        assert "breast cancer" in parsed["condition_terms"]
+        assert len(parsed["eligibility_keywords"]) == 2
+
+    def test_parse_fallback_on_garbled_input(self):
+        """Garbled MedGemma output returns empty lists + raw_text."""
+        guidance = "This is just free text with no structure at all."
+        parsed = _parse_clinical_guidance(guidance)
+        assert parsed["condition_terms"] == []
+        assert parsed["eligibility_keywords"] == []
+        assert parsed["treatment_line"] == ""
+        assert parsed["raw_text"] == guidance
+
+    def test_parse_empty_input(self):
+        parsed = _parse_clinical_guidance("")
+        assert parsed["condition_terms"] == []
+        assert parsed["raw_text"] == ""
+
+
+class TestBuildSearchChecklist:
+    def test_checklist_format(self):
+        """Checklist has condition + keyword sections."""
+        parsed = {
+            "condition_terms": ["mesothelioma", "pleural effusion", "solid tumor"],
+            "eligibility_keywords": ["asbestos", "treatment naive"],
+        }
+        checklist = _build_search_checklist(parsed)
+        assert "mesothelioma" in checklist
+        assert "pleural effusion" in checklist
+        assert "solid tumor" in checklist
+        assert "asbestos" in checklist
+        assert "Search Checklist" in checklist
+
+    def test_checklist_no_keywords(self):
+        parsed = {"condition_terms": ["cancer"], "eligibility_keywords": []}
+        checklist = _build_search_checklist(parsed)
+        assert "cancer" in checklist
+        assert "Eligibility" not in checklist
+
+
+class TestTruncateEligibility:
+    def test_short_passthrough(self):
+        """Text under 2000 chars passes unchanged."""
+        short = "Inclusion Criteria:\n- NSCLC\n- Age >= 18"
+        assert _truncate_eligibility(short) == short
+
+    def test_long_cuts_at_newline(self):
+        """Long text truncated cleanly at newline boundary."""
+        # Build text that's well over 2000 chars
+        lines = [f"Criterion {i}: Some eligibility text here" for i in range(100)]
+        long_text = "\n".join(lines)
+        assert len(long_text) > 2000
+
+        result = _truncate_eligibility(long_text)
+        assert len(result) <= 2100  # 2000 + truncation marker
+        assert result.endswith("[... truncated for brevity]")
+
+    def test_exact_limit_passthrough(self):
+        text = "x" * 2000
+        assert _truncate_eligibility(text) == text

@@ -1,0 +1,52 @@
+# MedPix Multi-Region 20-case Benchmark — MedGemma 4B (Vertex AI) vs Gemini Flash
+# Stratified: 4 cases x 5 body regions (Head, Thorax, Abdomen, Spine/MSK, Urinary)
+# Focus: medical image findings extraction quality
+
+benchmark: medpix_multimodal
+description: "MedGemma 1.5 4B vs Gemini Flash — 20-case multi-region findings benchmark"
+
+prompt:
+  mode: findings_only
+  medgemma_simple: false
+
+data:
+  benchmark_file: data/benchmark/medpix_multiregion_20.json
+  phase: 2  # Phase 2 = 20-case multi-region
+
+models:
+  medgemma_4b:
+    provider: vertex
+    project_id: "gen-lang-client-0517724223"
+    region: "us-central1"
+    endpoint_id: "923518299076034560"
+    model_name: "medgemma-4b-vertex"
+    gpu_hourly_rate: 1.15
+    max_tokens: 2048
+    max_concurrent: 1
+
+  gemini_pro:
+    provider: google
+    model_id: "gemini-3-flash-preview"
+    max_tokens: 2048
+    max_concurrent: 1
+
+judge:
+  model_id: "gemini-3-pro-preview"
+  description: "LLM-as-judge for findings clinical accuracy (Pro to avoid Flash self-judge bias)"
+
+evaluation:
+  metrics:
+    - findings_rouge_l_recall
+    - findings_rouge_l_precision
+    - findings_rouge_l_f1
+    - findings_llm_judge
+    - findings_key_finding_rate
+
+budget:
+  max_cost_usd: 10.0
+  warn_at_usd: 5.0
+
+output:
+  run_dir: "runs/"
+  save_raw_responses: true
+  save_per_case_scores: true

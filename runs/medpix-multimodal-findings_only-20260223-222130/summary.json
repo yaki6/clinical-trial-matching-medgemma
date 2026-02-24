@@ -1,0 +1,29 @@
+{
+  "mode": "findings_only",
+  "medgemma_4b": {
+    "n_cases": 20,
+    "n_judged": 16,
+    "findings_judge_good": 0.25,
+    "findings_judge_partial": 0.0,
+    "findings_judge_poor": 0.75,
+    "findings_key_finding_rate": 0.25,
+    "rouge_recall": 0.2188984904907767,
+    "rouge_precision": 0.08162642662064507,
+    "rouge_f1": 0.09967538438378856,
+    "avg_latency_ms": 24508.915570700083,
+    "total_cost": 0.15658473836836165
+  },
+  "gemini_pro": {
+    "n_cases": 20,
+    "n_judged": 16,
+    "findings_judge_good": 0.4375,
+    "findings_judge_partial": 0.0625,
+    "findings_judge_poor": 0.5,
+    "findings_key_finding_rate": 0.5,
+    "rouge_recall": 0.3103744663240816,
+    "rouge_precision": 0.06930799817174951,
+    "rouge_f1": 0.1054825242234622,
+    "avg_latency_ms": 10652.032991649776,
+    "total_cost": 0.11420374999999999
+  }
+}

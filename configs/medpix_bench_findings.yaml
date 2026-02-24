@@ -1,0 +1,48 @@
+# MedPix Findings-Only Benchmark — MedGemma 4B v1.5 (Vertex AI) vs Gemini Flash
+# Evaluates imaging findings description accuracy only (ROUGE metrics)
+
+benchmark: medpix_multimodal
+description: "MedGemma 1.5 4B (Vertex AI) vs Gemini 3 Flash — Findings-only benchmark"
+
+prompt:
+  mode: findings_only
+
+data:
+  benchmark_file: data/benchmark/medpix_thorax_10.json
+  phase: 1
+
+models:
+  medgemma_4b:
+    provider: vertex
+    project_id: "gen-lang-client-0517724223"
+    region: "us-central1"
+    endpoint_id: "923518299076034560"
+    model_name: "medgemma-1.5-4b-vertex"
+    gpu_hourly_rate: 1.15
+    max_tokens: 2048
+    max_concurrent: 1
+
+  gemini_pro:
+    provider: google
+    model_id: "gemini-3-flash-preview"
+    max_tokens: 2048
+    max_concurrent: 1
+
+judge:
+  model_id: "gemini-3-pro-preview"
+  description: "Not used in findings_only mode — judge is skipped"
+
+evaluation:
+  metrics:
+    - findings_rouge_l_recall
+    - findings_rouge_l_precision
+    - findings_rouge_l_f1
+
+budget:
+  max_cost_usd: 5.0
+  warn_at_usd: 2.0
+
+output:
+  run_dir: "runs/"
+  save_raw_responses: true
+  save_per_case_scores: true

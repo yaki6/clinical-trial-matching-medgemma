@@ -281,11 +281,11 @@ class VertexMedGemmaAdapter(ModelAdapter):
         messages.append({
             "role": "user",
             "content": [
+                {"type": "text", "text": prompt},
                 {
                     "type": "image_url",
                     "image_url": {"url": f"data:{mime_type};base64,{image_b64}"},
                 },
-                {"type": "text", "text": prompt},
             ],
         })
 

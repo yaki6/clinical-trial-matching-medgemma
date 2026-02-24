@@ -30,8 +30,8 @@ models:
     max_concurrent: 1
 
 judge:
-  model_id: "gemini-3-flash-preview"
-  description: "LLM-as-judge for diagnosis semantic equivalence"
+  model_id: "gemini-3-pro-preview"
+  description: "LLM-as-judge for diagnosis semantic equivalence (Pro to avoid Flash self-judge bias)"
 
 evaluation:
   metrics:

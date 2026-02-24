@@ -71,6 +71,29 @@ DIAGNOSIS: [single primary diagnosis]
 
 FINDINGS: [key imaging findings]"""
 
+# Findings-only prompt — detailed imaging description, no diagnosis
+PROMPT_TEMPLATE_FINDINGS_ONLY = """Clinical history: {history}
+
+Analyze the provided medical image. Describe ALL imaging findings in detail:
+
+FINDINGS:
+- Location and laterality of abnormalities
+- Size, shape, and density/signal characteristics of lesions
+- Associated findings (effusions, lymphadenopathy, calcifications)
+- Normal structures and their appearance
+- Any incidental findings
+
+Be systematic and thorough. Do NOT provide a diagnosis."""
+
+# Diagnosis-only prompt — focused on primary diagnosis
+PROMPT_TEMPLATE_DIAGNOSIS_ONLY = """Clinical history: {history}
+
+Based on the image and clinical history, what is the single most likely diagnosis?
+
+DIAGNOSIS: [your primary diagnosis — use standard medical terminology]
+
+DIFFERENTIAL: [top 2-3 alternatives if uncertain]"""
+
 JUDGE_PROMPT_TEMPLATE = """You are an expert medical evaluation judge.
 
 Compare the MODEL PREDICTION against the GOLD STANDARD diagnosis.
@@ -85,6 +108,28 @@ Score the prediction:
 
 Respond ONLY with valid JSON:
 {{"score": "correct", "explanation": "brief reason"}}"""
+
+FINDINGS_JUDGE_PROMPT_TEMPLATE = """You are a board-certified radiologist evaluating imaging findings quality.
+
+Compare the MODEL FINDINGS against the GOLD STANDARD findings for this case.
+
+CLINICAL HISTORY: {history}
+GOLD STANDARD FINDINGS: {gold_findings}
+MODEL FINDINGS: {predicted_findings}
+
+Evaluate the model's findings on these dimensions:
+1. **Clinically significant findings identified**: Did the model identify the key abnormalities?
+2. **Anatomical accuracy**: Are locations, laterality, and descriptions correct?
+3. **False positives**: Did the model hallucinate findings not present in the image?
+4. **Completeness**: Did the model miss important findings?
+
+Score the findings:
+- "good": Identifies the main abnormality correctly with reasonable anatomical accuracy (minor omissions acceptable)
+- "partial": Identifies some relevant findings but misses the primary abnormality OR has significant anatomical errors
+- "poor": Fails to identify the primary abnormality, OR describes the image as normal when it is not, OR has major hallucinated findings
+
+Respond ONLY with valid JSON:
+{{"score": "good", "key_finding_identified": true, "explanation": "brief clinical reason"}}"""
 
 
 async def run_single_case(
@@ -117,11 +162,11 @@ async def run_single_case(
     # MedGemma 4B (multimodal)
     try:
         logger.info("calling_medgemma", uid=case["uid"])
-        # Pass system message if adapter supports it (Vertex only)
-        kwargs = {"prompt": medgemma_prompt, "image_path": image_path, "max_tokens": medgemma_max_tokens}
-        if hasattr(medgemma, '_preprocess_image'):  # Vertex adapter
-            kwargs["system_message"] = "You are a board-certified radiologist. Analyze the medical image."
-        medgemma_response = await medgemma.generate_with_image(**kwargs)
+        # NOTE: system_message disabled — vLLM container may not support content block format
+        # Re-enable after confirming container compatibility
+        medgemma_response = await medgemma.generate_with_image(
+            prompt=medgemma_prompt, image_path=image_path, max_tokens=medgemma_max_tokens
+        )
         logger.info(
             "medgemma_done",
             uid=case["uid"],
@@ -162,6 +207,7 @@ async def run_single_case(
         "title": case.get("title", ""),
         "gold_diagnosis": case["gold_diagnosis"],
         "gold_findings": case["gold_findings"],
+        "location_category": case.get("location_category", ""),
         "image_path": str(image_path),
         "image_size_bytes": img_size,
         "image_meta": img_meta,
@@ -202,10 +248,29 @@ async def judge_diagnosis(
         return {"score": "incorrect", "explanation": f"Judge failed: {e}"}
 
 
-async def score_case(
-    case_result: dict, judge: GeminiAdapter
+async def judge_findings(
+    judge: GeminiAdapter, gold: str, predicted: str, history: str = ""
 ) -> dict:
-    """Parse responses, compute all metrics for one case."""
+    """Use LLM-as-judge to score imaging findings clinical quality."""
+    if not predicted.strip():
+        return {"score": "poor", "key_finding_identified": False, "explanation": "Empty prediction"}
+
+    prompt = FINDINGS_JUDGE_PROMPT_TEMPLATE.format(
+        history=history, gold_findings=gold, predicted_findings=predicted
+    )
+    try:
+        response = await judge.generate(prompt=prompt, max_tokens=256)
+        result = json.loads(response.text)
+        return result
+    except (json.JSONDecodeError, Exception) as e:
+        logger.warning("findings_judge_parse_failed", error=str(e)[:120])
+        return {"score": "poor", "key_finding_identified": False, "explanation": f"Judge failed: {e}"}
+
+
+async def score_case(
+    case_result: dict, judge: GeminiAdapter, mode: str = "combined"
+) -> dict:
+    """Parse responses, compute metrics for one case based on mode."""
     # Parse model responses
     medgemma_parsed = parse_model_response(case_result["medgemma_raw"])
     gemini_parsed = parse_model_response(case_result["gemini_raw"])
@@ -213,29 +278,53 @@ async def score_case(
     gold_diag = case_result["gold_diagnosis"]
     gold_find = case_result["gold_findings"]
 
-    # Score MedGemma
-    mg_exact = score_diagnosis_exact(gold_diag, medgemma_parsed["diagnosis"])
-    mg_substr = score_diagnosis_substring(gold_diag, medgemma_parsed["diagnosis"])
-    mg_rouge = score_findings_rouge(gold_find, medgemma_parsed["findings"])
-    mg_judge = await judge_diagnosis(judge, gold_diag, medgemma_parsed["diagnosis"])
+    # For findings_only mode: use the entire raw response as findings if parsing finds nothing
+    if mode == "findings_only":
+        if not medgemma_parsed["findings"].strip():
+            medgemma_parsed["findings"] = case_result["medgemma_raw"]
+        if not gemini_parsed["findings"].strip():
+            gemini_parsed["findings"] = case_result["gemini_raw"]
+
+    # For diagnosis_only mode: use the entire raw response as diagnosis if parsing finds nothing
+    if mode == "diagnosis_only":
+        if not medgemma_parsed["diagnosis"].strip():
+            medgemma_parsed["diagnosis"] = case_result["medgemma_raw"].split("\n")[0].strip()
+        if not gemini_parsed["diagnosis"].strip():
+            gemini_parsed["diagnosis"] = case_result["gemini_raw"].split("\n")[0].strip()
+
+    history = case_result.get("medgemma_prompt", "")  # for findings judge context
+
+    # Score MedGemma — skip irrelevant metrics per mode
+    mg_exact = score_diagnosis_exact(gold_diag, medgemma_parsed["diagnosis"]) if mode != "findings_only" else False
+    mg_substr = score_diagnosis_substring(gold_diag, medgemma_parsed["diagnosis"]) if mode != "findings_only" else False
+    mg_rouge = score_findings_rouge(gold_find, medgemma_parsed["findings"]) if mode != "diagnosis_only" else {"recall": 0, "precision": 0, "fmeasure": 0}
+    mg_judge = await judge_diagnosis(judge, gold_diag, medgemma_parsed["diagnosis"]) if mode != "findings_only" else {"score": "skipped", "explanation": "findings_only mode"}
+    mg_findings_judge = await judge_findings(judge, gold_find, medgemma_parsed["findings"], history) if mode != "diagnosis_only" else {"score": "skipped", "key_finding_identified": False, "explanation": "diagnosis_only mode"}
 
     # Score Gemini
-    gm_exact = score_diagnosis_exact(gold_diag, gemini_parsed["diagnosis"])
-    gm_substr = score_diagnosis_substring(gold_diag, gemini_parsed["diagnosis"])
-    gm_rouge = score_findings_rouge(gold_find, gemini_parsed["findings"])
-    gm_judge = await judge_diagnosis(judge, gold_diag, gemini_parsed["diagnosis"])
+    gm_exact = score_diagnosis_exact(gold_diag, gemini_parsed["diagnosis"]) if mode != "findings_only" else False
+    gm_substr = score_diagnosis_substring(gold_diag, gemini_parsed["diagnosis"]) if mode != "findings_only" else False
+    gm_rouge = score_findings_rouge(gold_find, gemini_parsed["findings"]) if mode != "diagnosis_only" else {"recall": 0, "precision": 0, "fmeasure": 0}
+    gm_judge = await judge_diagnosis(judge, gold_diag, gemini_parsed["diagnosis"]) if mode != "findings_only" else {"score": "skipped", "explanation": "findings_only mode"}
+    gm_findings_judge = await judge_findings(judge, gold_find, gemini_parsed["findings"], history) if mode != "diagnosis_only" else {"score": "skipped", "key_finding_identified": False, "explanation": "diagnosis_only mode"}
 
     return {
         "uid": case_result["uid"],
         "title": case_result["title"],
         "gold_diagnosis": gold_diag,
+        "gold_findings": gold_find,
+        "location_category": case_result.get("location_category", ""),
+        "mode": mode,
         "medgemma": {
             "predicted_diagnosis": medgemma_parsed["diagnosis"],
-            "predicted_findings": medgemma_parsed["findings"][:200],
+            "predicted_findings": medgemma_parsed["findings"][:1000],
             "exact_match": mg_exact,
             "substring_match": mg_substr,
             "llm_judge_score": mg_judge.get("score", "incorrect"),
             "llm_judge_explanation": mg_judge.get("explanation", ""),
+            "findings_judge_score": mg_findings_judge.get("score", "poor"),
+            "findings_judge_key_finding": mg_findings_judge.get("key_finding_identified", False),
+            "findings_judge_explanation": mg_findings_judge.get("explanation", ""),
             "rouge_recall": mg_rouge["recall"],
             "rouge_precision": mg_rouge["precision"],
             "rouge_fmeasure": mg_rouge["fmeasure"],
@@ -244,11 +333,14 @@ async def score_case(
         },
         "gemini": {
             "predicted_diagnosis": gemini_parsed["diagnosis"],
-            "predicted_findings": gemini_parsed["findings"][:200],
+            "predicted_findings": gemini_parsed["findings"][:1000],
             "exact_match": gm_exact,
             "substring_match": gm_substr,
             "llm_judge_score": gm_judge.get("score", "incorrect"),
             "llm_judge_explanation": gm_judge.get("explanation", ""),
+            "findings_judge_score": gm_findings_judge.get("score", "poor"),
+            "findings_judge_key_finding": gm_findings_judge.get("key_finding_identified", False),
+            "findings_judge_explanation": gm_findings_judge.get("explanation", ""),
             "rouge_recall": gm_rouge["recall"],
             "rouge_precision": gm_rouge["precision"],
             "rouge_fmeasure": gm_rouge["fmeasure"],
@@ -258,8 +350,8 @@ async def score_case(
     }
 
 
-def build_summary_table(scored_results: list[dict]) -> dict:
-    """Compute aggregate metrics for both models."""
+def build_summary_table(scored_results: list[dict], mode: str = "combined") -> dict:
+    """Compute aggregate metrics for both models based on mode."""
     mg_results = []
     gm_results = []
     for r in scored_results:
@@ -270,20 +362,32 @@ def build_summary_table(scored_results: list[dict]) -> dict:
         n = len(results)
         if n == 0:
             return {}
-        return {
+        summary = {
             "n_cases": n,
-            "diagnosis_exact_match": sum(1 for r in results if r["exact_match"]) / n,
-            "diagnosis_substring_match": sum(1 for r in results if r["substring_match"]) / n,
-            "diagnosis_llm_judge_correct": sum(1 for r in results if r["llm_judge_score"] == "correct") / n,
-            "diagnosis_llm_judge_partial": sum(1 for r in results if r["llm_judge_score"] == "partial") / n,
-            "findings_rouge_recall_mean": sum(r["rouge_recall"] for r in results) / n,
-            "findings_rouge_precision_mean": sum(r["rouge_precision"] for r in results) / n,
-            "findings_rouge_fmeasure_mean": sum(r["rouge_fmeasure"] for r in results) / n,
             "avg_latency_ms": sum(r["latency_ms"] for r in results) / n,
             "total_cost_usd": sum(r["cost"] for r in results),
         }
+        if mode != "findings_only":
+            summary.update({
+                "diagnosis_exact_match": sum(1 for r in results if r["exact_match"]) / n,
+                "diagnosis_substring_match": sum(1 for r in results if r["substring_match"]) / n,
+                "diagnosis_llm_judge_correct": sum(1 for r in results if r["llm_judge_score"] == "correct") / n,
+                "diagnosis_llm_judge_partial": sum(1 for r in results if r["llm_judge_score"] == "partial") / n,
+            })
+        if mode != "diagnosis_only":
+            summary.update({
+                "findings_rouge_recall_mean": sum(r["rouge_recall"] for r in results) / n,
+                "findings_rouge_precision_mean": sum(r["rouge_precision"] for r in results) / n,
+                "findings_rouge_fmeasure_mean": sum(r["rouge_fmeasure"] for r in results) / n,
+                "findings_judge_good": sum(1 for r in results if r.get("findings_judge_score") == "good") / n,
+                "findings_judge_partial": sum(1 for r in results if r.get("findings_judge_score") == "partial") / n,
+                "findings_judge_poor": sum(1 for r in results if r.get("findings_judge_score") == "poor") / n,
+                "findings_key_finding_rate": sum(1 for r in results if r.get("findings_judge_key_finding")) / n,
+            })
+        return summary
 
     return {
+        "mode": mode,
         "medgemma_4b": agg(mg_results),
         "gemini_pro": agg(gm_results),
     }
@@ -293,24 +397,37 @@ def print_comparison_table(summary: dict) -> None:
     """Print formatted comparison table."""
     mg = summary["medgemma_4b"]
     gm = summary["gemini_pro"]
+    mode = summary.get("mode", "combined")
+
+    mode_label = {"combined": "Combined", "findings_only": "Findings Only", "diagnosis_only": "Diagnosis Only"}.get(mode, mode)
 
     print("\n" + "=" * 80)
-    print("  MedPix Multimodal Benchmark — Results Summary")
+    print(f"  MedPix Multimodal Benchmark — {mode_label} Results")
     print("=" * 80)
     print(f"{'Metric':<40} {'MedGemma 4B':>15} {'Gemini Pro':>15}")
     print("-" * 80)
 
-    rows = [
-        ("Diagnosis — Exact Match", f"{mg.get('diagnosis_exact_match', 0):.0%}", f"{gm.get('diagnosis_exact_match', 0):.0%}"),
-        ("Diagnosis — Substring Match", f"{mg.get('diagnosis_substring_match', 0):.0%}", f"{gm.get('diagnosis_substring_match', 0):.0%}"),
-        ("Diagnosis — LLM Judge (correct)", f"{mg.get('diagnosis_llm_judge_correct', 0):.0%}", f"{gm.get('diagnosis_llm_judge_correct', 0):.0%}"),
-        ("Diagnosis — LLM Judge (partial)", f"{mg.get('diagnosis_llm_judge_partial', 0):.0%}", f"{gm.get('diagnosis_llm_judge_partial', 0):.0%}"),
-        ("Findings — ROUGE-L Recall", f"{mg.get('findings_rouge_recall_mean', 0):.3f}", f"{gm.get('findings_rouge_recall_mean', 0):.3f}"),
-        ("Findings — ROUGE-L Precision", f"{mg.get('findings_rouge_precision_mean', 0):.3f}", f"{gm.get('findings_rouge_precision_mean', 0):.3f}"),
-        ("Findings — ROUGE-L F1", f"{mg.get('findings_rouge_fmeasure_mean', 0):.3f}", f"{gm.get('findings_rouge_fmeasure_mean', 0):.3f}"),
+    rows = []
+    if mode != "findings_only":
+        rows.extend([
+            ("Diagnosis — Exact Match", f"{mg.get('diagnosis_exact_match', 0):.0%}", f"{gm.get('diagnosis_exact_match', 0):.0%}"),
+            ("Diagnosis — Substring Match", f"{mg.get('diagnosis_substring_match', 0):.0%}", f"{gm.get('diagnosis_substring_match', 0):.0%}"),
+            ("Diagnosis — LLM Judge (correct)", f"{mg.get('diagnosis_llm_judge_correct', 0):.0%}", f"{gm.get('diagnosis_llm_judge_correct', 0):.0%}"),
+            ("Diagnosis — LLM Judge (partial)", f"{mg.get('diagnosis_llm_judge_partial', 0):.0%}", f"{gm.get('diagnosis_llm_judge_partial', 0):.0%}"),
+        ])
+    if mode != "diagnosis_only":
+        rows.extend([
+            ("Findings — LLM Judge (good)", f"{mg.get('findings_judge_good', 0):.0%}", f"{gm.get('findings_judge_good', 0):.0%}"),
+            ("Findings — LLM Judge (partial)", f"{mg.get('findings_judge_partial', 0):.0%}", f"{gm.get('findings_judge_partial', 0):.0%}"),
+            ("Findings — Key Finding Identified", f"{mg.get('findings_key_finding_rate', 0):.0%}", f"{gm.get('findings_key_finding_rate', 0):.0%}"),
+            ("Findings — ROUGE-L Recall", f"{mg.get('findings_rouge_recall_mean', 0):.3f}", f"{gm.get('findings_rouge_recall_mean', 0):.3f}"),
+            ("Findings — ROUGE-L Precision", f"{mg.get('findings_rouge_precision_mean', 0):.3f}", f"{gm.get('findings_rouge_precision_mean', 0):.3f}"),
+            ("Findings — ROUGE-L F1", f"{mg.get('findings_rouge_fmeasure_mean', 0):.3f}", f"{gm.get('findings_rouge_fmeasure_mean', 0):.3f}"),
+        ])
+    rows.extend([
         ("Avg Latency (ms)", f"{mg.get('avg_latency_ms', 0):.0f}", f"{gm.get('avg_latency_ms', 0):.0f}"),
         ("Total Cost ($)", f"${mg.get('total_cost_usd', 0):.4f}", f"${gm.get('total_cost_usd', 0):.4f}"),
-    ]
+    ])
 
     for label, mg_val, gm_val in rows:
         print(f"{label:<40} {mg_val:>15} {gm_val:>15}")
@@ -412,24 +529,43 @@ async def main() -> None:
         print("ERROR: Gemini health check failed. Check GOOGLE_API_KEY.")
         sys.exit(1)
 
+    # Select prompt mode
+    prompt_cfg = config.get("prompt", {})
+    mode = prompt_cfg.get("mode", "combined")
+    use_simple_prompt = prompt_cfg.get("medgemma_simple", False)
+
     # Run benchmark
-    run_id = f"medpix-multimodal-{datetime.now(tz=UTC).strftime('%Y%m%d-%H%M%S')}"
+    mode_suffix = f"-{mode}" if mode != "combined" else ""
+    run_id = f"medpix-multimodal{mode_suffix}-{datetime.now(tz=UTC).strftime('%Y%m%d-%H%M%S')}"
     run_dir = Path(config["output"]["run_dir"]) / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info("benchmark_start", run_id=run_id, n_cases=len(cases))
     start_time = time.perf_counter()
 
-    # Select prompt template: simplified for MedGemma 4B, full for Gemini
-    use_simple_prompt = config.get("prompt", {}).get("medgemma_simple", False)
-    medgemma_template = PROMPT_TEMPLATE_SIMPLE if use_simple_prompt else PROMPT_TEMPLATE
-    logger.info("prompt_selection", medgemma_simple=use_simple_prompt)
+    if mode == "findings_only":
+        medgemma_template = PROMPT_TEMPLATE_FINDINGS_ONLY
+    elif mode == "diagnosis_only":
+        medgemma_template = PROMPT_TEMPLATE_DIAGNOSIS_ONLY
+    elif use_simple_prompt:
+        medgemma_template = PROMPT_TEMPLATE_SIMPLE
+    else:
+        medgemma_template = PROMPT_TEMPLATE
+    logger.info("prompt_selection", mode=mode, medgemma_simple=use_simple_prompt)
+
+    # Select Gemini prompt template — use same mode-specific template for fair comparison
+    if mode == "findings_only":
+        gemini_template = PROMPT_TEMPLATE_FINDINGS_ONLY
+    elif mode == "diagnosis_only":
+        gemini_template = PROMPT_TEMPLATE_DIAGNOSIS_ONLY
+    else:
+        gemini_template = PROMPT_TEMPLATE
 
     # Process cases sequentially (respect concurrency limits)
     raw_results = []
     for i, case in enumerate(cases):
         medgemma_prompt = medgemma_template.format(history=case["history"])
-        gemini_prompt = PROMPT_TEMPLATE.format(history=case["history"])
+        gemini_prompt = gemini_template.format(history=case["history"])
         result = await run_single_case(
             case, medgemma, gemini, medgemma_prompt, gemini_prompt, i, len(cases),
             medgemma_max_tokens=medgemma_max_tokens,
@@ -447,7 +583,7 @@ async def main() -> None:
         if "error" in result:
             logger.warning("skipping_errored_case", uid=result["uid"])
             continue
-        scored = await score_case(result, judge)
+        scored = await score_case(result, judge, mode=mode)
         scored_results.append(scored)
 
     # Save scored results
@@ -455,7 +591,7 @@ async def main() -> None:
         json.dump(scored_results, f, indent=2, default=str)
 
     # Build and save summary
-    summary = build_summary_table(scored_results)
+    summary = build_summary_table(scored_results, mode=mode)
     with open(run_dir / "summary.json", "w") as f:
         json.dump(summary, f, indent=2, default=str)
 

@@ -28,8 +28,8 @@ from google.cloud import aiplatform
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "gen-lang-client-0517724223")
 REGION = "us-central1"
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
-MODEL_ID = "google/medgemma-4b-it"
-DISPLAY_NAME = "medgemma-4b-it-imaging"
+MODEL_ID = "google/medgemma-1.5-4b-it"
+DISPLAY_NAME = "medgemma-1-5-4b-it-imaging"
 ENDPOINT_ID = os.environ.get("VERTEX_ENDPOINT_ID_4B", "923518299076034560")
 DEDICATED_DNS = os.environ.get("VERTEX_DEDICATED_DNS_4B", "")
 
