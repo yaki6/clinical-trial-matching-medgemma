@@ -25,7 +25,7 @@ from trialmatch.prescreen.agent import (
 )
 from trialmatch.prescreen.ctgov_client import CTGovClient, parse_search_results, parse_study_summary
 from trialmatch.prescreen.schema import PresearchResult, TrialCandidate
-from trialmatch.prescreen.tools import ToolExecutor, _truncate_eligibility
+from trialmatch.prescreen.tools import ToolExecutor, _truncate_eligibility, _extract_search_terms
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -1202,3 +1202,228 @@ class TestTruncateEligibility:
     def test_exact_limit_passthrough(self):
         text = "x" * 2000
         assert _truncate_eligibility(text) == text
+
+
+# ---------------------------------------------------------------------------
+# _extract_search_terms tests
+# ---------------------------------------------------------------------------
+
+
+class TestExtractSearchTerms:
+    def test_numbered_list_with_header(self):
+        text = (
+            "Here are the terms.\n\n"
+            "SEARCH_TERMS:\n"
+            "1. Mesothelioma\n"
+            "2. Pleural Neoplasm\n"
+            "3. Thoracic Cancer\n"
+        )
+        terms = _extract_search_terms(text)
+        assert terms == ["Mesothelioma", "Pleural Neoplasm", "Thoracic Cancer"]
+
+    def test_numbered_list_without_header(self):
+        """Falls back to extracting numbered items from whole text."""
+        text = "Consider these:\n1. Lung Cancer\n2. NSCLC\n3. Solid Tumor\n"
+        terms = _extract_search_terms(text)
+        assert "Lung Cancer" in terms
+        assert "NSCLC" in terms
+        assert "Solid Tumor" in terms
+
+    def test_bold_markdown_stripped(self):
+        text = "SEARCH_TERMS:\n1. **Mesothelioma**\n2. **Pleural Effusion**\n"
+        terms = _extract_search_terms(text)
+        assert "Mesothelioma" in terms
+        assert "Pleural Effusion" in terms
+
+    def test_parenthetical_notes_stripped(self):
+        text = "SEARCH_TERMS:\n1. Mesothelioma (exact diagnosis)\n2. Lung Cancer (broader)\n"
+        terms = _extract_search_terms(text)
+        assert "Mesothelioma" in terms
+        assert "Lung Cancer" in terms
+
+    def test_short_terms_filtered(self):
+        """Terms <= 2 chars are filtered out."""
+        text = "1. OK\n2. AB\n3. Mesothelioma\n"
+        terms = _extract_search_terms(text)
+        assert "Mesothelioma" in terms
+        assert len([t for t in terms if len(t) <= 2]) == 0
+
+    def test_empty_text(self):
+        assert _extract_search_terms("") == []
+
+    def test_no_list_items(self):
+        text = "This is just plain text with no numbered or bulleted items."
+        assert _extract_search_terms(text) == []
+
+    def test_dash_bullet_items(self):
+        text = "SEARCH_TERMS:\n- Mesothelioma\n- Pleural Effusion\n- Sarcoma\n"
+        terms = _extract_search_terms(text)
+        assert len(terms) == 3
+
+    def test_mixed_formats(self):
+        text = (
+            "SEARCH_TERMS:\n"
+            "1. Mesothelioma\n"
+            "2) Pleural Neoplasm\n"
+            "- Thoracic Cancer\n"
+            "* Solid Tumor\n"
+        )
+        terms = _extract_search_terms(text)
+        assert len(terms) == 4
+
+
+# ---------------------------------------------------------------------------
+# Search dedup cache tests
+# ---------------------------------------------------------------------------
+
+
+class TestSearchDedupCache:
+    def test_duplicate_search_returns_cached(self, sample_search_response):
+        executor = _make_executor(ctgov_search_response=sample_search_response)
+        # First call — hits CT.gov
+        r1, s1 = asyncio.run(executor.execute("search_trials", {"condition": "lung cancer"}))
+        assert "note" not in r1
+
+        # Second call — same term, should be cached
+        r2, s2 = asyncio.run(executor.execute("search_trials", {"condition": "lung cancer"}))
+        assert "DUPLICATE" in r2.get("note", "")
+        assert "(cached)" in s2
+
+    def test_different_terms_not_cached(self, sample_search_response):
+        executor = _make_executor(ctgov_search_response=sample_search_response)
+        r1, _ = asyncio.run(executor.execute("search_trials", {"condition": "lung cancer"}))
+        r2, _ = asyncio.run(executor.execute("search_trials", {"condition": "NSCLC"}))
+        assert "note" not in r1
+        assert "note" not in r2
+
+    def test_case_insensitive_dedup(self, sample_search_response):
+        executor = _make_executor(ctgov_search_response=sample_search_response)
+        asyncio.run(executor.execute("search_trials", {"condition": "Lung Cancer"}))
+        r2, _ = asyncio.run(executor.execute("search_trials", {"condition": "lung cancer"}))
+        assert "DUPLICATE" in r2.get("note", "")
+
+
+# ---------------------------------------------------------------------------
+# Fair scoring tests
+# ---------------------------------------------------------------------------
+
+
+class TestFairScoring:
+    def test_unique_queries_used_over_raw_count(self):
+        from trialmatch.prescreen.agent import _score_candidate
+
+        # 5 raw queries but only 2 unique → diversity=2
+        score_diverse = _score_candidate({"phase": [], "status": "COMPLETED"}, 5, unique_queries=2)
+        # 2 raw queries, 2 unique → diversity=2
+        score_same = _score_candidate({"phase": [], "status": "COMPLETED"}, 2, unique_queries=2)
+        assert score_diverse == score_same  # Same unique count → same score
+
+    def test_no_recruiting_bonus(self):
+        from trialmatch.prescreen.agent import _score_candidate
+
+        score_recruiting = _score_candidate({"phase": [], "status": "RECRUITING"}, 1, unique_queries=1)
+        score_completed = _score_candidate({"phase": [], "status": "COMPLETED"}, 1, unique_queries=1)
+        assert score_recruiting == score_completed
+
+    def test_phase_bonus_preserved(self):
+        from trialmatch.prescreen.agent import _score_candidate
+
+        score_p3 = _score_candidate({"phase": ["PHASE3"], "status": "COMPLETED"}, 1, unique_queries=1)
+        score_none = _score_candidate({"phase": [], "status": "COMPLETED"}, 1, unique_queries=1)
+        assert score_p3 > score_none
+
+    def test_max_candidates_raised(self):
+        from trialmatch.prescreen.agent import MAX_CANDIDATES
+        assert MAX_CANDIDATES == 500
+
+
+# ---------------------------------------------------------------------------
+# Configurable default_status tests
+# ---------------------------------------------------------------------------
+
+
+class TestConfigurableDefaultStatus:
+    def test_default_status_passed_to_ctgov(self):
+        """When default_status is set, it overrides the hardcoded RECRUITING."""
+        async def _run():
+            ctgov = AsyncMock(spec=CTGovClient)
+            ctgov.search = AsyncMock(return_value={"studies": [], "totalCount": 0})
+            executor = ToolExecutor(ctgov=ctgov, default_status=["COMPLETED", "RECRUITING"])
+            await executor.execute("search_trials", {"condition": "cancer"})
+            call_kwargs = ctgov.search.call_args[1]
+            assert call_kwargs["status"] == ["COMPLETED", "RECRUITING"]
+
+        asyncio.run(_run())
+
+    def test_no_default_status_uses_recruiting(self):
+        """When default_status is None, falls back to RECRUITING."""
+        async def _run():
+            ctgov = AsyncMock(spec=CTGovClient)
+            ctgov.search = AsyncMock(return_value={"studies": [], "totalCount": 0})
+            executor = ToolExecutor(ctgov=ctgov, default_status=None)
+            await executor.execute("search_trials", {"condition": "cancer"})
+            call_kwargs = ctgov.search.call_args[1]
+            assert call_kwargs["status"] == ["RECRUITING"]
+
+        asyncio.run(_run())
+
+    def test_explicit_status_overrides_default(self):
+        """Agent-provided status takes priority over default_status."""
+        async def _run():
+            ctgov = AsyncMock(spec=CTGovClient)
+            ctgov.search = AsyncMock(return_value={"studies": [], "totalCount": 0})
+            executor = ToolExecutor(ctgov=ctgov, default_status=["COMPLETED"])
+            await executor.execute("search_trials", {
+                "condition": "cancer",
+                "status": ["NOT_YET_RECRUITING"],
+            })
+            call_kwargs = ctgov.search.call_args[1]
+            assert call_kwargs["status"] == ["NOT_YET_RECRUITING"]
+
+        asyncio.run(_run())
+
+
+# ---------------------------------------------------------------------------
+# Structured expert response tests
+# ---------------------------------------------------------------------------
+
+
+class TestStructuredExpertResponse:
+    def test_expert_returns_search_terms(self):
+        """consult_medical_expert returns structured search_terms list."""
+        ctgov = AsyncMock(spec=CTGovClient)
+        medgemma = MagicMock()
+        medgemma.generate = AsyncMock(return_value=MagicMock(
+            text=(
+                "Here are the condition terms.\n\n"
+                "SEARCH_TERMS:\n"
+                "1. Mesothelioma\n"
+                "2. Pleural Neoplasm\n"
+                "3. Thoracic Cancer\n"
+            ),
+            estimated_cost=0.001,
+        ))
+        executor = ToolExecutor(ctgov=ctgov, medgemma=medgemma)
+        result, summary = asyncio.run(
+            executor.execute("consult_medical_expert", {"question": "Terms for mesothelioma?"})
+        )
+        assert "search_terms" in result
+        assert len(result["search_terms"]) == 3
+        assert "instruction" in result
+        assert "MUST" in result["instruction"]
+        assert "3 terms extracted" in summary
+
+    def test_expert_returns_answer_alongside_terms(self):
+        """Raw answer text is preserved alongside structured terms."""
+        ctgov = AsyncMock(spec=CTGovClient)
+        medgemma = MagicMock()
+        medgemma.generate = AsyncMock(return_value=MagicMock(
+            text="Some advice.\n\nSEARCH_TERMS:\n1. Cancer\n",
+            estimated_cost=0.001,
+        ))
+        executor = ToolExecutor(ctgov=ctgov, medgemma=medgemma)
+        result, _ = asyncio.run(
+            executor.execute("consult_medical_expert", {"question": "test"})
+        )
+        assert "answer" in result
+        assert "Some advice" in result["answer"]

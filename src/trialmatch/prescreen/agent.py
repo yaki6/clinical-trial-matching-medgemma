@@ -42,37 +42,39 @@ relevant trials on ClinicalTrials.gov for a given patient. \
 Maximize recall — missing an eligible trial is worse than including \
 an irrelevant one.
 
-You have {max_tool_calls} tool calls. You MUST use at least 15 search_trials \
-calls with DIFFERENT condition terms before stopping. Do NOT stop early.
+You have {max_tool_calls} tool calls.
 
-## Strategy
+## Mandatory Workflow
 
-1. Start by calling consult_medical_expert to get a comprehensive list of \
-   condition terms and synonyms for the patient's diagnosis.
-2. Execute search_trials once per condition term. Each call MUST use a \
-   DIFFERENT condition term — never repeat the same term.
-3. After exhausting condition-based searches, try intervention-based and \
-   eligibility_keywords-based searches.
-4. Use get_trial_details sparingly (max 3-5) for the most promising trials.
+### Phase 1: Get Search Plan from Expert (1 call)
+Call consult_medical_expert FIRST. It returns a 'search_terms' list. \
+This list IS your search plan. You MUST search EVERY term in that list.
 
-## search_trials Tips
+### Phase 2: Execute Search Plan (1 call per term)
+For EACH term in the expert's search_terms list:
+  - Call search_trials with that term as the `condition` parameter
+  - Use page_size=100
+  - Do NOT repeat any term — if the tool says "DUPLICATE", skip to the next term
+  - Do NOT add your own terms until you have searched ALL expert terms
 
-- **condition** is the primary search lever. CT.gov indexes trials under many \
-  different vocabulary terms. A "pleural effusion" trial will NOT appear in a \
-  "mesothelioma" search. You MUST search diverse terms including:
-  - The exact diagnosis
-  - Broader parent categories (e.g., "thoracic neoplasm", "solid tumor")
-  - Related clinical presentations (e.g., "pleural effusion", "chest tumor")
-  - Histological subtypes
-  - Synonyms and abbreviations
-- **DO NOT use location filters** unless the patient specifies a location preference.
-- **page_size**: Use 100 to maximize results per call.
-- **status**: Use the default unless instructed otherwise.
+### Phase 3: Supplementary Searches (remaining calls)
+After ALL expert terms are searched, use remaining calls for:
+  - intervention-based searches (drug names, therapy types)
+  - eligibility_keywords searches (biomarkers, staging terms)
+  - get_trial_details for 2-3 most promising trials
 
-## consult_medical_expert
+## Rules
+- NEVER skip a term from the expert's list
+- NEVER repeat a condition term you already searched
+- NEVER use location filters unless the patient specifies a location
+- page_size MUST be 100 for every search_trials call
+- status: use the default unless instructed otherwise
 
-Call this FIRST to get expert advice on what condition terms, synonyms, \
-and related conditions to search. Typical: 1-2 calls per patient.\
+## Why This Matters
+CT.gov indexes trials under MANY different vocabulary terms. A trial for \
+"pleural effusion" will NOT appear in a "mesothelioma" search. The expert \
+provides terms across diagnosis, symptoms, procedures, and broader categories. \
+Every term you skip is a pool of trials you will never see.\
 """
 
 PRESCREEN_USER_TEMPLATE = """\
@@ -89,7 +91,8 @@ PRESCREEN_USER_TEMPLATE = """\
 {key_facts_text}
 
 Find ALL potentially relevant clinical trials for this patient. \
-Use at least 15 different condition terms in your search_trials calls.\
+Follow the Mandatory Workflow: call consult_medical_expert FIRST, then \
+search EVERY term in the expert's search_terms list.\
 """
 
 
@@ -104,6 +107,7 @@ async def run_prescreen_agent(
     on_tool_call: Any | None = None,
     on_agent_text: Any | None = None,
     trace_callback: TraceCallback | None = None,
+    default_status: list[str] | None = None,
 ) -> PresearchResult:
     """Run the adaptive Gemini agentic PRESCREEN loop for one patient.
 
@@ -126,7 +130,8 @@ async def run_prescreen_agent(
 
     ctgov = CTGovClient()
     try:
-        executor = ToolExecutor(ctgov=ctgov, medgemma=medgemma_adapter)
+        executor = ToolExecutor(ctgov=ctgov, medgemma=medgemma_adapter,
+                                default_status=default_status)
 
         # Extract demographics from key_facts
         age = key_facts.get("age", "unknown")
@@ -521,19 +526,18 @@ def _describe_query(args: dict[str, Any]) -> str:
     return ", ".join(parts) or "broad search"
 
 
-MAX_CANDIDATES = 200  # High for recall — downstream VALIDATE filters
+MAX_CANDIDATES = 500  # Raised from 200 — reduces pruning loss for recall
 
 
-def _score_candidate(data: dict[str, Any], query_count: int) -> float:
+def _score_candidate(data: dict[str, Any], query_count: int,
+                     unique_queries: int | None = None) -> float:
     """Heuristic relevance score for ranking. Higher = better.
 
-    Scoring signals:
-    - query_count: found by multiple searches → more relevant (3 pts each)
-    - Phase II/III: more clinically advanced (2 pts)
-    - RECRUITING status: can actually enroll (1 pt)
-    - Has eligibility_criteria: we fetched details → agent thought it was relevant (2 pts)
+    Uses unique_queries (distinct search terms that found this trial)
+    rather than raw query_count to avoid inflating scores from duplicate searches.
     """
-    score = query_count * 3.0
+    diversity = unique_queries if unique_queries is not None else query_count
+    score = diversity * 3.0  # Found by N DISTINCT searches → more relevant
 
     phases = data.get("phase") or []
     if any(p in ("PHASE2", "PHASE3") for p in phases):
@@ -541,8 +545,8 @@ def _score_candidate(data: dict[str, Any], query_count: int) -> float:
     elif any(p in ("PHASE1",) for p in phases):
         score += 1.0
 
-    if data.get("status") == "RECRUITING":
-        score += 1.0
+    # Removed: RECRUITING bonus — biases against historical trials
+    # Downstream VALIDATE handles clinical relevance filtering
 
     if data.get("eligibility_criteria"):
         score += 2.0
@@ -561,8 +565,9 @@ def _build_candidates(
     scored: list[tuple[float, str, dict[str, Any]]] = []
 
     for nct_id, data in candidates_by_nct.items():
-        query_count = len(found_by_query.get(nct_id, []))
-        score = _score_candidate(data, query_count)
+        queries = found_by_query.get(nct_id, [])
+        unique_queries = len(set(queries))
+        score = _score_candidate(data, len(queries), unique_queries=unique_queries)
         scored.append((score, nct_id, data))
 
     # Sort by score desc, then nct_id for determinism

@@ -16,6 +16,7 @@ reliable results (validated against the live API).
 
 from __future__ import annotations
 
+import re
 import time
 from typing import Any
 
@@ -201,11 +202,14 @@ class ToolExecutor:
     Keeps running totals for cost/latency tracking.
     """
 
-    def __init__(self, ctgov: CTGovClient, medgemma: Any = None):
+    def __init__(self, ctgov: CTGovClient, medgemma: Any = None,
+                 default_status: list[str] | None = None):
         self._ctgov = ctgov
         self._medgemma = medgemma
+        self._default_status = default_status  # None = use ["RECRUITING"]
         self.medgemma_calls: int = 0
         self.medgemma_cost: float = 0.0
+        self._search_cache: dict[tuple, tuple[dict, str]] = {}
 
     async def execute(self, tool_name: str, args: dict[str, Any]) -> tuple[Any, str]:
         """Execute a tool call. Returns (raw_result, summary_string).
@@ -236,12 +240,26 @@ class ToolExecutor:
         page_size: int = 50,
         **_ignored: Any,
     ) -> tuple[dict, str]:
+        # Dedup: normalize and check cache
+        cache_key = (
+            (condition or "").strip().lower(),
+            (intervention or "").strip().lower(),
+            (eligibility_keywords or "").strip().lower(),
+        )
+        if cache_key in self._search_cache:
+            cached_result, cached_summary = self._search_cache[cache_key]
+            logger.info("search_dedup_cache_hit", condition=condition)
+            return (
+                {**cached_result, "note": "DUPLICATE SEARCH — you already searched this term. Use a DIFFERENT condition term."},
+                f"(cached) {cached_summary}",
+            )
+
         start = time.perf_counter()
         raw = await self._ctgov.search(
             condition=condition,
             intervention=intervention,
             eligibility_keywords=eligibility_keywords,
-            status=status or ["RECRUITING"],
+            status=status or self._default_status or ["RECRUITING"],
             phase=phase or None,
             location=location,
             sex=sex,
@@ -276,7 +294,10 @@ class ToolExecutor:
             f"NCT IDs: {[s['nct_id'] for s in summaries]}"
         )
         logger.info("ctgov_search_complete", count=len(studies), query_condition=condition)
-        return {"count": len(compact), "total_available": total, "trials": compact}, summary
+
+        result_dict = {"count": len(compact), "total_available": total, "trials": compact}
+        self._search_cache[cache_key] = (result_dict, summary)
+        return result_dict, summary
 
     async def _get_trial_details(self, nct_id: str, **_ignored: Any) -> tuple[dict, str]:
         start = time.perf_counter()
@@ -314,8 +335,20 @@ class ToolExecutor:
 
         prompt = (
             "You are a clinical expert advising a clinical trial search agent.\n"
-            "Answer concisely and actionably. Focus on specific medical terms, "
-            "synonyms, and CT.gov condition vocabulary.\n\n"
+            "The agent will search ClinicalTrials.gov using the condition terms you provide.\n\n"
+            "IMPORTANT: You MUST end your response with a structured list in this exact format:\n"
+            "SEARCH_TERMS:\n"
+            "1. <term>\n"
+            "2. <term>\n"
+            "...\n\n"
+            "Include ALL of these categories:\n"
+            "- Exact diagnosis and synonyms\n"
+            "- Histological/molecular subtypes\n"
+            "- Broader parent categories (e.g., organ-level, system-level)\n"
+            "- Related clinical presentations and symptoms the patient has\n"
+            "- Related procedures the patient has undergone\n"
+            "- Common comorbidity-associated trial categories\n\n"
+            "Aim for 15-20 terms. More is better — the agent will search each one.\n\n"
             f"Question: {question}"
         )
         start = time.perf_counter()
@@ -325,10 +358,47 @@ class ToolExecutor:
         self.medgemma_calls += 1
         self.medgemma_cost += response.estimated_cost
 
-        summary = f"MedGemma ({latency_ms:.0f}ms): {response.text[:150]}..."
+        # Parse structured terms from response
+        extracted_terms = _extract_search_terms(response.text)
+
+        summary = f"MedGemma ({latency_ms:.0f}ms): {len(extracted_terms)} terms extracted"
         logger.info(
             "medgemma_expert_consulted",
             question=question[:100],
             latency_ms=f"{latency_ms:.0f}",
+            terms_extracted=len(extracted_terms),
         )
-        return {"answer": response.text}, summary
+        return {
+            "answer": response.text,
+            "search_terms": extracted_terms,
+            "instruction": (
+                "You MUST call search_trials once for EACH term in 'search_terms' above. "
+                "Do not skip any. Do not repeat any. Check them off as you go."
+            ),
+        }, summary
+
+
+def _extract_search_terms(text: str) -> list[str]:
+    """Extract numbered search terms from MedGemma's response.
+
+    Looks for a SEARCH_TERMS: section with numbered items.
+    Falls back to extracting any numbered list items if section header not found.
+    """
+    terms: list[str] = []
+    # Try to find SEARCH_TERMS section first — capture all lines after the header
+    match = re.search(r"SEARCH_TERMS:\s*\n((?:[ \t]*(?:\d+[\.\)]|[-*]).+\n?)+)", text, re.IGNORECASE)
+    if match:
+        block = match.group(1)
+    else:
+        # Fallback: use the whole text
+        block = text
+
+    # Extract numbered items: "1. Term Name" or "- Term Name" or "* Term Name"
+    for line in block.split("\n"):
+        m = re.match(r"^\s*(?:\d+[\.\)]\s*\**|[-*]\s*\**)(.*?)(?:\**\s*[-:(].*)?$", line)
+        if m:
+            term = m.group(1).strip().strip("*").strip()
+            if term and len(term) > 2 and len(term) < 100:
+                terms.append(term)
+
+    return terms
