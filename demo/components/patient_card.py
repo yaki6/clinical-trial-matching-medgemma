@@ -83,9 +83,6 @@ def render_patient_card(profile: dict, dev_mode: bool = False) -> None:
         friendly_suffix = extract_friendly_label(profile)
         st.subheader(f"Patient: {topic_id}{friendly_suffix}")
 
-        with st.expander("View Full Medical Record", expanded=False):
-            st.markdown(profile.get("profile_text", "No profile text available"))
-
         ambiguities = profile.get("ambiguities", [])
         if ambiguities:
             with st.expander("Information Gaps in Your Record"):

@@ -22,6 +22,7 @@ _VERDICT_MESSAGES: dict[str, tuple[str, str]] = {
     # verdict -> (patient-facing message, streamlit color tag)
     "ELIGIBLE": ("You may be eligible for this trial", "green"),
     "EXCLUDED": ("You likely do not qualify for this trial", "red"),
+    "NOT_RELEVANT": ("This trial is not a match for your condition", "red"),
     "UNCERTAIN": (
         "More information is needed to determine eligibility",
         "orange",

@@ -54,6 +54,31 @@ from components.pipeline_viewer import (
 from components.results_summary import render_results_summary
 from components.trial_card import render_trial_card
 
+
+def _prioritize_validated_trials(candidates, validated_nct_ids: set[str]):
+    """Reorder candidates so validated trials appear first in the top-10 list.
+
+    The VALIDATE step evaluates a specific set of trials (from cache or live).
+    Those trials must appear at the top of the candidate list so the user sees
+    a consistent story: top trials → eligibility check → results.
+    """
+    if not validated_nct_ids:
+        return candidates
+
+    prioritized = [c for c in candidates if c.nct_id in validated_nct_ids]
+    rest = [c for c in candidates if c.nct_id not in validated_nct_ids]
+    return prioritized + rest
+
+# ---------------------------------------------------------------------------
+# Reduce default Streamlit main-panel padding for wider content area
+# ---------------------------------------------------------------------------
+st.markdown(
+    """<style>
+    .block-container { padding-left: 2rem; padding-right: 2rem; max-width: 100%; }
+    </style>""",
+    unsafe_allow_html=True,
+)
+
 # ---------------------------------------------------------------------------
 # Dev mode feature flag
 # ---------------------------------------------------------------------------
@@ -484,52 +509,79 @@ else:
     st.title("Find Clinical Trials")
     st.caption(_MEDICAL_DISCLAIMER)
 
+    # -- How it works (patient-friendly overview at top) --
+    with st.container(border=True):
+        st.markdown("### How It Works")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown("**1. Understand You**")
+            st.caption("We review your medical records and imaging to understand your condition")
+        with col2:
+            st.markdown("**2. Find Trials**")
+            st.caption("We search clinical trials that may be relevant to your situation")
+        with col3:
+            st.markdown("**3. Check Eligibility**")
+            st.caption("Each trial's criteria are checked against your profile to see if you may qualify")
+
 if not selected_topic:
     st.info("Select a patient from the sidebar to begin.")
     st.stop()
 
 profile = profile_map[selected_topic]
 
-# -- Patient card --
+# -- Patient card (header + ambiguities) --
 render_patient_card(profile, dev_mode=DEV_MODE)
 
-# -- Medical image for multimodal patients --
+# -- Multimodal detection --
 is_multimodal = profile.get("ingest_mode") == "multimodal" or bool(profile.get("images")) or bool(profile.get("image"))
 image_cache = _load_image_cache(selected_topic)
 has_image_input = bool(profile.get("images")) or bool(profile.get("image")) or bool(image_cache)
 
-if is_multimodal:
-    all_images = get_all_image_paths(profile)
-    for img_path, img_meta in all_images:
-        if img_path.exists():
-            render_medical_image(img_path, img_meta, dev_mode=DEV_MODE)
+if DEV_MODE:
+    # Dev mode: keep original sequential layout
+    if is_multimodal:
+        all_images = get_all_image_paths(profile)
+        for img_path, img_meta in all_images:
+            if img_path.exists():
+                render_medical_image(img_path, img_meta, dev_mode=DEV_MODE)
 
-st.divider()
+    st.divider()
 
-# -- Pipeline overview header (patient mode only) --
-if not DEV_MODE:
+    patient_note, key_facts = adapt_harness_patient(profile)
+    render_ingest_step(key_facts, dev_mode=DEV_MODE, has_image_input=has_image_input)
+
+    if image_cache:
+        render_image_findings(image_cache, dev_mode=DEV_MODE)
+else:
+    # Patient mode: structured input → output layout
+    # -- Section 1: Patient Input (EHR text + images side by side) --
+    ehr_text = profile.get("ehr_text", "")
+    profile_text = profile.get("profile_text", "")
+    all_images = get_all_image_paths(profile) if is_multimodal else []
+    existing_images = [(p, m) for p, m in all_images if p.exists()]
+
     with st.container(border=True):
-        st.markdown("### How TrialMatch Works")
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.markdown("**1. Understand**")
-            st.caption("MedGemma 1.5 4B reads your records & images")
-        with col2:
-            st.markdown("**2. Search**")
-            st.caption("Gemini Pro + MedGemma 27B find matching trials")
-        with col3:
-            st.markdown("**3. Evaluate**")
-            st.caption("MedGemma 27B + Gemini Pro check eligibility")
+        st.markdown("### Patient Input")
+        st.caption("Raw clinical data provided to the pipeline")
 
-# -- INGEST step --
-# Don't merge image cache into display key_facts (shown separately below).
-# PRESCREEN live runs merge image context via adapt_harness_patient(profile, image_cache).
-patient_note, key_facts = adapt_harness_patient(profile)
-render_ingest_step(key_facts, dev_mode=DEV_MODE, has_image_input=has_image_input)
+        if ehr_text and existing_images:
+            col_ehr, col_img = st.columns([3, 2])
+            with col_ehr:
+                st.markdown("**EHR Clinical Notes**")
+                st.markdown(ehr_text)
+            with col_img:
+                st.markdown("**Medical Images**")
+                for img_path, img_meta in existing_images:
+                    st.image(str(img_path), use_container_width=True)
+        elif ehr_text:
+            st.markdown("**EHR Clinical Notes**")
+            st.markdown(ehr_text)
+        elif existing_images:
+            for img_path, img_meta in existing_images:
+                st.image(str(img_path), use_container_width=True)
 
-# -- MedGemma image findings for multimodal patients --
-if image_cache:
-    render_image_findings(image_cache, dev_mode=DEV_MODE)
+    # Prepare INGEST data (needed for pipeline, rendered after INGEST animation)
+    patient_note, key_facts = adapt_harness_patient(profile)
 
 # Reset previous run outputs before a new run starts.
 if run_button:
@@ -557,6 +609,73 @@ if run_button and pipeline_mode == "cached" and not DEV_MODE:
         ingest_status.update(
             label="INGEST complete — Patient profile extracted", state="complete"
         )
+elif not DEV_MODE and st.session_state.get("prescreen_result"):
+    # DOM position placeholder: a widget MUST occupy this slot on every rerun
+    # so that the VALIDATE st.status doesn't land at the same DOM position as the
+    # previous run's PRESCREEN st.status (which causes ghost search-table elements).
+    with st.expander("Patient analysis complete", expanded=False):
+        st.caption("MedGemma 1.5 4B extracted structured clinical facts from your record")
+
+# -- Clinical Profile: always render when data is available (patient mode) --
+if not DEV_MODE and key_facts:
+    _ingest_expanded = bool(run_button)  # expanded on first run, collapsed on reruns
+    with st.container(border=True):
+        st.markdown("### Your Clinical Profile (AI-extracted)")
+        input_desc = "EHR + medical images" if has_image_input else "EHR text"
+        st.caption(
+            f"MedGemma 1.5 4B extracted these structured facts from your {input_desc}."
+        )
+
+        # Split key_facts into patient info (from EHR) vs imaging findings (from CT)
+        imaging_facts = {}
+        patient_facts = {}
+        for field, value in key_facts.items():
+            if field in ("imaging_findings", "medgemma_imaging"):
+                imaging_facts[field] = value
+            else:
+                patient_facts[field] = value
+
+        # -- Extracted Patient Information (from EHR text) --
+        with st.expander("Extracted Patient Information", expanded=_ingest_expanded):
+            st.caption("Structured facts extracted from your clinical notes")
+            if patient_facts:
+                for field, value in patient_facts.items():
+                    col1, col2 = st.columns([1, 3])
+                    with col1:
+                        from components.pipeline_viewer import _friendly_field
+                        st.markdown(f"**{_friendly_field(field)}**")
+                    with col2:
+                        if isinstance(value, list):
+                            st.markdown(", ".join(str(v) for v in value))
+                        elif isinstance(value, dict):
+                            if "findings" in value and isinstance(value["findings"], list):
+                                for f in value["findings"]:
+                                    st.markdown(f"- {f}")
+                            else:
+                                parts = [f"{k}: {v}" for k, v in value.items()]
+                                st.markdown("; ".join(parts))
+                        else:
+                            st.markdown(str(value))
+
+        # -- Medical Image Findings (from CT images) --
+        if imaging_facts:
+            with st.expander("Medical Image Findings", expanded=_ingest_expanded):
+                st.caption(
+                    "Findings extracted by MedGemma 1.5 4B directly from your medical images — "
+                    "these details (e.g. tree-in-bud pattern, honeycombing) "
+                    "are not present in the raw clinical notes"
+                )
+                for field, value in imaging_facts.items():
+                    if isinstance(value, dict):
+                        desc = value.get("description", "")
+                        if desc:
+                            st.markdown(desc)
+                        findings = value.get("findings", [])
+                        if findings:
+                            for f in findings:
+                                st.markdown(f"- {f}")
+                    elif isinstance(value, str):
+                        st.markdown(value)
 
 # Live run trace recorder (local JSONL artifact)
 live_trace: LiveTraceRecorder | None = None
@@ -872,30 +991,138 @@ elif run_button and pipeline_mode == "cached":
     else:
         # -- B2: Simulated PRESCREEN animation for cached patient mode --
         n_candidates = len(prescreen_result.candidates)
+        tool_traces = prescreen_result.tool_call_trace
+
         with st.status(
             "Step 2: PRESCREEN — Gemini Pro + MedGemma 27B searching trials...",
             expanded=True,
         ) as ps_status:
             st.write("Analyzing patient profile for search strategy...")
+            time.sleep(1.5)
+
+            # --- Phase 1: Medical expert consultation ---
+            expert_calls = [t for t in tool_traces if t.tool_name == "consult_medical_expert"]
+            if expert_calls:
+                tc = expert_calls[0]
+                question = tc.args.get("question", "")
+                st.write("**Consulting MedGemma 27B medical expert...**")
+                time.sleep(1.0)
+                if question:
+                    st.caption(f"_{question[:180]}..._")
+                time.sleep(1.5)
+
+            # --- Phase 2: Agentic search across ClinicalTrials.gov ---
+            search_calls = [t for t in tool_traces if t.tool_name == "search_trials"]
+            if search_calls:
+                st.write(f"**Searching ClinicalTrials.gov ({len(search_calls)} queries)...**")
+                time.sleep(0.8)
+
+                # Build compact search results as markdown table
+                search_lines = []
+                cumulative_results = 0
+                for tc in search_calls:
+                    cond = tc.args.get("condition", "unknown")
+                    count = tc.result_count or 0
+                    cumulative_results += count
+                    search_lines.append(f"| `{cond}` | {count} |")
+
+                # Render as a compact table that animates in chunks
+                header = "| Search Term | Trials |\n|---|---:|"
+                chunk_size = 5
+                for chunk_start in range(0, len(search_lines), chunk_size):
+                    chunk = search_lines[chunk_start:chunk_start + chunk_size]
+                    st.markdown(header + "\n" + "\n".join(chunk))
+                    time.sleep(1.2)
+
+                st.caption(f"{cumulative_results} total results across {len(search_calls)} searches → deduplicating...")
+                time.sleep(1.0)
+
+            # --- Phase 3: Trial details review ---
+            # Show trials that will actually be validated (from cache if available),
+            # so the narrative is consistent: search → review → eligibility check.
+            _cached_val = load_validate_results(selected_topic)
+            _val_ncts = set(_cached_val.keys()) if _cached_val else set()
+            if _val_ncts:
+                review_ncts = _val_ncts
+            else:
+                review_ncts = {
+                    tc.args.get("nct_id", "")
+                    for tc in tool_traces
+                    if tc.tool_name == "get_trial_details" and not tc.error
+                }
+            if review_ncts:
+                nct_to_candidate = {c.nct_id: c for c in prescreen_result.candidates}
+                st.write(f"**Reviewing {len(review_ncts)} high-relevance trials in detail...**")
+                time.sleep(0.8)
+                detail_lines = []
+                for nct in sorted(review_ncts):
+                    c = nct_to_candidate.get(nct)
+                    title = (c.brief_title or c.title or "")[:70] if c else ""
+                    detail_lines.append(f"| {nct} | {title} |")
+                detail_table = "| NCT ID | Title |\n|---|---|\n" + "\n".join(detail_lines)
+                st.markdown(detail_table)
+                time.sleep(1.5)
+
+            # --- Final: Top 10 candidates (validated trials first) ---
+            ranked = _prioritize_validated_trials(prescreen_result.candidates, _val_ncts)
+            st.write(f"**Found {n_candidates} unique candidate trials — top 10:**")
+            time.sleep(0.8)
+            top_10 = ranked[:10]
+            top_rows = []
+            for i, c in enumerate(top_10, 1):
+                title = (c.brief_title or c.title or "")[:60]
+                phase = ", ".join(c.phase) if c.phase else "—"
+                conds = ", ".join(c.conditions[:2])[:40] if c.conditions else "—"
+                top_rows.append(f"| {i} | {c.nct_id} | {title} | {phase} | {conds} |")
+            top_table = (
+                "| # | NCT ID | Title | Phase | Conditions |\n"
+                "|--:|---|---|---|---|\n"
+                + "\n".join(top_rows)
+            )
+            st.markdown(top_table)
             time.sleep(1.0)
-            for i, tc in enumerate(prescreen_result.tool_call_trace[:6]):
-                if tc.tool_name == "consult_medical_expert":
-                    st.write("Consulting MedGemma medical expert...")
-                elif tc.tool_name == "search_trials":
-                    cond = tc.args.get("condition", "")[:40]
-                    st.write(f"Searching ClinicalTrials.gov: {cond}...")
-                elif tc.tool_name == "get_trial_details":
-                    nct = tc.args.get("nct_id", "")
-                    st.write(f"Reviewing trial details: {nct}...")
-                time.sleep(0.6)
-            st.write(f"**Found {n_candidates} candidate trials**")
-            time.sleep(0.5)
+
             ps_status.update(
                 label=f"PRESCREEN complete — {n_candidates} trials found",
                 state="complete",
             )
 else:
-    render_prescreen_placeholder(dev_mode=DEV_MODE)
+    # If PRESCREEN results exist in session state, render them statically
+    # (this happens when user clicks "Validate Trials" — page reruns but run_button is False)
+    existing_prescreen = st.session_state.get("prescreen_result")
+    if existing_prescreen and existing_prescreen.topic_id == selected_topic and existing_prescreen.candidates:
+        n_candidates = len(existing_prescreen.candidates)
+        if DEV_MODE:
+            with st.expander(f"Step 2: PRESCREEN — {n_candidates} trials found (cached)", expanded=False):
+                st.caption(f"{n_candidates} candidate trials from previous search")
+        else:
+            with st.expander(
+                f"Finding Matching Trials — {n_candidates} trials found",
+                expanded=False,
+            ):
+                # Show static top 10 candidates table (validated trials first)
+                _cached_val = load_validate_results(selected_topic)
+                _val_ncts = set(_cached_val.keys()) if _cached_val else set()
+                ranked = _prioritize_validated_trials(
+                    existing_prescreen.candidates, _val_ncts
+                )
+                top_10 = ranked[:10]
+                top_rows = []
+                for i, c in enumerate(top_10, 1):
+                    title = (c.brief_title or c.title or "")[:60]
+                    phase = ", ".join(c.phase) if c.phase else "—"
+                    conds = ", ".join(c.conditions[:2])[:40] if c.conditions else "—"
+                    top_rows.append(f"| {i} | {c.nct_id} | {title} | {phase} | {conds} |")
+                top_table = (
+                    "| # | NCT ID | Title | Phase | Conditions |\n"
+                    "|--:|---|---|---|---|\n"
+                    + "\n".join(top_rows)
+                )
+                st.markdown(top_table)
+                if n_candidates > 10:
+                    st.caption(f"Showing top 10 of {n_candidates} candidates")
+    else:
+        render_prescreen_placeholder(dev_mode=DEV_MODE)
 
 # ---------------------------------------------------------------------------
 # VALIDATE step
@@ -957,28 +1184,41 @@ elif validate_button and pipeline_mode == "cached" and prescreen_result and pres
         else:
             # -- B3: Simulated VALIDATE animation for cached patient mode --
             with st.status(
-                "Step 3: VALIDATE — MedGemma 27B + Gemini Pro evaluating eligibility...",
+                "Step 3: Checking your eligibility...",
                 expanded=True,
             ) as val_status:
+                total_criteria = sum(len(d["criteria"]) for d in cached_validate.values())
+                st.write(f"Reviewing {total_criteria} eligibility criteria across {len(cached_validate)} trial(s)...")
+                time.sleep(1.5)
+
                 for nct_id, data in cached_validate.items():
-                    st.write(f"**Evaluating: {nct_id}**")
-                    time.sleep(0.5)
-                    for c in data["criteria"][:5]:
-                        icon = {
-                            "MET": "\U0001f7e2",
-                            "NOT_MET": "\U0001f534",
-                            "UNKNOWN": "\U0001f7e1",
-                        }.get(c["verdict"], "")
-                        st.write(
-                            f"  {icon} {c['verdict']} — {c['text'][:80]}..."
-                        )
+                    # Get trial title from prescreen candidates if available
+                    trial_title = nct_id
+                    if prescreen_result:
+                        for cand in prescreen_result.candidates:
+                            if cand.nct_id == nct_id:
+                                trial_title = cand.brief_title or cand.title or nct_id
+                                break
+
+                    # Truncate long technical titles for patient readability
+                    display_title = trial_title[:80] + "..." if len(trial_title) > 80 else trial_title
+                    st.write(f"Evaluating: **{display_title}**")
+                    time.sleep(1.0)
+
+                    # Show brief progress per criterion (no raw reasoning)
+                    for c in data["criteria"]:
                         time.sleep(0.3)
+
+                    # Show trial-level summary with verdict icon
                     verdict = data["verdict"]
-                    badge = VERDICT_BADGES.get(verdict, verdict)
-                    st.write(f"  Trial verdict: {badge}")
-                    time.sleep(0.3)
+                    met = sum(1 for c in data["criteria"] if c["verdict"] == "MET")
+                    total = len(data["criteria"])
+                    icon = {"ELIGIBLE": "✅", "EXCLUDED": "❌", "NOT_RELEVANT": "❌", "UNCERTAIN": "🟡"}.get(verdict, "❓")
+                    st.write(f"{icon} {met}/{total} criteria met")
+                    time.sleep(0.8)
+
                 val_status.update(
-                    label="VALIDATE complete — Eligibility determined",
+                    label=f"Eligibility check complete — {len(cached_validate)} trial(s) evaluated",
                     state="complete",
                 )
 
@@ -1050,9 +1290,17 @@ elif validate_button and pipeline_mode == "live" and prescreen_result and prescr
             if nct_id:
                 trial_criteria_map[nct_id] = ""  # placeholder
 
-    # For the demo, we'll try to fetch criteria via CT.gov API for top candidates
-    # that don't have cached criteria
-    top_candidates = prescreen_result.candidates[:max_trials]
+    # For live VALIDATE, prioritize trials that had get_trial_details called
+    # (they already have eligibility criteria fetched).
+    detailed_ncts = {
+        tc.args.get("nct_id", "")
+        for tc in prescreen_result.tool_call_trace
+        if tc.tool_name == "get_trial_details" and not tc.error
+    }
+    ranked_candidates = _prioritize_validated_trials(
+        prescreen_result.candidates, detailed_ncts
+    )
+    top_candidates = ranked_candidates[:max_trials]
 
     validate_results: dict[str, list[tuple[dict, object]]] = {}
     trial_verdicts: dict[str, str] = {}
@@ -1483,6 +1731,31 @@ elif validate_button and prescreen_result and not prescreen_result.candidates:
             st.warning("No candidate trials found by PRESCREEN. Nothing to validate.")
     else:
         st.info("No matching clinical trials were found for your condition.")
+elif not validate_button and st.session_state.get("trial_verdicts"):
+    # Persist VALIDATE results on reruns (after animation has completed)
+    existing_verdicts = st.session_state["trial_verdicts"]
+    existing_cached = st.session_state.get("cached_validate_data") or (
+        load_validate_results(selected_topic) if pipeline_mode == "cached" else None
+    )
+    if existing_cached and prescreen_result:
+        existing_cached = _filter_validate_to_prescreen(existing_cached, prescreen_result)
+
+    if DEV_MODE:
+        with st.expander("Step 3: VALIDATE — complete", expanded=False):
+            for nct_id, verdict in existing_verdicts.items():
+                badge = VERDICT_BADGES.get(verdict, verdict)
+                st.markdown(f"**{nct_id}**: {badge}")
+    elif existing_cached:
+        eligible = sum(1 for d in existing_cached.values() if d["verdict"] == "ELIGIBLE")
+        total_t = len(existing_cached)
+        label = f"Eligibility check complete — {eligible}/{total_t} trial(s) may match"
+        with st.expander(label, expanded=False):
+            for nct_id, data in existing_cached.items():
+                verdict = data["verdict"]
+                badge = VERDICT_BADGES.get(verdict, verdict)
+                met = sum(1 for c in data["criteria"] if c["verdict"] == "MET")
+                total = len(data["criteria"])
+                st.markdown(f"{badge} **{nct_id}** — {met}/{total} criteria met")
 elif not validate_button and not st.session_state.get("trial_verdicts"):
     render_validate_placeholder(dev_mode=DEV_MODE)
 
@@ -1564,7 +1837,7 @@ if trial_verdicts and prescreen_for_results:
         evaluated_count = len(trial_verdicts)
         eligible_count = sum(1 for v in trial_verdicts.values() if v == "ELIGIBLE")
         uncertain_count = sum(1 for v in trial_verdicts.values() if v == "UNCERTAIN")
-        excluded_count = sum(1 for v in trial_verdicts.values() if v == "EXCLUDED")
+        excluded_count = sum(1 for v in trial_verdicts.values() if v in ("EXCLUDED", "NOT_RELEVANT"))
 
         st.caption(
             f"PRESCREEN candidates: {prescreen_count} | "
