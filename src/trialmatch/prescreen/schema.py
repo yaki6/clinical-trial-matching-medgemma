@@ -18,7 +18,7 @@ class ToolCallRecord(BaseModel):
     """Trace record for a single tool invocation by the PRESCREEN agent."""
 
     call_index: int
-    tool_name: str  # "search_trials" | "get_trial_details" | "normalize_medical_terms"
+    tool_name: str  # "search_trials" | "get_trial_details" | "consult_medical_expert"
     args: dict[str, Any]
     result_summary: str  # Short human-readable summary of the result
     result_count: int = 0  # Number of trials returned (0 for non-search tools)

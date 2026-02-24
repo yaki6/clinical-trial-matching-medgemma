@@ -1013,6 +1013,171 @@ class TestConsultMedicalExpert:
 
 
 # ---------------------------------------------------------------------------
+# consult_medical_expert agent integration tests
+# ---------------------------------------------------------------------------
+
+
+class TestConsultMedicalExpertAgentIntegration:
+    """Tests that consult_medical_expert flows correctly through the full agent loop."""
+
+    def test_expert_then_search_integration(self, sample_search_response):
+        """Gemini calls consult_medical_expert, then search_trials, gets results."""
+        adapter = _make_gemini_adapter([
+            {
+                "function_calls": [{
+                    "name": "consult_medical_expert",
+                    "args": {"question": "What terms for mesothelioma?"},
+                }],
+            },
+            {
+                "function_calls": [{
+                    "name": "search_trials",
+                    "args": {"condition": "mesothelioma"},
+                }],
+            },
+            {"text": "Found trials for mesothelioma.", "function_calls": []},
+        ])
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.search = AsyncMock(return_value=sample_search_response)
+        mock_ctgov.aclose = AsyncMock()
+
+        medgemma = MagicMock()
+        medgemma.generate = AsyncMock(return_value=MagicMock(
+            text="Search: mesothelioma, pleural neoplasm, mesothelial tumor",
+            estimated_cost=0.002,
+        ))
+
+        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+            result = asyncio.run(run_prescreen_agent(
+                patient_note="61yo male with epithelioid mesothelioma",
+                key_facts={"diagnosis": "mesothelioma"},
+                ingest_source="gold",
+                gemini_adapter=adapter,
+                medgemma_adapter=medgemma,
+                topic_id="expert-integration",
+            ))
+
+        # Both tool calls recorded
+        assert result.total_api_calls == 2
+        tool_names = [t.tool_name for t in result.tool_call_trace]
+        assert "consult_medical_expert" in tool_names
+        assert "search_trials" in tool_names
+
+        # MedGemma cost flows through to result
+        assert result.medgemma_calls == 1
+        assert result.medgemma_estimated_cost == pytest.approx(0.002)
+
+        # Search results still collected
+        assert result.total_unique_nct_ids == 2
+        assert len(result.candidates) == 2
+
+    def test_expert_unavailable_agent_continues(self, sample_search_response):
+        """Agent completes when medgemma_adapter is None and expert returns error."""
+        adapter = _make_gemini_adapter([
+            {
+                "function_calls": [{
+                    "name": "consult_medical_expert",
+                    "args": {"question": "What terms for mesothelioma?"},
+                }],
+            },
+            {
+                "function_calls": [{
+                    "name": "search_trials",
+                    "args": {"condition": "mesothelioma"},
+                }],
+            },
+            {"text": "Completed search.", "function_calls": []},
+        ])
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.search = AsyncMock(return_value=sample_search_response)
+        mock_ctgov.aclose = AsyncMock()
+
+        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+            result = asyncio.run(run_prescreen_agent(
+                patient_note="Mesothelioma patient",
+                key_facts={},
+                ingest_source="gold",
+                gemini_adapter=adapter,
+                medgemma_adapter=None,  # No MedGemma available
+                topic_id="expert-unavailable",
+            ))
+
+        # Expert call recorded but no cost
+        assert result.total_api_calls == 2
+        assert result.medgemma_calls == 0
+        assert result.medgemma_estimated_cost == 0.0
+
+        # Search still succeeds
+        assert result.total_unique_nct_ids == 2
+
+    def test_expert_response_fed_back_to_gemini(self, sample_search_response):
+        """Verify the expert answer is passed back to Gemini as FunctionResponse."""
+        from google.genai import types as genai_types
+
+        adapter = _make_gemini_adapter([
+            {
+                "function_calls": [{
+                    "name": "consult_medical_expert",
+                    "args": {"question": "Synonyms for mesothelioma?"},
+                }],
+            },
+            {"text": "Done.", "function_calls": []},
+        ])
+
+        mock_ctgov = MagicMock(spec=CTGovClient)
+        mock_ctgov.aclose = AsyncMock()
+
+        medgemma = MagicMock()
+        medgemma.generate = AsyncMock(return_value=MagicMock(
+            text="Mesothelioma synonyms: pleural mesothelioma, peritoneal mesothelioma",
+            estimated_cost=0.001,
+        ))
+
+        # Capture contents passed to generate_content
+        captured_contents = []
+        original_side_effect = adapter._client.models.generate_content.side_effect
+
+        def capturing_side_effect(*args, **kwargs):
+            contents = kwargs.get("contents", args[1] if len(args) > 1 else [])
+            captured_contents.append(list(contents))
+            return original_side_effect(*args, **kwargs)
+
+        adapter._client.models.generate_content.side_effect = capturing_side_effect
+
+        with patch("trialmatch.prescreen.agent.CTGovClient", return_value=mock_ctgov):
+            asyncio.run(run_prescreen_agent(
+                patient_note="Mesothelioma patient",
+                key_facts={},
+                ingest_source="gold",
+                gemini_adapter=adapter,
+                medgemma_adapter=medgemma,
+            ))
+
+        # Second generate_content call should contain the expert's FunctionResponse
+        assert len(captured_contents) >= 2
+        second_call = captured_contents[1]
+
+        # Find the FunctionResponse content
+        found_expert_response = False
+        for item in second_call:
+            if not isinstance(item, genai_types.Content):
+                continue
+            for part in getattr(item, "parts", []):
+                fr = getattr(part, "function_response", None)
+                if fr and fr.name == "consult_medical_expert":
+                    found_expert_response = True
+                    # Agent wraps tool output as {"result": <raw>}
+                    assert "answer" in fr.response.get("result", fr.response)
+                    break
+
+        assert found_expert_response, (
+            "Expert FunctionResponse not found in second generate_content call"
+        )
+
+
+# ---------------------------------------------------------------------------
 # Truncation tests
 # ---------------------------------------------------------------------------
 

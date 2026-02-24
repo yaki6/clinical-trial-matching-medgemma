@@ -2,51 +2,40 @@
 
 > Generated from source: `src/trialmatch/prescreen/agent.py`, `tools.py`, `ctgov_client.py`, `cli/phase0.py`
 >
-> **Updated 2026-02-22**: Reflects current implementation — MedGemma clinical reasoning
-> pre-search step (ADR-009), two tools only (normalize_medical_terms commented out — ADR-011),
-> AREA[StudyType] filtering (ADR-010), heuristic candidate scoring.
+> **Updated 2026-02-24**: Reflects adaptive agentic architecture — Gemini 3 Pro
+> as reasoning orchestrator with three tools: `search_trials`, `get_trial_details`,
+> and `consult_medical_expert` (MedGemma 27B on-demand). No pre-search MedGemma
+> call. AREA[StudyType] filtering (ADR-010), heuristic candidate scoring.
 
 ---
 
 ## 1. PRESCREEN Agent Loop
 
-The PRESCREEN pipeline has two phases:
-1. **MedGemma clinical reasoning** (optional): MedGemma 4B generates clinical
-   guidance (condition terms, molecular drivers, eligibility keywords) that is
-   injected into Gemini's prompt.
-2. **Gemini agentic loop**: Gemini autonomously searches ClinicalTrials.gov
-   using two tools: `search_trials` and `get_trial_details`. The loop runs
-   up to `max_tool_calls + 5` iterations, with a budget guard that sends
-   structured FunctionResponse errors when the tool call cap is reached.
-
-Note: `normalize_medical_terms` was the original third tool but was commented
-out (ADR-011) due to ~25s latency with near-zero value.
+The PRESCREEN agent is a single adaptive loop:
+- **Gemini 3 Pro** autonomously searches ClinicalTrials.gov using three tools:
+  `search_trials`, `get_trial_details`, and `consult_medical_expert`.
+- **MedGemma 27B** is available as an on-demand callable expert via
+  `consult_medical_expert` — the agent decides when (and whether) to consult it
+  for medical terminology questions.
+- The loop runs up to `max_tool_calls + 5` iterations (default budget: 25 tool calls),
+  with a budget guard that sends structured FunctionResponse errors when the cap is reached.
 
 ```mermaid
 sequenceDiagram
     participant CLI
     participant Agent as Agent<br/>(run_prescreen_agent)
-    participant MG as MedGemma 4B
-    participant Gemini as Gemini Flash
+    participant Gemini as Gemini 3 Pro
     participant TE as ToolExecutor
+    participant MG as MedGemma 27B
     participant CTGov as CTGovClient
     participant API as CT.gov API v2
 
     CLI->>Agent: run_prescreen_agent(patient_note, key_facts, ...)
     activate Agent
 
-    Agent->>Agent: Create CTGovClient + ToolExecutor
+    Agent->>Agent: Create CTGovClient + ToolExecutor(ctgov, medgemma)
     Agent->>Agent: Extract demographics (age, sex) from key_facts
-
-    opt MedGemma clinical reasoning (if medgemma_adapter provided)
-        Agent->>MG: generate(CLINICAL_REASONING_PROMPT)
-        activate MG
-        MG-->>Agent: Clinical guidance (condition terms, molecular drivers, keywords)
-        deactivate MG
-        Agent->>Agent: Inject guidance into user prompt as "MedGemma Clinical Reasoning" section
-    end
-
-    Agent->>Agent: Format user message via PRESCREEN_USER_TEMPLATE (with demographics + guidance)
+    Agent->>Agent: Format user message via PRESCREEN_USER_TEMPLATE (demographics + patient note)
     Agent->>Agent: Build contents[] with system prompt + user message
 
     loop Agentic Loop (max_tool_calls + 5 iterations)
@@ -63,23 +52,36 @@ sequenceDiagram
             Agent->>Agent: Append error FunctionResponses to contents[]
             Note over Agent: continue loop (Gemini will produce final summary)
         else Normal tool execution
-            Agent->>TE: execute("search_trials", {condition, intervention, ...})
-            activate TE
-            TE->>CTGov: search(condition, intervention, eligibility_keywords, ...)
-            activate CTGov
-            CTGov->>API: GET /studies?query.cond=...&aggFilters=...
-            activate API
-            API-->>CTGov: {studies[], totalCount}
-            deactivate API
-            CTGov-->>TE: raw response dict
-            deactivate CTGov
-            TE->>TE: parse_search_results() → parse_study_summary() → compact dicts
-            TE-->>Agent: ({count, total_available, trials[]}, summary)
-            deactivate TE
 
-            Agent->>Agent: Merge trials into candidates_by_nct, track found_by_query
+            opt consult_medical_expert (on-demand, 1-3 calls typical)
+                Agent->>TE: execute("consult_medical_expert", {question})
+                activate TE
+                TE->>MG: generate(clinical question prompt)
+                activate MG
+                MG-->>TE: Expert answer (condition terms, synonyms, etc.)
+                deactivate MG
+                TE-->>Agent: ({answer: "..."}, summary)
+                deactivate TE
+            end
 
-            opt get_trial_details (only for promising trials)
+            opt search_trials (primary search tool, 15-20 calls typical)
+                Agent->>TE: execute("search_trials", {condition, intervention, ...})
+                activate TE
+                TE->>CTGov: search(condition, intervention, eligibility_keywords, ...)
+                activate CTGov
+                CTGov->>API: GET /studies?query.cond=...&aggFilters=...
+                activate API
+                API-->>CTGov: {studies[], totalCount}
+                deactivate API
+                CTGov-->>TE: raw response dict
+                deactivate CTGov
+                TE->>TE: parse_search_results() -> parse_study_summary() -> compact dicts
+                TE-->>Agent: ({count, total_available, trials[]}, summary)
+                deactivate TE
+                Agent->>Agent: Merge trials into candidates_by_nct, track found_by_query
+            end
+
+            opt get_trial_details (only for promising trials, 3-5 calls typical)
                 Agent->>TE: execute("get_trial_details", {nct_id})
                 activate TE
                 TE->>CTGov: get_details(nct_id)
@@ -102,7 +104,7 @@ sequenceDiagram
     end
 
     Agent->>Agent: _build_candidates() — heuristic score: query_count*3 + phase_bonus + recruiting_bonus + details_bonus
-    Agent->>Agent: Prune to MAX_CANDIDATES=20
+    Agent->>Agent: Prune to MAX_CANDIDATES=200
     Agent->>Agent: Compute gemini_cost from token counts
     Agent->>CTGov: aclose()
 

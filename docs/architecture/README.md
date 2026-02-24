@@ -51,11 +51,11 @@ src/trialmatch/
 ├── cli/           # Click CLI entry points (trialmatch command)
 ├── ingest/        # INGEST component — profile_adapter converts nsclc JSON → PRESCREEN dict
 │   └── profile_adapter.py  # list-of-objects → flat dict, demographics promotion (age/sex → top-level)
-├── prescreen/     # PRESCREEN component — MedGemma pre-search + Gemini agentic search
-│   ├── agent.py       # MedGemma clinical reasoning + Gemini multi-turn agentic loop
+├── prescreen/     # PRESCREEN component — Gemini Pro adaptive agentic search + MedGemma expert
+│   ├── agent.py       # Gemini 3 Pro multi-turn agentic loop (adaptive, disease-agnostic)
 │   ├── ctgov_client.py # Async CT.gov API v2 client (AREA[StudyType], rate-limited, retry)
 │   ├── schema.py      # TrialCandidate, ToolCallRecord, PresearchResult
-│   └── tools.py       # Gemini FunctionDeclarations (search_trials, get_trial_details) + ToolExecutor
+│   └── tools.py       # Gemini FunctionDeclarations (search_trials, get_trial_details, consult_medical_expert) + ToolExecutor
 ├── validate/      # VALIDATE component — (Patient, Criterion) → MET/NOT_MET/UNKNOWN
 │   └── evaluator.py   # Reusable criterion evaluator (model-agnostic)
 ├── data/          # Data loading: HF dataset (TrialGPT criterion annotations), sampling
@@ -97,17 +97,17 @@ Gemini uses Google AI Studio (`google-genai` SDK).
 
 ## PRESCREEN Agent Architecture
 
-The PRESCREEN agent uses a two-model architecture (ADR-009):
+The PRESCREEN agent uses an adaptive agentic architecture:
 
-1. **MedGemma 4B** — Clinical reasoning pre-search: generates structured guidance (condition terms, likely molecular drivers, priority eligibility keywords, treatment line assessment) before the agentic loop begins. Latency: 12-43s, cost: ~$0.05/patient.
+1. **Gemini 3 Pro** — Reasoning orchestrator: multi-turn function-calling loop with 3 tools (`search_trials`, `get_trial_details`, `consult_medical_expert`), default budget of 25 tool calls. The agent autonomously decides search strategy based on intermediate results. Budget guard sends structured FunctionResponse errors when tool cap is reached.
 
-2. **Gemini Flash** — Agentic search orchestrator: multi-turn function-calling loop with 2 tools (`search_trials`, `get_trial_details`), max 8 tool calls. Budget guard sends structured FunctionResponse errors when tool cap is reached.
+2. **MedGemma 27B** — On-demand clinical expert: available as the `consult_medical_expert` tool within the agentic loop. The agent calls it when uncertain about medical terminology, condition synonyms, or CT.gov vocabulary. Typical usage: 1-3 calls per patient. Graceful fallback if unavailable.
 
-`normalize_medical_terms` was the original third tool (MedGemma-powered term normalization) but was commented out (ADR-011) due to ~25s latency per call with near-zero value — MedGemma echoed inputs unchanged. The clinical reasoning pre-search step provides better guidance.
+The system prompt is minimal and disease-agnostic — it provides the goal (maximize recall), the tool budget, and anti-patterns to avoid (e.g., don't use age/sex filters which silently hurt recall). Gemini Pro reasons about its own search strategy.
 
 ### Candidate Scoring
 
-Candidates are ranked by a heuristic score: `query_count * 3 + phase_bonus + recruiting_bonus + details_bonus`, capped at MAX_CANDIDATES=20. Phase II/III trials get +2, RECRUITING gets +1, trials with fetched eligibility criteria get +2.
+Candidates are ranked by a heuristic score: `query_count * 3 + phase_bonus + recruiting_bonus + details_bonus`, capped at MAX_CANDIDATES=200. Phase II/III trials get +2, RECRUITING gets +1, trials with fetched eligibility criteria get +2.
 
 ### CT.gov API v2 Filtering
 

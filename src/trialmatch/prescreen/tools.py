@@ -216,8 +216,9 @@ PRESCREEN_TOOLS = genai_types.Tool(
 
 
 class ToolExecutor:
-    """Dispatches Gemini tool calls to CT.gov API.
+    """Dispatches Gemini tool calls to CT.gov API and MedGemma expert.
 
+    Three tools: search_trials, get_trial_details, consult_medical_expert.
     Keeps running totals for cost/latency tracking.
     """
 
