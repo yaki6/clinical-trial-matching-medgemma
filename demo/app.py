@@ -23,7 +23,7 @@ Multi-model AI pipeline for matching cancer patients to clinical trials.
 
 **Pipeline**: INGEST \u2192 PRESCREEN \u2192 VALIDATE
 
-**Models**: MedGemma 4B (normalization) \u00b7 MedGemma 27B (evaluation)
+**Models**: MedGemma 1.5 4B (normalization) \u00b7 MedGemma 27B (evaluation)
 \u00b7 Gemini 3 Pro (orchestration)
 
 ---

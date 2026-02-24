@@ -1,11 +1,11 @@
-# MedGemma 4B Reasoning Analysis: Model vs Human Expert vs GPT-4
+# MedGemma 1.5 4B Reasoning Analysis: Model vs Human Expert vs GPT-4
 
 <!-- Last updated: 2026-02-21 -->
 <!-- Based on Phase 0 benchmark run: phase0-medgemma-1.5-4b-20260221-013509 -->
 
 ## Overview
 
-This document compares MedGemma 4B's medical reasoning against human expert annotations and GPT-4 explanations from the TrialGPT HF criterion-level dataset (20-pair Phase 0 sample).
+This document compares MedGemma 1.5 4B's medical reasoning against human expert annotations and GPT-4 explanations from the TrialGPT HF criterion-level dataset (20-pair Phase 0 sample).
 
 ### Data Sources
 
@@ -13,11 +13,11 @@ This document compares MedGemma 4B's medical reasoning against human expert anno
 |--------|--------|-----------|----------|
 | Human Expert | Ground truth (MET/NOT_MET/UNKNOWN) | Not available (labels only) | Sentence indices (sparse) |
 | GPT-4 | 75% accurate | Free-text explanation per pair | Not structured |
-| MedGemma 4B | 35% accurate | Step-by-step reasoning chain | Sentence indices |
+| MedGemma 1.5 4B | 35% accurate | Step-by-step reasoning chain | Sentence indices |
 
 ## Error Taxonomy
 
-MedGemma 4B made 13 errors in 20 pairs. These cluster into 4 distinct failure modes:
+MedGemma 1.5 4B made 13 errors in 20 pairs. These cluster into 4 distinct failure modes:
 
 ### Type A: Reasoning Correct, Label Contradicts (3/13 errors)
 
@@ -53,7 +53,7 @@ Reasoning correctly identifies 2 days < 1 week, but label says MET.
 
 Same pattern: correct negative reasoning, wrong positive label.
 
-**Root cause**: MedGemma 4B has insufficient instruction-following capacity to reliably map its own reasoning conclusions to the correct JSON label value. The model treats label output as partially independent from its reasoning chain.
+**Root cause**: MedGemma 1.5 4B has insufficient instruction-following capacity to reliably map its own reasoning conclusions to the correct JSON label value. The model treats label output as partially independent from its reasoning chain.
 
 ---
 
@@ -171,7 +171,7 @@ MedGemma uses `<unused94>...<unused95>` thinking tokens before producing actual 
 
 ### Reasoning Quality vs Label Accuracy
 
-| Metric | Expert | GPT-4 | MedGemma 4B |
+| Metric | Expert | GPT-4 | MedGemma 1.5 4B |
 |--------|--------|-------|-------------|
 | Label accuracy | 100% | 75% | 35% |
 | Reasoning-label consistency | N/A | High (85% "Correct" by TrialGPT annotation) | Low (~50% — reasoning often correct, label wrong) |
@@ -182,7 +182,7 @@ MedGemma uses `<unused94>...<unused95>` thinking tokens before producing actual 
 
 ### Verdict Distribution Comparison
 
-| Verdict | Ground Truth | GPT-4 | MedGemma 4B |
+| Verdict | Ground Truth | GPT-4 | MedGemma 1.5 4B |
 |---------|-------------|-------|-------------|
 | MET | 8 (40%) | 8 (40%) | 14 (70%) |
 | NOT_MET | 8 (40%) | 8 (40%) | 3 (15%) |
@@ -194,8 +194,8 @@ MedGemma's distribution is heavily skewed toward MET, while both the ground trut
 
 | Model | Mean Evidence Overlap (Jaccard) |
 |-------|-------------------------------|
-| MedGemma 4B (native labels) | 5% |
-| MedGemma 4B (eligible labels) | 35% |
+| MedGemma 1.5 4B (native labels) | 5% |
+| MedGemma 1.5 4B (eligible labels) | 35% |
 | Gemini 3 Pro (native labels) | 75% |
 
 Note: Evidence overlap improved with eligible labels because more pairs produced parseable JSON with evidence_sentences, even though accuracy did not improve.
@@ -204,7 +204,7 @@ Note: Evidence overlap improved with eligible labels because more pairs produced
 
 ## Key Takeaways
 
-### 1. MedGemma 4B's medical reasoning is better than its accuracy suggests
+### 1. MedGemma 1.5 4B's medical reasoning is better than its accuracy suggests
 
 At least 7 of 13 errors (Types A + B) involve correct or partially correct clinical reasoning with wrong label output. The model's **understanding** of clinical content is substantially better than its **instruction-following** on the label mapping task.
 

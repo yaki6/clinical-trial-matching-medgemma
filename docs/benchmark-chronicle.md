@@ -33,15 +33,15 @@ and lessons learned across the trialmatch clinical trial criterion reasoning pro
 | 4 | MedGemma 27B + Gemini Flash | v3 | 42 | 85.0% | 0.855 | 0.769 | $0.031 | 4.9s |
 | 4 | MedGemma 27B + Gemini Pro | v3 | 42 | 85.0% | 0.855 | 0.769 | $0.033 | 9.0s |
 | 6 | MedGemma 27B + Gemini Flash | v1 | 42 | 80.0% | 0.796 | 0.697 | $0.020 | 3.9s |
-| 6 | MedGemma 4B + Gemini Pro (v4, 3-seed avg) | v4 | 42/123/7 | **75.0%** avg | 0.744 | 0.607 | $1.03 | 55s |
+| 6 | MedGemma 1.5 4B + Gemini Pro (v4, 3-seed avg) | v4 | 42/123/7 | **75.0%** avg | 0.744 | 0.607 | $1.03 | 55s |
 | 8 | Gemini 3 Pro (standalone) | best | 42 | 75.0% | 0.558 | 0.583 | $0.037 | 11.2s |
 | 8 | **GPT-4 baseline** | — | 42 | **75.0%** | 0.746 | — | — | — |
 | 10 | MedGemma 27B Vertex (standalone) | — | 42 | 70.0% | 0.722 | 0.538 | $0.053 | 8.3s |
 | 11 | Gemini Pro + Flash (two-stage) | v3 | 7 | 70.0% | 0.689 | 0.545 | $0.030 | 4.2s |
-| 12 | MedGemma 4B HF (standalone, best) | — | 42 | 65.0% | 0.666 | 0.453 | $0.695 | 49.3s |
-| 13 | MedGemma 4B Vertex (standalone) | — | 42 | 60.0% | 0.613 | 0.355 | $0.015 | 2.4s |
-| 14 | MedGemma 4B + Gemini Flash | v1 | 42 | 45.0% | 0.447 | 0.225 | $0.015 | 4.3s |
-| 15 | MedGemma 4B HF (standalone, worst) | — | 42 | 35.0% | 0.315 | 0.030 | $0.532 | 15.7s |
+| 12 | MedGemma 1.5 4B HF (standalone, best) | — | 42 | 65.0% | 0.666 | 0.453 | $0.695 | 49.3s |
+| 13 | MedGemma 1.5 4B Vertex (standalone) | — | 42 | 60.0% | 0.613 | 0.355 | $0.015 | 2.4s |
+| 14 | MedGemma 1.5 4B + Gemini Flash | v1 | 42 | 45.0% | 0.447 | 0.225 | $0.015 | 4.3s |
+| 15 | MedGemma 1.5 4B HF (standalone, worst) | — | 42 | 35.0% | 0.315 | 0.030 | $0.532 | 15.7s |
 
 ### Headline: Two-stage MedGemma 27B + Gemini beats GPT-4 by 20 percentage points
 
@@ -56,7 +56,7 @@ Chronological log of every significant event, run, and decision.
 
 ### Feb 18 — Connectivity Validation
 - `5f19266` Agent memory scaffolding (DASHBOARD, session protocol, skills)
-- Validated MedGemma 4B HF endpoint + Gemini 3 Pro API connectivity
+- Validated MedGemma 1.5 4B HF endpoint + Gemini 3 Pro API connectivity
 - Ran diagnostic comparison on 2 patients (model-connectivity-report.md)
 
 ### Feb 19 — Phase 0 Implementation + First Benchmarks
@@ -65,7 +65,7 @@ Chronological log of every significant event, run, and decision.
 - `32bc017` 4 BDD scenarios for validate module
 - `0412fbf` Fix: prevent false-positive MET from substring matches
 - **Runs** (all standalone, seed 42):
-  - MedGemma 4B HF: 60% → 65% (tuning concurrency)
+  - MedGemma 1.5 4B HF: 60% → 65% (tuning concurrency)
   - Gemini 3 Pro: 50% (early sequential run, no CWA)
 
 ### Feb 20 — PRESCREEN Module + 27B Deployment
@@ -75,7 +75,7 @@ Chronological log of every significant event, run, and decision.
   - `pytorch` framework OOM (27B x fp32 = 108GB)
   - `custom` framework (TGI docker, bf16) works (~54GB)
   - TGI 3.0 chat template incompatible with Gemma 3 → garbled output
-- **Runs**: Gemini Pro 60-75% (tuning prompts), MedGemma 4B 55% (3 concurrent)
+- **Runs**: Gemini Pro 60-75% (tuning prompts), MedGemma 1.5 4B 55% (3 concurrent)
 
 ### Feb 21 — TGI Bug Discovery + Vertex AI + Two-Stage Breakthrough
 - `34d8d10` Fix: TrialGPT-native labels + CWA → exclusion semantic inversion fixed
@@ -129,8 +129,8 @@ Detailed at `docs/prompt-changelog.md`. Summary of the optimization journey:
 ### Pre-Two-Stage (standalone models)
 | Model | Best Accuracy | Key Limitation |
 |-------|--------------|----------------|
-| MedGemma 4B HF | 65% | MET bias, JSON instruction-following failure |
-| MedGemma 4B (max_tokens=512) | 35% | Thinking chain truncated by TGI CUDA workaround |
+| MedGemma 1.5 4B HF | 65% | MET bias, JSON instruction-following failure |
+| MedGemma 1.5 4B (max_tokens=512) | 35% | Thinking chain truncated by TGI CUDA workaround |
 | MedGemma 27B Vertex | 70% | Better instruction-following, but still misses nuance |
 | Gemini 3 Pro | 75% | Good JSON, lacks deep clinical reasoning |
 
@@ -184,7 +184,7 @@ Flash = Pro on labeling accuracy. **Recommendation: use Flash for 1.8x speed + l
 | Stage 1 Model | Accuracy | Quality |
 |--------------|----------|---------|
 | MedGemma 27B | 95% (v4) | Rich clinical reasoning, occasional keyword errors |
-| MedGemma 4B | 80% (v1+Pro) | Decent reasoning, more keyword errors, MET bias |
+| MedGemma 1.5 4B | 80% (v1+Pro) | Decent reasoning, more keyword errors, MET bias |
 | Gemini Pro (no MedGemma) | 60-70% | Solid structure, lacks medical domain depth |
 
 ---
@@ -201,7 +201,7 @@ Flash = Pro on labeling accuracy. **Recommendation: use Flash for 1.8x speed + l
 | 99 | — | — | — | 60% | 90% |
 | 256 | — | — | — | — | 80% |
 
-### MedGemma 4B + Gemini Pro (v4) x Seed Matrix
+### MedGemma 1.5 4B + Gemini Pro (v4) x Seed Matrix
 
 | Seed | 4B + Pro v4 | GPT-4 baseline | vs GPT-4 |
 |------|-------------|----------------|----------|
@@ -242,7 +242,7 @@ Flash = Pro on labeling accuracy. **Recommendation: use Flash for 1.8x speed + l
 
 ## All 35 Runs — Complete Inventory
 
-### MedGemma 4B Standalone (9 runs)
+### MedGemma 1.5 4B Standalone (9 runs)
 
 | # | Run ID (timestamp) | Seed | Acc | F1 | Kappa | Cost | Avg Latency | Notes |
 |---|-------------------|------|-----|-----|-------|------|-------------|-------|
@@ -297,7 +297,7 @@ Flash = Pro on labeling accuracy. **Recommendation: use Flash for 1.8x speed + l
 | 29 | v3-20260222-103110 | v3 | 42 | Replay | 85% | 0.855 | 0.769 | $0.033 |
 | 30 | **v4-20260222-124953** | **v4** | **42** | **Replay** | **95%** | **0.958** | **0.922** | **$0.036** |
 
-### Two-Stage: MedGemma 4B + Gemini (5 runs)
+### Two-Stage: MedGemma 1.5 4B + Gemini (5 runs)
 
 | # | Run ID | Stage 2 | Prompt | Seed | Acc | F1 | Kappa | Cost |
 |---|--------|---------|--------|------|-----|-----|-------|------|
@@ -363,8 +363,8 @@ Flash = Pro on labeling accuracy. **Recommendation: use Flash for 1.8x speed + l
 
 | Model | Bias | Severity | Mitigation |
 |-------|------|----------|------------|
-| MedGemma 4B | Strong MET bias on exclusion criteria | High | Use two-stage with Pro labeler |
-| MedGemma 4B | JSON instruction-following failure | High | Two-stage offloads JSON to Gemini |
+| MedGemma 1.5 4B | Strong MET bias on exclusion criteria | High | Use two-stage with Pro labeler |
+| MedGemma 1.5 4B | JSON instruction-following failure | High | Two-stage offloads JSON to Gemini |
 | MedGemma 27B | Symptoms → Diagnosis over-inference | Medium | v4 Q3 distinction helps but Pair 7 persists |
 | Gemini Flash | Follows Stage 2 rules strictly (good and bad) | Low | Well-designed mapping rules (v2/v4) handle this |
 

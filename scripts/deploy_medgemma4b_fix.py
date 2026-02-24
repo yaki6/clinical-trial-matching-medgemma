@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fix MedGemma 4B endpoint: push custom handler to resolve CUDA crash + temperature warning.
+"""Fix MedGemma 1.5 4B endpoint: push custom handler to resolve CUDA crash + temperature warning.
 
 Diagnosis (from research report):
   1. Default HF toolkit routes `temperature` to AutoProcessor → warning, no effect
@@ -157,7 +157,7 @@ def check(token: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Fix MedGemma 4B endpoint: custom handler for CUDA stability"
+        description="Fix MedGemma 1.5 4B endpoint: custom handler for CUDA stability"
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--push-only", action="store_true", help="Push handler, don't update endpoint")

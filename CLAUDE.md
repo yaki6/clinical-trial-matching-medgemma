@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**trialmatch** — Clinical trial matching tool using MedGemma (4B multimodal + 27B text) and Gemini 3 Pro. Three-component pipeline: INGEST → PRESCREEN → VALIDATE. Benchmarked on TrialGPT HF criterion-level annotations (ADR-006). Preparing for MedGemma Impact Challenge submission (Kaggle, deadline Feb 24 2026).
+**trialmatch** — Clinical trial matching tool using MedGemma (1.5 4B multimodal + 27B text) and Gemini 3 Pro. Three-component pipeline: INGEST → PRESCREEN → VALIDATE. Benchmarked on TrialGPT HF criterion-level annotations (ADR-006). Preparing for MedGemma Impact Challenge submission (Kaggle, deadline Feb 24 2026).
 
 ## TODO — MedGemma Challenge Demo (Due Feb 24)
 
@@ -40,10 +40,10 @@ UI: **Streamlit** (no separate backend). Narrative: multi-model orchestration (n
 
 | Model | Endpoint | Use Case | Status |
 |-------|----------|----------|--------|
-| MedGemma 4B | **Vertex AI Model Garden** (default) | Multimodal (EHR + images) | **Recommended** — stable, no token limit issues |
+| MedGemma 1.5 4B | **Vertex AI Model Garden** (default) | Multimodal (EHR + images) | **Recommended** — stable, no token limit issues |
 | MedGemma 27B | **Vertex AI Model Garden** (int8, default) | Text-only (higher accuracy) | **Recommended** — benchmarked 70% standalone, 87.5% two-stage |
 | Gemini 3 Pro | Google AI Studio API | General-purpose baseline | Working |
-| MedGemma 4B | HF Inference (`pcmy7bkqtqesrrzd`) | Legacy fallback | Unstable — TGI CUDA bugs, max_tokens=512 limit |
+| MedGemma 1.5 4B | HF Inference (`pcmy7bkqtqesrrzd`) | Legacy fallback | Unstable — TGI CUDA bugs, max_tokens=512 limit |
 | MedGemma 27B | HF Inference (`wu5nclwms3ctrwd1`) | Legacy fallback | **Broken** — TGI 3.0 chat template incompatible |
 
 ### Phase 0 Benchmark Results (Feb 21-22, 2026)
@@ -64,11 +64,11 @@ UI: **Streamlit** (no separate backend). Narrative: multi-model orchestration (n
 |-------|--------|----------|----------|-----------|-------|
 | MedGemma 27B + Gemini Pro (two-stage) | v4 | 95.0% | 95.8% | 0.922 | Best single-seed result |
 | MedGemma 27B + Gemini Pro (two-stage) | v3 | 85.0% | 85.5% | 0.769 | v3 regression from v2 |
-| MedGemma 4B + Gemini Pro (two-stage) | v1 | 80.0% | 83.1% | 0.688 | 4B reasoning + Pro labeling |
+| MedGemma 1.5 4B + Gemini Pro (two-stage) | v1 | 80.0% | 83.1% | 0.688 | 4B reasoning + Pro labeling |
 | GPT-4 (baseline) | — | 75.0% | 74.6% | — | Built into HF dataset (seed=42) |
 | Gemini 3 Pro (standalone) | — | 75.0% | 55.8% | 0.583 | Post prompt fix |
 | MedGemma 27B (Vertex int8, standalone) | — | 70.0% | 72.2% | 0.538 | Vertex AI, ~8s/pair |
-| MedGemma 4B (HF, standalone) | — | 35.0% | 31.5% | 0.030 | max_tokens=512 workaround |
+| MedGemma 1.5 4B (HF, standalone) | — | 35.0% | 31.5% | 0.030 | max_tokens=512 workaround |
 
 **Key findings**:
 1. **Two-stage v4 is competitive with GPT-4 (+1.2pp at n=80)** — 87.5% vs 86.2% accuracy across 4 seeds. The initial +20pp advantage (seed=42) does not generalize; single-seed results have 15-20pp variance.
@@ -76,7 +76,7 @@ UI: **Streamlit** (no separate backend). Narrative: multi-model orchestration (n
 3. **v4 prompt recovers v3 regression** — v3 added "don't re-derive" rule that dropped accuracy from 95% to 85% on seed=42. v4 reverts to v2-style re-derivation + adds severity gating.
 4. **27B dramatically outperforms 4B** in standalone mode (70% vs 35%) — larger model has much better instruction-following for structured JSON output.
 5. **Statistical caveat**: n=80 total pairs (4x20). 95% CI for 87.5% accuracy ~ [78%, 94%]. Tier A (n=1024) needed for statistical significance.
-6. MedGemma 4B has a **systematic MET bias**: model reasoning is often correct but the JSON `label` field contradicts it. This is an instruction-following failure, not a reasoning failure.
+6. MedGemma 1.5 4B has a **systematic MET bias**: model reasoning is often correct but the JSON `label` field contradicts it. This is an instruction-following failure, not a reasoning failure.
 
 ## Commands
 
@@ -251,7 +251,7 @@ curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/
 
 ### Constraint Stack (all endpoints)
 
-| Layer | MedGemma 4B (Vertex AI, default) | MedGemma 27B (Vertex AI, default) | Gemini (AI Studio) | CT.gov API |
+| Layer | MedGemma 1.5 4B (Vertex AI, default) | MedGemma 27B (Vertex AI, default) | Gemini (AI Studio) | CT.gov API |
 |-------|----------------------------------|-----------------------------------|-------------------|------------|
 | **Platform limit** | No QPS limit (dedicated endpoint) | No QPS limit (dedicated endpoint) | 10 concurrent | 40 req/min |
 | **GPU / hardware** | **4 concurrent** (KV cache ceiling) | **4 concurrent** (KV cache ceiling) | N/A | N/A |
@@ -259,7 +259,7 @@ curl -X DELETE https://api.endpoints.huggingface.cloud/v2/endpoint/$HF_USERNAME/
 | **App config** | `max_concurrent: 1` | `max_concurrent: 1` | `max_concurrent: 1` | Single client |
 | **Binding constraint** | GPU VRAM → 4 | GPU VRAM → 4 | Platform → 10 | API → 40 rpm |
 
-### MedGemma 4B (HF Inference, legacy fallback) — Hard limit: 1
+### MedGemma 1.5 4B (HF Inference, legacy fallback) — Hard limit: 1
 
 TGI CUDA bug forces `max_concurrent: 1` and `max_tokens: 512`. Not a quota — a kernel-level crash. Concurrency > 1 increases crash probability, and a single crash poisons the GPU until full endpoint restart. **Use Vertex AI instead.**
 
@@ -365,7 +365,7 @@ uv run pytest tests/bdd/ --collect-only -q 2>/dev/null | grep -c "scenario"
 
 ### Known Issues — TGI + MedGemma CUDA Bug
 
-**Critical**: TGI (Text Generation Inference) + MedGemma 4B has a reproducible CUDA bug:
+**Critical**: TGI (Text Generation Inference) + MedGemma 1.5 4B has a reproducible CUDA bug:
 
 - **Symptom**: `CUBLAS_STATUS_EXECUTION_FAILED` or `CUDA error: misaligned address` when `max_new_tokens` ≥ ~500-1024 on certain prompts
 - **NOT hardware-related**: Same crash on both Nvidia L4 (24GB) and L40S (48GB)
@@ -420,3 +420,4 @@ you MUST run ALL script, especially bash,python scripts in background so you can
 API keys are already stored in .env
 MUST check the tail log in real time when running benchmark; do not use timeout or sleep
 you MUST teardown Vertex medgemma endpoints after using to avoice extra cost
+PRESCREEN agent MUST use `gemini-3-pro-preview` (NOT Flash) — full reasoning capability required for adaptive agentic search. Always pass `model="gemini-3-pro-preview"` when creating GeminiAdapter for PRESCREEN.

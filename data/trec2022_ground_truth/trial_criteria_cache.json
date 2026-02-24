@@ -1,0 +1,291 @@
+{
+  "NCT00042770": {
+    "brief_title": "Standard Chest Tube Compared With a Small Catheter in Treating Malignant Pleural Effusion in Patients With Cancer",
+    "eligibility_criteria": "DISEASE CHARACTERISTICS:\n\n* Radiologic evidence of a unilateral malignant pleural effusion requiring sclerosis or ongoing drainage because it is symptomatic (dyspnea and/or progressive fatigue)\n\n  * An asymptomatic patient is eligible if the patient underwent a prior thoracentesis within the past 2 weeks and was symptomatic before the procedure\n  * No bilateral effusions by plain chest x-ray\n* Histologically or cytologically confirmed solid tumor or hematologic malignancy\n\n  * Histologic confirmation of malignant cells in pleural fluid is not required\n* Pleural spaces must be naive to pleurodesis attempts\n\n  * No prior intrapleural therapy (defined as a chest tube in place or placed to drain an effusion, prior surgical pleurectomy, or any prior chemical or mechanical pleurodesis on the ipsilateral side)\n\n    * Placement of a small interventional radiology catheter for temporary drainage is not considered intrapleural therapy as long as no sclerosant medication was given and it has not been in place longer than 10 days\n\nPATIENT CHARACTERISTICS:\n\nAge\n\n* 18 and over\n\nPerformance status\n\n* CTC 0-2\n\nHematopoietic\n\n* Granulocyte count at least 1,500/mm\\^3\n* Platelet count at least 100,000/mm\\^3\n\nPulmonary\n\n* No active pleural infection\n\nOther\n\n* No allergy to talc\n* No surgical contraindication to talc usage\n* Not pregnant or nursing\n* Fertile patients must use effective contraception\n\nPRIOR CONCURRENT THERAPY:\n\nChemotherapy\n\n* Concurrent systemic chemotherapy allowed\n\nRadiotherapy\n\n* Concurrent palliative radiotherapy to a symptomatic lesion allowed except to the treated hemithorax within 30 days of the drainage procedure\n\nSurgery\n\n* See Disease Characteristics\n* Prior thoracotomies without specific pleural ablation (including lobectomy but not pneumonectomy) allowed\n* Prior needle-based diagnostic interventions (fine-needle aspiration, small bore catheter drainage of less than 10 days, or thoracentesis) allowed",
+    "inclusion_criteria": [
+      "Radiologic evidence of a unilateral malignant pleural effusion requiring sclerosis or ongoing drainage because it is symptomatic (dyspnea and/or progressive fatigue)",
+      "An asymptomatic patient is eligible if the patient underwent a prior thoracentesis within the past 2 weeks and was symptomatic before the procedure",
+      "Histologically or cytologically confirmed solid tumor or hematologic malignancy",
+      "Histologic confirmation of malignant cells in pleural fluid is not required",
+      "Pleural spaces must be naive to pleurodesis attempts",
+      "Placement of a small interventional radiology catheter for temporary drainage is not considered intrapleural therapy as long as no sclerosant medication was given and it has not been in place longer than 10 days",
+      "Age",
+      "18 and over",
+      "Performance status",
+      "CTC 0-2",
+      "Hematopoietic",
+      "Granulocyte count at least 1,500/mm\\^3",
+      "Platelet count at least 100,000/mm\\^3",
+      "Pulmonary",
+      "Other",
+      "Fertile patients must use effective contraception",
+      "Chemotherapy",
+      "Concurrent systemic chemotherapy allowed",
+      "Radiotherapy",
+      "Concurrent palliative radiotherapy to a symptomatic lesion allowed except to the treated hemithorax within 30 days of the drainage procedure",
+      "Surgery",
+      "See Disease Characteristics",
+      "Prior thoracotomies without specific pleural ablation (including lobectomy but not pneumonectomy) allowed",
+      "Prior needle-based diagnostic interventions (fine-needle aspiration, small bore catheter drainage of less than 10 days, or thoracentesis) allowed"
+    ],
+    "exclusion_criteria": [
+      "No bilateral effusions by plain chest x-ray",
+      "No prior intrapleural therapy (defined as a chest tube in place or placed to drain an effusion, prior surgical pleurectomy, or any prior chemical or mechanical pleurodesis on the ipsilateral side)",
+      "No active pleural infection",
+      "No allergy to talc",
+      "No surgical contraindication to talc usage",
+      "Not pregnant or nursing"
+    ],
+    "status": "COMPLETED",
+    "last_update": "2016-07-04",
+    "criteria_drift_warning": false,
+    "qrel_score": 2,
+    "fetched_at": "2026-02-23T00:24:39.608446+00:00"
+  },
+  "NCT00644319": {
+    "brief_title": "Ibuprofen or Morphine in Treating Pain in Patients Undergoing Pleurodesis for Malignant Pleural Effusion",
+    "eligibility_criteria": "DISEASE CHARACTERISTICS:\n\n* Diagnosis of malignant pleural effusion requiring pleurodesis confirmed by 1 of the following:\n\n  * Histologically proven pleural malignancy\n  * Typical features of pleural malignancy seen on direct vision during thoracoscopy\n  * Pleural effusion in the context of histologically proven cancer elsewhere\n* No primary lymphoma or small cell lung carcinoma\n* All patients undergoing thoracoscopy for suspected malignant pleural effusion are eligible\n\nPATIENT CHARACTERISTICS:\n\n* Life expectancy \\> 1 month\n* Not pregnant or nursing\n* No history of GI bleeding or untreated peptic ulceration\n* No known sensitivity to non-steroidal anti-inflammatory drugs (NSAIDs), opiates, or paracetamol\n* No hypercapnic respiratory failure\n* No known intravenous drug abuse\n* No severe renal or liver disease\n* No known bleeding diathesis\n* Able to give informed consent\n\nPRIOR CONCURRENT THERAPY:\n\n* More than 2 weeks since prior and no concurrent corticosteroid therapy\n* No concurrent warfarin therapy\n* No other concurrent analgesics\n\n  * Analgesics used as a breakthrough regimen are allowed from trial entry to tube withdrawal at day 3 post-pleurodesis (i.e., regular paracetamol, assigned study analgesia, and breakthrough medication only, including opiate slow release patches)\n* No concurrent enrollment on another clinical study\n\n  * Patients may participate in other trials immediately after completion of current trial, excluding those involving further pleural procedures or analgesia trials in which patients must wait at least 3 months after completion of current trial",
+    "inclusion_criteria": [
+      "Diagnosis of malignant pleural effusion requiring pleurodesis confirmed by 1 of the following:",
+      "Histologically proven pleural malignancy",
+      "Typical features of pleural malignancy seen on direct vision during thoracoscopy",
+      "Pleural effusion in the context of histologically proven cancer elsewhere",
+      "All patients undergoing thoracoscopy for suspected malignant pleural effusion are eligible",
+      "Life expectancy \\> 1 month",
+      "Able to give informed consent",
+      "More than 2 weeks since prior and no concurrent corticosteroid therapy",
+      "Analgesics used as a breakthrough regimen are allowed from trial entry to tube withdrawal at day 3 post-pleurodesis (i.e., regular paracetamol, assigned study analgesia, and breakthrough medication only, including opiate slow release patches)",
+      "Patients may participate in other trials immediately after completion of current trial, excluding those involving further pleural procedures or analgesia trials in which patients must wait at least 3 months after completion of current trial"
+    ],
+    "exclusion_criteria": [
+      "No primary lymphoma or small cell lung carcinoma",
+      "Not pregnant or nursing",
+      "No history of GI bleeding or untreated peptic ulceration",
+      "No known sensitivity to non-steroidal anti-inflammatory drugs (NSAIDs), opiates, or paracetamol",
+      "No hypercapnic respiratory failure",
+      "No known intravenous drug abuse",
+      "No severe renal or liver disease",
+      "No known bleeding diathesis",
+      "No concurrent warfarin therapy",
+      "No other concurrent analgesics",
+      "No concurrent enrollment on another clinical study"
+    ],
+    "status": "UNKNOWN",
+    "last_update": "2009-07-08",
+    "criteria_drift_warning": false,
+    "qrel_score": 2,
+    "fetched_at": "2026-02-23T00:24:41.057735+00:00"
+  },
+  "NCT00665015": {
+    "brief_title": "Pleural Effusion Following Cardiac Surgery: Prevalence, Risk Factors and Clinical Features",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Coronary artery bypass grafting (CABG)\n* Valve replacement\n* Combined CABG and valve replacement\n* between January 1st, 2004 and December 31st, 2005\n\nExclusion Criteria:\n\n* Previous CABG\n* Pulmonary and/or aortic artery surgery\n* Heart or lung transplant\n* Pleural effusion present at the time of surgery",
+    "inclusion_criteria": [
+      "Coronary artery bypass grafting (CABG)",
+      "Valve replacement",
+      "Combined CABG and valve replacement",
+      "between January 1st, 2004 and December 31st, 2005"
+    ],
+    "exclusion_criteria": [
+      "Previous CABG",
+      "Pulmonary and/or aortic artery surgery",
+      "Heart or lung transplant",
+      "Pleural effusion present at the time of surgery"
+    ],
+    "status": "COMPLETED",
+    "last_update": "2008-04-23",
+    "criteria_drift_warning": false,
+    "qrel_score": 0,
+    "fetched_at": "2026-02-23T00:24:42.676202+00:00"
+  },
+  "NCT01062789": {
+    "brief_title": "Optical Breath-hold Control System for Image-guided Procedures",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Patients scheduled for a CT-guided lung or upper abdomen biopsy (including lesions in the liver, pancreas, stomach, kidneys, adrenals, spleen, or in the peritoneum at or above the level of the kidneys) on the SMH-CT-3M scanner when either Dr. Carlson or Dr. Bender are scheduled.\n* Lesions will need to measure 3 cm or less in maximum dimension and cannot be affixed to the chest or abdominal wall.\n\nExclusion Criteria:\n\n* Inability to cooperate with breath-holding (including cognitive impairment, poor pulmonary function that inhibits patients from being able to hold their breath for at least 10 seconds)\n* Patients with bleeding diatheses (platelets \\< 50,000, International Normalized Ratio \\> 1.5, or activated partial thromboplastin time \\> twice normal)\n* Lesions that abut the pleura or abdominal wall for a distance greater than 3 cm (these lesions were assumed to be fixed in position and less likely to be affected by respiratory motion).\n* Patients with implanted medical devices (pacemakers) (this exclusion is based on the Division of Engineering Safety Review-enclosed in application)",
+    "inclusion_criteria": [
+      "Patients scheduled for a CT-guided lung or upper abdomen biopsy (including lesions in the liver, pancreas, stomach, kidneys, adrenals, spleen, or in the peritoneum at or above the level of the kidneys) on the SMH-CT-3M scanner when either Dr. Carlson or Dr. Bender are scheduled.",
+      "Lesions will need to measure 3 cm or less in maximum dimension and cannot be affixed to the chest or abdominal wall."
+    ],
+    "exclusion_criteria": [
+      "Inability to cooperate with breath-holding (including cognitive impairment, poor pulmonary function that inhibits patients from being able to hold their breath for at least 10 seconds)",
+      "Patients with bleeding diatheses (platelets \\< 50,000, International Normalized Ratio \\> 1.5, or activated partial thromboplastin time \\> twice normal)",
+      "Lesions that abut the pleura or abdominal wall for a distance greater than 3 cm (these lesions were assumed to be fixed in position and less likely to be affected by respiratory motion).",
+      "Patients with implanted medical devices (pacemakers) (this exclusion is based on the Division of Engineering Safety Review-enclosed in application)"
+    ],
+    "status": "WITHDRAWN",
+    "last_update": "2011-05-17",
+    "criteria_drift_warning": false,
+    "qrel_score": 1,
+    "fetched_at": "2026-02-23T00:24:44.080563+00:00"
+  },
+  "NCT01424176": {
+    "brief_title": "Dexpramipexole Renal PK Study",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Adult males/females aged 18 to 75 years inclusive and between 19 and 36 kg/m2 inclusive BMI.\n* Subjects with renal impairment must have stable renal disease (i.e., no change in disease status within the 28 days prior to dosing) as determined by the Investigator with laboratory and clinical findings that support the diagnosis of renal impairment.\n* Subjects with renal impairment (excluding ESRD subjects), must have 2 separate estimates of creatinine clearance that are within 25% of each other, obtained \\>5 days apart, but not \\>6 months apart\n* Subjects must have a GFR (estimated GFR; as defined by estimation of creatinine clearance using the MDRD formula) of \u226580 (healthy volunteers), between 50 and 79 (mild renal impairment), between 30 and 49 (moderate renal impairment), or \\<30 (severe renal impairment), or must require dialysis \u22643 times a week (ESRD).\n* Healthy volunteers must be matched to renally impaired subjects for age (\u00b1 10 years), gender, and if possible BMI (\u00b1 20%).\n\nExclusion Criteria:\n\n* Healthy volunteers who have received prescription medication within the 14 days prior to dosing (except for birth control).\n* Renally impaired subjects who have received prescription medication within the 14 days prior to dosing (except for birth control and medications taken at a stable dose for underlying conditions, as determined by the Investigator).",
+    "inclusion_criteria": [
+      "Adult males/females aged 18 to 75 years inclusive and between 19 and 36 kg/m2 inclusive BMI.",
+      "Subjects with renal impairment must have stable renal disease (i.e., no change in disease status within the 28 days prior to dosing) as determined by the Investigator with laboratory and clinical findings that support the diagnosis of renal impairment.",
+      "Subjects with renal impairment (excluding ESRD subjects), must have 2 separate estimates of creatinine clearance that are within 25% of each other, obtained \\>5 days apart, but not \\>6 months apart",
+      "Subjects must have a GFR (estimated GFR; as defined by estimation of creatinine clearance using the MDRD formula) of \u226580 (healthy volunteers), between 50 and 79 (mild renal impairment), between 30 and 49 (moderate renal impairment), or \\<30 (severe renal impairment), or must require dialysis \u22643 times a week (ESRD).",
+      "Healthy volunteers must be matched to renally impaired subjects for age (\u00b1 10 years), gender, and if possible BMI (\u00b1 20%)."
+    ],
+    "exclusion_criteria": [
+      "Healthy volunteers who have received prescription medication within the 14 days prior to dosing (except for birth control).",
+      "Renally impaired subjects who have received prescription medication within the 14 days prior to dosing (except for birth control and medications taken at a stable dose for underlying conditions, as determined by the Investigator)."
+    ],
+    "status": "COMPLETED",
+    "last_update": "2014-11-25",
+    "criteria_drift_warning": false,
+    "qrel_score": 0,
+    "fetched_at": "2026-02-23T00:24:45.545442+00:00"
+  },
+  "NCT02208895": {
+    "brief_title": "iSTAT Comparison Study, IRB3785",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* any patient 18 to 99 year old with a diagnosis of pleural effusion and undergoing a diagnostic thoracentesis.\n\nExclusion Criteria:\n\n* Inability to provide informed consent by the patient or the surrogate to enroll for the planned study.",
+    "inclusion_criteria": [
+      "any patient 18 to 99 year old with a diagnosis of pleural effusion and undergoing a diagnostic thoracentesis."
+    ],
+    "exclusion_criteria": [
+      "Inability to provide informed consent by the patient or the surrogate to enroll for the planned study."
+    ],
+    "status": "COMPLETED",
+    "last_update": "2020-03-06",
+    "criteria_drift_warning": false,
+    "qrel_score": 2,
+    "fetched_at": "2026-02-23T00:24:47.115138+00:00"
+  },
+  "NCT02300883": {
+    "brief_title": "Observational Prospective Analysis of Biological Characteristics of Mesothelioma Patients",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Malignant pleural mesothelioma patients\n* Availability of plural effusion and frozen and paraffin-embedded tumor specimens.\n\nExclusion Criteria:\n\n* Unavailability of plural effusion and frozen and paraffin-embedded tumor specimens.",
+    "inclusion_criteria": [
+      "Malignant pleural mesothelioma patients",
+      "Availability of plural effusion and frozen and paraffin-embedded tumor specimens."
+    ],
+    "exclusion_criteria": [
+      "Unavailability of plural effusion and frozen and paraffin-embedded tumor specimens."
+    ],
+    "status": "COMPLETED",
+    "last_update": "2022-09-09",
+    "criteria_drift_warning": false,
+    "qrel_score": 2,
+    "fetched_at": "2026-02-23T00:24:48.576022+00:00"
+  },
+  "NCT02882165": {
+    "brief_title": "Clinical And Social Characteristics and Demographics in COPD",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Already on primary care COPD register and DOSE score \\<4 (low risk)\n\nExclusion Criteria:\n\n* No capacity to consent or unable to travel to primary care practice (local GP surgery)",
+    "inclusion_criteria": [
+      "Already on primary care COPD register and DOSE score \\<4 (low risk)"
+    ],
+    "exclusion_criteria": [
+      "No capacity to consent or unable to travel to primary care practice (local GP surgery)"
+    ],
+    "status": "COMPLETED",
+    "last_update": "2021-06-16",
+    "criteria_drift_warning": false,
+    "qrel_score": 0,
+    "fetched_at": "2026-02-23T00:24:50.068713+00:00"
+  },
+  "NCT03259087": {
+    "brief_title": "Pharmacokinetics (PK) and Safety of a Single Intravenous (IV) Dose of MK-3866 in Participants With Impaired Renal Function and in Healthy Controls (MK-3866-005)",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Females of non-childbearing potential. Male participants with female partner(s) of child-bearing potential agree to use a medically acceptable method of contraception during the study and for 90 days after dosing. If partner is pregnant, males agree to use a condom; if partner is of child-bearing potential, partner must use additional birth control\n* Male participants agree not to donate sperm from the first dose until 90 days after dosing\n* Adequate venous access\n\nRenal Impaired Participants\n\n* Liver function tests (serum alanine aminotransferase \\[ALT\\] and aspartate aminotransferase \\[AST\\]) and serum bilirubin (total and direct) within upper limit of normal\n* Panels A, B, and C: no clinically significant change in renal status at least 1 month prior to dosing and not currently or previously been on hemodialysis\n* Panel E only: ESRD maintained on stable regimen of at least 3 times per week HD for at least 3 months prior to first dosing\n\nHealthy Participants\n\n* Age within \u00b1 15 years of the mean age of participants with impaired renal function to which the healthy participant is matched\n* Medically healthy as per medical history, physical examination, vital signs, 12-lead electrocardiograms (ECGs), and clinical laboratory safety tests\n* Blood urea nitrogen, liver function tests (ALT, AST, alkaline phosphatase \\[ALP\\]), and serum bilirubin (total and direct) within upper limit of normal.\n\nExclusion Criteria:\n\n* Mentally/legally incapacitated, or significant emotional problems or significant psychiatric disorder\n* History of clinically significant endocrine, gastrointestinal, cardiovascular, hematological, hepatic, immunological, respiratory, genitourinary or major neurological abnormalities or diseases\n* History of any illness that might confound the results of the study or poses an additional risk to the participant by their participation in the study\n* Clinically significant history of cancer\n* Smoker and/or has used nicotine or nicotine-containing products within 3 months prior to screening\n* Female participants of childbearing potential, pregnant, or lactating\n* Positive results for urine or saliva drug screen and/or urine or breath alcohol screen at screening or check-in\n* Positive results at screening for human immunodeficiency virus (HIV), hepatitis B surface antigen (HBsAg), or hepatitis C virus (HCV)\n* Consumes more than 3 glasses of alcoholic beverages within 6 months of screening\n* Consumes excessive amounts of coffee, tea, cola, energy-drinks, or other caffeinated beverages per day\n* Major surgery, donated or lost 1 unit of blood within 4 weeks prior to screening, or donated plasma within 7 days prior to dosing in Part 1 or first dose in Part 2\n\nRenal Impaired Participants\n\n* Panels A, B, and C: Failed renal transplant or has had nephrectomy\n* Panels A, B, and C: Rapidly fluctuating renal function, as determined by historical measurements; or demonstrated/suspected renal artery stenosis\n* Panel E only: Has required frequent emergent HD (\u22653) within a year prior to first dosing\n\nHealthy Participants\n\n* Renal transplant or nephrectomy",
+    "inclusion_criteria": [
+      "Females of non-childbearing potential. Male participants with female partner(s) of child-bearing potential agree to use a medically acceptable method of contraception during the study and for 90 days after dosing. If partner is pregnant, males agree to use a condom; if partner is of child-bearing potential, partner must use additional birth control",
+      "Male participants agree not to donate sperm from the first dose until 90 days after dosing",
+      "Adequate venous access",
+      "Renal Impaired Participants",
+      "Liver function tests (serum alanine aminotransferase \\[ALT\\] and aspartate aminotransferase \\[AST\\]) and serum bilirubin (total and direct) within upper limit of normal",
+      "Panels A, B, and C: no clinically significant change in renal status at least 1 month prior to dosing and not currently or previously been on hemodialysis",
+      "Panel E only: ESRD maintained on stable regimen of at least 3 times per week HD for at least 3 months prior to first dosing",
+      "Healthy Participants",
+      "Age within \u00b1 15 years of the mean age of participants with impaired renal function to which the healthy participant is matched",
+      "Medically healthy as per medical history, physical examination, vital signs, 12-lead electrocardiograms (ECGs), and clinical laboratory safety tests",
+      "Blood urea nitrogen, liver function tests (ALT, AST, alkaline phosphatase \\[ALP\\]), and serum bilirubin (total and direct) within upper limit of normal."
+    ],
+    "exclusion_criteria": [
+      "Mentally/legally incapacitated, or significant emotional problems or significant psychiatric disorder",
+      "History of clinically significant endocrine, gastrointestinal, cardiovascular, hematological, hepatic, immunological, respiratory, genitourinary or major neurological abnormalities or diseases",
+      "History of any illness that might confound the results of the study or poses an additional risk to the participant by their participation in the study",
+      "Clinically significant history of cancer",
+      "Smoker and/or has used nicotine or nicotine-containing products within 3 months prior to screening",
+      "Female participants of childbearing potential, pregnant, or lactating",
+      "Positive results for urine or saliva drug screen and/or urine or breath alcohol screen at screening or check-in",
+      "Positive results at screening for human immunodeficiency virus (HIV), hepatitis B surface antigen (HBsAg), or hepatitis C virus (HCV)",
+      "Consumes more than 3 glasses of alcoholic beverages within 6 months of screening",
+      "Consumes excessive amounts of coffee, tea, cola, energy-drinks, or other caffeinated beverages per day",
+      "Major surgery, donated or lost 1 unit of blood within 4 weeks prior to screening, or donated plasma within 7 days prior to dosing in Part 1 or first dose in Part 2",
+      "Renal Impaired Participants",
+      "Panels A, B, and C: Failed renal transplant or has had nephrectomy",
+      "Panels A, B, and C: Rapidly fluctuating renal function, as determined by historical measurements; or demonstrated/suspected renal artery stenosis",
+      "Panel E only: Has required frequent emergent HD (\u22653) within a year prior to first dosing",
+      "Healthy Participants",
+      "Renal transplant or nephrectomy"
+    ],
+    "status": "COMPLETED",
+    "last_update": "2019-04-19",
+    "criteria_drift_warning": false,
+    "qrel_score": 0,
+    "fetched_at": "2026-02-23T00:24:51.578019+00:00"
+  },
+  "NCT03272087": {
+    "brief_title": "Rational Approach to a Unilateral Pleural Effusion",
+    "eligibility_criteria": "Inclusion Criteria:\n\n1. Patients with recurrent pleural effusion of unknown origin after a first pleural tap according to BTS guidelines.\n2. Indication for thoracoscopy according to BTS guidelines.\n3. Patients accept further investigation according to Danish and BTS guidelines.\n4. Have received oral and written consent and agreed.\n5. At the time of inclusion, above 18 years of age.\n\nExclusion Criteria:\n\n1. Female patients: pregnancy or breastfeeding.\n2. Lack of language comprehension.\n3. Legally incompetent patients.\n4. Life expectancy less than 3 month.\n5. Contraindications to pleural tissue sampling.",
+    "inclusion_criteria": [
+      "1. Patients with recurrent pleural effusion of unknown origin after a first pleural tap according to BTS guidelines.",
+      "2. Indication for thoracoscopy according to BTS guidelines.",
+      "3. Patients accept further investigation according to Danish and BTS guidelines.",
+      "4. Have received oral and written consent and agreed.",
+      "5. At the time of inclusion, above 18 years of age."
+    ],
+    "exclusion_criteria": [
+      "1. Female patients: pregnancy or breastfeeding.",
+      "2. Lack of language comprehension.",
+      "3. Legally incompetent patients.",
+      "4. Life expectancy less than 3 month.",
+      "5. Contraindications to pleural tissue sampling."
+    ],
+    "status": "TERMINATED",
+    "last_update": "2020-12-17",
+    "criteria_drift_warning": false,
+    "qrel_score": 1,
+    "fetched_at": "2026-02-23T00:24:53.062759+00:00"
+  },
+  "NCT04235998": {
+    "brief_title": "Value of Additional Upfront Systematic Lung Ultrasound in the Workup of Patients With Unilateral Pleural Effusion",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Age \u2265 18 years.\n* Unilateral pleural effusion of unknown course.\n* Patients must be able to give informed consent.\n\nExclusion Criteria:\n\n* Bilateral pleural effusions.\n* Known cause of pleural effusions.\n* Life expectancy \\<3 months.\n* Inability to understand written or spoken Danish.",
+    "inclusion_criteria": [
+      "Age \u2265 18 years.",
+      "Unilateral pleural effusion of unknown course.",
+      "Patients must be able to give informed consent."
+    ],
+    "exclusion_criteria": [
+      "Bilateral pleural effusions.",
+      "Known cause of pleural effusions.",
+      "Life expectancy \\<3 months.",
+      "Inability to understand written or spoken Danish."
+    ],
+    "status": "COMPLETED",
+    "last_update": "2022-05-11",
+    "criteria_drift_warning": false,
+    "qrel_score": 1,
+    "fetched_at": "2026-02-23T00:24:54.561143+00:00"
+  },
+  "NCT04236037": {
+    "brief_title": "Ultrasound-guided Biopsy of the Pleura as a Supplement to Extraction of Fluid in Patients With One-sided Fluid in the Pleura",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Age \u2265 18 years.\n* Patients with a previous thoracentesis of a unilateral exudative pleural effusion according to Light's criteria (1) without malignant cells.\n* CT thorax or PET-CT with contrast performed.\n* Clinical suspicion of cancer such as (but not limited to) weight loss or PET-CT results or former cancer diagnosis.\n* Patients must be able to give informed consent.\n\nExclusion Criteria:\n\n* Bilateral pleural effusions.\n* Known cause of pleural effusions.\n* Life expectancy \\<3 months.\n* Inability to understand written or spoken Danish.",
+    "inclusion_criteria": [
+      "Age \u2265 18 years.",
+      "Patients with a previous thoracentesis of a unilateral exudative pleural effusion according to Light's criteria (1) without malignant cells.",
+      "CT thorax or PET-CT with contrast performed.",
+      "Clinical suspicion of cancer such as (but not limited to) weight loss or PET-CT results or former cancer diagnosis.",
+      "Patients must be able to give informed consent."
+    ],
+    "exclusion_criteria": [
+      "Bilateral pleural effusions.",
+      "Known cause of pleural effusions.",
+      "Life expectancy \\<3 months.",
+      "Inability to understand written or spoken Danish."
+    ],
+    "status": "TERMINATED",
+    "last_update": "2020-09-25",
+    "criteria_drift_warning": false,
+    "qrel_score": 1,
+    "fetched_at": "2026-02-23T00:24:56.141833+00:00"
+  }
+}

@@ -8,7 +8,7 @@
 
 ## Context
 
-MedGemma 4B achieved only 35% accuracy on Phase 0 benchmark due to a systematic MET bias. The hypothesis was that TrialGPT-native 6-class labels (`included`/`not included`/`excluded`/`not excluded`/`not enough information`) create semantic confusion, especially the double-negation "not excluded" and the inverted semantics of exclusion criteria.
+MedGemma 1.5 4B achieved only 35% accuracy on Phase 0 benchmark due to a systematic MET bias. The hypothesis was that TrialGPT-native 6-class labels (`included`/`not included`/`excluded`/`not excluded`/`not enough information`) create semantic confusion, especially the double-negation "not excluded" and the inverted semantics of exclusion criteria.
 
 We replaced the 6-class labels with 3 universal labels: `"eligible"` (MET), `"not eligible"` (NOT_MET), `"unknown"` (UNKNOWN).
 
@@ -23,7 +23,7 @@ We replaced the 6-class labels with 3 universal labels: `"eligible"` (MET), `"no
 
 | Model | Native Labels | Eligible Labels | Change |
 |-------|--------------|-----------------|--------|
-| MedGemma 4B | 35% acc, 0.030 kappa | 35% acc, -0.032 kappa | No improvement |
+| MedGemma 1.5 4B | 35% acc, 0.030 kappa | 35% acc, -0.032 kappa | No improvement |
 | Gemini 3 Pro | 75% acc, 0.657 kappa | **45% acc**, 0.257 kappa | **-30% regression** |
 | GPT-4 (baseline) | 75% | 75% | N/A (precomputed) |
 
@@ -47,6 +47,6 @@ Gemini output 13/20 UNKNOWN with eligible labels (was well-distributed with nati
 
 ## Consequences
 
-- MedGemma 4B's MET bias is a model capacity issue, not a label semantics issue
+- MedGemma 1.5 4B's MET bias is a model capacity issue, not a label semantics issue
 - Gemini 3 Pro is sensitive to label vocabulary changes — keep proven native labels
 - Future accuracy improvements must target model capacity (27B) or post-processing, not prompt label engineering

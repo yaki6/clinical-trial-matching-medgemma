@@ -13,6 +13,7 @@ import asyncio
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 import streamlit as st
@@ -42,6 +43,7 @@ from cache_manager import (
     save_validate_results,
     validate_cached_run,
 )
+from components.patient_report import build_patient_report_data, render_patient_report_markdown
 from components.patient_card import extract_friendly_label, render_medical_image, render_patient_card
 from components.pipeline_viewer import (
     render_image_findings,
@@ -243,7 +245,7 @@ def _get_validate_adapters(mode: str):
                 return None, None
             return create_validate_adapters(mode, api_key=api_key)
 
-        # MedGemma 4B (single)
+        # MedGemma 1.5 4B (single)
         return create_validate_adapters(mode, hf_token=hf_token)
     except ValueError as exc:
         st.error(str(exc))
@@ -357,7 +359,7 @@ if DEV_MODE:
         [
             "Two-Stage (MedGemma \u2192 Gemini)",
             "Gemini 3 Pro (single)",
-            "MedGemma 4B (single)",
+            "MedGemma 1.5 4B (single)",
         ],
         help=(
             "Two-stage uses MedGemma for medical reasoning "
@@ -449,6 +451,21 @@ if is_multimodal:
 
 st.divider()
 
+# -- Pipeline overview header (patient mode only) --
+if not DEV_MODE:
+    with st.container(border=True):
+        st.markdown("### How TrialMatch Works")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown("**1. Understand**")
+            st.caption("MedGemma 1.5 4B reads your records & images")
+        with col2:
+            st.markdown("**2. Search**")
+            st.caption("Gemini Pro + MedGemma 27B find matching trials")
+        with col3:
+            st.markdown("**3. Evaluate**")
+            st.caption("MedGemma 27B + Gemini Pro check eligibility")
+
 # -- INGEST step --
 # Don't merge image cache into display key_facts (shown separately below).
 # PRESCREEN live runs merge image context via adapt_harness_patient(profile, image_cache).
@@ -465,6 +482,24 @@ if run_button:
     st.session_state.pop("validate_results", None)
     st.session_state.pop("trial_verdicts", None)
     st.session_state.pop("cached_validate_data", None)
+
+# -- B1: Simulated INGEST animation for cached mode --
+if run_button and pipeline_mode == "cached" and not DEV_MODE:
+    with st.status(
+        "Step 1: INGEST — MedGemma 1.5 4B analyzing patient data...", expanded=True
+    ) as ingest_status:
+        st.write("Reading clinical note...")
+        time.sleep(0.8)
+        st.write("Extracting structured key facts...")
+        time.sleep(0.5)
+        if is_multimodal and image_cache:
+            st.write("MedGemma 1.5 4B analyzing CT image...")
+            time.sleep(1.5)
+            st.write("Merging image findings with clinical profile...")
+            time.sleep(0.5)
+        ingest_status.update(
+            label="INGEST complete — Patient profile extracted", state="complete"
+        )
 
 # Live run trace recorder (local JSONL artifact)
 live_trace: LiveTraceRecorder | None = None
@@ -560,7 +595,7 @@ if run_button and pipeline_mode == "live":
     if DEV_MODE:
         # ---- Dev mode: full agent trace streaming ----
         # Container for live-streaming agent tool calls
-        prescreen_status = st.status("PRESCREEN: Searching ClinicalTrials.gov...", expanded=True)
+        prescreen_status = st.status("Step 2: PRESCREEN — Gemini Pro + MedGemma 27B searching trials...", expanded=True)
         prescreen_log = prescreen_status.container()
         prescreen_log.write(
             f"Running agentic search with {gemini_adapter.name} orchestration..."
@@ -598,7 +633,6 @@ if run_button and pipeline_mode == "live":
                         ingest_source="gold",
                         gemini_adapter=gemini_adapter,
                         medgemma_adapter=medgemma_adapter,
-                        require_clinical_guidance=True,
                         topic_id=selected_topic,
                         on_tool_call=_on_tool_call,
                         on_agent_text=_on_agent_text,
@@ -749,7 +783,7 @@ elif run_button and pipeline_mode == "cached":
     st.session_state["prescreen_result"] = prescreen_result
 
     if DEV_MODE:
-        with st.expander("Step 2: PRESCREEN -- Trial Search (cached)", expanded=True):
+        with st.expander("Step 2: PRESCREEN — Gemini Pro + MedGemma 27B (cached)", expanded=True):
             st.caption(
                 "Loaded cached result: "
                 f"{len(prescreen_result.candidates)} candidates"
@@ -780,10 +814,30 @@ elif run_button and pipeline_mode == "cached":
                     )
                 st.dataframe(trial_data, use_container_width=True)
     else:
+        # -- B2: Simulated PRESCREEN animation for cached patient mode --
         n_candidates = len(prescreen_result.candidates)
-        st.success(
-            f"Loaded cached PRESCREEN output with {n_candidates} candidate trials."
-        )
+        with st.status(
+            "Step 2: PRESCREEN — Gemini Pro + MedGemma 27B searching trials...",
+            expanded=True,
+        ) as ps_status:
+            st.write("Analyzing patient profile for search strategy...")
+            time.sleep(1.0)
+            for i, tc in enumerate(prescreen_result.tool_call_trace[:6]):
+                if tc.tool_name == "consult_medical_expert":
+                    st.write("Consulting MedGemma medical expert...")
+                elif tc.tool_name == "search_trials":
+                    cond = tc.args.get("condition", "")[:40]
+                    st.write(f"Searching ClinicalTrials.gov: {cond}...")
+                elif tc.tool_name == "get_trial_details":
+                    nct = tc.args.get("nct_id", "")
+                    st.write(f"Reviewing trial details: {nct}...")
+                time.sleep(0.6)
+            st.write(f"**Found {n_candidates} candidate trials**")
+            time.sleep(0.5)
+            ps_status.update(
+                label=f"PRESCREEN complete — {n_candidates} trials found",
+                state="complete",
+            )
 else:
     render_prescreen_placeholder(dev_mode=DEV_MODE)
 
@@ -802,7 +856,7 @@ if run_button and pipeline_mode == "cached" and prescreen_result and prescreen_r
 
         if DEV_MODE:
             # ---- Dev mode: full cached validate display ----
-            with st.expander("Step 3: VALIDATE -- Eligibility Check (cached)", expanded=True):
+            with st.expander("Step 3: VALIDATE — MedGemma 27B + Gemini Pro (cached)", expanded=True):
                 cached_mode = None
                 if skipped_count:
                     st.warning(
@@ -840,12 +894,32 @@ if run_button and pipeline_mode == "cached" and prescreen_result and prescreen_r
                         f"VALIDATE evaluated: {len(cached_validate)}"
                     )
         else:
-            # ---- Patient mode: render trial cards from cache ----
-            # (trial cards are rendered in the Results panel below)
-            st.caption(
-                f"PRESCREEN candidates: {len(prescreen_result.candidates)} | "
-                f"VALIDATE evaluated: {len(cached_validate)}"
-            )
+            # -- B3: Simulated VALIDATE animation for cached patient mode --
+            with st.status(
+                "Step 3: VALIDATE — MedGemma 27B + Gemini Pro evaluating eligibility...",
+                expanded=True,
+            ) as val_status:
+                for nct_id, data in cached_validate.items():
+                    st.write(f"**Evaluating: {nct_id}**")
+                    time.sleep(0.5)
+                    for c in data["criteria"][:5]:
+                        icon = {
+                            "MET": "\U0001f7e2",
+                            "NOT_MET": "\U0001f534",
+                            "UNKNOWN": "\U0001f7e1",
+                        }.get(c["verdict"], "")
+                        st.write(
+                            f"  {icon} {c['verdict']} — {c['text'][:80]}..."
+                        )
+                        time.sleep(0.3)
+                    verdict = data["verdict"]
+                    badge = VERDICT_BADGES.get(verdict, verdict)
+                    st.write(f"  Trial verdict: {badge}")
+                    time.sleep(0.3)
+                val_status.update(
+                    label="VALIDATE complete — Eligibility determined",
+                    state="complete",
+                )
 
         st.session_state["trial_verdicts"] = {
             nct: d["verdict"] for nct, d in cached_validate.items()
@@ -855,7 +929,7 @@ if run_button and pipeline_mode == "cached" and prescreen_result and prescreen_r
         st.session_state["cached_validate_data"] = cached_validate
     else:
         if DEV_MODE:
-            with st.expander("Step 3: VALIDATE -- Eligibility Check (cached)", expanded=True):
+            with st.expander("Step 3: VALIDATE — MedGemma 27B + Gemini Pro (cached)", expanded=True):
                 st.warning(
                     f"No cached VALIDATE results for {selected_topic}. "
                     "Run in LIVE mode first to generate cached results."
@@ -1084,7 +1158,7 @@ elif run_button and pipeline_mode == "live" and prescreen_result and prescreen_r
                                 mr = cr.model_response
                                 latency_s = mr.latency_ms / 1000
                                 model_label = (
-                                    "MedGemma 4B" if "MedGemma" in validate_mode else "Gemini 3 Pro"
+                                    "MedGemma 1.5 4B" if "MedGemma" in validate_mode else "Gemini 3 Pro"
                                 )
                                 st.caption(
                                     f"{model_label} | "
@@ -1449,6 +1523,7 @@ if trial_verdicts and prescreen_for_results:
             key=lambda t: verdict_order.get(trial_verdicts.get(t.nct_id, ""), 3),
         )
 
+        trial_cards_data = []
         for trial in sorted_trials:
             nct_id = trial.nct_id
             verdict = trial_verdicts[nct_id]
@@ -1471,13 +1546,48 @@ if trial_verdicts and prescreen_for_results:
                 # Cached results (dict)
                 criteria_for_card = cached_validate_data[nct_id].get("criteria", [])
 
+            trial_cards_data.append(
+                {
+                    "nct_id": nct_id,
+                    "title": trial.brief_title or trial.title,
+                    "phase": ", ".join(trial.phase) if trial.phase else "N/A",
+                    "status": trial.status,
+                    "verdict": verdict,
+                    "criteria": criteria_for_card,
+                }
+            )
+
+        report_data = build_patient_report_data(trial_cards_data)
+        report_markdown = render_patient_report_markdown(report_data)
+        preview_key = f"patient_report_preview_{selected_topic}"
+
+        with st.container(border=True):
+            st.markdown("### Doctor Discussion Report")
+            st.caption(
+                "Plain-language summary for your healthcare visit. "
+                "Includes likely matches and what extra information may be needed."
+            )
+            if st.button(
+                "Export to PDF (Coming soon)",
+                key=f"patient_report_export_{selected_topic}",
+            ):
+                st.session_state[preview_key] = not st.session_state.get(preview_key, False)
+
+            st.markdown(report_markdown)
+
+            if st.session_state.get(preview_key, False):
+                with st.expander("Markdown Preview", expanded=True):
+                    st.code(report_markdown, language="markdown")
+
+        # Render detailed trial cards below the doctor discussion report.
+        for trial_data in trial_cards_data:
             render_trial_card(
-                nct_id=nct_id,
-                title=trial.brief_title or trial.title,
-                phase=", ".join(trial.phase) if trial.phase else "N/A",
-                status=trial.status,
-                verdict=verdict,
-                criteria=criteria_for_card,
+                nct_id=trial_data["nct_id"],
+                title=trial_data["title"],
+                phase=trial_data["phase"],
+                status=trial_data["status"],
+                verdict=trial_data["verdict"],
+                criteria=trial_data["criteria"],
             )
 
         # Bottom disclaimer

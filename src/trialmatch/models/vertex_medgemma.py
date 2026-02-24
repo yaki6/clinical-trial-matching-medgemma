@@ -1,6 +1,6 @@
 """Vertex AI Model Garden adapter for MedGemma (DEFAULT deployment).
 
-This is the recommended adapter for both MedGemma 4B and 27B. HF Inference
+This is the recommended adapter for both MedGemma 1.5 4B and 27B. HF Inference
 Endpoints are unstable (TGI CUDA bugs, chat template incompatibilities) and
 should only be used as a legacy fallback.
 
@@ -29,7 +29,7 @@ logger = structlog.get_logger()
 class VertexMedGemmaAdapter(ModelAdapter):
     """DEFAULT adapter for MedGemma deployed on Vertex AI Model Garden.
 
-    This is the recommended deployment for both MedGemma 4B (imaging) and 27B
+    This is the recommended deployment for both MedGemma 1.5 4B (imaging) and 27B
     (reasoning). Uses ADC credentials and direct REST calls via httpx to avoid
     the heavy google-cloud-aiplatform SDK dependency.
     """

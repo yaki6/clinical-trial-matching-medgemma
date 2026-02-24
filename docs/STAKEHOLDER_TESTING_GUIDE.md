@@ -15,7 +15,7 @@ TrialMatch is an AI-powered clinical trial matching tool. It takes a cancer pati
 
 | Stage | What it does | Model used |
 |-------|-------------|------------|
-| **INGEST** | Extracts key medical facts from patient notes | MedGemma 4B |
+| **INGEST** | Extracts key medical facts from patient notes | MedGemma 1.5 4B |
 | **PRESCREEN** | Searches ClinicalTrials.gov for matching trials | Gemini 3 Pro |
 | **VALIDATE** | Evaluates patient eligibility per criterion | MedGemma 27B + Gemini 3 Pro |
 
@@ -117,7 +117,7 @@ TrialMatch is an AI-powered clinical trial matching tool. It takes a cancer pati
 2. You should see:
 
    **a) Model Comparison Table**
-   - Multiple models listed (MedGemma 27B, MedGemma 4B, Gemini 3 Pro, GPT-4 baseline)
+   - Multiple models listed (MedGemma 27B, MedGemma 1.5 4B, Gemini 3 Pro, GPT-4 baseline)
    - Accuracy, F1 scores, Cohen's Kappa metrics
    - **Check**: Are numbers displayed correctly? (e.g., 70%, 75%, not 0.7, 0.75)
 
@@ -147,7 +147,7 @@ TrialMatch is an AI-powered clinical trial matching tool. It takes a cancer pati
 |--------|----------|
 | MedGemma 27B Accuracy | ~70% |
 | GPT-4 Baseline Accuracy | 75% |
-| MedGemma 4B Accuracy | ~35% |
+| MedGemma 1.5 4B Accuracy | ~35% |
 | Two-Stage (27B + Gemini) Accuracy | ~85% |
 
 ---
@@ -171,7 +171,7 @@ TrialMatch is an AI-powered clinical trial matching tool. It takes a cancer pati
 3. **Home page**:
    - Open **http://localhost:8501**
    - **Check**: Is the pipeline described clearly (INGEST -> PRESCREEN -> VALIDATE)?
-   - **Check**: Are the models listed (MedGemma 4B, MedGemma 27B, Gemini 3 Pro)?
+   - **Check**: Are the models listed (MedGemma 1.5 4B, MedGemma 27B, Gemini 3 Pro)?
 
 4. **Error states**:
    - If any section shows an error, note the exact error message

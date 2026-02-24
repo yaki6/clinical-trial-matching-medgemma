@@ -1,4 +1,4 @@
-# MedGemma 4B Imaging Findings Benchmark — Results & Improvement Plan
+# MedGemma 1.5 4B Imaging Findings Benchmark — Results & Improvement Plan
 
 **Date**: 2026-02-24
 **Run directory**: `runs/medpix-multimodal-findings_only-20260223-222130/`
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-MedGemma 4B (v1.5, Vertex AI) achieved **25% "good" findings** (LLM judge) on a 20-case multi-region radiology benchmark, compared to **43.8%** for Gemini Flash baseline. The model can identify large, obvious abnormalities but consistently misses subtle secondary findings and fails on Head imaging. This document captures root causes and actionable improvement paths.
+MedGemma 1.5 4B (v1.5, Vertex AI) achieved **25% "good" findings** (LLM judge) on a 20-case multi-region radiology benchmark, compared to **43.8%** for Gemini Flash baseline. The model can identify large, obvious abnormalities but consistently misses subtle secondary findings and fails on Head imaging. This document captures root causes and actionable improvement paths.
 
 ## Benchmark Design
 
@@ -23,7 +23,7 @@ MedGemma 4B (v1.5, Vertex AI) achieved **25% "good" findings** (LLM judge) on a 
 4. **ROUGE-L Precision/F1**: Additional lexical metrics
 
 ### Infrastructure
-- **MedGemma 4B**: Vertex AI Model Garden, `google/medgemma-1.5-4b-it`, 1x L4 GPU, bf16
+- **MedGemma 1.5 4B**: Vertex AI Model Garden, `google/medgemma-1.5-4b-it`, 1x L4 GPU, bf16
 - **Gemini Flash**: Google AI Studio, `gemini-3-flash-preview`
 - **LLM Judge**: Gemini 3 Pro via `scripts/rescore_simple.py`
 
@@ -31,7 +31,7 @@ MedGemma 4B (v1.5, Vertex AI) achieved **25% "good" findings** (LLM judge) on a 
 
 ### Overall
 
-| Metric | MedGemma 4B | Gemini Flash | Delta |
+| Metric | MedGemma 1.5 4B | Gemini Flash | Delta |
 |--------|-------------|-------------|-------|
 | LLM Judge (good) | 25.0% (4/16) | 43.8% (7/16) | -18.8pp |
 | LLM Judge (partial) | 0.0% | 6.2% | -6.2pp |
@@ -83,7 +83,7 @@ MedGemma 4B (v1.5, Vertex AI) achieved **25% "good" findings** (LLM judge) on a 
 - **Impact**: This fix was already applied before the 20-case benchmark
 
 ### 2. Model Architecture Limitations (4B)
-- MedGemma 4B is a relatively small multimodal model
+- MedGemma 1.5 4B is a relatively small multimodal model
 - Limited capacity for complex multi-finding radiology reports
 - Works best as a "screening" tool (is there a mass? yes/no) rather than comprehensive reporting
 
@@ -115,7 +115,7 @@ MedGemma 4B (v1.5, Vertex AI) achieved **25% "good" findings** (LLM judge) on a 
 - Expected improvement on cases where key finding is only visible on non-primary image
 
 #### C. Two-Stage Findings Pipeline
-- **Stage 1 (MedGemma 4B)**: Identify primary abnormality and location
+- **Stage 1 (MedGemma 1.5 4B)**: Identify primary abnormality and location
 - **Stage 2 (Gemini Flash)**: Elaborate on secondary findings using MedGemma's initial read
 - Mirrors the successful two-stage architecture from criterion-level evaluation (87.5% accuracy)
 

@@ -6,11 +6,11 @@ Quick-reference table of all architectural and strategic decisions. Full details
 |---|----------|--------|-------------|
 | 001 | Qrels-only eval, TREC 2021 (not 2022) | Accepted (amended) | Phase 1 results justify pipeline |
 | 002 | Gold SoT inputs for component isolation | Accepted | E2E-best run tests propagation |
-| 003 | Three-model ablation (MedGemma 4B + 27B + Gemini 3 Pro) | Accepted (amended) | Phase 0 exit criteria |
+| 003 | Three-model ablation (MedGemma 1.5 4B + 27B + Gemini 3 Pro) | Accepted (amended) | Phase 0 exit criteria |
 | 004 | Tiered evaluation budget (A+B = ~$330) | Accepted (amended) | If results are paper-worthy → Tier C |
 | 005 | Whole criteria blocks for spike (no atomization) | Accepted | Phase 0 too coarse to differentiate models |
 | 006 | Switch to TrialGPT HF criterion-level annotations | Accepted | Need trial-level eval (Tier B) or broader coverage |
-| 007 | TGI CUDA bug — max_tokens=512 workaround for MedGemma 4B | Accepted | Vertex AI confirmed no TGI bug; 27B uses max_tokens=2048 on Vertex |
+| 007 | TGI CUDA bug — max_tokens=512 workaround for MedGemma 1.5 4B | Accepted | Vertex AI confirmed no TGI bug; 27B uses max_tokens=2048 on Vertex |
 | 008 | Eligible label experiment: simplify to eligible/not eligible/unknown | **Rejected** | N/A — experiment disproved hypothesis. See `docs/medgemma-4b-reasoning-analysis.md` |
 | 009 | MedGemma clinical reasoning pre-search step in PRESCREEN | Accepted | MedGemma 27B available for pre-search, or Gemini gains sufficient medical domain knowledge |
 | 010 | CT.gov study type filtering via AREA[StudyType] Essie syntax (not filter.studyType) | Accepted | CT.gov API v2 adds a proper `filter.studyType` parameter |
@@ -20,7 +20,7 @@ Quick-reference table of all architectural and strategic decisions. Full details
 
 | Decision | Rationale | Revisit When |
 |----------|-----------|-------------|
-| MedGemma 4B for clinical reasoning pre-search (ADR-009) | Provides domain-specific guidance (molecular drivers, condition terms) that Gemini alone lacks; complementary architecture for competition narrative | MedGemma 27B fast inference available |
+| MedGemma 1.5 4B for clinical reasoning pre-search (ADR-009) | Provides domain-specific guidance (molecular drivers, condition terms) that Gemini alone lacks; complementary architecture for competition narrative | MedGemma 27B fast inference available |
 | AREA[StudyType]Interventional in query.term (ADR-010) | filter.studyType is not a valid CT.gov API v2 parameter; returns 400 errors | CT.gov API adds filter.studyType |
 | Comment out normalize_medical_terms (ADR-011) | ~25s latency per call with near-zero value (MedGemma echoes input); replaced by clinical reasoning pre-search | Better prompts or vocabulary lookup |
 | Heuristic candidate scoring: query_count*3 + bonuses | Simple, interpretable ranking; phase II/III (+2), RECRUITING (+1), fetched details (+2); MAX_CANDIDATES=20 | ML-based scoring or LLM re-ranking |

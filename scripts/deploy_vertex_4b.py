@@ -1,4 +1,4 @@
-"""Deploy / undeploy / status / smoke-test / run MedGemma 4B (multimodal) on Vertex AI.
+"""Deploy / undeploy / status / smoke-test / run MedGemma 1.5 4B (multimodal) on Vertex AI.
 
 Uses vLLM container with multimodal support (--limit-mm-per-prompt) on 1x NVIDIA L4.
 4B x 2 bytes (fp16) = 8GB model weights, fits easily in 1x L4 (24GB VRAM).
@@ -329,7 +329,7 @@ def _run_smoke_test(dedicated_dns, max_attempts=10, interval=30):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Manage MedGemma 4B (multimodal) on Vertex AI",
+        description="Manage MedGemma 1.5 4B (multimodal) on Vertex AI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )

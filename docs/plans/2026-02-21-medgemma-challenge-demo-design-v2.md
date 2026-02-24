@@ -19,11 +19,11 @@
 
 | Model | Accuracy | F1 Macro | Cohen's κ |
 |-------|----------|----------|-----------|
-| MedGemma 4B | 55% | 0.508 | 0.286 |
+| MedGemma 1.5 4B | 55% | 0.508 | 0.286 |
 | Gemini 3 Pro | 75% | 0.558 | 0.583 |
 | GPT-4 (HF baseline) | 75% | 0.746 | — |
 
-MedGemma 4B is **20 points worse** than Gemini on accuracy. The plan's story of "MedGemma superiority" would be immediately challenged by judges reviewing the benchmark table. This is the single biggest risk to the submission.
+MedGemma 1.5 4B is **20 points worse** than Gemini on accuracy. The plan's story of "MedGemma superiority" would be immediately challenged by judges reviewing the benchmark table. This is the single biggest risk to the submission.
 
 **Fix**: Reframe the narrative. Don't claim MedGemma beats general models. Instead:
 1. Position MedGemma as the **domain-specific backbone in a multi-model orchestration system** — it handles medical term normalization (PRESCREEN), patient profile extraction (INGEST), while Gemini handles general reasoning/orchestration.
@@ -62,17 +62,17 @@ For the demo, when a user selects a patient and clicks "Run Pipeline":
 
 **Fix**: Create `data/samples/` with 3 curated JSON fixtures on Day 1. Source from `nsclc_trial_profiles.json` or synthesize from TrialGPT HF cases.
 
-#### FLAW 5: MedGemma 4B Multimodal Not Supported in Code
+#### FLAW 5: MedGemma 1.5 4B Multimodal Not Supported in Code
 
-The `MedGemmaAdapter` uses `text_generation` API exclusively. Even though MedGemma 4B is a multimodal model, the current adapter **cannot send images**. Building multimodal support requires:
+The `MedGemmaAdapter` uses `text_generation` API exclusively. Even though MedGemma 1.5 4B is a multimodal model, the current adapter **cannot send images**. Building multimodal support requires:
 - Switching to `chat_completion` or `image_text_to_text` API
 - Base64 image encoding
 - Updated prompt template for image + text inputs
 - Different response parsing
 
-The plan lists "MedGemma 4B multimodal image processing" as P1 (Day 3), but this is a significant code change to a core module.
+The plan lists "MedGemma 1.5 4B multimodal image processing" as P1 (Day 3), but this is a significant code change to a core module.
 
-**Fix**: Demote multimodal to P2. For Patient 2 (EHR + image), use pre-extracted key facts. Show the medical image in the UI as context but note it was "pre-processed by MedGemma 4B." This is honest and avoids a risky code change.
+**Fix**: Demote multimodal to P2. For Patient 2 (EHR + image), use pre-extracted key facts. Show the medical image in the UI as context but note it was "pre-processed by MedGemma 1.5 4B." This is honest and avoids a risky code change.
 
 ### SIGNIFICANT GAPS (quality-impacting)
 
@@ -145,7 +145,7 @@ The 3-page tech doc is listed for Day 4 with zero structure. For a competition, 
 #### GAP 6: Reproducibility Challenges
 
 Competition requires "reproducible source code" but:
-- MedGemma 4B/27B HF Inference Endpoints are private/paid
+- MedGemma 1.5 4B/27B HF Inference Endpoints are private/paid
 - MedGemma 27B was self-deployed on A100 80GB (~$5/hr)
 - External reproducer needs HF Pro subscription or own deployment
 
@@ -156,7 +156,7 @@ Competition requires "reproducible source code" but:
 
 #### GAP 7: HAI-DEF Model Utilization Could Be Stronger
 
-The plan uses MedGemma 4B + 27B. But the HAI-DEF collection has 17+ models. Using more models (even briefly) strengthens the "effective use of HAI-DEF models" judging criterion.
+The plan uses MedGemma 1.5 4B + 27B. But the HAI-DEF collection has 17+ models. Using more models (even briefly) strengthens the "effective use of HAI-DEF models" judging criterion.
 
 **Consider adding**:
 - **TxGemma** (therapeutics prediction) — for ranking matched trials by drug mechanism relevance. Even a simple call in VALIDATE to check drug interactions would add value.
@@ -254,7 +254,7 @@ Key messages:
 │  Mode: live (default) | cached (fallback for demo recording)       │
 └────────────────────────────────────────────────────────────────────┘
         │              │              │
-   MedGemma 4B    MedGemma 27B    Gemini 3 Pro
+   MedGemma 1.5 4B    MedGemma 27B    Gemini 3 Pro
    (HF Inference)  (HF Inference)  (AI Studio)
 ```
 
@@ -265,7 +265,7 @@ Source from existing `nsclc_trial_profiles.json` (37 profiles at repo root) + Tr
 | # | Name | Description | Primary Model | Why This Case |
 |---|------|-------------|---------------|---------------|
 | 1 | NSCLC EGFR+ | 62F, lung adenocarcinoma, EGFR L858R, never smoker | MedGemma 27B | Rich biomarker + phenotype data, many matching trials |
-| 2 | Diabetic Retinopathy | 58M, T2DM + retinal image, fundoscopy findings | MedGemma 4B | Demonstrates multimodal (pre-extracted), straightforward text |
+| 2 | Diabetic Retinopathy | 58M, T2DM + retinal image, fundoscopy findings | MedGemma 1.5 4B | Demonstrates multimodal (pre-extracted), straightforward text |
 | 3 | Multi-condition Elderly | 74M, CKD + CHF + atrial fib, 8 medications | Both models | Complex polypharmacy, demonstrates multi-model routing |
 
 **Key change**: Patient 2 should come from TrialGPT HF dataset or be synthesized, since NSCLC profiles don't include medical images. Alternatively, use a pre-computed multimodal result with a real medical image for display.
@@ -317,7 +317,7 @@ This is critical for:
 
 | # | Item | Est. Hours | Day |
 |---|------|-----------|-----|
-| 15 | MedGemma 4B multimodal image support in adapter | 3h | 3 |
+| 15 | MedGemma 1.5 4B multimodal image support in adapter | 3h | 3 |
 | 16 | TxGemma integration for drug mechanism scoring | 2h | 3 |
 | 17 | ClinicalTrials.gov links + export report | 1h | 3 |
 | 18 | Playwright e2e test suite (beyond recording) | 1.5h | 3 |

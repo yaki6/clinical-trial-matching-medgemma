@@ -29,10 +29,10 @@ GEMINI_PRO_MODEL_ID = "gemini-3-pro-preview"
 
 VALIDATE_MODE_TWO_STAGE = "Two-Stage (MedGemma → Gemini)"
 VALIDATE_MODE_GEMINI_SINGLE = "Gemini 3 Pro (single)"
-VALIDATE_MODE_MEDGEMMA_SINGLE = "MedGemma 4B (single)"
+VALIDATE_MODE_MEDGEMMA_SINGLE = "MedGemma 1.5 4B (single)"
 
 # HF Inference is an opt-in legacy fallback. Vertex AI is the default for
-# both MedGemma 4B and 27B due to HF TGI CUDA instability.
+# both MedGemma 1.5 4B and 27B due to HF TGI CUDA instability.
 _FORCE_HF_MEDGEMMA_ENV = "TRIALMATCH_FORCE_HF_MEDGEMMA"
 _VERTEX_PROJECT_ENV = "GCP_PROJECT_ID"
 _VERTEX_REGION_ENV = "GCP_REGION"
@@ -141,7 +141,7 @@ def create_imaging_adapter(hf_token: str = "") -> ModelAdapter:
 
     if not hf_token:
         msg = (
-            "Vertex AI not configured for MedGemma 4B imaging (recommended). "
+            "Vertex AI not configured for MedGemma 1.5 4B imaging (recommended). "
             "Set GCP_PROJECT_ID + VERTEX_ENDPOINT_ID, or set HF_TOKEN "
             "for legacy HF fallback."
         )

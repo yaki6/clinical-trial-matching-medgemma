@@ -102,7 +102,7 @@ async def main():
     print(f"\n{'='*75}", flush=True)
     print(f"  20-Case Multi-Region Findings Benchmark Results", flush=True)
     print(f"{'='*75}", flush=True)
-    print(f"{'Metric':<40} {'MedGemma 4B':>15} {'Gemini Flash':>15}", flush=True)
+    print(f"{'Metric':<40} {'MedGemma 1.5 4B':>15} {'Gemini Flash':>15}", flush=True)
     print(f"{'-'*75}", flush=True)
     for label, mk, gk in [
         ("LLM Judge (good)", "findings_judge_good", "findings_judge_good"),

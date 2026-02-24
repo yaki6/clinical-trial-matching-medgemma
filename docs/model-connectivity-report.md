@@ -1,4 +1,4 @@
-# Model Connectivity Report: MedGemma 4B & Gemini 3 Pro
+# Model Connectivity Report: MedGemma 1.5 4B & Gemini 3 Pro
 
 > **Date:** 2026-02-18 (updated 2026-02-23)
 > **Status:** Both endpoints verified and operational
@@ -148,7 +148,7 @@ Two patient cases were tested with identical system prompts.
 
 ### 4.1 Patient 1: 2-year-old boy (Classic Kawasaki Disease)
 
-| Aspect | MedGemma 4B | Gemini 3 Pro |
+| Aspect | MedGemma 1.5 4B | Gemini 3 Pro |
 |--------|-------------|--------------|
 | **Primary Dx** | Kawasaki Disease | Kawasaki Disease |
 | **Key findings cited** | Fever >5d, conjunctivitis, strawberry tongue, desquamation, lymphadenopathy, sterile pyuria, coronary dilation | Same + explicit AHA criteria mapping |
@@ -159,7 +159,7 @@ Two patient cases were tested with identical system prompts.
 
 ### 4.2 Patient 2: 75F Septic Shock
 
-| Aspect | MedGemma 4B | Gemini 3 Pro |
+| Aspect | MedGemma 1.5 4B | Gemini 3 Pro |
 |--------|-------------|--------------|
 | **Primary Dx** | Sepsis secondary to Klebsiella UTI + AKI + possible adrenal insufficiency | Septic Shock secondary to GAS bacteremia (source: skin/soft tissue via PVD) |
 | **Key findings cited** | Hypoglycemia, hypotension, leukocytosis, elevated creatinine, anuria | Same + linked leg rash to PVD as GAS entry point |
@@ -170,7 +170,7 @@ Two patient cases were tested with identical system prompts.
 
 ### 4.3 Summary Observations
 
-| Dimension | MedGemma 4B | Gemini 3 Pro |
+| Dimension | MedGemma 1.5 4B | Gemini 3 Pro |
 |-----------|-------------|--------------|
 | Diagnostic accuracy | Correct primary Dx both cases | Correct + more nuanced |
 | Clinical reasoning depth | Good, somewhat conservative | Stronger causal chain linking |

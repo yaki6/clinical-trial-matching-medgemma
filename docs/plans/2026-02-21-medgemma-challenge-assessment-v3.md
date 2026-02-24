@@ -178,8 +178,8 @@ Health AI judges care deeply about data privacy. The plan mentions zero privacy 
 |---------------|----------|-------|
 | Gemini + old labels | 60% | Before prompt fix |
 | Gemini + native labels + CWA | 75% | After prompt fix |
-| MedGemma 4B + old labels | 55% | Before prompt fix |
-| MedGemma 4B + native labels + CWA | TBD | Post-fix rerun |
+| MedGemma 1.5 4B + old labels | 55% | Before prompt fix |
+| MedGemma 1.5 4B + native labels + CWA | TBD | Post-fix rerun |
 
 This shows the SYSTEM contributes, not just the model choice.
 
@@ -294,7 +294,7 @@ Given that **Execution & Communication quality is 30%** of judging, re-prioritiz
 | # | Item | Hours | Day |
 |---|------|-------|-----|
 | 14 | Reproducibility: .env.example, README | 1h | 4 |
-| 15 | MedGemma 4B multimodal | 3h | — |
+| 15 | MedGemma 1.5 4B multimodal | 3h | — |
 | 16 | TxGemma integration | 2h | — |
 
 ---
@@ -353,7 +353,7 @@ Given that **Execution & Communication quality is 30%** of judging, re-prioritiz
 - [Architecture diagram PNG]
 
 1.3 **HAI-DEF Model Utilization** (200 words)
-- MedGemma 4B: medical term normalization (PRESCREEN search_variants)
+- MedGemma 1.5 4B: medical term normalization (PRESCREEN search_variants)
 - MedGemma 27B: criterion-level eligibility evaluation (VALIDATE)
 - Both models are **open-weight** — deployable on-premise in hospitals
 - No patient data leaves the local environment

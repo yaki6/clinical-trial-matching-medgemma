@@ -123,6 +123,14 @@ def save_ingest_result(topic_id: str, patient_note: str, key_facts: dict) -> Pat
     return out_path
 
 
+def load_ingest_result(topic_id: str) -> dict | None:
+    """Load INGEST (patient_note + key_facts) from cache. Returns None if not found."""
+    cached_path = _topic_dir(topic_id) / "ingest.json"
+    if not cached_path.exists():
+        return None
+    return json.loads(cached_path.read_text())
+
+
 def save_cached_manifest(
     topic_id: str,
     prescreen_trial_ids: list[str],

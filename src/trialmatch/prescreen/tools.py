@@ -113,27 +113,6 @@ _SEARCH_TRIALS_DECL = genai_types.FunctionDeclaration(
                     "City, state, or country. Examples: 'Boston', 'California', 'Germany'."
                 ),
             ),
-            "min_age": genai_types.Schema(
-                type=genai_types.Type.STRING,
-                description=(
-                    "Patient's age as lower bound. Format: 'X Years'. "
-                    "Finds trials accepting patients this age or older. "
-                    "Example: '65 Years'."
-                ),
-            ),
-            "max_age": genai_types.Schema(
-                type=genai_types.Type.STRING,
-                description=(
-                    "Patient's age as upper bound. Format: 'X Years'. "
-                    "Finds trials accepting patients this age or younger. "
-                    "Example: '75 Years'."
-                ),
-            ),
-            "sex": genai_types.Schema(
-                type=genai_types.Type.STRING,
-                enum=["MALE", "FEMALE", "ALL"],
-                description="Patient's sex for eligibility filtering. Default ALL.",
-            ),
             "study_type": genai_types.Schema(
                 type=genai_types.Type.STRING,
                 enum=["INTERVENTIONAL", "OBSERVATIONAL", "EXPANDED_ACCESS"],

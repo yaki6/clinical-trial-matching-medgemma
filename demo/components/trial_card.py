@@ -34,7 +34,7 @@ _CRITERION_ICONS: dict[str, str] = {
     "UNKNOWN": "🟡",
 }
 
-_TRUNCATE_LEN = 60
+_TRUNCATE_LEN = 80
 
 
 def _truncate(text: str, max_len: int = _TRUNCATE_LEN) -> str:
@@ -134,13 +134,13 @@ def render_trial_card(
                 # Two-stage reasoning (MedGemma -> Gemini)
                 if c.get("stage1_reasoning"):
                     st.markdown("*Stage 1 — MedGemma Medical Reasoning:*")
-                    st.text(c["stage1_reasoning"])
+                    st.markdown(c["stage1_reasoning"])
                     if c.get("reasoning"):
                         st.markdown("*Stage 2 — Gemini Label Assignment:*")
-                        st.text(c["reasoning"])
+                        st.markdown(c["reasoning"])
                 elif c.get("reasoning"):
                     st.markdown("*Reasoning:*")
-                    st.text(c["reasoning"])
+                    st.markdown(c["reasoning"])
 
                 st.markdown("")  # visual spacing between criteria
 

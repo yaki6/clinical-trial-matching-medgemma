@@ -131,13 +131,13 @@ uv run python scripts/deploy_vertex_27b.py run -- uv run pytest tests/e2e/ -m e2
 uv run python scripts/deploy_vertex_27b.py run -- bash -c "echo 'custom script here'"
 ```
 
-## MedGemma 4B (HF Inference) — Companion Endpoint
+## MedGemma 1.5 4B (HF Inference) — Companion Endpoint
 
 For e2e demo, both 4B and 27B must be online:
 
 | Model | Endpoint | Health Check |
 |-------|----------|-------------|
-| MedGemma 4B | HF Inference (`pcmy7bkqtqesrrzd`) | `MedGemmaAdapter.health_check()` via `InferenceClient.text_generation` |
+| MedGemma 1.5 4B | HF Inference (`pcmy7bkqtqesrrzd`) | `MedGemmaAdapter.health_check()` via `InferenceClient.text_generation` |
 | MedGemma 27B | Vertex AI (`6588061467889631232`) | `VertexMedGemmaAdapter.health_check()` via REST `:predict` |
 
 4B uses TGI backend with `text_generation` API (NOT `/v1/chat/completions` — that returns 404).

@@ -37,7 +37,7 @@ Key insight: judges evaluate "how models are applied in realistic healthcare con
 | CLI benchmark pipeline | Ready | INGEST (gold) -> VALIDATE -> METRICS, 140 tests passing |
 | PRESCREEN agent | Ready | Gemini agentic loop + CT.gov API + MedGemma normalize |
 | 37 NSCLC patient profiles | Ready | `nsclc_trial_profiles.json` with key_facts pre-extracted |
-| MedGemma 4B endpoint | Active | HF Inference, smoke tests passing |
+| MedGemma 1.5 4B endpoint | Active | HF Inference, smoke tests passing |
 | MedGemma 27B endpoint | Active | TGI on A100 80GB, smoke tests passing |
 | Gemini 3 Pro | Active | API key validated |
 | Phase 0 benchmark | NOT RUN | Config ready, needs live execution |
@@ -68,7 +68,7 @@ Streamlit App (localhost:8501)
 │                            │  └────────────────────────┘  │
 └──────────────────────────────────────────────────────────┘
          │              │              │
-     MedGemma 4B    MedGemma 27B    Gemini 3 Pro
+     MedGemma 1.5 4B    MedGemma 27B    Gemini 3 Pro
       (HF TGI)      (HF TGI)     (AI Studio)
          │
      CT.gov API v2
@@ -126,7 +126,7 @@ Each profile has: `profile_text` (EHR note), `key_facts` (structured), `ambiguit
 
 Shows pre-computed Phase 0 results (loaded from `runs/<run_id>/`):
 
-1. **Model Comparison Table**: accuracy, F1, Cohen's kappa for MedGemma 4B vs 27B vs Gemini vs GPT-4 baseline
+1. **Model Comparison Table**: accuracy, F1, Cohen's kappa for MedGemma 1.5 4B vs 27B vs Gemini vs GPT-4 baseline
 2. **Confusion Matrices**: side-by-side heatmaps (3 models)
 3. **Per-criterion Audit Table**: expandable, from `audit_table.md`
 4. **Cost & Latency**: tokens, USD cost, avg latency per model
@@ -151,7 +151,7 @@ Shows pre-computed Phase 0 results (loaded from `runs/<run_id>/`):
 - Quantitative comparison vs general-purpose model (Gemini 3 Pro) and GPT-4 baseline
 
 **Section 1.3: HAI-DEF Model Usage** (~200 words)
-- MedGemma 4B: medical term normalization in PRESCREEN (search_variants for CT.gov)
+- MedGemma 1.5 4B: medical term normalization in PRESCREEN (search_variants for CT.gov)
 - MedGemma 27B: criterion-level eligibility evaluation in VALIDATE
 - Both: clinical reasoning with medical domain knowledge vs general-purpose Gemini 3 Pro
 
@@ -222,7 +222,7 @@ Shows pre-computed Phase 0 results (loaded from `runs/<run_id>/`):
 
 ### P2 — If time permits
 
-9. MedGemma 4B multimodal image input for imaging cases
+9. MedGemma 1.5 4B multimodal image input for imaging cases
 10. ClinicalTrials.gov deep links for matched trials
 11. Export report as PDF
 

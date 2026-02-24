@@ -1,4 +1,4 @@
-# ADR-007: TGI CUDA Bug — max_tokens=512 Workaround for MedGemma 4B
+# ADR-007: TGI CUDA Bug — max_tokens=512 Workaround for MedGemma 1.5 4B
 
 **Status:** Accepted
 **Date:** 2026-02-21
@@ -6,7 +6,7 @@
 
 ## Context
 
-During Phase 0 benchmark runs, the HuggingFace Inference Endpoint (TGI backend) for MedGemma 4B crashes with `CUDA CUBLAS_STATUS_EXECUTION_FAILED` on specific prompt + max_new_tokens combinations. After the initial crash, the GPU enters a permanent "misaligned address" state where all subsequent requests fail until the endpoint restarts (via scale-to-zero + resume).
+During Phase 0 benchmark runs, the HuggingFace Inference Endpoint (TGI backend) for MedGemma 1.5 4B crashes with `CUDA CUBLAS_STATUS_EXECUTION_FAILED` on specific prompt + max_new_tokens combinations. After the initial crash, the GPU enters a permanent "misaligned address" state where all subsequent requests fail until the endpoint restarts (via scale-to-zero + resume).
 
 ### Investigation Results
 
@@ -24,7 +24,7 @@ Set `max_tokens=512` as the default in `evaluate_criterion()` to avoid TGI CUDA 
 ## Rationale
 
 - max_tokens=512 is the highest safe value below the crash threshold (~500-1024 range).
-- MedGemma 4B's "thinking tokens" (`<unused94>thought...`) consume significant output budget, so 512 tokens often truncates the thinking chain before reaching the JSON output.
+- MedGemma 1.5 4B's "thinking tokens" (`<unused94>thought...`) consume significant output budget, so 512 tokens often truncates the thinking chain before reaching the JSON output.
 - The alternative (max_tokens=2048) gives 55% accuracy but crashes on ~30% of prompts, making benchmark runs unreliable.
 - This is a workaround for a TGI bug, not a fundamental model limitation.
 
@@ -34,10 +34,10 @@ Set `max_tokens=512` as the default in `evaluate_criterion()` to avoid TGI CUDA 
 - **Pro:** No endpoint restarts needed during benchmark
 - **Con:** Accuracy dropped from 55% (max_tokens=2048) to 35% (max_tokens=512)
 - **Con:** Truncated thinking chains force keyword fallback parsing instead of structured JSON
-- **Con:** MedGemma 4B's MET bias may be partially exacerbated by truncation
+- **Con:** MedGemma 1.5 4B's MET bias may be partially exacerbated by truncation
 
 ## Revisit When
 
 - TGI updates fix the CUDA bug (check TGI release notes)
-- Vertex AI Model Garden provides a stable MedGemma 4B endpoint (no TGI dependency)
+- Vertex AI Model Garden provides a stable MedGemma 1.5 4B endpoint (no TGI dependency)
 - vLLM or other serving frameworks become available on HF Inference Endpoints

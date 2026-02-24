@@ -14,7 +14,7 @@ HuggingFace Dataset (TrialGPT criterion annotations)
     ├──────────────────────────────────────┐
     ▼                                      ▼
 [PRESCREEN] run_prescreen_agent()     [VALIDATE] evaluate_criterion()
-    │   1. MedGemma 4B clinical           │   Two-stage evaluation:
+    │   1. MedGemma 1.5 4B clinical           │   Two-stage evaluation:
     │      reasoning (pre-search)         │     Stage 1: MedGemma reasoning
     │   2. Gemini Flash agentic loop      │     Stage 2: Gemini labeling
     │   Tools: search_trials,             │   Output: CriterionResult
@@ -76,7 +76,7 @@ src/trialmatch/
 
 ## Model Adapter Pattern
 
-All models (MedGemma 4B, MedGemma 27B, Gemini 3 Pro) implement a common interface:
+All models (MedGemma 1.5 4B, MedGemma 27B, Gemini 3 Pro) implement a common interface:
 
 - `generate(prompt, **kwargs) → ModelResponse`
 - `ModelResponse` includes: text, input_tokens, output_tokens, latency_ms, estimated_cost

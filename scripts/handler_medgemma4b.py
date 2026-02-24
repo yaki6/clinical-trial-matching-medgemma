@@ -1,4 +1,4 @@
-"""Custom HF Inference Endpoint handler for MedGemma 4B multimodal.
+"""Custom HF Inference Endpoint handler for MedGemma 1.5 4B multimodal.
 
 Fixes three server-side issues with the default image-text-to-text pipeline:
 1. temperature leaks to AutoProcessor instead of model.generate()

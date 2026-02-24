@@ -11,11 +11,11 @@ The PRESCREEN agent originally had three tools available to Gemini:
 2. `get_trial_details` — full eligibility criteria fetch
 3. `normalize_medical_terms` — MedGemma-powered medical term normalization
 
-The `normalize_medical_terms` tool called MedGemma 4B to produce CT.gov-optimized search variants for medical terms (e.g., normalizing "NSCLC" to "non-small cell lung cancer" with synonyms and disambiguation).
+The `normalize_medical_terms` tool called MedGemma 1.5 4B to produce CT.gov-optimized search variants for medical terms (e.g., normalizing "NSCLC" to "non-small cell lung cancer" with synonyms and disambiguation).
 
 ### Problems Observed
 
-1. **Near-zero value**: In live testing, MedGemma 4B echoed the input term back unchanged in most cases, providing no additional search variants.
+1. **Near-zero value**: In live testing, MedGemma 1.5 4B echoed the input term back unchanged in most cases, providing no additional search variants.
 2. **High latency**: Each call added ~25 seconds due to MedGemma inference time, significantly slowing the agentic loop.
 3. **Budget consumption**: Each normalize call counted against the agent's `max_tool_calls` budget (default 8), reducing the number of actual search_trials calls the agent could make.
 4. **Redundancy with clinical reasoning**: The new MedGemma clinical reasoning pre-search step (ADR-009) provides better search term guidance upfront, making per-term normalization redundant.

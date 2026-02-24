@@ -1,0 +1,2204 @@
+{
+  "trials": {
+    "NCT00002622": {
+      "conditions": [
+        "Metastatic Cancer"
+      ],
+      "keywords": [
+        "malignant pleural effusion"
+      ],
+      "title": "Talc in Treating Patients With Malignant Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE3"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "talc",
+        "Talc"
+      ]
+    },
+    "NCT00002872": {
+      "conditions": [
+        "Metastatic Cancer"
+      ],
+      "keywords": [
+        "malignant pleural effusion"
+      ],
+      "title": "Bleomycin, Doxycycline, or Talc in Treating Patients With Malignant Pleural Effusions",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE3"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "bleomycin sulfate",
+        "doxycycline",
+        "talc"
+      ]
+    },
+    "NCT00005636": {
+      "conditions": [
+        "Malignant Mesothelioma"
+      ],
+      "keywords": [
+        "localized malignant mesothelioma",
+        "advanced malignant mesothelioma",
+        "recurrent malignant mesothelioma"
+      ],
+      "title": "Cisplatin With or Without Pemetrexed Disodium in Treating Patients With Malignant Mesothelioma of the Pleura That Cannot be Removed by Surgery",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE3"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "cisplatin",
+        "pemetrexed disodium"
+      ]
+    },
+    "NCT00019825": {
+      "conditions": [
+        "Esophageal Cancer",
+        "Lung Cancer",
+        "Malignant Mesothelioma",
+        "Metastatic Cancer"
+      ],
+      "keywords": [
+        "recurrent non-small cell lung cancer",
+        "stage II esophageal cancer",
+        "stage III esophageal cancer",
+        "stage IV esophageal cancer",
+        "recurrent esophageal cancer",
+        "extensive stage small cell lung cancer",
+        "recurrent small cell lung cancer",
+        "advanced malignant mesothelioma",
+        "recurrent malignant mesothelioma",
+        "stage IIIB non-small cell lung cancer",
+        "stage IV non-small cell lung cancer",
+        "malignant pleural effusion"
+      ],
+      "title": "Decitabine in Treating Patients With Unresectable Lung or Esophageal Cancer or Malignant Mesothelioma of the Pleura",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "decitabine"
+      ]
+    },
+    "NCT00037817": {
+      "conditions": [
+        "Advanced Esophageal Cancers",
+        "Primary Small Cell Lung Cancers",
+        "Non-Small-Cell Lung Carcinoma",
+        "Pleural Mesotheliomas",
+        "Cancers of Non-thoracic Origin With Metastases to the Lungs or Pleura"
+      ],
+      "keywords": [
+        "Toxicity Evaluation",
+        "Pharmacokinetics",
+        "Apoptosis",
+        "Gene Induction",
+        "Gene Expression",
+        "Lung Cancer",
+        "Small Cell Lung Cancer",
+        "Non-Small Cell Lung Cancer",
+        "Pleural Mesothelioma"
+      ],
+      "title": "Phase I Study of Gene Induction Mediated by Sequential Decitabine/Depsipeptide Infusion With or Without Concurrent Celecoxib in Subjects With Pulmonary and Pleural Malignancies",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Decitabine",
+        "Depsipeptide",
+        "Celecoxib"
+      ]
+    },
+    "NCT00042770": {
+      "conditions": [
+        "Metastatic Cancer",
+        "Pulmonary Complications"
+      ],
+      "keywords": [
+        "malignant pleural effusion",
+        "pulmonary complications"
+      ],
+      "title": "Standard Chest Tube Compared With a Small Catheter in Treating Malignant Pleural Effusion in Patients With Cancer",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE3"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "talc",
+        "dyspnea management"
+      ]
+    },
+    "NCT00094978": {
+      "conditions": [
+        "Carcinoma, Small Cell",
+        "Carcinoma, Non-Small-Cell Lung",
+        "Esophageal Neoplasms",
+        "Mesothelioma"
+      ],
+      "keywords": [
+        "Apoptosis",
+        "Toxicity",
+        "Pharmacokinetic",
+        "Gene Induction",
+        "Maximally Tolerated Dose",
+        "Small Cell Lung Cancer",
+        "SCLC",
+        "Non-Small Cell Lung Cancer",
+        "NSCLC",
+        "Esophageal Cancer",
+        "Pleural Mesothelioma"
+      ],
+      "title": "Depsipeptide/Flavopiridol Infusion for Cancers of the Lungs, Esophagus, Pleura, Thymus or Mediastinum",
+      "status": "TERMINATED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Depsipeptide",
+        "Flavopiridol (alvocidib)"
+      ]
+    },
+    "NCT00114205": {
+      "conditions": [
+        "Metastatic Cancer"
+      ],
+      "keywords": [
+        "malignant pleural effusion"
+      ],
+      "title": "Surgery and Intrapleural Docetaxel in Treating Patients With Malignant Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "docetaxel",
+        "therapeutic thoracoscopy"
+      ]
+    },
+    "NCT00165555": {
+      "conditions": [
+        "Pleural Mesothelioma",
+        "Malignant Pleural Mesothelioma"
+      ],
+      "keywords": [
+        "cisplatin",
+        "pleurectomy",
+        "decortication",
+        "heated cisplatin"
+      ],
+      "title": "Pleurectomy/Decortication Followed by Intrathoracic/Intraperitoneal Heated Cisplatin for Malignant Pleural Mesothelioma",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Cisplatin",
+        "Sodium Thiosulfate"
+      ]
+    },
+    "NCT00166894": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "pleural effusion",
+        "TREM-1"
+      ],
+      "title": "Use of the Triggering Receptor Expressed on Myeloid Cells-1 (TREM-1) in the Diagnosis of Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT00172835": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "pleural effusion",
+        "procalcitonin"
+      ],
+      "title": "Use of Procalcitonin in the Diagnosis of Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT00227630": {
+      "conditions": [
+        "Malignant Mesothelioma"
+      ],
+      "keywords": [
+        "epithelial mesothelioma",
+        "sarcomatous mesothelioma",
+        "localized malignant mesothelioma",
+        "recurrent malignant mesothelioma"
+      ],
+      "title": "Pemetrexed Disodium and Cisplatin Followed By Surgery and Radiation Therapy in Treating Patients With Malignant Pleural Mesothelioma",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "cisplatin",
+        "pemetrexed disodium",
+        "adjuvant therapy",
+        "conventional surgery",
+        "neoadjuvant therapy",
+        "radiation therapy"
+      ]
+    },
+    "NCT00242723": {
+      "conditions": [
+        "Malignant Pleural Mesotheliomas NOS",
+        "Esophageal Cancers NOS",
+        "Lung Cancer NOS",
+        "Thoracic Cancers",
+        "Cancers of Non Thoracic Origin With Metastases to the Lungs or Pleura"
+      ],
+      "keywords": [
+        "Biopsy",
+        "Staging Studies",
+        "Screening",
+        "potentially malignant or suspicious lesions",
+        "Cancer Primary Evaluation",
+        "Lung Cancer",
+        "Esophageal Cancer",
+        "Malignant Pleural Mesothelioma"
+      ],
+      "title": "Evaluation of Cell Changes in Blood and Tissue in Cancers of the Lung, Esophagus and Lung Lining",
+      "status": "RECRUITING",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT00313066": {
+      "conditions": [
+        "Tuberculosis",
+        "Tuberculous Pleurisy",
+        "Malignant Pleural Effusion",
+        "Empyema"
+      ],
+      "keywords": [
+        "CTGF",
+        "fibrogenic cytokine",
+        "FGF",
+        "pleural fibrosis"
+      ],
+      "title": "Comparison the Level of CTGF Protein and Related Cytokine in Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT00316134": {
+      "conditions": [
+        "Pleural Effusion",
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [
+        "Pleural Diseases",
+        "Pleural Effusion",
+        "Pleural Effusion, Malignant",
+        "Pleural Neoplasms",
+        "Neoplasms, Pleural"
+      ],
+      "title": "Multiple Biomarkers in Undiagnosed Pleural Effusion",
+      "status": "TERMINATED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Procedure/Surgery"
+      ]
+    },
+    "NCT00430664": {
+      "conditions": [
+        "Malignant Pleural Effusions",
+        "Recurrent Pleural Effusions",
+        "Primary Spontaneous Pneumothorax",
+        "Secondary Spontaneous Pneumothorax"
+      ],
+      "keywords": [
+        "pleurodesis",
+        "talc",
+        "iodopovidone"
+      ],
+      "title": "A Comparative Study of the Safety and Efficacy of Face Talc Slurry and Iodopovidone for Pleurodesis",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Pleurodesis with either talc or iodopovidone"
+      ]
+    },
+    "NCT00469196": {
+      "conditions": [
+        "Mesothelioma"
+      ],
+      "keywords": [
+        "mesothelioma",
+        "tomotherapy"
+      ],
+      "title": "Tomotherapy Treatment for Mesothelioma",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Tomotherapy"
+      ]
+    },
+    "NCT00473291": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "pleural effusion",
+        "lung sounds",
+        "acoustic monitoring"
+      ],
+      "title": "Vibration Response Imaging (VRI) in Management and Evaluation in Patients With Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT00504738": {
+      "conditions": [
+        "Lung Disease",
+        "Chronic Obstructive Pulmonary Disease (COPD)",
+        "Asthma"
+      ],
+      "keywords": [
+        "lung disease",
+        "chronic obstructive pulmonary disease (COPD)",
+        "asthma",
+        "smokers",
+        "non-smokers"
+      ],
+      "title": "Lung Disease Collection (Qatar): Evaluation of the Lungs of Individuals With Lung Disease",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT00509041": {
+      "conditions": [
+        "Malignant Mesothelioma"
+      ],
+      "keywords": [
+        "advanced malignant mesothelioma",
+        "epithelial mesothelioma",
+        "recurrent malignant mesothelioma",
+        "sarcomatous mesothelioma"
+      ],
+      "title": "Dasatinib in Treating Patients With Previously Treated Malignant Mesothelioma",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "dasatinib"
+      ]
+    },
+    "NCT00637078": {
+      "conditions": [
+        "Hypertension",
+        "Hypercholesterolemia"
+      ],
+      "keywords": [
+        "hypertension",
+        "hypercholesterolemia",
+        "family physicians",
+        "fixed dose combination therapy",
+        "cluster randomized controlled trial"
+      ],
+      "title": "STITCH2 (Simplified Therapeutic Intervention to Control Hypertension and Hypercholesterolemia)",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE4"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Treatment algorithm:caduet, Amlodipine, ACEI-ARB combo dose, a-blocker, b-blocker or spironolactone, dyslipidemic therapy with ezetamide"
+      ]
+    },
+    "NCT00637676": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "malignant pleural effusion",
+        "subcutaneous tunneled drainage",
+        "talc pleurodesis"
+      ],
+      "title": "Tunneled Pleural Catheter in Partially Entrapped Lung",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "VATS, Talc-Pleurodesis, tunneled pleural drainage",
+        "VATS, Talc-pleurodesis"
+      ]
+    },
+    "NCT00639067": {
+      "conditions": [
+        "Lung Neoplasms"
+      ],
+      "keywords": [
+        "Cancer of Lung",
+        "Cancer of the Lung",
+        "Lung Cancer",
+        "Neoplasms, Lung",
+        "Neoplasms, Pulmonary",
+        "Pulmonary Cancer",
+        "Pulmonary Neoplasms"
+      ],
+      "title": "Breath Test for Early Detection of Lung Cancer",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Breath Collection Apparatus"
+      ]
+    },
+    "NCT00644319": {
+      "conditions": [
+        "Metastatic Cancer"
+      ],
+      "keywords": [
+        "malignant pleural effusion"
+      ],
+      "title": "Ibuprofen or Morphine in Treating Pain in Patients Undergoing Pleurodesis for Malignant Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "ibuprofen",
+        "morphine sulfate",
+        "management of therapy complications",
+        "pleurodesis"
+      ]
+    },
+    "NCT00690261": {
+      "conditions": [
+        "Tumor",
+        "Lung Cancer"
+      ],
+      "keywords": [
+        "tumor associated macrophage",
+        "lung cancer",
+        "outcome"
+      ],
+      "title": "The Impact of M1/M2 Tumor Associated Macrophage (TAM) Polarization on Cancer Progression and Prognosis Prediction",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        ""
+      ]
+    },
+    "NCT00715611": {
+      "conditions": [
+        "Mesothelioma"
+      ],
+      "keywords": [
+        "pemetrexed",
+        "cisplatin",
+        "IMRT",
+        "PLEURA",
+        "Malignant",
+        "08-053"
+      ],
+      "title": "Pleurectomy/Decortication (Neo) Adjuvant Chemotherapy and Intensity Modulated Radiation Therapy to the Pleura in Patients With Locally Advanced Malignant Pleural Mesothelioma",
+      "status": "ACTIVE_NOT_RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Pleurectomy/Decortication",
+        "pemetrexed and cisplatin or carboplatin",
+        "Intensity Modulated Radiation Therapy"
+      ]
+    },
+    "NCT00758316": {
+      "conditions": [
+        "Malignant Pleural Effusions"
+      ],
+      "keywords": [
+        "Malignant",
+        "Pleural",
+        "Effusions",
+        "Thoracoscopy",
+        "Catheter"
+      ],
+      "title": "A Prospective, Randomized Controlled Trial for a Rapid Pleurodesis Protocol for the Management of Pleural Effusions",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE3"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Thoracoscopy and Pleurx",
+        "Thoracoscopy"
+      ]
+    },
+    "NCT00789087": {
+      "conditions": [
+        "Recurrent Malignant Pleural Effusion."
+      ],
+      "keywords": [
+        "Pleural Effusion.",
+        "Talc.",
+        "Pleurodesis.",
+        "Quality of Life.",
+        "Thoracoscopy."
+      ],
+      "title": "Talc Pleurodesis in Patients With Recurrent Malignant Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE4"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Videothoracoscopic talc poudrage (VT).",
+        "Talc slurry through a chest tube (DT)."
+      ]
+    },
+    "NCT00896285": {
+      "conditions": [
+        "Malignant Pleural Effusion",
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "Pleural malignancy",
+        "pleural effusion",
+        "pleurodesis",
+        "chest tube",
+        "cancer",
+        "cancer pain management"
+      ],
+      "title": "The First Therapeutic Intervention in Malignant Pleural Effusion Trial",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Large bore chest drain + NSAID based analgesic regimen",
+        "Small bore chest drain + NSAID based analgesic regimen",
+        "Large bore chest drain + opiate based analgesic regimen",
+        "Small bore chest drain + opiate based analgesic regimen"
+      ]
+    },
+    "NCT00978939": {
+      "conditions": [
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [],
+      "title": "Impact of Aggressive Versus Standard Drainage Regimen Using a Long Term Indwelling Pleural Catheter",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE4"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Standard Drainage Instructions",
+        "Aggressive Drainage Instructions"
+      ]
+    },
+    "NCT01105390": {
+      "conditions": [
+        "Advanced Malignant Mesothelioma",
+        "Epithelial Mesothelioma",
+        "Recurrent Malignant Mesothelioma",
+        "Sarcomatous Mesothelioma"
+      ],
+      "keywords": [],
+      "title": "AMG 102, Pemetrexed Disodium, and Cisplatin in Treating Patients With Malignant Pleural Mesothelioma",
+      "status": "WITHDRAWN",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "rilotumumab",
+        "cisplatin",
+        "pemetrexed disodium",
+        "laboratory biomarker analysis"
+      ]
+    },
+    "NCT01125124": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "Pleurodesis",
+        "Malignant pleural effusion",
+        "Silver Nitrate",
+        "Pain"
+      ],
+      "title": "Safety and Effectiveness Study for Pleurodesis With Silver Nitrate in Malignant Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Silver Nitrate"
+      ]
+    },
+    "NCT01141946": {
+      "conditions": [
+        "Lung Cancer"
+      ],
+      "keywords": [
+        "lung cancer",
+        "pleural effusion",
+        "post-op care",
+        "diaphragmatic ultrasound"
+      ],
+      "title": "Pleural Ultrasonography in Lung Cancer",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "thoracic ultrasound",
+        "pleural aspiration"
+      ]
+    },
+    "NCT01193439": {
+      "conditions": [
+        "Pleural Diseases"
+      ],
+      "keywords": [
+        "thoracoscopy",
+        "pleural diseases",
+        "complications",
+        "safety"
+      ],
+      "title": "Safety of Thoracoscopy in Patients With High Risk",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT01196585": {
+      "conditions": [
+        "Pleural Diseases"
+      ],
+      "keywords": [
+        "Pleura",
+        "biopsy",
+        "diagnosis",
+        "CT",
+        "ultrasonography"
+      ],
+      "title": "Ultrasonography Guided Pleural Biopsy Versus Computed Tomography Guided Pleural Biopsy",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "CT-Guided pleural needle biopsy with Abrams' needle",
+        "Ultrasonography guided cutting pleural needle biopsy"
+      ]
+    },
+    "NCT01262612": {
+      "conditions": [
+        "Malignant Ascites",
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "cediranib",
+        "malignant ascites",
+        "malignant pleural effusion"
+      ],
+      "title": "Cediranib as Palliative Treatment in Patients With Symptomatic Malignant Ascites or Pleural Effusion",
+      "status": "TERMINATED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "immediate cediranib",
+        "Start cediranib after 28 days Best Supportive Care"
+      ]
+    },
+    "NCT01409551": {
+      "conditions": [
+        "Safety of Intervention",
+        "Efficacy of Intervention",
+        "Cost Effectiveness"
+      ],
+      "keywords": [
+        "Pleural effusion",
+        "VATS",
+        "hyperthermia",
+        "thoracostomy",
+        "pleurodesis"
+      ],
+      "title": "Video-assisted Hyperthermic Pleural Chemoperfusion vs Talc Pleurodesis for Refractory Malignant Pleural Effusions.",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "VATS hyperthermic chemoperfusion",
+        "Bedside talc slurry pleurodesis"
+      ]
+    },
+    "NCT01411202": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "Malignant Pleural Effusion",
+        "Doxycycline",
+        "Pleurodesis",
+        "Pleurx catheter"
+      ],
+      "title": "Effectiveness of Doxycycline for Treating Pleural Effusions Related to Cancer in an Outpatient Population",
+      "status": "UNKNOWN",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Doxycycline",
+        "normal saline"
+      ]
+    },
+    "NCT01580982": {
+      "conditions": [
+        "Lung Neoplasms"
+      ],
+      "keywords": [
+        "Oncogenes",
+        "Lung and Other Thoracic Cancers"
+      ],
+      "title": "Molecular Analysis of Oncogenes and Resistance Mechanisms in Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT01601444": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "To assess pleural effusion by measuring internal thoracic impedance"
+      ],
+      "title": "Detection of Pleural Effusion by Internal Thoracic Impedance Method",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Pletysmograph"
+      ]
+    },
+    "NCT01624090": {
+      "conditions": [
+        "Lung Cancer",
+        "Esophageal Cancer",
+        "Mesothelioma",
+        "Gastrointestinal Neoplasms",
+        "Breast Cancer"
+      ],
+      "keywords": [
+        "Cancer Stem Cell",
+        "Thoracic Malignancies",
+        "Mithramycin Treatment",
+        "Lung Tumors",
+        "Metastatic Lung Tumors"
+      ],
+      "title": "Mithramycin for Lung, Esophagus, and Other Chest Cancers",
+      "status": "TERMINATED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Mithramycin"
+      ]
+    },
+    "NCT01756742": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "Pleural Effusion",
+        "Respiratory physiotherapy",
+        "Length of stay"
+      ],
+      "title": "Effects of Respiratory Physiotherapy on Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Respiratory physiotherapy",
+        "Conservative treatment"
+      ]
+    },
+    "NCT01766739": {
+      "conditions": [
+        "Lung Cancer"
+      ],
+      "keywords": [
+        "GL-ONC1",
+        "pleural effusion",
+        "12-169"
+      ],
+      "title": "Intra-pleural Administration of GL-ONC1, a Genetically Modified Vaccinia Virus, in Patients With Malignant Pleural Effusion: Primary, Metastases and Mesothelioma",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "GL-ONC1"
+      ]
+    },
+    "NCT01778270": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "pleural effusion",
+        "pleural drainage",
+        "thorax impedance",
+        "respiration parameters",
+        "heart sounds analysis"
+      ],
+      "title": "Not Invasive Monitoring of Pleural Drainage",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Body Bioimpedance Sensor"
+      ]
+    },
+    "NCT01819363": {
+      "conditions": [
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [
+        "Pleural effusion",
+        "Pleural elastance",
+        "Pleurodesis",
+        "Quality of life",
+        "Computed Tomography"
+      ],
+      "title": "Relationship Between Pleural Elastance and Effectiveness of Pleurodesis on Recurrent Malignant Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Pleural elastance"
+      ]
+    },
+    "NCT01952327": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Investigation Into the Automated Drainage of Recurrent Effusions From the Pleural Space in Thoracic Malignancy.",
+      "status": "TERMINATED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "The pleurapump system"
+      ]
+    },
+    "NCT01952431": {
+      "conditions": [
+        "TLC in Patients With and Without Respiratory System Disease"
+      ],
+      "keywords": [
+        "Total Lung Capacity"
+      ],
+      "title": "Measurement and Evaluation of Total Lung Capacity (TLC) in the Field of Pulmonary Functional Testing (PFT)",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Total Lung Capacity (TLC) testing"
+      ]
+    },
+    "NCT01973985": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "Pleural Effusion"
+      ],
+      "title": "Using Ultrasound to Predict the Results of Draining Pleural Effusions",
+      "status": "TERMINATED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Pleural Manometry",
+        "Thoracic ultrasonography",
+        "Pleural aspiration catheter OR chest drain (standard care)",
+        "Talc slurry pleurodesis via chest drain (standard care)"
+      ]
+    },
+    "NCT02024113": {
+      "conditions": [
+        "Lung Cancer"
+      ],
+      "keywords": [
+        "validation",
+        "model",
+        "metabolic profile",
+        "positron emission tomography"
+      ],
+      "title": "LC-NMR Study Biomarkers to Detect Lung Cancer",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Venous blood sample"
+      ]
+    },
+    "NCT02045121": {
+      "conditions": [
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [],
+      "title": "Multicentre Study Comparing Indwelling Pleural Catheter With Talc Pleurodesis for Malignant Pleural Effusion Management",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Indwelling Pleural Catheter",
+        "Talc Pleurodesis"
+      ]
+    },
+    "NCT02062632": {
+      "conditions": [
+        "Esophageal Carcinoma",
+        "Hypopharyngeal Carcinoma",
+        "Laryngeal Carcinoma",
+        "Lymphoma",
+        "Mesothelioma",
+        "Metastatic Malignant Neoplasm in the Lung",
+        "Metastatic Malignant Neoplasm in the Pleura",
+        "Metastatic Malignant Neoplasm in the Spinal Cord",
+        "Non-Small Cell Lung Carcinoma",
+        "Sarcoma",
+        "Small Cell Lung Carcinoma",
+        "Thymic Carcinoma",
+        "Thymoma",
+        "Thyroid Gland Carcinoma"
+      ],
+      "keywords": [],
+      "title": "Doxepin Hydrochloride in Treating Esophageal Pain in Patients With Thoracic Cancer Receiving Radiation Therapy to the Thorax With or Without Chemotherapy",
+      "status": "TERMINATED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Doxepin Hydrochloride",
+        "Placebo",
+        "Quality-of-Life Assessment",
+        "Questionnaire Administration"
+      ]
+    },
+    "NCT02092155": {
+      "conditions": [
+        "Malignant Pleural Effusions"
+      ],
+      "keywords": [],
+      "title": "Biomarker Levels During Indwelling Pleural cAtheter Sample Testing",
+      "status": "ENROLLING_BY_INVITATION",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT02172027": {
+      "conditions": [
+        "Lung Cancer"
+      ],
+      "keywords": [],
+      "title": "Immunomagnetic Detection of Cancer Cells in Pleural Effusion in Lung Cancer Patients as Additional Staging and Prognostic Tool",
+      "status": "WITHDRAWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Immunomagnetic Detection"
+      ]
+    },
+    "NCT02192138": {
+      "conditions": [
+        "Pleural Effusion",
+        "Exudative Pleuritis"
+      ],
+      "keywords": [
+        "Pleural effusion",
+        "Pleural fluid",
+        "Thoracentesis",
+        "Intrapleural pressure",
+        "Pleural manometry"
+      ],
+      "title": "Pathophysiological Effects of Intrapleural Pressure Changes During Therapeutic Thoracentesis",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Therapeutic thoracentesis",
+        "Pleural catheter",
+        "Pleural manometer"
+      ]
+    },
+    "NCT02208895": {
+      "conditions": [
+        "Pleural Effusions"
+      ],
+      "keywords": [
+        "pleural",
+        "glucose",
+        "glucometer",
+        "i-STAT"
+      ],
+      "title": "iSTAT Comparison Study, IRB3785",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT02227732": {
+      "conditions": [
+        "Malignant Pleural Effusions"
+      ],
+      "keywords": [],
+      "title": "A Pilot Study Evaluating the Safety and Effectiveness of a New Pleural Catheter for the Medical Management of Symptomatic, Recurrent, Malignant Pleural Effusions",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "New Indwelling Pleural Catheter"
+      ]
+    },
+    "NCT02246946": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "pleural effusion",
+        "chest tube",
+        "respiratory therapy",
+        "intermittent positive-pressure breathing",
+        "lung function",
+        "pulmonary complications"
+      ],
+      "title": "Positive Airway Pressure on Pleural Effusion After Drainage",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Positive Airway Pressure",
+        "Conventional Chest Physiotherapy",
+        "Control group"
+      ]
+    },
+    "NCT02269761": {
+      "conditions": [
+        "Cough",
+        "Dyspnea",
+        "Wheezing"
+      ],
+      "keywords": [
+        "Emergency Departments",
+        "Chest",
+        "Lung",
+        "Cough",
+        "Dyspnea",
+        "Wheezing",
+        "Ultrasound",
+        "Ultrasonography"
+      ],
+      "title": "Chest Ultrasound of ER Patients With Cough or SOB",
+      "status": "TERMINATED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Nuvis Diagnostic Ultrasound System"
+      ]
+    },
+    "NCT02300883": {
+      "conditions": [
+        "Malignant Mesothelioma"
+      ],
+      "keywords": [],
+      "title": "Observational Prospective Analysis of Biological Characteristics of Mesothelioma Patients",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT02320617": {
+      "conditions": [
+        "Lung Neoplasms"
+      ],
+      "keywords": [
+        "Lung Neoplasms",
+        "diffusion weighted MRI",
+        "ADC value",
+        "treatment effect"
+      ],
+      "title": "Application of Diffusion Weighted MRI Versus CT in Evaluation of the Effect of Treating Lung Cancer",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Diffusion Magnetic Resonance Imaging"
+      ]
+    },
+    "NCT02414269": {
+      "conditions": [
+        "Malignant Pleural Disease",
+        "Mesothelioma",
+        "Metastases",
+        "Lung Cancer",
+        "Breast Cancer"
+      ],
+      "keywords": [
+        "modified T cells",
+        "cyclophosphamide",
+        "CAR T cells",
+        "15-007",
+        "CAR",
+        "immunotherapy"
+      ],
+      "title": "Malignant Pleural Disease Treated With Autologous T Cells Genetically Engineered to Target the Cancer-Cell Surface Antigen Mesothelin",
+      "status": "ACTIVE_NOT_RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "iCasp9M28z T cell infusions",
+        "cyclophosphamide",
+        "pembrolizumab"
+      ]
+    },
+    "NCT02436850": {
+      "conditions": [
+        "Respiratory Instability"
+      ],
+      "keywords": [
+        "Thoracentesis",
+        "Pocket Ultrasound Device",
+        "Ultrasound",
+        "Soroka University Medical Center",
+        "Physical Examination",
+        "Ethical Committee"
+      ],
+      "title": "Bed Side Thoracentesis Among Non-Ventilated Patients With Respiratory Instability",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Thoracentesis"
+      ]
+    },
+    "NCT02517749": {
+      "conditions": [
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [],
+      "title": "Out Patient Talc Slurry Via Indwelling Pleural Catheter for Malignant Pleural Effusion Vs Usual Inpatient Management",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Chest Drain Insertion and Talc Pleurodesis",
+        "Indwelling Pleural Catheter Insertion and Talc Pleurodesis"
+      ]
+    },
+    "NCT02518100": {
+      "conditions": [
+        "Automated Measurement of Vital Signs"
+      ],
+      "keywords": [],
+      "title": "Vital Signs Patch: Automated Monitoring of Vital Signs Measurements in the In-Patient Hospital Setting",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Vital Signs Patch (VSP) System 3-Lead (NEHB) Configuration",
+        "Vital Signs Patch (VSP) System 1-Lead (PAL) Configuration"
+      ]
+    },
+    "NCT02521922": {
+      "conditions": [
+        "Vital Signs"
+      ],
+      "keywords": [],
+      "title": "Vital Signs Patch Early Feasibility and Usability Study",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "VSP System - NEHB Configuration",
+        "VSP System - PAL Configuration"
+      ]
+    },
+    "NCT02524470": {
+      "conditions": [
+        "Vital Signs"
+      ],
+      "keywords": [],
+      "title": "Vital Signs Patch Early Feasibility and Usability Study v1.0",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "VSP System - NEHB Configuration",
+        "VSP System - PAL Configuration"
+      ]
+    },
+    "NCT02548221": {
+      "conditions": [
+        "Bilateral Pleural Effusion"
+      ],
+      "keywords": [
+        "Thoracentesis",
+        "Pleural Effusions",
+        "Transthoracic echocardiogram",
+        "Lung volume measurements"
+      ],
+      "title": "Impact of Large-Volume Pleural Effusions on Heart Function",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "transthoracic echocardiogram"
+      ]
+    },
+    "NCT02583282": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "A Study to Compare the Efficacy and Safety of Intrapleural Doxycycline Versus Iodopovidone for Performing Pleurodesis in Malignant Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Doxycycline",
+        "Iodopovidine"
+      ]
+    },
+    "NCT02602119": {
+      "conditions": [
+        "Neoplasms"
+      ],
+      "keywords": [],
+      "title": "Intraoperative Imaging of Pulmonary Nodules by OTL38",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "OTL38"
+      ]
+    },
+    "NCT02613299": {
+      "conditions": [
+        "Mesothelioma",
+        "Solitary Fibrous Tumor of the Pleura"
+      ],
+      "keywords": [],
+      "title": "Surgery for Mesothelioma After Radiation Therapy \"SMART\" for Resectable Malignant Pleural Mesothelioma",
+      "status": "TERMINATED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT02613312": {
+      "conditions": [
+        "Mesothelioma",
+        "Solitary Fibrous Tumor of the Pleura"
+      ],
+      "keywords": [],
+      "title": "Chemotherapy Followed by Surgery and Neoadjuvant Hemothoracic Intensity Modified Radiation Therapy (IMRT) for Patients With Malignant Pleural Mesothelioma",
+      "status": "TERMINATED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT02627274": {
+      "conditions": [
+        "Solid Tumor",
+        "Breast Cancer",
+        "Cancer of Head and Neck"
+      ],
+      "keywords": [],
+      "title": "A Study Evaluating Safety, Pharmacokinetics, and Therapeutic Activity of RO6874281 as a Single Agent (Part A) or in Combination With Trastuzumab or Cetuximab (Part B or C)",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "RO6874281",
+        "Trastuzumab",
+        "Cetuximab"
+      ]
+    },
+    "NCT02648763": {
+      "conditions": [
+        "Mesothelioma",
+        "Solitary Fibrous Tumor of the Pleura"
+      ],
+      "keywords": [],
+      "title": "Staging Procedures to Diagnose Malignant Pleural Mesothelioma",
+      "status": "TERMINATED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT02649894": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "malignant pleural effusion"
+      ],
+      "title": "Safety and Effectiveness of a New Pleural Catheter for Symptomatic, Recurrent, MPEs Versus Approved Pleural Catheter",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Active Comparator: Approved Uncoated PleurX Indwelling Pleural Catheter",
+        "Experimental: Silver Nitrate Coated Indwelling Pleural Catheter (SNCIPC)"
+      ]
+    },
+    "NCT02677883": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Impact of Pleural Manometry on Chest Discomfort After Therapeutic Thoracentesis",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Manometry-guided thoracentesis",
+        "Symptom-guided thoracentesis"
+      ]
+    },
+    "NCT02724462": {
+      "conditions": [
+        "Smoking"
+      ],
+      "keywords": [
+        "smoking cessation",
+        "app for quitting smoking"
+      ],
+      "title": "Trial of An Innovative Smartphone Intervention for Smoking Cessation",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Smartphone-delivered Intervention (SmartQuit)",
+        ": Smartphone-delivered Intervention (Standard of care app)"
+      ]
+    },
+    "NCT02809872": {
+      "conditions": [
+        "Pleural Effusion Disorder",
+        "Thoracic Ultrasound"
+      ],
+      "keywords": [],
+      "title": "Ultrasound Estimation of Pleural Effusion in the Sitting Patients",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Diagnostic Thoracic Ultrasound"
+      ]
+    },
+    "NCT02825095": {
+      "conditions": [
+        "Pleural Effusion, Malignant",
+        "Lung Neoplasms"
+      ],
+      "keywords": [
+        "malignant pleural effusion,talc pleurodesis,quality of life"
+      ],
+      "title": "Management of Malignant Pleural Effusion - Indwelling Pleural Catheter or Talc Pleurodesis",
+      "status": "UNKNOWN",
+      "phase": [
+        "EARLY_PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Talc Pleurodesis",
+        "Indwelling Pleural Catheter",
+        "chest ultrasound",
+        "Local anesthesia",
+        "Chest Tube"
+      ]
+    },
+    "NCT02851927": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Mini Thoracoscopy vs Semirigid Thoracoscopy in Exudative Pleural Effusions",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Mini Thoracoscopy",
+        "SemiRigid Thoracoscopy"
+      ]
+    },
+    "NCT02975921": {
+      "conditions": [
+        "Pleural Effusion",
+        "Pleurodesis",
+        "Malignant Pleural Effusion",
+        "Pleural Effusion Due to Congestive Heart Failure",
+        "Pleural Effusion in Conditions Classified Elsewhere",
+        "Pleural Effusions, Chronic"
+      ],
+      "keywords": [
+        "Pleural Effusion",
+        "Thoracentesis",
+        "Pleural Cavity",
+        "Pleurodesis",
+        "Tunneled Pleural Catheter"
+      ],
+      "title": "Betadine Pleurodesis Via Tunneled Pleural Catheters",
+      "status": "WITHDRAWN",
+      "phase": [
+        "PHASE4"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Povidone-Iodine"
+      ]
+    },
+    "NCT03153501": {
+      "conditions": [
+        "Diagnosis of Pleural Diseases",
+        "Medical Thoracoscopy"
+      ],
+      "keywords": [],
+      "title": "Efficiency and Safety of Pleural Biopsy Methods in the Diagnosis of Pleural Diseases",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "CT-guided Abrams needle biopsy, US-guided cutting needle, medical thoracoscopy"
+      ]
+    },
+    "NCT03172052": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Evaluating Different Modalities for Pleural Adhesiolysis at Assuit University Hospital",
+      "status": "UNKNOWN",
+      "phase": [
+        "PHASE4"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "streptokinase",
+        "MESNA (2-mercaptoethane sulfonate Na)",
+        "Medical thoracoscopy",
+        "Video assisted thoracoscopy (VATS)"
+      ]
+    },
+    "NCT03189108": {
+      "conditions": [
+        "Ovarian Cancer",
+        "Primary Peritoneal Cancer",
+        "Fallopian Tube Cancer",
+        "Cancer"
+      ],
+      "keywords": [
+        "Malignant Effusion Composition",
+        "Paracentesis",
+        "Thoracentesis",
+        "Natural History"
+      ],
+      "title": "Collection of Malignant Ascites, Pleural Fluid, and Blood From People With Solid Tumors",
+      "status": "TERMINATED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT03270215": {
+      "conditions": [
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [
+        "Computed Tomography",
+        "Specificity",
+        "Sensitivity"
+      ],
+      "title": "The Added Value of CT Scanning in Patients With an Unilateral Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Computed tomography"
+      ]
+    },
+    "NCT03276715": {
+      "conditions": [
+        "Pleural Effusion, Malignant",
+        "Lung Cancer"
+      ],
+      "keywords": [
+        "malignant pleural effusion",
+        "lung cancer"
+      ],
+      "title": "Prognostic Factors on Malignant Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT03290183": {
+      "conditions": [
+        "Pleural Malignant Mesothelioma",
+        "Thymoma",
+        "Pleural Diseases"
+      ],
+      "keywords": [
+        "Confocal laser endomicroscopy"
+      ],
+      "title": "Confocal Laser Endomicroscopy in Pleural Malignancies",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Confocal laser endomicroscopy"
+      ]
+    },
+    "NCT03319186": {
+      "conditions": [
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [],
+      "title": "EDIT Management Feasibility Trial",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "EDIT Management",
+        "Chest drain and talc pleurodesis"
+      ]
+    },
+    "NCT03319472": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "malignant",
+        "cancer",
+        "simple bedside test",
+        "rapid",
+        "score",
+        "widely available",
+        "feasible"
+      ],
+      "title": "Using Pleural Effusions to Diagnose Cancer",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT03325192": {
+      "conditions": [
+        "Pleural Effusion, Malignant",
+        "Pleurodesis",
+        "Pleural Diseases"
+      ],
+      "keywords": [
+        "Indwelling Pleural Catheter",
+        "Pleurodesis",
+        "Iodopovidone",
+        "Pleural Effusion, Malignant"
+      ],
+      "title": "Rapid Pleurodesis Through an Indwelling Pleural Catheter",
+      "status": "TERMINATED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Rapid pleurodesis protocol",
+        "Placebo"
+      ]
+    },
+    "NCT03403855": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Rocket\u00ae Pleural Catheters: QOL, Feasibility and Satisfaction in Recurrent MPE Patients",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Rocket\u00ae IPC- Long External Length",
+        "Rocket\u00ae IPC- Short External Length"
+      ]
+    },
+    "NCT03414905": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Management of Malignant Pleural Effusions Using an Indwelling Tunneled Pleural Catheter and Non-Vacuum Collection System",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Aspira Catheter",
+        "Ultrasound"
+      ]
+    },
+    "NCT03482570": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "Activity behaviors",
+        "Malignant pleural effusion"
+      ],
+      "title": "Activity Behaviours in Patients With Malignant Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "ActiGraph"
+      ]
+    },
+    "NCT03507452": {
+      "conditions": [
+        "Advanced Recurrent Malignant Pleural Epithelioid Mesothelioma",
+        "Advanced Recurrent Malignant Peritoneal Epithelioid Mesothelioma",
+        "Advanced Recurrent Serous Ovarian Cancer",
+        "Advanced Pancreatic Ductal Adenocarcinoma (Optional, Dose Expansion, Not Initiated)"
+      ],
+      "keywords": [
+        "Malignant Mesothelioma",
+        "Malignant Pleural Epithelioid Mesothelioma",
+        "Malignant Peritoneal Epithelioid Mesothelioma"
+      ],
+      "title": "First-in-human Study of BAY2287411 Injection, a Thorium-227 Labeled Antibody-chelator Conjugate, in Patients With Tumors Known to Express Mesothelin",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "BAY2287411",
+        "BAY2287411"
+      ]
+    },
+    "NCT03591952": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "Thoracentesis"
+      ],
+      "title": "Gravity- Versus Suction-driven Large Volume Thoracentesis",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Suction-Driven Thoracentesis",
+        "Gravity-Driven Thoracentesis"
+      ]
+    },
+    "NCT03678090": {
+      "conditions": [
+        "Pleural Effusion",
+        "Cancer, Lung"
+      ],
+      "keywords": [],
+      "title": "The Safety and Efficacy of Fibrinolysis in Patients With an Indwelling Pleural Catheter for Multi-loculated Malignant Pleural Effusion.",
+      "status": "WITHDRAWN",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "tPA standard dosage",
+        "tPA low dosage"
+      ]
+    },
+    "NCT03736122": {
+      "conditions": [
+        "Malignant Pleural Effusion",
+        "Malignant Ascites"
+      ],
+      "keywords": [],
+      "title": "A Study of Syngenon (BSG-001) for Inhalation in Subjects With Malignant Pleural Effusion and/or Malignant Ascites",
+      "status": "UNKNOWN",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "BSG-001"
+      ]
+    },
+    "NCT03781908": {
+      "conditions": [
+        "Pleural Effusion, Malignant"
+      ],
+      "keywords": [],
+      "title": "Management of Malignant Pleural Effusion With Indwelling Pleural Catheter Versus Silver Nitrate Pleurodesis",
+      "status": "UNKNOWN",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Silver Nitrate",
+        "Indwelling Pleural Catheter"
+      ]
+    },
+    "NCT03831386": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Gravity Versus Vacuum Based Indwelling Tunneled Pleural Drainage System",
+      "status": "RECRUITING",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Vacuum-Based IPC",
+        "Gravity-Based IPC"
+      ]
+    },
+    "NCT03907852": {
+      "conditions": [
+        "Mesothelioma",
+        "Mesothelioma, Malignant",
+        "Mesothelioma; Pleura",
+        "Mesotheliomas Pleural",
+        "Mesothelioma Peritoneum",
+        "Cholangiocarcinoma",
+        "Cholangiocarcinoma Recurrent",
+        "Ovarian Cancer",
+        "Non Small Cell Lung Cancer",
+        "Non Small Cell Lung Cancer Metastatic",
+        "High Grade Ovarian Serous Adenocarcinoma"
+      ],
+      "keywords": [],
+      "title": "Phase 1/2 Trial of Gavo-cel (TC-210) in Patients With Advanced Mesothelin-Expressing Cancer",
+      "status": "ACTIVE_NOT_RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "gavo-cel",
+        "fludarabine",
+        "cyclophosphamide",
+        "Nivolumab",
+        "Ipilimumab"
+      ]
+    },
+    "NCT03922841": {
+      "conditions": [
+        "Pleural Diseases"
+      ],
+      "keywords": [],
+      "title": "Pleural Disease: Phenotypes, Diagnostic Yield and Outcomes",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Pleural disease management"
+      ]
+    },
+    "NCT03973957": {
+      "conditions": [
+        "Pleural Effusion",
+        "Pleural Diseases",
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "Pleural effusion",
+        "Pleural diseases",
+        "Pleurodesis",
+        "Malignant pleural effusion"
+      ],
+      "title": "Talc Outpatient Pleurodesis With Indwelling Catheter",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Indwelling pleural catheter placement",
+        "Fentanyl Citrate",
+        "Talc Slurry",
+        "Drainage collection bag"
+      ]
+    },
+    "NCT03997669": {
+      "conditions": [
+        "Pleural Diseases"
+      ],
+      "keywords": [],
+      "title": "The Diagnosis and Mechanism of Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Collection of pleural effusion"
+      ]
+    },
+    "NCT04039126": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [
+        "MALIGNANT PLEURAL EFFUSSION"
+      ],
+      "title": "Comparison of the Effectiveness of Povidone-Iodine Alone to Povidone-Iodine-Tetracycline Combination",
+      "status": "UNKNOWN",
+      "phase": [
+        "PHASE1"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "CHEMICAL PLEURODESIS WITH POVIDONE-IODINE-TETRACYCLINE COMBINATION",
+        "CHEMICAL PLEURODESIS WITH POVIDONE-IODINE ALONE"
+      ]
+    },
+    "NCT04074902": {
+      "conditions": [
+        "Pleurodesis"
+      ],
+      "keywords": [],
+      "title": "Role of Chest Sonography in Evaluation of Pleurodesis in Patients With Malignant Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Ultrasonography"
+      ]
+    },
+    "NCT04115111": {
+      "conditions": [
+        "Pleura Mesothelioma"
+      ],
+      "keywords": [
+        "malignant pleural mesothelioma"
+      ],
+      "title": "Diadem to Investigate the Activity and Safety of Durvalumab",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE2"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Durvalumab"
+      ]
+    },
+    "NCT04264325": {
+      "conditions": [
+        "Malignant Pleural Effusion",
+        "Lung Neoplasms"
+      ],
+      "keywords": [
+        "Dyspnea",
+        "Malignant pleural effusion",
+        "Lung Neoplasms",
+        "Therapeutic thoracocentesis",
+        "Lung ultrasound",
+        "Diaphragmatic ultrasound",
+        "Diaphragmatic dysfunction"
+      ],
+      "title": "Quantitative Diaphragmatic Ultrasound Evaluation in Pleural Effusions : A Feasability Study",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "diaphragmatic ultrasound measure"
+      ]
+    },
+    "NCT04322136": {
+      "conditions": [
+        "Malignant Pleural Effusion",
+        "Respiratory Disease",
+        "Cancer"
+      ],
+      "keywords": [],
+      "title": "AMPLE-3: IPC Plus Talc vs VATS in Management of Malignant Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Pleurodesis via Video-assisted thoracoscopic surgery",
+        "Indwelling pleural catheter (with talc pleurodesis if suitable)"
+      ]
+    },
+    "NCT04413292": {
+      "conditions": [
+        "Bronchial Neoplasm Benign"
+      ],
+      "keywords": [
+        "Survivin; Fibulin-3; Lung cancer; MPM"
+      ],
+      "title": "Survivin and Fibulin-3 in Benign and Malignant Respiratory Diseases",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "ELISA assays and Westren blot analysis of survivin and fibulin-3 expression"
+      ]
+    },
+    "NCT04418804": {
+      "conditions": [
+        "Pneumothorax",
+        "Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Diagnosis and Classification of Pleural Diseases Using Ultrasound Channel Data",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Chest ultrasound"
+      ]
+    },
+    "NCT04420663": {
+      "conditions": [
+        "Thoracocentesis of Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Pleural Manometry in Thoracocentesis",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Pleural Manometry"
+      ]
+    },
+    "NCT04533854": {
+      "conditions": [
+        "Pleural Effusion",
+        "Ascites"
+      ],
+      "keywords": [],
+      "title": "Investigating Signal Change in Malignant and Non-malignant Pleural Effusions and asCitic Fluid Using fTiR Analysis",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT04670562": {
+      "conditions": [
+        "Pleural Effusion, Malignant",
+        "Prognosis"
+      ],
+      "keywords": [],
+      "title": "Longitudinal Follow up of Patients With Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT04683419": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [
+        "Thoracoscopy",
+        "Cryobiopsy"
+      ],
+      "title": "Modified Thoracoscopic Pleural Cryobiopsy in Diagnosis of Exudative Pleural Effusion",
+      "status": "UNKNOWN",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Modified Thoracoscopic pleural Cryobiopsy"
+      ]
+    },
+    "NCT04731129": {
+      "conditions": [
+        "Pleural Diseases",
+        "Pleural Neoplasms"
+      ],
+      "keywords": [
+        "Probe based confocal laser endomicroscopy"
+      ],
+      "title": "Mini Invasive Endomicroscopy of the Pleura for Malignancies Diagnosis",
+      "status": "COMPLETED",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": [
+        "Probe based confocal laser endomicroscopy of the pleura"
+      ]
+    },
+    "NCT04761003": {
+      "conditions": [
+        "Pleura; Exudate"
+      ],
+      "keywords": [],
+      "title": "Efficacy And Safety Of Thoracoscopic Cryobiopsy In Patients With Undiagnosed Exudative Pleural Effusion",
+      "status": "COMPLETED",
+      "phase": [
+        "NA"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Thoracoscopy forceps"
+      ]
+    },
+    "NCT04781894": {
+      "conditions": [
+        "Elasticity Imaging Techniques"
+      ],
+      "keywords": [
+        "Shear wave ultrasound elastography"
+      ],
+      "title": "Application of Transthoracic Shear-wave Ultrasound Elastography in Pleural Lesions",
+      "status": "RECRUITING",
+      "phase": [],
+      "study_type": "OBSERVATIONAL",
+      "interventions": []
+    },
+    "NCT04792970": {
+      "conditions": [
+        "Malignant Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Randomized Controlled Trial of Talc Instillation In Addition To Daily Drainage Through a Tunneled Pleural Catheter to Improve Rates of Outpatient Pleurodesis in Patients With Malignant Pleural Effusion",
+      "status": "TERMINATED",
+      "phase": [
+        "PHASE4"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Talc"
+      ]
+    },
+    "NCT04806373": {
+      "conditions": [
+        "Pleural Effusion"
+      ],
+      "keywords": [],
+      "title": "Intrapleural Fibrinolytic Therapy to Enhance Chemical Pleurodesis Enhance Chemical Pleurodesis",
+      "status": "COMPLETED",
+      "phase": [
+        "PHASE4"
+      ],
+      "study_type": "INTERVENTIONAL",
+      "interventions": [
+        "Cathflo Activase",
+        "Talc Slurry Pleurodesis"
+      ]
+    }
+  },
+  "errors": []
+}

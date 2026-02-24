@@ -42,47 +42,43 @@ relevant trials on ClinicalTrials.gov for a given patient. \
 Maximize recall — missing an eligible trial is worse than including \
 an irrelevant one.
 
-You have {max_tool_calls} tool calls. Use them wisely.
+You have {max_tool_calls} tool calls. You MUST use at least 15 search_trials \
+calls with DIFFERENT condition terms before stopping. Do NOT stop early.
 
-## Tools
+## Strategy
 
-### search_trials
-Search ClinicalTrials.gov. Key parameters:
-- **condition**: Disease or condition (e.g., "mesothelioma", "pleural effusion"). \
-  This is the primary search lever. CT.gov indexes trials under many different \
-  vocabulary terms — a trial for "pleural effusion" will NOT appear in a \
-  "mesothelioma" search. Use diverse condition terms across multiple calls.
-- **intervention**: Drug or therapy name (e.g., "pembrolizumab", "cisplatin").
-- **eligibility_keywords**: Free-text searched inside eligibility criteria \
-  (e.g., "EGFR L858R", "treatment naive", "prior platinum"). Best for \
-  biomarkers and clinical phenotype terms that appear in inclusion/exclusion text.
-- **status**: Recruitment status filter. Default: ["RECRUITING"]. \
-  Set to ["RECRUITING", "NOT_YET_RECRUITING", "COMPLETED", "ACTIVE_NOT_RECRUITING"] \
-  for historical or comprehensive searches.
-- **phase**, **location**, **study_type**: Optional narrowing filters.
-- **page_size**: Results per call (default 50, max 100).
-- **age/sex filters**: Available but NOT recommended — many trials lack \
-  structured age data and the filter silently excludes them, hurting recall.
+1. Start by calling consult_medical_expert to get a comprehensive list of \
+   condition terms and synonyms for the patient's diagnosis.
+2. Execute search_trials once per condition term. Each call MUST use a \
+   DIFFERENT condition term — never repeat the same term.
+3. After exhausting condition-based searches, try intervention-based and \
+   eligibility_keywords-based searches.
+4. Use get_trial_details sparingly (max 3-5) for the most promising trials.
 
-One condition term per call. Diverse terms across calls > repeated similar terms.
+## search_trials Tips
 
-### get_trial_details
-Fetch full eligibility criteria for a specific trial by NCT ID. \
-Use when you need the inclusion/exclusion text to assess patient fit. \
-Each call costs one tool use — prefer more searches over more detail fetches.
+- **condition** is the primary search lever. CT.gov indexes trials under many \
+  different vocabulary terms. A "pleural effusion" trial will NOT appear in a \
+  "mesothelioma" search. You MUST search diverse terms including:
+  - The exact diagnosis
+  - Broader parent categories (e.g., "thoracic neoplasm", "solid tumor")
+  - Related clinical presentations (e.g., "pleural effusion", "chest tumor")
+  - Histological subtypes
+  - Synonyms and abbreviations
+- **DO NOT use location filters** unless the patient specifies a location preference.
+- **page_size**: Use 100 to maximize results per call.
+- **status**: Use the default unless instructed otherwise.
 
-### consult_medical_expert
-Ask MedGemma, a specialized medical AI, a clinical question. Use when you \
-need domain expertise you're uncertain about — e.g., what related conditions \
-share treatment approaches, what molecular features are clinically relevant, \
-or what terminology CT.gov uses for a specific disease. \
-Each call takes ~10 seconds. Typical usage: 1-3 calls per patient.\
+## consult_medical_expert
+
+Call this FIRST to get expert advice on what condition terms, synonyms, \
+and related conditions to search. Typical: 1-2 calls per patient.\
 """
 
 PRESCREEN_USER_TEMPLATE = """\
 ## Patient Demographics
 - Age: {age}
-- Sex: {sex} (API value: {sex_api})
+- Sex: {sex}
 
 ## Patient Profile
 
@@ -92,7 +88,8 @@ PRESCREEN_USER_TEMPLATE = """\
 
 {key_facts_text}
 
-Find ALL potentially relevant clinical trials for this patient.\
+Find ALL potentially relevant clinical trials for this patient. \
+Use at least 15 different condition terms in your search_trials calls.\
 """
 
 
@@ -143,7 +140,6 @@ async def run_prescreen_agent(
             key_facts_text=_format_key_facts(key_facts),
             age=age,
             sex=sex_raw,
-            sex_api=sex_api,
         )
         _emit_trace(
             trace_callback,

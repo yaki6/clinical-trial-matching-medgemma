@@ -34,10 +34,10 @@ def render_ingest_step(key_facts: dict, dev_mode: bool = False) -> None:
         dev_mode: If True, show technical labels. If False, show patient-friendly labels.
     """
     if dev_mode:
-        title = "Step 1: INGEST -- Key Facts"
+        title = "Step 1: INGEST — MedGemma 1.5 4B Key Fact Extraction"
         caption = "Key clinical facts extracted from patient record"
     else:
-        title = "Your Clinical Profile"
+        title = "Your Clinical Profile (AI-extracted)"
         caption = "Here's what we extracted from your medical record:"
 
     with st.expander(title, expanded=True):
@@ -63,9 +63,17 @@ def render_ingest_step(key_facts: dict, dev_mode: bool = False) -> None:
                 if isinstance(value, list):
                     st.markdown(", ".join(str(v) for v in value))
                 elif isinstance(value, dict):
-                    # Flatten dict values for display (e.g. demographics: {age: 43, sex: female})
-                    parts = [f"{k}: {v}" for k, v in value.items()]
-                    st.markdown("; ".join(parts))
+                    if "findings" in value and isinstance(value["findings"], list):
+                        # Render imaging findings as bulleted list
+                        desc = value.get("description", "")
+                        if desc:
+                            st.markdown(desc)
+                        for f in value["findings"]:
+                            st.markdown(f"- {f}")
+                    else:
+                        # Flatten dict values for display (e.g. demographics: {age: 43, sex: female})
+                        parts = [f"{k}: {v}" for k, v in value.items()]
+                        st.markdown("; ".join(parts))
                 else:
                     st.markdown(str(value))
 
@@ -105,7 +113,7 @@ def render_validate_placeholder(dev_mode: bool = False) -> None:
 
 
 def render_image_findings(
-    image_findings: dict, model_name: str = "MedGemma 4B", dev_mode: bool = False
+    image_findings: dict, model_name: str = "MedGemma 1.5 4B", dev_mode: bool = False
 ) -> None:
     """Render MedGemma image extraction findings.
 

@@ -42,6 +42,11 @@ def render_results_summary(
         st.markdown(
             f"We found **{total_trials}** clinical {trial_word} for your condition."
         )
+        st.markdown(
+            "This is a screening overview, not a diagnosis. "
+            "**ELIGIBLE** means your current record appears to fit. "
+            "**UNCERTAIN** means more records or tests may be needed to confirm fit."
+        )
 
         st.markdown("")  # visual spacing
 
@@ -64,11 +69,14 @@ def render_results_summary(
 
         # -- Contextual encouragement message --
         if eligible_count > 0:
-            st.info("Scroll down for details on each trial.")
+            st.info(
+                "You have possible matches. Review the doctor discussion report below and "
+                "bring it to your appointment for confirmation."
+            )
         elif uncertain_count > 0:
             st.warning(
-                "Some trials need additional information. "
-                "Discuss with your healthcare provider."
+                "Some trials may still be possible but need additional records or tests. "
+                "Use the checklist below to prepare for your healthcare visit."
             )
         else:
             # All excluded (or zero trials, which is also handled gracefully)

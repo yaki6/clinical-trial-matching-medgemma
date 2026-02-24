@@ -72,7 +72,7 @@ def render_patient_card(profile: dict, dev_mode: bool = False) -> None:
         st.subheader(f"Patient: {topic_id}")
 
         with st.expander("Clinical Note", expanded=False):
-            st.text(profile.get("profile_text", "No profile text available"))
+            st.markdown(profile.get("profile_text", "No profile text available"))
 
         ambiguities = profile.get("ambiguities", [])
         if ambiguities:
@@ -84,7 +84,7 @@ def render_patient_card(profile: dict, dev_mode: bool = False) -> None:
         st.subheader(f"Patient: {topic_id}{friendly_suffix}")
 
         with st.expander("View Full Medical Record", expanded=False):
-            st.text(profile.get("profile_text", "No profile text available"))
+            st.markdown(profile.get("profile_text", "No profile text available"))
 
         ambiguities = profile.get("ambiguities", [])
         if ambiguities:
@@ -118,7 +118,7 @@ def render_medical_image(
         if plane:
             parts.append(plane)
         label = " -- ".join(parts)
-        with st.expander(f"Medical Image: {label}", expanded=False):
+        with st.expander(f"Medical Image: {label}", expanded=True):
             st.image(str(image_path), use_container_width=True)
             if image_meta.get("caption"):
                 st.caption(image_meta["caption"])

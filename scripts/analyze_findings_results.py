@@ -26,7 +26,7 @@ for region in regions:
     print(f"  {region:<30}  MG: {mg_good}/{mg_valid} good  GM: {gm_good}/{gm_valid} good  |  ROUGE-R: MG={mg_r:.3f} GM={gm_r:.3f}")
 
 # MedGemma strengths
-print("\n--- MedGemma 4B Findings Where Judge Said 'good' ---")
+print("\n--- MedGemma 1.5 4B Findings Where Judge Said 'good' ---")
 for d in data:
     if d["medgemma"]["findings_judge_score"] == "good":
         print(f"  {d['uid']} ({d.get('location_category','')}) - {d['title'][:50]}")

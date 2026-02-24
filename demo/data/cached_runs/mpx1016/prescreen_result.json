@@ -3,62 +3,92 @@
   "ingest_source": "gold",
   "candidates": [
     {
-      "nct_id": "NCT03556228",
-      "title": "VMD-928 Monotherapy and in Combination With Pembrolizumab to Treat TrkA Overexpression Driven Solid Tumors or Lymphoma",
-      "brief_title": "VMD-928 Monotherapy and in Combination With Pembrolizumab to Treat TrkA Overexpression Driven Solid Tumors or Lymphoma",
+      "nct_id": "NCT04322890",
+      "title": "Treatment Strategies and Survival Outcome for Non-small Cell Lung Cancer With Oncogenic Mutation",
+      "brief_title": "Treatment Strategies and Survival Outcome for Non-small Cell Lung Cancer With Oncogenic Mutation",
       "status": "RECRUITING",
       "phase": [
-        "PHASE1",
         "PHASE2"
       ],
       "conditions": [
-        "Head and Neck Carcinoma",
-        "Adenoid Cystic Carcinoma",
-        "Lung Cancer"
+        "Non Small Cell Lung Cancer",
+        "EGFR Gene Mutation",
+        "ALK Gene Mutation"
       ],
       "interventions": [
-        "VMD-928 100 mg Tablet",
-        "VMD-928 Tablet and Pembrolizumab (200 mg)"
+        "Osimertinib",
+        "Alectinib 150 MG",
+        "Crizotinib 250 MG",
+        "Savolitinib, Crizotinib."
       ],
-      "sponsor": "VM Oncology, LLC",
-      "enrollment": 242,
+      "sponsor": "Hunan Province Tumor Hospital",
+      "enrollment": 6000,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Lung Adenocarcinoma'",
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'",
+        "cond='Non-small cell lung cancer', kw='RET fusion'",
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
       ]
     },
     {
-      "nct_id": "NCT06814496",
-      "title": "Radiation Combined With BIspecific T-Cell Engager in DLL3 Expressing Tumors",
-      "brief_title": "Radiation Combined With BIspecific T-Cell Engager in DLL3 Expressing Tumors",
+      "nct_id": "NCT06074588",
+      "title": "Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)",
+      "brief_title": "Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)",
       "status": "RECRUITING",
       "phase": [
-        "PHASE1",
-        "PHASE2"
+        "PHASE3"
       ],
       "conditions": [
-        "Melanoma",
-        "Medullary Thyroid Cancer",
-        "Sinonasal Undifferentiated Carcinoma"
+        "Non-small Cell Lung Cancer (NSCLC)"
       ],
       "interventions": [
-        "Tarlatamab",
-        "Concurrent Radiation Therapy",
-        "Sequential Radiation therapy"
+        "Sacituzumab tirumotecan",
+        "Docetaxel",
+        "Pemetrexed"
       ],
-      "sponsor": "University of Arizona",
-      "enrollment": 30,
+      "sponsor": "Merck Sharp & Dohme LLC",
+      "enrollment": 556,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Lung Adenocarcinoma'",
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'",
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'",
+        "cond='Non-small cell lung cancer', kw='RET fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT06563999",
+      "title": "Neoadjuvant Umbrella Trial for Patients With Unresectable Stage III NSCLC Harboring Rare Mutations.",
+      "brief_title": "Neoadjuvant Umbrella Trial for Patients With Unresectable Stage III NSCLC Harboring Rare Mutations.",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Cancer Stage III",
+        "Mutation"
+      ],
+      "interventions": [
+        "Sunvozertinib",
+        "Crizotinib",
+        "Pralsetinib",
+        "Larotrectinib"
+      ],
+      "sponsor": "Sun Yat-sen University",
+      "enrollment": 120,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'",
+        "cond='Non-small cell lung cancer', kw='RET fusion'",
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
       ]
     },
     {
@@ -84,89 +114,219 @@
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer', kw='ALK treatment naive'"
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'",
+        "cond='Non-small cell lung cancer', intr='Repotrectinib'"
       ]
     },
     {
-      "nct_id": "NCT05498428",
-      "title": "A Study of Amivantamab in Participants With Advanced or Metastatic Solid Tumors Including Epidermal Growth Factor Receptor (EGFR)-Mutated Non-Small Cell Lung Cancer",
-      "brief_title": "A Study of Amivantamab in Participants With Advanced or Metastatic Solid Tumors Including Epidermal Growth Factor Receptor (EGFR)-Mutated Non-Small Cell Lung Cancer",
+      "nct_id": "NCT01639508",
+      "title": "Cabozantinib in Patients With RET Fusion-Positive Advanced Non-Small Cell Lung Cancer and Those With Other Genotypes: ROS1 or NTRK Fusions or Increased MET or AXL Activity",
+      "brief_title": "Cabozantinib in Patients With RET Fusion-Positive Advanced Non-Small Cell Lung Cancer and Those With Other Genotypes: ROS1 or NTRK Fusions or Increased MET or AXL Activity",
       "status": "RECRUITING",
       "phase": [
         "PHASE2"
       ],
       "conditions": [
-        "Carcinoma, Non-small-Cell Lung"
+        "Non-Small Cell Lung Cancer"
       ],
       "interventions": [
-        "Amivantamab",
-        "Lazertinib",
+        "Cabozantinib"
+      ],
+      "sponsor": "Memorial Sloan Kettering Cancer Center",
+      "enrollment": 86,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'",
+        "cond='Non-small cell lung cancer', kw='RET fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT07330596",
+      "title": "QL1706 Combined With Chemotherapy in the Treatment of Immune-mediated NSCLC",
+      "brief_title": "QL1706 Combined With Chemotherapy in the Treatment of Immune-mediated NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "NSCLC (Advanced Non-small Cell Lung Cancer)"
+      ],
+      "interventions": [
+        "QL1706 combined with Chemotherapy",
+        "Chemotherapy"
+      ],
+      "sponsor": "Anhui Provincial Cancer Hospital",
+      "enrollment": 96,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'",
+        "cond='Non-small cell lung cancer', kw='RET fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT05456256",
+      "title": "A Study of LP-300 With Carboplatin and Pemetrexed in Never Smokers With Advanced Lung Adenocarcinoma",
+      "brief_title": "A Study of LP-300 With Carboplatin and Pemetrexed in Never Smokers With Advanced Lung Adenocarcinoma",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Adenocarcinoma of Lung",
+        "Carcinoma, Non-Small-Cell Lung"
+      ],
+      "interventions": [
+        "LP-300",
+        "Pemetrexed",
+        "Carboplatin"
+      ],
+      "sponsor": "Lantern Pharma Inc.",
+      "enrollment": 90,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Lung Adenocarcinoma', kw='never smoker'"
+      ]
+    },
+    {
+      "nct_id": "NCT05627960",
+      "title": "First in Human Phase 1 Study of AG01 Anti-Progranulin/GP88 Antibody in Advanced Solid Tumor Malignancies",
+      "brief_title": "First in Human Phase 1 Study of AG01 Anti-Progranulin/GP88 Antibody in Advanced Solid Tumor Malignancies",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Triple Negative Breast Cancer",
+        "Hormone-Resistant Breast Cancer",
+        "Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "AG-01 Compound"
+      ],
+      "sponsor": "A&G Pharmaceutical Inc.",
+      "enrollment": 77,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'",
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06031558",
+      "title": "Phase III Study of SY-5007, a RET Inhibitor, in Patients With Locally Advanced or Metastatic RET Fusion-positive NSCLC",
+      "brief_title": "Phase III Study of SY-5007, a RET Inhibitor, in Patients With Locally Advanced or Metastatic RET Fusion-positive NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "SY-5007"
+      ],
+      "sponsor": "Shouyao Holdings (Beijing) Co. LTD",
+      "enrollment": 120,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='RET fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT06333951",
+      "title": "AMG 193 Alone or in Combination With Other Therapies in Subjects With Advanced Thoracic Tumors With Homozygous MTAP-deletion (Master Protocol) (MTAPESTRY 104).",
+      "brief_title": "AMG 193 Alone or in Combination With Other Therapies in Subjects With Advanced Thoracic Tumors With Homozygous MTAP-deletion (Master Protocol) (MTAPESTRY 104).",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Thoracic Tumors",
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "AMG 193",
         "Carboplatin",
-        "Pemetrexed"
+        "Paclitaxel",
+        "Pembrolizumab"
       ],
-      "sponsor": "Janssen Research & Development, LLC",
-      "enrollment": 520,
+      "sponsor": "Amgen",
+      "enrollment": 500,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer', kw='EGFR treatment naive'"
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'",
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
       ]
     },
     {
-      "nct_id": "NCT05783622",
-      "title": "Study of JANX008 in Subjects With Advanced or Metastatic Solid Tumor Malignancies",
-      "brief_title": "Study of JANX008 in Subjects With Advanced or Metastatic Solid Tumor Malignancies",
+      "nct_id": "NCT06452277",
+      "title": "A Study to Learn More About How Well Sevabertinib (BAY 2927088) Works and How Safe it is Compared With Standard Treatment, in Participants Who Have Advanced Non-small Cell Lung Cancer (NSCLC) With Mutations of the Human Epidermal Growth Factor Receptor 2 (HER2)",
+      "brief_title": "A Study to Learn More About How Well Sevabertinib (BAY 2927088) Works and How Safe it is Compared With Standard Treatment, in Participants Who Have Advanced Non-small Cell Lung Cancer (NSCLC) With Mutations of the Human Epidermal Growth Factor Receptor 2 (HER2)",
       "status": "RECRUITING",
       "phase": [
-        "PHASE1"
+        "PHASE3"
       ],
       "conditions": [
-        "Non-Small Cell Lung Cancer",
-        "Renal Cell Carcinoma",
-        "Squamous Cell Carcinoma of the Head and Neck"
+        "Advanced Non-small Cell Lung Cancer",
+        "HER2 Mutation"
       ],
       "interventions": [
-        "JANX008"
+        "BAY2927088",
+        "Pembrolizumab",
+        "Cisplatin",
+        "Carboplatin"
       ],
-      "sponsor": "Janux Therapeutics",
-      "enrollment": 130,
+      "sponsor": "Bayer",
+      "enrollment": 278,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Lung Adenocarcinoma'",
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
       ]
     },
     {
-      "nct_id": "NCT06562192",
-      "title": "Phase I Study of [177Lu]Lu-NNS309 in Patients With Pancreatic, Lung, Breast and Colorectal Cancers",
-      "brief_title": "Phase I Study of [177Lu]Lu-NNS309 in Patients With Pancreatic, Lung, Breast and Colorectal Cancers",
+      "nct_id": "NCT06564324",
+      "title": "A Phase III Study Comparing Taletrectinib With Standard Therapy in ROS1 Positive Locally Advanced or Metastatic Non-small Cell Lung Cancer Patients",
+      "brief_title": "A Phase III Study Comparing Taletrectinib With Standard Therapy in ROS1 Positive Locally Advanced or Metastatic Non-small Cell Lung Cancer Patients",
       "status": "RECRUITING",
       "phase": [
-        "PHASE1"
+        "PHASE3"
       ],
       "conditions": [
-        "Pancreatic Ductal Adenocarcinoma",
-        "Non-small Cell Lung Cancer",
-        "HR+/HER2- Ductal and Lobular Breast Cancer"
+        "Non Small Cell Lung Cancer"
       ],
       "interventions": [
-        "[68Ga]Ga-NNS309",
-        "[177Lu]Lu-NNS309"
+        "Taletrectinib",
+        "Crizotinib"
       ],
-      "sponsor": "Novartis Pharmaceuticals",
-      "enrollment": 162,
+      "sponsor": "Nuvation Bio Inc.",
+      "enrollment": 138,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Lung Adenocarcinoma'",
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'"
       ]
     },
     {
@@ -192,57 +352,376 @@
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer', kw='ALK treatment naive'"
+        "cond='Non-small cell lung cancer', kw='treatment naive'"
       ]
     },
     {
-      "nct_id": "NCT01639508",
-      "title": "Cabozantinib in Patients With RET Fusion-Positive Advanced Non-Small Cell Lung Cancer and Those With Other Genotypes: ROS1 or NTRK Fusions or Increased MET or AXL Activity",
-      "brief_title": "Cabozantinib in Patients With RET Fusion-Positive Advanced Non-Small Cell Lung Cancer and Those With Other Genotypes: ROS1 or NTRK Fusions or Increased MET or AXL Activity",
+      "nct_id": "NCT07361562",
+      "title": "A Study of a Selective ERBB2 Inhibitor (CGT4255), in Patients With Advanced Solid Tumors",
+      "brief_title": "A Study of a Selective ERBB2 Inhibitor (CGT4255), in Patients With Advanced Solid Tumors",
       "status": "RECRUITING",
       "phase": [
-        "PHASE2"
+        "PHASE1"
       ],
       "conditions": [
-        "Non-Small Cell Lung Cancer"
+        "Advanced Solid Tumor, Adult",
+        "ERBB2 Altered Breast Cancer",
+        "ERBB2 Gene Amplification"
       ],
       "interventions": [
-        "Cabozantinib"
+        "CGT4255"
       ],
-      "sponsor": "Memorial Sloan Kettering Cancer Center",
-      "enrollment": 86,
+      "sponsor": "Cogent Biosciences, Inc.",
+      "enrollment": 100,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'",
+        "cond='Non-small cell lung cancer', kw='NRG1 fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT04165798",
+      "title": "KEYMAKER-U01 Umbrella Master Study: Studies of Investigational Agents With Either Pembrolizumab (MK-3475) Alone or With Pembrolizumab PLUS Chemotherapy in Participants With Non-small Cell Lung Cancer (NSCLC) (MK-3475-U01/KEYMAKER-U01)",
+      "brief_title": "KEYMAKER-U01 Umbrella Master Study: Studies of Investigational Agents With Either Pembrolizumab (MK-3475) Alone or With Pembrolizumab PLUS Chemotherapy in Participants With Non-small Cell Lung Cancer (NSCLC) (MK-3475-U01/KEYMAKER-U01)",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Carcinoma, Non-Small-Cell Lung"
+      ],
+      "interventions": [
+        "Tumor Imaging",
+        "Tumor Tissue Collection",
+        "Blood Sample Collection"
+      ],
+      "sponsor": "Merck Sharp & Dohme LLC",
+      "enrollment": 1065,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'",
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT04777175",
+      "title": "A Retrospective Study: Evaluation of the Efficacy of Immunotherapy With Rare Mutations in Non-small Cell Lung Cancer",
+      "brief_title": "A Retrospective Study: Evaluation of the Efficacy of Immunotherapy With Rare Mutations in Non-small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "immunity therapy"
+      ],
+      "sponsor": "Yongchang Zhang",
+      "enrollment": 186,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='RET fusion'",
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT04900935",
+      "title": "Patient-centered, Optimal Integration of Survivorship and Palliative Care",
+      "brief_title": "Patient-centered, Optimal Integration of Survivorship and Palliative Care",
+      "status": "RECRUITING",
+      "phase": [
+        "NA"
+      ],
+      "conditions": [
+        "Stage IV Non-small Cell Lung Cancer",
+        "Targeted Therapy",
+        "Nonsmall Cell Lung Cancer"
+      ],
+      "interventions": [
+        "POISE"
+      ],
+      "sponsor": "Massachusetts General Hospital",
+      "enrollment": 70,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'",
         "cond='Non-small cell lung cancer', kw='RET fusion'"
       ]
     },
     {
-      "nct_id": "NCT03175224",
-      "title": "APL-101 Study of Subjects With NSCLC With c-Met EXON 14 Skip Mutations and c-Met Dysregulation Advanced Solid Tumors",
-      "brief_title": "APL-101 Study of Subjects With NSCLC With c-Met EXON 14 Skip Mutations and c-Met Dysregulation Advanced Solid Tumors",
+      "nct_id": "NCT06196424",
+      "title": "A Study to Investigate the Family History of Cancer in Patients With Non-small Cell Lung Cancer (FAHIC - Lung).",
+      "brief_title": "A Study to Investigate the Family History of Cancer in Patients With Non-small Cell Lung Cancer (FAHIC - Lung).",
       "status": "RECRUITING",
-      "phase": [
-        "PHASE2"
-      ],
+      "phase": [],
       "conditions": [
-        "Solid Tumors",
-        "Advanced Cancer",
-        "Renal Cancer"
+        "Non Small Cell Lung Cancer"
       ],
       "interventions": [
-        "APL-101 Oral Capsules"
+        "study questionnaire to investigate family history"
       ],
-      "sponsor": "Apollomics Inc.",
-      "enrollment": 497,
+      "sponsor": "Fondazione Policlinico Universitario Campus Bio-Medico",
+      "enrollment": 180,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer', kw='EGFR treatment naive'"
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'",
+        "cond='Non-small cell lung cancer', kw='RET fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT03412877",
+      "title": "Administration of Autologous T-Cells Genetically Engineered to Express T-Cell Receptors Reactive Against Neoantigens in People With Metastatic Cancer",
+      "brief_title": "Administration of Autologous T-Cells Genetically Engineered to Express T-Cell Receptors Reactive Against Neoantigens in People With Metastatic Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Endocrine Tumors",
+        "Non-Small Cell Lung Cancer",
+        "Ovarian Cancer"
+      ],
+      "interventions": [
+        "Cyclophosphamide",
+        "Fludarabine",
+        "Aldesleukin",
+        "Individual Patient TCR-Transduced PBL"
+      ],
+      "sponsor": "National Cancer Institute (NCI)",
+      "enrollment": 285,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT03476681",
+      "title": "Study of NEO-201 in Solid Tumors Expansion Cohorts",
+      "brief_title": "Study of NEO-201 in Solid Tumors Expansion Cohorts",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non Small Cell Lung Cancer",
+        "Head and Neck Squamous Cell Carcinoma",
+        "Cervical Cancer"
+      ],
+      "interventions": [
+        "NEO-201 in combination with pembrolizumab"
+      ],
+      "sponsor": "Precision Biologics, Inc",
+      "enrollment": 121,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT03645928",
+      "title": "Study of Autologous Tumor Infiltrating Lymphocytes in Patients With Solid Tumors",
+      "brief_title": "Study of Autologous Tumor Infiltrating Lymphocytes in Patients With Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Metastatic Melanoma",
+        "Squamous Cell Carcinoma of the Head and Neck",
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Lifileucel",
+        "LN-145",
+        "Pembrolizumab",
+        "LN-145-S1"
+      ],
+      "sponsor": "Iovance Biotherapeutics, Inc.",
+      "enrollment": 245,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT03851445",
+      "title": "Lung-MAP: A Master Screening Protocol for Previously-Treated Non-Small Cell Lung Cancer",
+      "brief_title": "Lung-MAP: A Master Screening Protocol for Previously-Treated Non-Small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2",
+        "PHASE3"
+      ],
+      "conditions": [
+        "Previously Treated Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Screening Platform"
+      ],
+      "sponsor": "SWOG Cancer Research Network",
+      "enrollment": 10000,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT04084717",
+      "title": "Study of Crizotinib for ROS1 and MET Activated Lung Cancer",
+      "brief_title": "Study of Crizotinib for ROS1 and MET Activated Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-squamous Non-small-cell Lung Cancer",
+        "Stage IV Non-small Cell Lung Cancer",
+        "ROS1 Gene Rearrangement"
+      ],
+      "interventions": [
+        "Crizotinib"
+      ],
+      "sponsor": "University Health Network, Toronto",
+      "enrollment": 50,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT04144569",
+      "title": "PD-1 Combined With Pyrotinib for Chemotherapy Failure HER2 Insertion Mutation Advanced NSCLC",
+      "brief_title": "PD-1 Combined With Pyrotinib for Chemotherapy Failure HER2 Insertion Mutation Advanced NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "HER2 Insertion Mutation Positive Advanced NSCLC"
+      ],
+      "interventions": [
+        "PD-1 Combined With Pyrotinib"
+      ],
+      "sponsor": "Yongchang Zhang",
+      "enrollment": 30,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT04165070",
+      "title": "KEYMAKER-U01 Substudy 01A: Efficacy and Safety Study of Pembrolizumab (MK-3475) With or Without Chemotherapy When Used With Investigational Agents in Treatment-naïve Participants With Stage IV Non-small Cell Lung Cancer (NSCLC) (MK-3475-01A/KEYMAKER-U01A)",
+      "brief_title": "KEYMAKER-U01 Substudy 01A: Efficacy and Safety Study of Pembrolizumab (MK-3475) With or Without Chemotherapy When Used With Investigational Agents in Treatment-naïve Participants With Stage IV Non-small Cell Lung Cancer (NSCLC) (MK-3475-01A/KEYMAKER-U01A)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Carcinoma, Non-Small-Cell Lung"
+      ],
+      "interventions": [
+        "Pembrolizumab",
+        "Carboplatin",
+        "Paclitaxel",
+        "Pemetrexed"
+      ],
+      "sponsor": "Merck Sharp & Dohme LLC",
+      "enrollment": 450,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT04267848",
+      "title": "Testing the Addition of a Type of Drug Called Immunotherapy to the Usual Chemotherapy Treatment for Non-small Cell Lung Cancer, an ALCHEMIST Treatment Trial (Chemo-IO [ACCIO])",
+      "brief_title": "Testing the Addition of a Type of Drug Called Immunotherapy to the Usual Chemotherapy Treatment for Non-small Cell Lung Cancer, an ALCHEMIST Treatment Trial (Chemo-IO [ACCIO])",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Lung Non-Small Cell Carcinoma",
+        "Lung Non-Small Cell Squamous Carcinoma",
+        "Lung Non-Squamous Non-Small Cell Carcinoma"
+      ],
+      "interventions": [
+        "Biospecimen Collection",
+        "Carboplatin",
+        "Cisplatin",
+        "Computed Tomography"
+      ],
+      "sponsor": "National Cancer Institute (NCI)",
+      "enrollment": 1210,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT04322617",
+      "title": "Anlotinib Plus Immune Checkpoint Inhibitors for Lung Cancer",
+      "brief_title": "Anlotinib Plus Immune Checkpoint Inhibitors for Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2",
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Anlotinib plus the same Immune Checkpoint Inhibitors.",
+        "Anlotinib plus the new Immune Checkpoint Inhibitors.",
+        "Anlotinib"
+      ],
+      "sponsor": "Hunan Province Tumor Hospital",
+      "enrollment": 1200,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
       ]
     },
     {
@@ -274,88 +753,482 @@
       ]
     },
     {
-      "nct_id": "NCT05261399",
-      "title": "Savolitinib Plus Osimertinib Versus Platinum-based Doublet Chemotherapy in Participants With Non-Small Cell Lung Cancer Who Have Progressed on Osimertinib Treatment",
-      "brief_title": "Savolitinib Plus Osimertinib Versus Platinum-based Doublet Chemotherapy in Participants With Non-Small Cell Lung Cancer Who Have Progressed on Osimertinib Treatment",
+      "nct_id": "NCT04613596",
+      "title": "Phase 2 Trial of Adagrasib Monotherapy and in Combination With Pembrolizumab and a Phase 3 Trial of Adagrasib in Combination in Patients With a KRAS G12C Mutation KRYSTAL-7",
+      "brief_title": "Phase 2 Trial of Adagrasib Monotherapy and in Combination With Pembrolizumab and a Phase 3 Trial of Adagrasib in Combination in Patients With a KRAS G12C Mutation KRYSTAL-7",
       "status": "RECRUITING",
       "phase": [
+        "PHASE2",
         "PHASE3"
       ],
       "conditions": [
-        "Carcinoma",
-        "Non-Small-Cell Lung"
+        "Advanced Non-Small Cell Lung Cancer",
+        "Metastatic Non-Small Cell Lung Cancer"
       ],
       "interventions": [
-        "Savolitinib",
-        "Osimertinib",
-        "Pemetrexed",
-        "Cisplatin"
+        "Adagrasib",
+        "Adagrasib",
+        "Adagrasib",
+        "Adagrasib"
       ],
-      "sponsor": "AstraZeneca",
-      "enrollment": 324,
+      "sponsor": "Mirati Therapeutics Inc.",
+      "enrollment": 806,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
       ]
     },
     {
-      "nct_id": "NCT05286814",
-      "title": "PDS01ADC in Combination With Hepatic Artery Infusion Pump (HAIP) and Systemic Therapy for Subjects With Metastatic Colorectal Cancer, Intrahepatic Cholangiocarcinoma, or Metastatic Adrenocortical Carcinoma",
-      "brief_title": "PDS01ADC in Combination With Hepatic Artery Infusion Pump (HAIP) and Systemic Therapy for Subjects With Metastatic Colorectal Cancer, Intrahepatic Cholangiocarcinoma, or Metastatic Adrenocortical Carcinoma",
+      "nct_id": "NCT04777084",
+      "title": "The Efficacy and Safety of the Bispecific Anti-PD-1/PD-L1 Antibody IBI318 Combined with Lenvatinib in NSCLC.",
+      "brief_title": "The Efficacy and Safety of the Bispecific Anti-PD-1/PD-L1 Antibody IBI318 Combined with Lenvatinib in NSCLC.",
       "status": "RECRUITING",
       "phase": [
         "PHASE2"
       ],
       "conditions": [
-        "Metastatic Colorectal Cancer (Mcrc)",
-        "Intrahepatic Cholangiocarcinoma (Icc)",
-        "Intrahepatic Bile Duct Cancer"
+        "Non-Small Cell Lung Cancer"
       ],
       "interventions": [
-        "Dexamethasone",
-        "PDS01ADC",
-        "Intera 3000 Hepatic Artery Infusion Pump (HAIP)",
-        "Floxuridine"
+        "IBI318"
       ],
-      "sponsor": "National Cancer Institute (NCI)",
-      "enrollment": 70,
+      "sponsor": "Hunan Province Tumor Hospital",
+      "enrollment": 120,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Lung Adenocarcinoma'"
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'"
       ]
     },
     {
-      "nct_id": "NCT05317858",
-      "title": "Blood-brain Barrier (BBB) Opening Using Exablate Focused Ultrasound With Standard of Care Treatment of NSCLC Brain Mets",
-      "brief_title": "Blood-brain Barrier (BBB) Opening Using Exablate Focused Ultrasound With Standard of Care Treatment of NSCLC Brain Mets",
+      "nct_id": "NCT04996121",
+      "title": "A Study of XZP-5955 Tablets in Patients With NTRK or ROS1 Fusion Positive Locally Advanced or Metastatic Solid Tumors",
+      "brief_title": "A Study of XZP-5955 Tablets in Patients With NTRK or ROS1 Fusion Positive Locally Advanced or Metastatic Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Locally Advanced or Metastatic Solid Tumors",
+        "Locally Advanced or Metastatic Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "XZP-5955 tablets"
+      ],
+      "sponsor": "Xuanzhu Biopharmaceutical Co., Ltd.",
+      "enrollment": 360,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT05014464",
+      "title": "ALK Tyrosine Kinase Inhibitors in ALK-rearranged Advanced Squamous Cell Carcinoma",
+      "brief_title": "ALK Tyrosine Kinase Inhibitors in ALK-rearranged Advanced Squamous Cell Carcinoma",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Crizotinib"
+      ],
+      "sponsor": "Hunan Province Tumor Hospital",
+      "enrollment": 90,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT05085028",
+      "title": "A Randomised Open-label Phase III Trial of REduced Frequency Pembrolizumab immuNothErapy for First-line Treatment of Patients With Advanced Non-small Cell Lung Cancer (NSCLC)",
+      "brief_title": "A Randomised Open-label Phase III Trial of REduced Frequency Pembrolizumab immuNothErapy for First-line Treatment of Patients With Advanced Non-small Cell Lung Cancer (NSCLC)",
       "status": "RECRUITING",
       "phase": [
         "PHASE3"
       ],
       "conditions": [
-        "Brain Tumor",
+        "Lung Cancer, Nonsmall Cell"
+      ],
+      "interventions": [
+        "Pembrolizumab 25 MG/ML [Keytruda]"
+      ],
+      "sponsor": "Imperial College London",
+      "enrollment": 1750,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05098132",
+      "title": "Study of STK-012 Alone and With Other Treatments in Patients With Advanced Lung Cancer and Other Cancers",
+      "brief_title": "Study of STK-012 Alone and With Other Treatments in Patients With Advanced Lung Cancer and Other Cancers",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Advanced Solid Tumor",
+        "Non Small Cell Lung Cancer",
+        "Untreated Advanced NSCLC"
+      ],
+      "interventions": [
+        "STK-012",
+        "pembrolizumab",
+        "pemetrexed",
+        "carboplatin"
+      ],
+      "sponsor": "Synthekine",
+      "enrollment": 364,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05123482",
+      "title": "A Phase I/IIa Study of AZD8205 Given Alone or Combined, in Participants With Advanced/Metastatic Solid Malignancies",
+      "brief_title": "A Phase I/IIa Study of AZD8205 Given Alone or Combined, in Participants With Advanced/Metastatic Solid Malignancies",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Breast Cancer",
+        "Biliary Tract Carcinoma",
+        "Ovarian Cancer"
+      ],
+      "interventions": [
+        "AZD8205",
+        "AZD8205 and AZD2936 (Rilvegostomig)",
+        "AZD8205 and AZD5305 (saruparib)",
+        "AZD8205 and AZD5305 (saruparib) and AZD2936 (rilvegostomig)"
+      ],
+      "sponsor": "AstraZeneca",
+      "enrollment": 460,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT05150691",
+      "title": "A Phase 1/2a Study of DB-1303/BNT323 in Advanced/Metastatic Solid Tumors",
+      "brief_title": "A Phase 1/2a Study of DB-1303/BNT323 in Advanced/Metastatic Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "HER2-positive Advanced Solid Tumor"
+      ],
+      "interventions": [
+        "DB-1303/BNT323",
+        "Pertuzumab Injection",
+        "Ritonavir",
+        "Itraconazole"
+      ],
+      "sponsor": "DualityBio Inc.",
+      "enrollment": 796,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT05236946",
+      "title": "Observation or Upfront Cranial RT in Oncogene Mutated NSCLC With Asymptomatic BM: A Phase III RCT",
+      "brief_title": "Observation or Upfront Cranial RT in Oncogene Mutated NSCLC With Asymptomatic BM: A Phase III RCT",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Asymptomatic Brain Metastases",
+        "Driver Mutation Positive Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Stereotactic radiosurgery/whole brain radiotherapy",
+        "Tyrosine kinase inhibitor"
+      ],
+      "sponsor": "Tata Memorial Hospital",
+      "enrollment": 190,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT05284539",
+      "title": "Efficacy of Platinum-based Chemotherapy Plus Immune Checkpoint Inhibitors for EGFR/ALK/ROS1 Mutant Lung Cancer",
+      "brief_title": "Efficacy of Platinum-based Chemotherapy Plus Immune Checkpoint Inhibitors for EGFR/ALK/ROS1 Mutant Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
         "Non Small Cell Lung Cancer"
       ],
       "interventions": [
-        "Blood Brain Barrier Opening - Oncology",
-        "Pembrolizumab",
-        "Atezolizumab",
-        "Cemiplimab"
+        "Pemetrexed, Cisplatin, Bevacizumab Plus Pembrolizumab"
       ],
-      "sponsor": "InSightec",
+      "sponsor": "Hunan Province Tumor Hospital",
+      "enrollment": 760,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT05467748",
+      "title": "EZH2 Inhibitor, Tulmimetostat, and PD-1 Blockade for Treatment of Advanced Non-small Cell Lung Cancer",
+      "brief_title": "EZH2 Inhibitor, Tulmimetostat, and PD-1 Blockade for Treatment of Advanced Non-small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Tulmimetostat"
+      ],
+      "sponsor": "VA Office of Research and Development",
+      "enrollment": 66,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05501665",
+      "title": "Split Course Adaptive Radiation Therapy With Pembrolizumab With/Without Chemotherapy for Treating Stage IV Lung Cancer",
+      "brief_title": "Split Course Adaptive Radiation Therapy With Pembrolizumab With/Without Chemotherapy for Treating Stage IV Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Non-Small Cell Carcinoma",
+        "Stage IV Lung Cancer AJCC v8",
+        "Stage III Lung Cancer"
+      ],
+      "interventions": [
+        "Biospecimen Collection",
+        "Carboplatin",
+        "Computed Tomography",
+        "Fludeoxyglucose F-18"
+      ],
+      "sponsor": "Vanderbilt-Ingram Cancer Center",
+      "enrollment": 25,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05532696",
+      "title": "Phase 1b/2 Study to Evaluate ABT-101 in Solid Tumor and NSCLC Patients",
+      "brief_title": "Phase 1b/2 Study to Evaluate ABT-101 in Solid Tumor and NSCLC Patients",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Advanced Solid Tumor",
+        "Non Small Cell Lung Cancer",
+        "HER2 Mutations"
+      ],
+      "interventions": [
+        "ABT-101"
+      ],
+      "sponsor": "Anbogen Therapeutics, Inc.",
+      "enrollment": 61,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT05549037",
+      "title": "Effect of Time-of-Day (ToD) for Immunochemotherapy on PFS in NSCLC",
+      "brief_title": "Effect of Time-of-Day (ToD) for Immunochemotherapy on PFS in NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Pembrolizumab, Sintilimab"
+      ],
+      "sponsor": "Hunan Province Tumor Hospital",
+      "enrollment": 210,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='treatment naive'"
+      ]
+    },
+    {
+      "nct_id": "NCT05570825",
+      "title": "SX-682 With Pembrolizumab for the Treatment of Metastatic or Recurrent Stage IIIC or IV Non-Small Cell Lung Cancer",
+      "brief_title": "SX-682 With Pembrolizumab for the Treatment of Metastatic or Recurrent Stage IIIC or IV Non-Small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Metastatic Lung Non-Small Cell Carcinoma",
+        "Recurrent Lung Non-Small Cell Carcinoma",
+        "Stage IIIC Lung Cancer AJCC v8"
+      ],
+      "interventions": [
+        "Biopsy",
+        "Biospecimen Collection",
+        "Computed Tomography",
+        "CXCR1/2 Inhibitor SX-682"
+      ],
+      "sponsor": "University of Washington",
       "enrollment": 30,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05579366",
+      "title": "Rinatabart Sesutecan (Rina-S, PRO1184, GEN1184) for Advanced Solid Tumors (GCT1184-01/ PRO1184-001)",
+      "brief_title": "Rinatabart Sesutecan (Rina-S, PRO1184, GEN1184) for Advanced Solid Tumors (GCT1184-01/ PRO1184-001)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "High Grade Epithelial Ovarian Cancer",
+        "High Grade Serous Ovarian Cancer",
+        "Primary Peritoneal Carcinoma"
+      ],
+      "interventions": [
+        "Rina-S",
+        "Carboplatin",
+        "Bevacizumab",
+        "Pembrolizumab"
+      ],
+      "sponsor": "Genmab",
+      "enrollment": 764,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT05669846",
+      "title": "Study of Healthy Donor FMT (hdFMT) and Pembrolizumab in Relapsed/Refractory (R/R) PD-L1 Positive NSCLC",
+      "brief_title": "Study of Healthy Donor FMT (hdFMT) and Pembrolizumab in Relapsed/Refractory (R/R) PD-L1 Positive NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Healthy Donor Fecal Microbiota Transplant (hdFMT)",
+        "Pembrolizumab"
+      ],
+      "sponsor": "Diwakar Davar",
+      "enrollment": 26,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05751018",
+      "title": "Phase II Clinical Study of Pyrotinib in First-line Treatment of Primary HER2-amplified/Mutated Advanced Non-small Cell Lung Cancer",
+      "brief_title": "Phase II Clinical Study of Pyrotinib in First-line Treatment of Primary HER2-amplified/Mutated Advanced Non-small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Pyrotinib"
+      ],
+      "sponsor": "Peking Union Medical College Hospital",
+      "enrollment": 18,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
       ]
     },
     {
@@ -386,62 +1259,6 @@
       ]
     },
     {
-      "nct_id": "NCT05797168",
-      "title": "Phase I/IIa Study of AZD5335 as Monotherapy and Combination Therapy in Participants With Solid Tumors",
-      "brief_title": "Phase I/IIa Study of AZD5335 as Monotherapy and Combination Therapy in Participants With Solid Tumors",
-      "status": "RECRUITING",
-      "phase": [
-        "PHASE1",
-        "PHASE2"
-      ],
-      "conditions": [
-        "Ovarian Cancer",
-        "Lung Adenocarcinoma",
-        "Endometrial Cancer"
-      ],
-      "interventions": [
-        "AZD5335",
-        "Saruparib (AZD5305)",
-        "Bevacizumab",
-        "Carboplatin"
-      ],
-      "sponsor": "AstraZeneca",
-      "enrollment": 506,
-      "start_date": null,
-      "primary_completion_date": null,
-      "locations_count": null,
-      "study_type": "",
-      "found_by_queries": [
-        "cond='Lung Adenocarcinoma'"
-      ]
-    },
-    {
-      "nct_id": "NCT05807048",
-      "title": "Daratumumab in STK11 Mutated NSCLC",
-      "brief_title": "Daratumumab in STK11 Mutated NSCLC",
-      "status": "RECRUITING",
-      "phase": [
-        "PHASE2"
-      ],
-      "conditions": [
-        "Non-small Cell Lung Cancer With STK11/LKB1 Mutation"
-      ],
-      "interventions": [
-        "Daratumumab and Hyaluronidase-fihj",
-        "Pre-Intervention Medication",
-        "Post-Intervention Medication"
-      ],
-      "sponsor": "NYU Langone Health",
-      "enrollment": 14,
-      "start_date": null,
-      "primary_completion_date": null,
-      "locations_count": null,
-      "study_type": "",
-      "found_by_queries": [
-        "cond='Non-small cell lung cancer'"
-      ]
-    },
-    {
       "nct_id": "NCT05920356",
       "title": "A Study Evaluating Sotorasib Platinum Doublet Combination Versus Pembrolizumab Platinum Doublet Combination as a Front-Line Therapy in Participants With Stage IV or Advanced Stage IIIB/C Nonsquamous Non-Small Cell Lung Cancers (CodeBreaK 202)",
       "brief_title": "A Study Evaluating Sotorasib Platinum Doublet Combination Versus Pembrolizumab Platinum Doublet Combination as a Front-Line Therapy in Participants With Stage IV or Advanced Stage IIIB/C Nonsquamous Non-Small Cell Lung Cancers (CodeBreaK 202)",
@@ -463,27 +1280,213 @@
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
       ]
     },
     {
-      "nct_id": "NCT06074588",
-      "title": "Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)",
-      "brief_title": "Sacituzumab Tirumotecan (MK-2870) Versus Chemotherapy in Previously Treated Advanced or Metastatic Nonsquamous Non-small Cell Lung Cancer (NSCLC) With EGFR Mutations or Other Genomic Alterations (MK-2870-004)",
+      "nct_id": "NCT05937906",
+      "title": "Clinical Trial Evaluating the Safety and Efficacy of Chemoimmunotherapy Plus Short Course of Mek Inhibitor in First Line of Treatment of Metastatic Non Squamous Non Small Cell Lung Adenocarcinoma With PDL1 < 50 %.",
+      "brief_title": "Clinical Trial Evaluating the Safety and Efficacy of Chemoimmunotherapy Plus Short Course of Mek Inhibitor in First Line of Treatment of Metastatic Non Squamous Non Small Cell Lung Adenocarcinoma With PDL1 < 50 %.",
       "status": "RECRUITING",
       "phase": [
-        "PHASE3"
+        "PHASE1",
+        "PHASE2"
       ],
       "conditions": [
-        "Non-small Cell Lung Cancer (NSCLC)"
+        "Non-Small Cell Lung Cancer"
       ],
       "interventions": [
-        "Sacituzumab tirumotecan",
-        "Docetaxel",
-        "Pemetrexed"
+        "Phase I - Mirdametinib - Level 1",
+        "Phase II - Mirdametinib",
+        "Phase I - Mirdametinib - Level 2",
+        "Phase I - Mirdametinib - Level 3"
       ],
-      "sponsor": "Merck Sharp & Dohme LLC",
-      "enrollment": 556,
+      "sponsor": "Centre Georges Francois Leclerc",
+      "enrollment": 24,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06043817",
+      "title": "First-In-Human Study of STX-721/PFL-721 in Participants With Locally Advanced or Metastatic Non-Small Cell Lung Cancer Harboring EGFR or HER2 Exon 20 Insertion Mutations",
+      "brief_title": "First-In-Human Study of STX-721/PFL-721 in Participants With Locally Advanced or Metastatic Non-Small Cell Lung Cancer Harboring EGFR or HER2 Exon 20 Insertion Mutations",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "NSCLC",
+        "EGFR/HER2 Exon 20 Insertion Mutation"
+      ],
+      "interventions": [
+        "STX-721/PFL-721 (Escalated)",
+        "STX-721/PFL-721 (3 dose levels)",
+        "STX-721/PFL-721 (RP2D)"
+      ],
+      "sponsor": "Pierre Fabre Medicament",
+      "enrollment": 251,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06047379",
+      "title": "Safety and Efficacy of NEO212 in Patients With Astrocytoma IDH-mutant, Glioblastoma IDH-wildtype or Brain Metastasis",
+      "brief_title": "Safety and Efficacy of NEO212 in Patients With Astrocytoma IDH-mutant, Glioblastoma IDH-wildtype or Brain Metastasis",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Diffuse Astrocytoma, IDH-Mutant",
+        "Glioblastoma, IDH-wildtype",
+        "Brain Metastases, Adult"
+      ],
+      "interventions": [
+        "NEO212 Oral Capsule",
+        "Ipilimumab",
+        "Pembrolizumab",
+        "Nivolumab"
+      ],
+      "sponsor": "Neonc Technologies, Inc.",
+      "enrollment": 134,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06092086",
+      "title": "Lorlatinib as the First-line Treatment in China Advanced ALK+ NSCLC",
+      "brief_title": "Lorlatinib as the First-line Treatment in China Advanced ALK+ NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "ALK Positive Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Loratinib"
+      ],
+      "sponsor": "Guangdong Association of Clinical Trials",
+      "enrollment": 126,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT06106802",
+      "title": "Lazertinib & Tepotinib for EGFR Mutant NSCLC in MET Overexpressed or Amplified Who Progressed After Lazertinib Treatment",
+      "brief_title": "Lazertinib & Tepotinib for EGFR Mutant NSCLC in MET Overexpressed or Amplified Who Progressed After Lazertinib Treatment",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer Metastatic"
+      ],
+      "interventions": [
+        "Lazertinib",
+        "Tepotinib"
+      ],
+      "sponsor": "Samsung Medical Center",
+      "enrollment": 47,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06109558",
+      "title": "The Efficacy and Safety of LMV-12 Combined With Osimertinib in NSCLC",
+      "brief_title": "The Efficacy and Safety of LMV-12 Combined With Osimertinib in NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non Small Cell Lung Cancer",
+        "RET Gene Mutation",
+        "MET Amplification"
+      ],
+      "interventions": [
+        "LMV-12(HE003)"
+      ],
+      "sponsor": "Hunan Province Tumor Hospital",
+      "enrollment": 120,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='RET fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT06114511",
+      "title": "A Study of BL-M07D1 in Patients With HER2-mutated, Locally Advanced or Metastatic Non-small-cell Lung Cancer",
+      "brief_title": "A Study of BL-M07D1 in Patients With HER2-mutated, Locally Advanced or Metastatic Non-small-cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "BL-M07D1"
+      ],
+      "sponsor": "Sichuan Baili Pharmaceutical Co., Ltd.",
+      "enrollment": 98,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06147570",
+      "title": "A Study of HS-10365 in Patients With Advanced or Metastatic RET Fusion-Positive Non-Small Cell Lung Cancer",
+      "brief_title": "A Study of HS-10365 in Patients With Advanced or Metastatic RET Fusion-Positive Non-Small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Nonsmall Cell Lung Cancer"
+      ],
+      "interventions": [
+        "HS-10365 capsules"
+      ],
+      "sponsor": "Jiangsu Hansoh Pharmaceutical Co., Ltd.",
+      "enrollment": 62,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
@@ -520,182 +1523,2038 @@
       ]
     },
     {
-      "nct_id": "NCT06385925",
-      "title": "A Study of TSN1611 Treating Patients With Advanced Solid Tumors Harboring KRAS G12D Mutation",
-      "brief_title": "A Study of TSN1611 Treating Patients With Advanced Solid Tumors Harboring KRAS G12D Mutation",
+      "nct_id": "NCT06162221",
+      "title": "Study of RAS(ON) Inhibitors in Patients With Advanced RAS-mutated NSCLC",
+      "brief_title": "Study of RAS(ON) Inhibitors in Patients With Advanced RAS-mutated NSCLC",
       "status": "RECRUITING",
       "phase": [
         "PHASE1",
         "PHASE2"
       ],
       "conditions": [
-        "Malignant Neoplasm"
+        "Non-Small Cell Lung Cancer, NSCLC",
+        "KRAS, NRAS, HRAS-mutated NSCLC",
+        "KRAS G12C-mutated Solid Tumors, Lung Cancer"
       ],
       "interventions": [
-        "TSN1611",
-        "TSN1611",
-        "TSN1611",
-        "TSN1611"
+        "RMC-6291",
+        "RMC-6236",
+        "Pembrolizumab",
+        "Cisplatin"
       ],
-      "sponsor": "Tyligand Pharmaceuticals (Suzhou) Limited",
-      "enrollment": 440,
+      "sponsor": "Revolution Medicines, Inc.",
+      "enrollment": 616,
       "start_date": null,
       "primary_completion_date": null,
       "locations_count": null,
       "study_type": "",
       "found_by_queries": [
-        "cond='Non-small cell lung cancer'"
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06216301",
+      "title": "LUNAR-2: TTFields With Pembrolizumab + Platinum-based Chemotherapy for Metastatic NSCLC",
+      "brief_title": "LUNAR-2: TTFields With Pembrolizumab + Platinum-based Chemotherapy for Metastatic NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Metastatic Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "NovoTTF-200T",
+        "Pembrolizumab",
+        "Platinum based chemotherapy"
+      ],
+      "sponsor": "NovoCure GmbH",
+      "enrollment": 734,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06222489",
+      "title": "Whole Body HER3 Quantification With Radiolabelled Patritumab Deruxtecan (HER3-DXd) PET/CT",
+      "brief_title": "Whole Body HER3 Quantification With Radiolabelled Patritumab Deruxtecan (HER3-DXd) PET/CT",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Carcinoma",
+        "Advanced Non-Small Cell Squamous Lung Cancer",
+        "EGFR Gene Mutation"
+      ],
+      "interventions": [
+        "89Zr-Patritumab deruxtecan"
+      ],
+      "sponsor": "The Netherlands Cancer Institute",
+      "enrollment": 16,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06228326",
+      "title": "A Study Assessing KB707 for the Treatment of Advanced Solid Tumor Malignancies Affecting the Lungs",
+      "brief_title": "A Study Assessing KB707 for the Treatment of Advanced Solid Tumor Malignancies Affecting the Lungs",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Cancer, Non-small Cell",
+        "Lung Cancer Metastatic",
+        "Solid Tumor, Adult"
+      ],
+      "interventions": [
+        "KB707",
+        "Pembrolizumab (KEYTRUDA®)",
+        "Chemotherapy",
+        "Docetaxel"
+      ],
+      "sponsor": "Krystal Biotech, Inc.",
+      "enrollment": 250,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06315010",
+      "title": "REPotrectinib in ROS1-positive Non-small Cell Lung Cancer Patients With Active Brain mEtastasis",
+      "brief_title": "REPotrectinib in ROS1-positive Non-small Cell Lung Cancer Patients With Active Brain mEtastasis",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "NSCLC",
+        "Brain Metastases",
+        "ROS1 Gene Rearrangement"
+      ],
+      "interventions": [
+        "Repotrectinib"
+      ],
+      "sponsor": "MedSIR",
+      "enrollment": 20,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Repotrectinib'"
+      ]
+    },
+    {
+      "nct_id": "NCT06388031",
+      "title": "ICI Rechallenge for Advanced NSCLC With Long-Term Response to First-Line ICI",
+      "brief_title": "ICI Rechallenge for Advanced NSCLC With Long-Term Response to First-Line ICI",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Immune checkpoint inhibitor"
+      ],
+      "sponsor": "Peking Union Medical College Hospital",
+      "enrollment": 27,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06405230",
+      "title": "Evaluation of Programmed Death Ligand 1 (PDL1) Response to Treatment in Extracellular Vesicles (EVs), Patient-derived Organoid (PDOs)s and Immune-marker Positron Emission Tomography (PET) Scanning in Non-small Cell Lung Cancer (NSCLC)",
+      "brief_title": "Evaluation of Programmed Death Ligand 1 (PDL1) Response to Treatment in Extracellular Vesicles (EVs), Patient-derived Organoid (PDOs)s and Immune-marker Positron Emission Tomography (PET) Scanning in Non-small Cell Lung Cancer (NSCLC)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Cancer, Non-Small Cell"
+      ],
+      "interventions": [
+        "Pembrolizumab",
+        "Dostarlimab",
+        "Pemetrexed+ (carboplatin or cisplatin)"
+      ],
+      "sponsor": "GlaxoSmithKline",
+      "enrollment": 40,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06430437",
+      "title": "A Study of SHR-A1811 in First-line Treatment of Patients With Advanced or Metastatic Non-small Cell Lung Cancer With HER2 Mutations",
+      "brief_title": "A Study of SHR-A1811 in First-line Treatment of Patients With Advanced or Metastatic Non-small Cell Lung Cancer With HER2 Mutations",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer With HER2- Mutations"
+      ],
+      "interventions": [
+        "SHR-A1811",
+        "PD-1/PD-L1 inhibitors、Pemetrexed/ Paclitaxel、Carboplatin/ Cisplatin"
+      ],
+      "sponsor": "Jiangsu HengRui Medicine Co., Ltd.",
+      "enrollment": 300,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06528847",
+      "title": "Adjuvant Benmelstobart for Stage IB, Grade 3 Invasive Lung Adenocarcinoma",
+      "brief_title": "Adjuvant Benmelstobart for Stage IB, Grade 3 Invasive Lung Adenocarcinoma",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Benmelstobart"
+      ],
+      "sponsor": "Shanghai Pulmonary Hospital, Shanghai, China",
+      "enrollment": 62,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT06538012",
+      "title": "TIL Therapy Combined With Pembrolizumab for Advanced or Metastatic Refractory Lung Cancer",
+      "brief_title": "TIL Therapy Combined With Pembrolizumab for Advanced or Metastatic Refractory Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Cancer",
+        "Lung Cancer Metastatic",
+        "Lung Cancer, Non-small Cell"
+      ],
+      "interventions": [
+        "Tumor Infiltrating Lymphocytes (TIL)",
+        "Cyclophosphamide",
+        "Fludarabine",
+        "Interleukin-2"
+      ],
+      "sponsor": "Essen Biotech",
+      "enrollment": 85,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06552234",
+      "title": "Phase II Efficacy Study of Repotrectinib in Frail and/or Elderly Patients With ROS1-rearranged Advanced NSCLC",
+      "brief_title": "Phase II Efficacy Study of Repotrectinib in Frail and/or Elderly Patients With ROS1-rearranged Advanced NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "NSCLC Stage IV",
+        "NSCLC, Stage III"
+      ],
+      "interventions": [
+        "Repotrectinib"
+      ],
+      "sponsor": "Centre Hospitalier Intercommunal de Toulon La Seyne sur Mer",
+      "enrollment": 30,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Repotrectinib'"
+      ]
+    },
+    {
+      "nct_id": "NCT06620835",
+      "title": "Trial for Local Ablative Treatment (LAT) Optimization in Patients With Advanced Non-Small Cells Lung Cancer (NSCLC) Presenting an Anaplastic Lymphoma Kinase (ALK) Rearrangement Treated by Brigatinib",
+      "brief_title": "Trial for Local Ablative Treatment (LAT) Optimization in Patients With Advanced Non-Small Cells Lung Cancer (NSCLC) Presenting an Anaplastic Lymphoma Kinase (ALK) Rearrangement Treated by Brigatinib",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "NSCLC"
+      ],
+      "interventions": [
+        "Blood samples for Hematology",
+        "Blood samples for Chemistry",
+        "Blood sample for liver function tests",
+        "Pregnancy test"
+      ],
+      "sponsor": "Groupe Francais De Pneumo-Cancerologie",
+      "enrollment": 45,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT06632262",
+      "title": "A Phase 2 Clinical Study of ABSK061 and ABSK043",
+      "brief_title": "A Phase 2 Clinical Study of ABSK061 and ABSK043",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "HER2-Gastric/Gastroesophageal Junction Cancer",
+        "Urothelial Carcinoma",
+        "Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "ABSK061 + ABSK043",
+        "ABSK061+ABSK043 in combination with CAPOX"
+      ],
+      "sponsor": "Abbisko Therapeutics Co, Ltd",
+      "enrollment": 202,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06687369",
+      "title": "A Study to Compare Pharmacokinetics, Efficacy, Safety, and Immunogenicity of MB12 (Proposed Pembrolizumab Biosimilar) to Keytruda® in Non-small Cell Lung Cancer (BENITO Study)",
+      "brief_title": "A Study to Compare Pharmacokinetics, Efficacy, Safety, and Immunogenicity of MB12 (Proposed Pembrolizumab Biosimilar) to Keytruda® in Non-small Cell Lung Cancer (BENITO Study)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non Squamous Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "MB12 (Proposed Pembrolizumab Biosimilar)",
+        "EU-sourced Keytruda®",
+        "US-sourced Keytruda®",
+        "Pemetrexed"
+      ],
+      "sponsor": "mAbxience Research S.L.",
+      "enrollment": 726,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06692738",
+      "title": "A Global Phase III Study of Rilvegostomig or Pembrolizumab Plus Chemotherapy for First-Line Treatment of Metastatic Squamous Non-small Cell Lung Cancer (NSCLC)",
+      "brief_title": "A Global Phase III Study of Rilvegostomig or Pembrolizumab Plus Chemotherapy for First-Line Treatment of Metastatic Squamous Non-small Cell Lung Cancer (NSCLC)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Rilvegostomig",
+        "Pembrolizumab",
+        "Carboplatin",
+        "Paclitaxel"
+      ],
+      "sponsor": "AstraZeneca",
+      "enrollment": 880,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06706076",
+      "title": "A Study of BH-30643 in Subjects With Locally Advanced or Metastatic NSCLC Harboring EGFR and/or HER2 Mutations",
+      "brief_title": "A Study of BH-30643 in Subjects With Locally Advanced or Metastatic NSCLC Harboring EGFR and/or HER2 Mutations",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "NSCLC (Advanced Non-small Cell Lung Cancer)"
+      ],
+      "interventions": [
+        "BH-30643",
+        "BH-30643"
+      ],
+      "sponsor": "BlossomHill Therapeutics",
+      "enrollment": 266,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06710132",
+      "title": "Study of Anti-CEACAM5 ADC M9140 in Participants With Advanced Solid Tumors (PROCEADE PanTumor)",
+      "brief_title": "Study of Anti-CEACAM5 ADC M9140 in Participants With Advanced Solid Tumors (PROCEADE PanTumor)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Solid Tumors",
+        "Gastric Cancer",
+        "Non-Small Cell Lung Cancer (NSCLC)"
+      ],
+      "interventions": [
+        "M9140"
+      ],
+      "sponsor": "EMD Serono Research & Development Institute, Inc.",
+      "enrollment": 250,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT06711900",
+      "title": "A Study of SKB264 in Combination With Pembrolizumab Versus Chemotherapy in Combination With Pembrolizumab as First-Line Treatment for PD-L1 Negative Patients With Locally Advanced or Metastatic Non-Squamous Non-Small Cell Lung Cancer",
+      "brief_title": "A Study of SKB264 in Combination With Pembrolizumab Versus Chemotherapy in Combination With Pembrolizumab as First-Line Treatment for PD-L1 Negative Patients With Locally Advanced or Metastatic Non-Squamous Non-Small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "SKB264",
+        "Pembrolizumab",
+        "pemetrexed",
+        "carboplatin or cisplatin"
+      ],
+      "sponsor": "Sichuan Kelun-Biotech Biopharmaceutical Co., Ltd.",
+      "enrollment": 432,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06712316",
+      "title": "Safety, Efficacy, and Pharmacokinetics of BNT327 in Combination With Chemotherapy and Other Investigational Agents for Lung Cancer",
+      "brief_title": "Safety, Efficacy, and Pharmacokinetics of BNT327 in Combination With Chemotherapy and Other Investigational Agents for Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2",
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Pumitamig",
+        "Pembrolizumab",
+        "Carboplatin",
+        "Pemetrexed"
+      ],
+      "sponsor": "BioNTech SE",
+      "enrollment": 1260,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT06726265",
+      "title": "Study of Eftilagimod Alfa (Efti) in Combination With Pembrolizumab and Chemotherapy Versus Placebo in Combination With Pembrolizumab and Chemotherapy in Participants With Metastatic Non-Small Cell Lung Cancer (NSCLC) (TACTI-004)",
+      "brief_title": "Study of Eftilagimod Alfa (Efti) in Combination With Pembrolizumab and Chemotherapy Versus Placebo in Combination With Pembrolizumab and Chemotherapy in Participants With Metastatic Non-Small Cell Lung Cancer (NSCLC) (TACTI-004)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Advanced/Metastatic Non-Small Cell Lung Cancer (NSCLC)"
+      ],
+      "interventions": [
+        "eftilagimod alfa",
+        "carboplatin plus paclitaxel",
+        "cisplatin or carboplatin + pemetrexed",
+        "pembrolizumab (KEYTRUDA®)"
+      ],
+      "sponsor": "Immutep S.A.S.",
+      "enrollment": 756,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06731413",
+      "title": "Reduced CT + Anti-PD-1 as First Line Tx in Vulnerable Older Adults w/Adv <50% PD-L1 Non-Small Cell Lung Cancer (NSCLC)",
+      "brief_title": "Reduced CT + Anti-PD-1 as First Line Tx in Vulnerable Older Adults w/Adv <50% PD-L1 Non-Small Cell Lung Cancer (NSCLC)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "NSCLC",
+        "Advanced Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Reduced Dose of Chemotherapy and Immunotherapy"
+      ],
+      "sponsor": "Virginia Commonwealth University",
+      "enrollment": 40,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06734182",
+      "title": "Neoadjuvant Envafolimab Plus Disitamab Vedotin and Carboplatin in Resectable HER2-Mutant Non-Small-Cell Lung Cancer",
+      "brief_title": "Neoadjuvant Envafolimab Plus Disitamab Vedotin and Carboplatin in Resectable HER2-Mutant Non-Small-Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Envafolimab injections+intravenous Disitamab Vedotin+carboplatin"
+      ],
+      "sponsor": "Guangdong Provincial People's Hospital",
+      "enrollment": 25,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06749860",
+      "title": "Disitamab Vedotin in Combination with Tislelizumab and Bevacizumab in a Phase II Clinical Study of Locally Advanced or Metastatic Non-small Cell Lung Cancer with HER2 Mutation/amplification/expression",
+      "brief_title": "Disitamab Vedotin in Combination with Tislelizumab and Bevacizumab in a Phase II Clinical Study of Locally Advanced or Metastatic Non-small Cell Lung Cancer with HER2 Mutation/amplification/expression",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Cancer"
+      ],
+      "interventions": [
+        "Disitamab Vedotin + tislelizumab + bevacizumab"
+      ],
+      "sponsor": "Shanghai Pulmonary Hospital, Shanghai, China",
+      "enrollment": 58,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06780098",
+      "title": "Substudy 01I: A Study of Investigational Agents in Participants With Previously Treated Stage IV Squamous Non-small Cell Lung Cancer (NSCLC) (MK-3475-01I/KEYMAKER-U01I)",
+      "brief_title": "Substudy 01I: A Study of Investigational Agents in Participants With Previously Treated Stage IV Squamous Non-small Cell Lung Cancer (NSCLC) (MK-3475-01I/KEYMAKER-U01I)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Neoplasm"
+      ],
+      "interventions": [
+        "R-DXD",
+        "I-DXD",
+        "Docetaxel"
+      ],
+      "sponsor": "Merck Sharp & Dohme LLC",
+      "enrollment": 144,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT06788912",
+      "title": "Pembrolizumab (MK-3475) Plus Investigational Agents in Resectable Non-small Cell Lung Cancer (NSCLC) (MK-3475-01E/KEYMAKER-U01)",
+      "brief_title": "Pembrolizumab (MK-3475) Plus Investigational Agents in Resectable Non-small Cell Lung Cancer (NSCLC) (MK-3475-01E/KEYMAKER-U01)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Lung Neoplasm Malignant"
+      ],
+      "interventions": [
+        "Pembrolizumab (neoadjuvant)",
+        "Cisplatin",
+        "Gemcitabine",
+        "Pemetrexed"
+      ],
+      "sponsor": "Merck Sharp & Dohme LLC",
+      "enrollment": 60,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06840782",
+      "title": "First-line Immunotherapy-based Standard of Care and Local Ablative Treatments for Oligometastatic Non-small Cell Lung Cancer Patients.",
+      "brief_title": "First-line Immunotherapy-based Standard of Care and Local Ablative Treatments for Oligometastatic Non-small Cell Lung Cancer Patients.",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Oligometastatic Non-small Cell Lung Cancer (NSCLC)"
+      ],
+      "interventions": [
+        "Radical local treatment",
+        "SoC-based immunotherapy (+/- chemotherapy)"
+      ],
+      "sponsor": "Gustave Roussy, Cancer Campus, Grand Paris",
+      "enrollment": 124,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06875310",
+      "title": "A Study of Adagrasib Plus Pembrolizumab Plus Chemotherapy vs. Placebo Plus Pembrolizumab Plus Chemotherapy in Participants With Previously Untreated Non-squamous Non-small Cell Lung Cancer With KRAS G12C Mutation (KRYSTAL-4)",
+      "brief_title": "A Study of Adagrasib Plus Pembrolizumab Plus Chemotherapy vs. Placebo Plus Pembrolizumab Plus Chemotherapy in Participants With Previously Untreated Non-squamous Non-small Cell Lung Cancer With KRAS G12C Mutation (KRYSTAL-4)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Carcinoma, Non-Small-Cell Lung"
+      ],
+      "interventions": [
+        "Adagrasib",
+        "Pembrolizumab",
+        "Carboplatin",
+        "Pemetrexed"
+      ],
+      "sponsor": "Mirati Therapeutics Inc.",
+      "enrollment": 630,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07012031",
+      "title": "Sotorasib in Combination With Trastuzumab Deruxtecan for the Treatment of Locally Advanced and Metastatic Non-small Cell Lung Cancer With a KRAS G12C Mutation",
+      "brief_title": "Sotorasib in Combination With Trastuzumab Deruxtecan for the Treatment of Locally Advanced and Metastatic Non-small Cell Lung Cancer With a KRAS G12C Mutation",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Locally Advanced Lung Non-Small Cell Carcinoma",
+        "Metastatic Lung Non-Small Cell Carcinoma",
+        "Stage III Lung Cancer AJCC v8"
+      ],
+      "interventions": [
+        "Biopsy Procedure",
+        "Biospecimen Collection",
+        "Computed Tomography",
+        "Echocardiography Test"
+      ],
+      "sponsor": "National Cancer Institute (NCI)",
+      "enrollment": 37,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT07020221",
+      "title": "A Phase 1/2 Study of VS-7375 in Patients With KRAS G12D-Mutated Solid Tumors",
+      "brief_title": "A Phase 1/2 Study of VS-7375 in Patients With KRAS G12D-Mutated Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Pancreatic Ductal Adenocarcinoma",
+        "Non Small Cell Lung Cancer",
+        "Colorectal Cancer"
+      ],
+      "interventions": [
+        "VS-7375",
+        "Cetuximab",
+        "Carboplatin + Pemetrexed + Pembrolizumab",
+        "Gemcitabine"
+      ],
+      "sponsor": "Verastem, Inc.",
+      "enrollment": 295,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07070232",
+      "title": "A Clinical Study to Test if an Investigational Treatment Called BNT326 is Safe and Potentially Beneficial When Used Alone or in Combination With Other Investigational Treatments Such as BNT327, for People With Advanced Malignant Tumors",
+      "brief_title": "A Clinical Study to Test if an Investigational Treatment Called BNT326 is Safe and Potentially Beneficial When Used Alone or in Combination With Other Investigational Treatments Such as BNT327, for People With Advanced Malignant Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Advanced Solid Tumor"
+      ],
+      "interventions": [
+        "BNT326",
+        "Pumitamig",
+        "Itraconazole",
+        "Paroxetine"
+      ],
+      "sponsor": "BioNTech SE",
+      "enrollment": 980,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT07122687",
+      "title": "IBI363 Combined With Chemotherapy or Pembrolizumab Combined With Chemotherapy as Neoadjuvant Therapy in Resectable Stage IB-III Non-Squamous Non-Small Cell Lung Cancer",
+      "brief_title": "IBI363 Combined With Chemotherapy or Pembrolizumab Combined With Chemotherapy as Neoadjuvant Therapy in Resectable Stage IB-III Non-Squamous Non-Small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Resectable Stage IB-III Non-Squamous Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Pemetrexed",
+        "Cisplatin",
+        "IBI363",
+        "Carboplatin"
+      ],
+      "sponsor": "Innovent Biologics (Suzhou) Co. Ltd.",
+      "enrollment": 170,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07154706",
+      "title": "Phase 3 Study of Taletrectinib vs Placebo as an Adjuvant Therapy in ROS1 Positive NSCLC (TRUST-IV)",
+      "brief_title": "Phase 3 Study of Taletrectinib vs Placebo as an Adjuvant Therapy in ROS1 Positive NSCLC (TRUST-IV)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer (NSCLC)"
+      ],
+      "interventions": [
+        "Taletrectinib",
+        "Placebo"
+      ],
+      "sponsor": "Nuvation Bio Inc.",
+      "enrollment": 180,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT07192068",
+      "title": "Clinical Trial Evaluating the Activity of Zanidatamab for the Treatment of Patients With Solid Tumors With an Alteration of the HER2 Gene.",
+      "brief_title": "Clinical Trial Evaluating the Activity of Zanidatamab for the Treatment of Patients With Solid Tumors With an Alteration of the HER2 Gene.",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Sarcoma",
+        "Head &Amp; Neck Cancer"
+      ],
+      "interventions": [
+        "Zanidatamab"
+      ],
+      "sponsor": "UNICANCER",
+      "enrollment": 105,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT07195695",
+      "title": "Beamion LUNG-3: A Study to Test Whether Zongertinib Helps People With Surgically Removed, Non-small Cell Lung Cancer With HER2 Mutations Compared With Standard Treatment",
+      "brief_title": "Beamion LUNG-3: A Study to Test Whether Zongertinib Helps People With Surgically Removed, Non-small Cell Lung Cancer With HER2 Mutations Compared With Standard Treatment",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Zongertinib",
+        "Pembrolizumab",
+        "Atezolizumab",
+        "Durvalumab"
+      ],
+      "sponsor": "Boehringer Ingelheim",
+      "enrollment": 400,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT07221474",
+      "title": "A Study of V940/Placebo + Pembrolizumab and Chemotherapy in Metastatic Squamous Non-Small Cell Lung Cancer (V940-013)",
+      "brief_title": "A Study of V940/Placebo + Pembrolizumab and Chemotherapy in Metastatic Squamous Non-Small Cell Lung Cancer (V940-013)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Squamous Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "V940",
+        "Pembrolizumab",
+        "Carboplatin",
+        "Paclitaxel"
+      ],
+      "sponsor": "Merck Sharp & Dohme LLC",
+      "enrollment": 180,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07223424",
+      "title": "Patient Preference for Subcutaneous vs. Intravenous Immune Therapy",
+      "brief_title": "Patient Preference for Subcutaneous vs. Intravenous Immune Therapy",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Renal Cell Carcinoma",
+        "Non Small Cell Lung Cancer",
+        "Melanoma"
+      ],
+      "interventions": [
+        "nivolumab",
+        "pembrolizumab"
+      ],
+      "sponsor": "Diwakar Davar",
+      "enrollment": 480,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07252739",
+      "title": "KEYMAKER-U01 Substudy 01J: A Study of Pembrolizumab Plus MK-1084 in Participants With Non-Small Cell Lung Cancer (NSCLC) With Kirsten Rat Sarcoma Viral Oncogene Homolog (KRAS) G12C Mutations (MK-3475-01J/KEYMAKER-U01J)",
+      "brief_title": "KEYMAKER-U01 Substudy 01J: A Study of Pembrolizumab Plus MK-1084 in Participants With Non-Small Cell Lung Cancer (NSCLC) With Kirsten Rat Sarcoma Viral Oncogene Homolog (KRAS) G12C Mutations (MK-3475-01J/KEYMAKER-U01J)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Malignant Neoplasm"
+      ],
+      "interventions": [
+        "MK-1084",
+        "Pembrolizumab",
+        "Cetuximab",
+        "Carboplatin"
+      ],
+      "sponsor": "Merck Sharp & Dohme LLC",
+      "enrollment": 130,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07287995",
+      "title": "A Study of ASP2998 Given by Itself and Given With Standard Therapies in People With Solid Tumors",
+      "brief_title": "A Study of ASP2998 Given by Itself and Given With Standard Therapies in People With Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1",
+        "PHASE2"
+      ],
+      "conditions": [
+        "Locally Advanced or Metastatic Malignant Solid Tumors"
+      ],
+      "interventions": [
+        "ASP2998",
+        "Pembrolizumab",
+        "Enfortumab Vedotin",
+        "Carboplatin"
+      ],
+      "sponsor": "Astellas Pharma Global Development, Inc.",
+      "enrollment": 428,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07362459",
+      "title": "A Study to Evaluate the Safety and Tolerability of SCTB14 as First-Line Therapy in Non-Small Cell Lung Cancer.",
+      "brief_title": "A Study to Evaluate the Safety and Tolerability of SCTB14 as First-Line Therapy in Non-Small Cell Lung Cancer.",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE3"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Carcinoma (NSCLC)"
+      ],
+      "interventions": [
+        "SCTB14",
+        "Pembrolizumab"
+      ],
+      "sponsor": "Sinocelltech Ltd.",
+      "enrollment": 246,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07428044",
+      "title": "A Study of Trastuzumab Deruxtecan in People With Non-Small Cell Lung Cancer",
+      "brief_title": "A Study of Trastuzumab Deruxtecan in People With Non-Small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE2"
+      ],
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Non-small Cell Lung Cancer Stage II",
+        "Non-Small Cell Lung Cancer Stage IIIA"
+      ],
+      "interventions": [
+        "Trastuzumab Deruxtecan"
+      ],
+      "sponsor": "Memorial Sloan Kettering Cancer Center",
+      "enrollment": 14,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT02998567",
+      "title": "Combination Study of Guadecitabine/ASTX727 and Pembrolizumab",
+      "brief_title": "Combination Study of Guadecitabine/ASTX727 and Pembrolizumab",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Guadecitabine",
+        "Pembrolizumab",
+        "ASTX727"
+      ],
+      "sponsor": "Royal Marsden NHS Foundation Trust",
+      "enrollment": 60,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT03991819",
+      "title": "Study of Binimetinib in Combination With Pembrolizumab in Advanced Non-Small Cell Lung Cancer",
+      "brief_title": "Study of Binimetinib in Combination With Pembrolizumab in Advanced Non-Small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Non-small Cell Carcinoma"
+      ],
+      "interventions": [
+        "Binimetinib",
+        "Pembrolizumab"
+      ],
+      "sponsor": "University Health Network, Toronto",
+      "enrollment": 40,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT04297605",
+      "title": "Study of Pembrolizumab and Single Agent Chemotherapy as First Line Treatment for Patients With Locally Advanced or Metastatic Non-small Cell Lung Cancer With Eastern Cooperative Oncology Group (ECOG) Performance Status of 2",
+      "brief_title": "Study of Pembrolizumab and Single Agent Chemotherapy as First Line Treatment for Patients With Locally Advanced or Metastatic Non-small Cell Lung Cancer With Eastern Cooperative Oncology Group (ECOG) Performance Status of 2",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Pembrolizumab",
+        "Pemetrexed (Chemotherapy)",
+        "Nab-paclitaxel (Chemotherapy)"
+      ],
+      "sponsor": "University of Rochester",
+      "enrollment": 28,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT04772235",
+      "title": "Phase I Study of Repotrectinib and Osimertinib in NSCLC Patients",
+      "brief_title": "Phase I Study of Repotrectinib and Osimertinib in NSCLC Patients",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Nsclc"
+      ],
+      "interventions": [
+        "Repotrectinib",
+        "Osimertinib"
+      ],
+      "sponsor": "Instituto Oncológico Dr Rosell",
+      "enrollment": 32,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Repotrectinib'"
+      ]
+    },
+    {
+      "nct_id": "NCT04886804",
+      "title": "Beamion LUNG-1: A Study to Test Different Doses of Zongertinib in People With Different Types of Advanced Cancer (Solid Tumours With Changes in the HER2 Gene)",
+      "brief_title": "Beamion LUNG-1: A Study to Test Different Doses of Zongertinib in People With Different Types of Advanced Cancer (Solid Tumours With Changes in the HER2 Gene)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Neoplasm Metastasis",
+        "Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "zongertinib"
+      ],
+      "sponsor": "Boehringer Ingelheim",
+      "enrollment": 554,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT05777603",
+      "title": "Study of Aerosolized Antibiotics and Pembrolizumab in Advanced Non-small Cell Lung Cancer",
+      "brief_title": "Study of Aerosolized Antibiotics and Pembrolizumab in Advanced Non-small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Advanced Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "aerosolized aztreonam",
+        "aerosolized vancomycin",
+        "pembrolizumab"
+      ],
+      "sponsor": "National Cancer Institute (NCI)",
+      "enrollment": 23,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06218914",
+      "title": "Phase 1 Study to Investigate TCRTs KRAS Mutation in Unresectable, Advanced, and/or Metastatic Solid Tumors",
+      "brief_title": "Phase 1 Study to Investigate TCRTs KRAS Mutation in Unresectable, Advanced, and/or Metastatic Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer",
+        "Colorectal Carcinoma",
+        "Pancreatic Ductal Adenocarcinoma"
+      ],
+      "interventions": [
+        "NT-112: Autologous, engineered T Cells targeting KRAS G12D",
+        "AZD0240: Autologous, engineered T Cells targeting KRAS G12D"
+      ],
+      "sponsor": "AstraZeneca",
+      "enrollment": 24,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT06253871",
+      "title": "A Phase 1/1b Study of IAM1363 in HER2 Cancers",
+      "brief_title": "A Phase 1/1b Study of IAM1363 in HER2 Cancers",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "HER2 Mutation-Related Tumors",
+        "HER2",
+        "HER2-positive Breast Cancer"
+      ],
+      "interventions": [
+        "IAM1363"
+      ],
+      "sponsor": "Iambic Therapeutics, Inc",
+      "enrollment": 243,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06625775",
+      "title": "Open-Label Study of BBO-10203 in Subjects With Advanced Solid Tumors",
+      "brief_title": "Open-Label Study of BBO-10203 in Subjects With Advanced Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Solid Tumor, Adult",
+        "Metastatic Breast Cancer",
+        "Advanced Breast Cancer"
+      ],
+      "interventions": [
+        "BBO-10203",
+        "Trastuzumab",
+        "Fulvestrant",
+        "Ribociclib"
+      ],
+      "sponsor": "TheRas, Inc., d/b/a BBOT (BridgeBio Oncology Therapeutics)",
+      "enrollment": 392,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT07140016",
+      "title": "A Study of Gilteritinib in Adults With Advanced ALK-positive Non-small Cell Lung Cancer (NSCLC)",
+      "brief_title": "A Study of Gilteritinib in Adults With Advanced ALK-positive Non-small Cell Lung Cancer (NSCLC)",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer (NSCLC)",
+        "Anaplastic Lymphoma Kinase (ALK) Positive"
+      ],
+      "interventions": [
+        "gilteritinib"
+      ],
+      "sponsor": "Astellas Pharma Global Development, Inc.",
+      "enrollment": 40,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT07166601",
+      "title": "M0324 as Monotherapy and in Combination With Pembrolizumab or Chemotherapy in Participants With Selected Advanced Solid Tumors",
+      "brief_title": "M0324 as Monotherapy and in Combination With Pembrolizumab or Chemotherapy in Participants With Selected Advanced Solid Tumors",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Advanced Solid Tumor"
+      ],
+      "interventions": [
+        "M0324",
+        "M0324",
+        "Pembrolizumab",
+        "mFOLFIRINOX"
+      ],
+      "sponsor": "EMD Serono Research & Development Institute, Inc.",
+      "enrollment": 77,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07180862",
+      "title": "A Study Evaluating BAT3306 Compared With Keytruda® in NSCLC Cancer Participants",
+      "brief_title": "A Study Evaluating BAT3306 Compared With Keytruda® in NSCLC Cancer Participants",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Carcinoma, Non-Small-Cell Lung"
+      ],
+      "interventions": [
+        "BAT3306",
+        "US-Keytruda®"
+      ],
+      "sponsor": "Bio-Thera Solutions",
+      "enrollment": 140,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT07227168",
+      "title": "A Study of STRO-004 in Adults With Refractory/Recurrent Metastatic Cancer",
+      "brief_title": "A Study of STRO-004 in Adults With Refractory/Recurrent Metastatic Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE1"
+      ],
+      "conditions": [
+        "Head and Neck Squamous Cell Carcinoma HNSCC",
+        "Non-Small Cell Lung Cancer NSCLC",
+        "Esophageal Cancer"
+      ],
+      "interventions": [
+        "STRO-004",
+        "Pembrolizumab"
+      ],
+      "sponsor": "Sutro Biopharma, Inc.",
+      "enrollment": 200,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT04790682",
+      "title": "LIquid Biopsy to prEdict Responses To First-line immunotherapY in Metastatic Non-small Cell LUNG Cancer. LIBERTY LUNG",
+      "brief_title": "LIquid Biopsy to prEdict Responses To First-line immunotherapY in Metastatic Non-small Cell LUNG Cancer. LIBERTY LUNG",
+      "status": "RECRUITING",
+      "phase": [
+        "NA"
+      ],
+      "conditions": [
+        "Metastatic Lung Cancer"
+      ],
+      "interventions": [
+        "assessment of the predictive value of ctDNA level of the prominent mutant allele variation between baseline and week 6, on response to treatment according to RECIST 1.1 criteria."
+      ],
+      "sponsor": "Institut Curie",
+      "enrollment": 300,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT04886401",
+      "title": "Retrospective Observational Study on Prediction of Response to PD-1 Immunotherapy in Patients with NSCLC",
+      "brief_title": "Retrospective Observational Study on Prediction of Response to PD-1 Immunotherapy in Patients with NSCLC",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Advanced Non Small Cell Lung Cancer"
+      ],
+      "interventions": [],
+      "sponsor": "University Hospital, Brest",
+      "enrollment": 50,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05122806",
+      "title": "Analysis of Biological Characteristics of Advanced ALK-rearranged NSCLC",
+      "brief_title": "Analysis of Biological Characteristics of Advanced ALK-rearranged NSCLC",
+      "status": "RECRUITING",
+      "phase": [
+        "NA"
+      ],
+      "conditions": [
+        "Non-small Cell Lung Cancer",
+        "ALK Gene Rearrangement Positive"
+      ],
+      "interventions": [
+        "RNAseq"
+      ],
+      "sponsor": "Groupe Francais De Pneumo-Cancerologie",
+      "enrollment": 100,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT05145244",
+      "title": "Copenhagen Master Observational Trial",
+      "brief_title": "Copenhagen Master Observational Trial",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Non-small Cell Lung Cancer",
+        "Breast Cancer"
+      ],
+      "interventions": [
+        "NO intervention"
+      ],
+      "sponsor": "Rigshospitalet, Denmark",
+      "enrollment": 2400,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT05260606",
+      "title": "Imaging Biomarkers for Immune Checkpoint Inhibitor Treatment in Patients With Non-small Cell Lung Cancer",
+      "brief_title": "Imaging Biomarkers for Immune Checkpoint Inhibitor Treatment in Patients With Non-small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Carcinoma, Non-Small-Cell Lung",
+        "Immune Checkpoint Inhibitors"
+      ],
+      "interventions": [
+        "F-18 FDG PET/CT"
+      ],
+      "sponsor": "Samsung Medical Center",
+      "enrollment": 100,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT05724004",
+      "title": "Alectinib Followed by Concomitant Consolidation Radiation Therapy in Advanced NSCLC With ALK-rearrangement (A-SAB)",
+      "brief_title": "Alectinib Followed by Concomitant Consolidation Radiation Therapy in Advanced NSCLC With ALK-rearrangement (A-SAB)",
+      "status": "RECRUITING",
+      "phase": [
+        "NA"
+      ],
+      "conditions": [
+        "Radiotherapy Side Effect",
+        "Non-small Cell Lung Cancer",
+        "ALK Gene Mutation"
+      ],
+      "interventions": [
+        "SBRT/SRS/radiation therapy"
+      ],
+      "sponsor": "Karolinska University Hospital",
+      "enrollment": 70,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT05935384",
+      "title": "SIBYL: obServation of Therapy Response With lIquid BiopsY evaLuation",
+      "brief_title": "SIBYL: obServation of Therapy Response With lIquid BiopsY evaLuation",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Non-small Cell Lung Cancer",
+        "Colorectal Cancer",
+        "Breast Cancer"
+      ],
+      "interventions": [
+        "Guardant360"
+      ],
+      "sponsor": "Guardant Health, Inc.",
+      "enrollment": 470,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06000358",
+      "title": "The Effect of Combined Cryotherapy and Immunotherapy on Systemic T Cell Changes and Clinical Outcomes in Metastatic Non-small Cell Lung Cancer",
+      "brief_title": "The Effect of Combined Cryotherapy and Immunotherapy on Systemic T Cell Changes and Clinical Outcomes in Metastatic Non-small Cell Lung Cancer",
+      "status": "RECRUITING",
+      "phase": [
+        "NA"
+      ],
+      "conditions": [
+        "Lung Cancer Stage IV"
+      ],
+      "interventions": [
+        "Bronchoscopic cryotherapy",
+        "Pembrolizumab",
+        "Platinum based chemotherapy"
+      ],
+      "sponsor": "Lithuanian University of Health Sciences",
+      "enrollment": 120,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', intr='Pembrolizumab'"
+      ]
+    },
+    {
+      "nct_id": "NCT06180005",
+      "title": "Incidence and Characterization of Drivers Oncogenes in the Population With Lung Cancer Afferents to the Cancer Institute in Aviano (IN.ON.D.)",
+      "brief_title": "Incidence and Characterization of Drivers Oncogenes in the Population With Lung Cancer Afferents to the Cancer Institute in Aviano (IN.ON.D.)",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Non Small Cell Lung Cancer"
+      ],
+      "interventions": [],
+      "sponsor": "Centro di Riferimento Oncologico - Aviano",
+      "enrollment": 700,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT06234579",
+      "title": "Longitudinal Assessment of Genomic Alterations and Clonal Evolution in ALK-positive NSCLC (Galileo Project)",
+      "brief_title": "Longitudinal Assessment of Genomic Alterations and Clonal Evolution in ALK-positive NSCLC (Galileo Project)",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "ALK Gene Mutation",
+        "NSCLC Stage IV",
+        "ALK Sensitizing Mutation"
+      ],
+      "interventions": [
+        "Biopsy (tissue or liquid)"
+      ],
+      "sponsor": "Fondazione Policlinico Universitario Agostino Gemelli IRCCS",
+      "enrollment": 108,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ALK rearrangement'"
+      ]
+    },
+    {
+      "nct_id": "NCT06646471",
+      "title": "PROspective Master-protocol for Evaluation of Systemic THErapeutics in Elderly With Thoracic Malignancies",
+      "brief_title": "PROspective Master-protocol for Evaluation of Systemic THErapeutics in Elderly With Thoracic Malignancies",
+      "status": "RECRUITING",
+      "phase": [
+        "PHASE4"
+      ],
+      "conditions": [
+        "Non Small Cell Lung Cancer",
+        "Lung Cancer"
+      ],
+      "interventions": [
+        "Bio-bank repository",
+        "Quality of Life (QoL)",
+        "G-Code"
+      ],
+      "sponsor": "GFPC Investigation",
+      "enrollment": 500,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='Master Protocol'"
+      ]
+    },
+    {
+      "nct_id": "NCT06809764",
+      "title": "Clinical Effectiveness and Safety of Trastuzumab Deruxtecan (T-DXd) in Chinese Patients With HER2m NSCLC (RERUN)",
+      "brief_title": "Clinical Effectiveness and Safety of Trastuzumab Deruxtecan (T-DXd) in Chinese Patients With HER2m NSCLC (RERUN)",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Non-small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "No drug"
+      ],
+      "sponsor": "Daiichi Sankyo",
+      "enrollment": 150,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT07008287",
+      "title": "Real-world Study of Taletrectinib for Advanced ROS1+ NSCLC With Brain Metastases",
+      "brief_title": "Real-world Study of Taletrectinib for Advanced ROS1+ NSCLC With Brain Metastases",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "Taletrectinib"
+      ],
+      "sponsor": "Innovent Biologics (Suzhou) Co. Ltd.",
+      "enrollment": 100,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT07109154",
+      "title": "DeniLA: Comprehensive Demographics and Clinical Profile of NSCLC Patients: Analyzing Guideline-Concordant Care in First-line Treatment Patterns",
+      "brief_title": "DeniLA: Comprehensive Demographics and Clinical Profile of NSCLC Patients: Analyzing Guideline-Concordant Care in First-line Treatment Patterns",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "Lung Neoplasms"
+      ],
+      "interventions": [],
+      "sponsor": "AstraZeneca",
+      "enrollment": 200,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
+      ]
+    },
+    {
+      "nct_id": "NCT07199959",
+      "title": "Study on the Mechanism of Acquired Resistance of Entrectinib",
+      "brief_title": "Study on the Mechanism of Acquired Resistance of Entrectinib",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "ROS1 Fusion Positive",
+        "Non Small Cell Lung Cancer"
+      ],
+      "interventions": [
+        "venipuncyure",
+        "Entrectinib"
+      ],
+      "sponsor": "Fudan University",
+      "enrollment": 38,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='ROS1 fusion'"
+      ]
+    },
+    {
+      "nct_id": "NCT07356544",
+      "title": "Observational, Prospective, Multi-centric Study Exploring HER2 Mutations Incidence and Therapeutic Management in aNSCLC",
+      "brief_title": "Observational, Prospective, Multi-centric Study Exploring HER2 Mutations Incidence and Therapeutic Management in aNSCLC",
+      "status": "RECRUITING",
+      "phase": [],
+      "conditions": [
+        "NSCLC (Advanced Non-small Cell Lung Cancer)",
+        "HER2"
+      ],
+      "interventions": [],
+      "sponsor": "Gruppo Oncologico Italiano di Ricerca Clinica",
+      "enrollment": 50,
+      "start_date": null,
+      "primary_completion_date": null,
+      "locations_count": null,
+      "study_type": "",
+      "found_by_queries": [
+        "cond='Non-small cell lung cancer', kw='HER2 mutation'"
       ]
     }
   ],
-  "agent_reasoning": "Based on the patient's profile—**43-year-old female, never smoker, with lung adenocarcinoma**—there is a very high probability (up to 60-70%) of an actionable driver mutation such as **EGFR, ALK, ROS1, or HER2**. The presence of **signet-ring cell features** is a unique histologic subtype often associated with aggressive behavior and specific molecular alterations (particularly ALK and ROS1 rearrangements).\n\nSince the patient appears to be **treatment-naive** (first-line setting), the priority is to find trials offering potent, next-generation targeted therapies that may be superior to standard chemotherapy/immunotherapy.\n\n### **Search Strategy**\n1.  **Broad Phenotype Search:** Screened for \"Non-Small Cell Lung Cancer\" (NSCLC) trials accepting young females.\n2.  **Driver-Specific Searches:** Targeted \"First-line\" or \"Treatment-naive\" trials for **EGFR, ALK, ROS1, and HER2**, as these are the most likely drivers in a never-smoker.\n3.  **Histology Check:** Looked for \"signet ring\" mentions (rarely specific inclusion criteria, but covered under broad adenocarcinoma trials).\n\n---\n\n### **Top 5 Clinical Trial Candidates**\n\nThese trials are grouped by the specific genetic mutation they target. The patient **must undergo comprehensive biomarker testing (NGS)** to determine which of these is the correct match.\n\n#### **1. If ALK-Positive (High Probability)**\n*   **Trial:** **Phase 3 Study of Neladalkib (NVL-655) vs. Crizotinib in TKI-Naive ALK-Positive NSCLC**\n*   **NCT ID:** [NCT06765109](https://clinicaltrials.gov/study/NCT06765109)\n*   **Why it's a top match:**\n    *   **Target:** ALK fusion (common in young, never-smokers with signet-ring features).\n    *   **Design:** This is a head-to-head Phase 3 trial testing a \"4th generation\" ALK inhibitor (Neladalkib) designed to be more potent and brain-penetrant than earlier drugs.\n    *   **Fit:** Specifically recruiting **treatment-naive** patients.\n\n#### **2. If ROS1-Positive (Strong Possibility)**\n*   **Trial:** **TRIDENT-1: Repotrectinib in Patients with ROS1 or NTRK Fusions**\n*   **NCT ID:** [NCT03093116](https://clinicaltrials.gov/study/NCT03093116)\n*   **Why it's a top match:**\n    *   **Target:** ROS1 fusions (highly enriched in never-smokers).\n    *   **Design:** The \"EXP-1\" cohort is specifically for **ROS1 TKI-naïve** patients. Repotrectinib is a next-generation inhibitor with high efficacy against resistance mutations.\n    *   **Fit:** Ideal for a patient presenting with advanced stage disease who needs a durable first-line option.\n\n#### **3. If HER2-Mutated (Significant Possibility)**\n*   **Trial:** **Beamion LUNG-2: Zongertinib vs. Standard of Care in First-Line HER2+ NSCLC**\n*   **NCT ID:** [NCT06151574](https://clinicaltrials.gov/study/NCT06151574)\n*   **Why it's a top match:**\n    *   **Target:** HER2 (ERBB2) mutations.\n    *   **Design:** Phase 3 trial comparing a specific HER2-targeted pill (Zongertinib) directly against standard chemo-immunotherapy.\n    *   **Fit:** HER2 mutations are a distinct driver in never-smokers. This trial offers access to targeted therapy in the first-line setting, which is not currently standard of care (usually chemo first).\n\n#### **4. If EGFR-Mutated (Most Common)**\n*   **Trial:** **Amivantamab and Lazertinib in EGFR-Mutated NSCLC (CHRYSALIS-2 / MARIPOSA)**\n*   **NCT ID:** [NCT05498428](https://clinicaltrials.gov/study/NCT05498428)\n*   **Why it's a top match:**\n    *   **Target:** EGFR Exon 19 Deletion or L858R.\n    *   **Design:** Evaluates the chemo-free combination of a bispecific antibody (Amivantamab) and a TKI (Lazertinib).\n    *   **Fit:** Offers a potentially chemotherapy-sparing first-line option. (Note: Check specific cohort status as this is a large multi-cohort study).\n\n#### **5. If KRAS G12C-Mutated (Less common in never-smokers, but possible)**\n*   **Trial:** **CodeBreaK 202: Sotorasib vs. Standard of Care in First-Line KRAS G12C NSCLC**\n*   **NCT ID:** [NCT05920356](https://clinicaltrials.gov/study/NCT05920356)\n*   **Why it's a top match:**\n    *   **Target:** KRAS G12C mutation.\n    *   **Design:** Phase 3 comparing the KRAS inhibitor Sotorasib + Chemo against standard Chemo + Pembrolizumab.\n    *   **Fit:** Provides access to targeted therapy upfront for KRAS G12C, which is otherwise treated with chemo-immunotherapy alone.\n\n---\n\n### **Critical Next Steps**\n1.  **Molecular Testing is Urgent:** The \"Signet-ring\" histology and \"Never Smoker\" status make **Next-Generation Sequencing (NGS)** mandatory. You cannot choose a trial without knowing if she is `ALK+`, `ROS1+`, `EGFR+`, or `HER2+`.\n2.  **Brain MRI:** Many of these trials (especially ALK/ROS1) have specific inclusion criteria regarding brain metastases. A baseline MRI is essential.\n3.  **Confirm Stage:** The \"pleural fluid suspicious for malignancy\" needs to be confirmed (Stage IV) to be eligible for these metastatic trials.",
+  "agent_reasoning": "Based on the patient's clinical profile—specifically **young age (43)**, **never smoker** status, and **lung adenocarcinoma with signet-ring cell features**—there is a very high probability of an actionable driver mutation, most notably **ALK rearrangement** or **ROS1 rearrangement**, which are strongly associated with signet-ring morphology in never smokers. **RET fusions** and **HER2 mutations** are also possibilities.\n\nSince the patient appears to be **treatment-naive** (based on the \"presents with...\" history and lack of prior treatment mentioned), the following clinical trials are prioritized for first-line therapy.\n\n### **Top Priority: ALK & ROS1 Targeted Trials (Strongest Biological Link)**\nThese trials target the specific molecular drivers most likely to be present given the \"signet-ring cell\" histology and \"never smoker\" status.\n\n*   **NCT06765109: NVL-655 (Neladalkib) for TKI-Naive ALK-Positive NSCLC**\n    *   **Phase:** 3\n    *   **Relevance:** This trial specifically recruits patients who have **not** received prior TKI treatment, making it an ideal first-line option if she is ALK-positive. NVL-655 is a next-generation ALK inhibitor designed to overcome resistance and penetrate the brain.\n    *   **Key Criterion:** Must have documented ALK rearrangement (tissue or blood).\n\n*   **NCT06564324: Taletrectinib vs. Standard Therapy for ROS1-Positive NSCLC**\n    *   **Phase:** 3\n    *   **Relevance:** Signet-ring cell features are also a hallmark of ROS1-rearranged lung cancer. This trial compares a potent new ROS1 inhibitor (Taletrectinib) against standard chemotherapy/crizotinib in the first-line setting.\n    *   **Key Criterion:** Documented ROS1 rearrangement; no prior treatment for metastatic disease.\n\n*   **NCT03093116: Repotrectinib (TPX-0005) for ALK, ROS1, or NTRK1-3 Positive Tumors**\n    *   **Phase:** 1/2 (TRIDENT-1)\n    *   **Relevance:** A \"basket\" trial that covers multiple gene fusions (ALK, ROS1, NTRK). Repotrectinib is highly potent and FDA-approved for ROS1, but this trial may offer access if the specific Phase 3 trials above are unavailable or if she has an NTRK fusion (rare but possible).\n    *   **Key Criterion:** Advanced solid tumor with ALK, ROS1, or NTRK rearrangement.\n\n### **Secondary Drivers (RET & HER2)**\nIf ALK/ROS1 testing is negative, these drivers are the next most common in young never-smokers.\n\n*   **NCT06031558: SY-5007 (RET Inhibitor) for RET Fusion-Positive NSCLC**\n    *   **Phase:** 3\n    *   **Relevance:** RET fusions occur in ~1-2% of NSCLC, predominantly in never-smokers. This trial provides a specific targeted therapy (SY-5007) for treatment-naive patients.\n    *   **Key Criterion:** Confirmed RET fusion; no prior systemic therapy.\n\n*   **NCT06452277: Sevabertinib (BAY 2927088) vs. Standard of Care for HER2-Mutant NSCLC**\n    *   **Phase:** 3\n    *   **Relevance:** HER2 mutations occur in ~2-4% of never-smokers. This trial compares a novel HER2 inhibitor against the standard chemotherapy-immunotherapy regimen.\n    *   **Key Criterion:** Documented HER2 mutation (Exon 20 insertion or TKD mutation); treatment-naive.\n\n### **Broad / Driver-Negative Options (Standard of Care + Novel Agent)**\nIf no actionable driver mutation is found (or while waiting for results), these trials add a novel agent to the standard chemotherapy + immunotherapy backbone.\n\n*   **NCT04165070: KEYMAKER-U01 Substudy 01A (Pembrolizumab + Novel Agents)**\n    *   **Phase:** 1/2\n    *   **Relevance:** Designed for **treatment-naive** Stage IV NSCLC patients. It combines the standard immunotherapy (Pembrolizumab) with various investigational agents. This is an excellent \"catch-all\" option if her tumor is \"driver-negative\".\n    *   **Key Criterion:** Treatment-naive Stage IV NSCLC; no actionable EGFR/ALK/ROS1 (usually excluded or enrolled in separate cohorts).\n\n*   **NCT06711900: SKB264 (TROP2-ADC) + Pembrolizumab vs. Chemo + Pembrolizumab**\n    *   **Phase:** 3\n    *   **Relevance:** Tests a TROP2-directed antibody-drug conjugate (SKB264) combined with immunotherapy in the first-line setting. This is a promising approach for patients without classic driver mutations.\n    *   **Key Criterion:** PD-L1 negative or positive cohorts likely available; treatment-naive.\n\n### **Next Steps for the Patient**\n1.  **Molecular Testing is Critical:** Her \"signet-ring\" histology is a strong predictor for **ALK** or **ROS1**. Ensure her biopsy is sent for a comprehensive NGS panel (Next-Generation Sequencing) covering ALK, ROS1, RET, MET, HER2, and NTRK immediately.\n2.  **Screening:** Most of the trials above (especially the Phase 3 ALK/ROS1 trials) will accept patients for screening and may facilitate the molecular testing confirmation.",
   "tool_call_trace": [
     {
       "call_index": 0,
-      "tool_name": "search_trials",
+      "tool_name": "consult_medical_expert",
       "args": {
-        "max_age": "75 Years",
-        "condition": "Lung Adenocarcinoma",
-        "status": [
-          "RECRUITING"
-        ],
-        "min_age": "18 Years",
-        "sex": "FEMALE",
-        "page_size": 10,
-        "location": "United States"
+        "question": "A 43-year-old female never-smoker has lung malignancy with signet-ring cell features, bilateral lung involvement, and lymphovascular invasion. 1. What specific lung cancer subtypes or driver mutations are strongly associated with signet-ring cell features in never smokers? 2. What search terms should I use on ClinicalTrials.gov to find trials relevant to this specific histology?"
       },
-      "result_summary": "Found 10 trials (API total: 10), latency 463ms. NCT IDs: ['NCT05783622', 'NCT06562192', 'NCT06814496', 'NCT05286814', 'NCT03556228', 'NCT06066138', 'NCT05797168', 'NCT06147037', 'NCT06503146', 'NCT04119024']",
-      "result_count": 10,
-      "latency_ms": 465.3287089895457,
-      "error": null
+      "result_summary": "Error in consult_medical_expert: Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-051772",
+      "result_count": 0,
+      "latency_ms": 1809.3195840010594,
+      "error": "Client error '400 Bad Request' for url 'https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0517724223/locations/us-central1/endpoints/7499477442478735360:predict'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400"
     },
     {
       "call_index": 1,
       "tool_name": "search_trials",
       "args": {
-        "max_age": "75 Years",
-        "condition": "Non-small cell lung cancer",
-        "status": [
-          "RECRUITING"
-        ],
-        "min_age": "18 Years",
-        "sex": "FEMALE",
-        "page_size": 10,
-        "location": "United States"
+        "eligibility_keywords": "signet ring cell",
+        "condition": "Non-small cell lung cancer"
       },
-      "result_summary": "Found 10 trials (API total: 10), latency 1229ms. NCT IDs: ['NCT05920356', 'NCT05783622', 'NCT06562192', 'NCT06814496', 'NCT05317858', 'NCT06593522', 'NCT03556228', 'NCT05807048', 'NCT06385925', 'NCT05261399']",
-      "result_count": 10,
-      "latency_ms": 1230.514166993089,
+      "result_summary": "Found 0 trials (API total: 0), latency 2250ms. NCT IDs: []",
+      "result_count": 0,
+      "latency_ms": 2250.2856250030163,
       "error": null
     },
     {
       "call_index": 2,
       "tool_name": "search_trials",
       "args": {
-        "page_size": 10,
-        "location": "United States",
-        "condition": "Non-small cell lung cancer",
-        "status": [
-          "RECRUITING"
-        ],
-        "eligibility_keywords": "EGFR treatment naive"
+        "eligibility_keywords": "never smoker",
+        "condition": "Lung Adenocarcinoma"
       },
-      "result_summary": "Found 3 trials (API total: 3), latency 307ms. NCT IDs: ['NCT04762199', 'NCT05498428', 'NCT03175224']",
-      "result_count": 3,
-      "latency_ms": 307.3286669095978,
+      "result_summary": "Found 1 trials (API total: 1), latency 1577ms. NCT IDs: ['NCT05456256']",
+      "result_count": 1,
+      "latency_ms": 1577.1834580009454,
       "error": null
     },
     {
       "call_index": 3,
       "tool_name": "search_trials",
       "args": {
-        "page_size": 10,
-        "location": "United States",
-        "status": [
-          "RECRUITING"
-        ],
-        "eligibility_keywords": "ALK treatment naive",
-        "condition": "Non-small cell lung cancer"
+        "condition": "Non-small cell lung cancer",
+        "eligibility_keywords": "ALK rearrangement"
       },
-      "result_summary": "Found 2 trials (API total: 2), latency 1341ms. NCT IDs: ['NCT06765109', 'NCT03093116']",
-      "result_count": 2,
-      "latency_ms": 1341.6972500272095,
+      "result_summary": "Found 12 trials (API total: 12), latency 1459ms. NCT IDs: ['NCT05236946', 'NCT06528847', 'NCT06092086', 'NCT05724004', 'NCT06620835', 'NCT04084717', 'NCT07140016', 'NCT03093116', 'NCT05014464', 'NCT06074588', 'NCT05122806', 'NCT06234579']",
+      "result_count": 12,
+      "latency_ms": 1459.043417002249,
       "error": null
     },
     {
       "call_index": 4,
-      "tool_name": "get_trial_details",
+      "tool_name": "search_trials",
       "args": {
-        "nct_id": "NCT06765109"
+        "condition": "Solid Tumor",
+        "eligibility_keywords": "signet ring cell"
       },
-      "result_summary": "Fetched details for NCT06765109 (Neladalkib (NVL-655) for TKI-naive Patients With Advanced ALK-Positive NSCLC), latency 181ms",
+      "result_summary": "Found 0 trials (API total: 0), latency 1326ms. NCT IDs: []",
       "result_count": 0,
-      "latency_ms": 181.4298750832677,
+      "latency_ms": 1326.1838340004033,
       "error": null
     },
     {
       "call_index": 5,
       "tool_name": "get_trial_details",
       "args": {
-        "nct_id": "NCT05498428"
+        "nct_id": "NCT05456256"
       },
-      "result_summary": "Fetched details for NCT05498428 (A Study of Amivantamab in Participants With Advanced or Metastatic Solid Tumors Including Epidermal Growth Factor Receptor (EGFR)-Mutated Non-Small Cell Lung Cancer), latency 1451ms",
+      "result_summary": "Fetched details for NCT05456256 (A Study of LP-300 With Carboplatin and Pemetrexed in Never Smokers With Advanced Lung Adenocarcinoma), latency 270ms",
       "result_count": 0,
-      "latency_ms": 1452.0209579495713,
+      "latency_ms": 270.0755419973575,
       "error": null
     },
     {
       "call_index": 6,
-      "tool_name": "get_trial_details",
+      "tool_name": "search_trials",
       "args": {
-        "nct_id": "NCT03093116"
+        "eligibility_keywords": "treatment naive",
+        "phase": [
+          "PHASE2",
+          "PHASE3"
+        ],
+        "condition": "Non-small cell lung cancer"
       },
-      "result_summary": "Fetched details for NCT03093116 (A Study of Repotrectinib (TPX-0005) in Patients With Advanced Solid Tumors Harboring ALK, ROS1, or NTRK1-3 Rearrangements), latency 1500ms",
-      "result_count": 0,
-      "latency_ms": 1539.8308750009164,
+      "result_summary": "Found 2 trials (API total: 2), latency 355ms. NCT IDs: ['NCT06765109', 'NCT05549037']",
+      "result_count": 2,
+      "latency_ms": 355.03075000087847,
       "error": null
     },
     {
       "call_index": 7,
       "tool_name": "search_trials",
       "args": {
-        "page_size": 10,
-        "eligibility_keywords": "HER2 mutation",
-        "location": "United States",
-        "condition": "Non-small cell lung cancer",
-        "status": [
-          "RECRUITING"
-        ]
+        "intervention": "Repotrectinib",
+        "condition": "Non-small cell lung cancer"
       },
-      "result_summary": "Found 10 trials (API total: 10), latency 1552ms. NCT IDs: ['NCT04886804', 'NCT07195695', 'NCT07361562', 'NCT06151574', 'NCT06706076', 'NCT06253871', 'NCT05785741', 'NCT04585750', 'NCT06625775', 'NCT06452277']",
-      "result_count": 10,
-      "latency_ms": 1552.6647920487449,
+      "result_summary": "Found 4 trials (API total: 4), latency 1374ms. NCT IDs: ['NCT04772235', 'NCT06315010', 'NCT06552234', 'NCT03093116']",
+      "result_count": 4,
+      "latency_ms": 1374.6390420019452,
       "error": null
     },
     {
       "call_index": 8,
       "tool_name": "search_trials",
       "args": {
-        "location": "United States",
         "condition": "Non-small cell lung cancer",
+        "eligibility_keywords": "ROS1 fusion"
+      },
+      "result_summary": "Found 14 trials (API total: 14), latency 1733ms. NCT IDs: ['NCT04900935', 'NCT07330596', 'NCT06564324', 'NCT05284539', 'NCT04996121', 'NCT01639508', 'NCT04322890', 'NCT07008287', 'NCT06196424', 'NCT07154706', 'NCT06563999', 'NCT04777084', 'NCT07199959', 'NCT06074588']",
+      "result_count": 14,
+      "latency_ms": 1733.3259580009326,
+      "error": null
+    },
+    {
+      "call_index": 9,
+      "tool_name": "search_trials",
+      "args": {
+        "condition": "Non-small cell lung cancer",
+        "eligibility_keywords": "RET fusion"
+      },
+      "result_summary": "Found 11 trials (API total: 11), latency 1245ms. NCT IDs: ['NCT04900935', 'NCT06147570', 'NCT07330596', 'NCT04777175', 'NCT01639508', 'NCT06031558', 'NCT04322890', 'NCT06109558', 'NCT06196424', 'NCT06563999', 'NCT06074588']",
+      "result_count": 11,
+      "latency_ms": 1246.085208000295,
+      "error": null
+    },
+    {
+      "call_index": 10,
+      "tool_name": "get_trial_details",
+      "args": {
+        "nct_id": "NCT06765109"
+      },
+      "result_summary": "Fetched details for NCT06765109 (Neladalkib (NVL-655) for TKI-naive Patients With Advanced ALK-Positive NSCLC), latency 2352ms",
+      "result_count": 0,
+      "latency_ms": 2351.921499997843,
+      "error": null
+    },
+    {
+      "call_index": 11,
+      "tool_name": "get_trial_details",
+      "args": {
+        "nct_id": "NCT06564324"
+      },
+      "result_summary": "Fetched details for NCT06564324 (A Phase III Study Comparing Taletrectinib With Standard Therapy in ROS1 Positive Locally Advanced or Metastatic Non-small Cell Lung Cancer Patients), latency 1185ms",
+      "result_count": 0,
+      "latency_ms": 1184.8944170014875,
+      "error": null
+    },
+    {
+      "call_index": 12,
+      "tool_name": "get_trial_details",
+      "args": {
+        "nct_id": "NCT03093116"
+      },
+      "result_summary": "Fetched details for NCT03093116 (A Study of Repotrectinib (TPX-0005) in Patients With Advanced Solid Tumors Harboring ALK, ROS1, or NTRK1-3 Rearrangements), latency 1798ms",
+      "result_count": 0,
+      "latency_ms": 1798.8228340000205,
+      "error": null
+    },
+    {
+      "call_index": 13,
+      "tool_name": "search_trials",
+      "args": {
+        "eligibility_keywords": "HER2 mutation",
+        "condition": "Non-small cell lung cancer"
+      },
+      "result_summary": "Found 37 trials (API total: 37), latency 523ms. NCT IDs: ['NCT05145244', 'NCT07109154', 'NCT07356544', 'NCT05627960', 'NCT05751018', 'NCT06706076', 'NCT06043817', 'NCT06106802', 'NCT04777175', 'NCT05785741', 'NCT07012031', 'NCT06222489', 'NCT07070232', 'NCT04322890', 'NCT07195695', 'NCT04585750', 'NCT06625775', 'NCT07361562', 'NCT06749860', 'NCT04144569', 'NCT06253871', 'NCT06452277', 'NCT07192068', 'NCT06430437', 'NCT06632262', 'NCT06180005', 'NCT05935384', 'NCT06734182', 'NCT04886804', 'NCT07428044', 'NCT05579366', 'NCT06563999', 'NCT06809764', 'NCT06114511', 'NCT05532696', 'NCT05150691', 'NCT06151574']",
+      "result_count": 37,
+      "latency_ms": 523.621042000741,
+      "error": null
+    },
+    {
+      "call_index": 14,
+      "tool_name": "search_trials",
+      "args": {
+        "condition": "Non-small cell lung cancer",
+        "eligibility_keywords": "NRG1 fusion"
+      },
+      "result_summary": "Found 1 trials (API total: 1), latency 1125ms. NCT IDs: ['NCT07361562']",
+      "result_count": 1,
+      "latency_ms": 1124.930707999738,
+      "error": null
+    },
+    {
+      "call_index": 15,
+      "tool_name": "search_trials",
+      "args": {
+        "intervention": "Pembrolizumab",
         "status": [
           "RECRUITING"
         ],
-        "eligibility_keywords": "RET fusion",
-        "page_size": 10
+        "condition": "Non-small cell lung cancer"
       },
-      "result_summary": "Found 3 trials (API total: 3), latency 1432ms. NCT IDs: ['NCT04900935', 'NCT06074588', 'NCT01639508']",
-      "result_count": 3,
-      "latency_ms": 1432.2990829823539,
+      "result_summary": "Found 50 trials (API total: 50), latency 1853ms. NCT IDs: ['NCT05937906', 'NCT06692738', 'NCT07362459', 'NCT04165798', 'NCT04613596', 'NCT06875310', 'NCT06788912', 'NCT05085028', 'NCT07122687', 'NCT04297605', 'NCT07252739', 'NCT04267848', 'NCT06000358', 'NCT06731413', 'NCT05260606', 'NCT07221474', 'NCT04322617', 'NCT06711900', 'NCT03476681', 'NCT06216301', 'NCT06228326', 'NCT05501665', 'NCT03991819', 'NCT06840782', 'NCT05627960', 'NCT02998567', 'NCT05570825', 'NCT07180862', 'NCT06405230', 'NCT05467748', 'NCT03645928', 'NCT04886401', 'NCT06162221', 'NCT07020221', 'NCT07166601', 'NCT04790682', 'NCT05669846', 'NCT07227168', 'NCT06333951', 'NCT06687369', 'NCT05098132', 'NCT05920356', 'NCT06047379', 'NCT03412877', 'NCT06538012', 'NCT07287995', 'NCT06726265', 'NCT05777603', 'NCT06388031', 'NCT07223424']",
+      "result_count": 50,
+      "latency_ms": 1853.9294580004935,
+      "error": null
+    },
+    {
+      "call_index": 16,
+      "tool_name": "search_trials",
+      "args": {
+        "eligibility_keywords": "Master Protocol",
+        "condition": "Non-small cell lung cancer"
+      },
+      "result_summary": "Found 10 trials (API total: 10), latency 1457ms. NCT IDs: ['NCT04165798', 'NCT06710132', 'NCT06333951', 'NCT06218914', 'NCT03851445', 'NCT06646471', 'NCT05123482', 'NCT06712316', 'NCT06780098', 'NCT04165070']",
+      "result_count": 10,
+      "latency_ms": 1457.7010000029986,
+      "error": null
+    },
+    {
+      "call_index": 17,
+      "tool_name": "get_trial_details",
+      "args": {
+        "nct_id": "NCT06031558"
+      },
+      "result_summary": "Fetched details for NCT06031558 (Phase III Study of SY-5007, a RET Inhibitor, in Patients With Locally Advanced or Metastatic RET Fusion-positive NSCLC), latency 260ms",
+      "result_count": 0,
+      "latency_ms": 260.4440830000385,
+      "error": null
+    },
+    {
+      "call_index": 18,
+      "tool_name": "get_trial_details",
+      "args": {
+        "nct_id": "NCT06452277"
+      },
+      "result_summary": "Fetched details for NCT06452277 (A Study to Learn More About How Well Sevabertinib (BAY 2927088) Works and How Safe it is Compared With Standard Treatment, in Participants Who Have Advanced Non-small Cell Lung Cancer (NSCLC) With Mutations of the Human Epidermal Growth Factor Receptor 2 (HER2)), latency 1598ms",
+      "result_count": 0,
+      "latency_ms": 1597.884291997616,
       "error": null
     }
   ],
-  "total_api_calls": 9,
-  "total_unique_nct_ids": 34,
-  "gemini_input_tokens": 43166,
-  "gemini_output_tokens": 1929,
-  "gemini_estimated_cost": 0.0732475,
-  "medgemma_calls": 1,
-  "medgemma_estimated_cost": 0.04498,
-  "latency_ms": 79376.1632089736
+  "total_api_calls": 19,
+  "total_unique_nct_ids": 126,
+  "gemini_input_tokens": 106008,
+  "gemini_output_tokens": 1945,
+  "gemini_estimated_cost": 0.15196,
+  "medgemma_calls": 0,
+  "medgemma_estimated_cost": 0.0,
+  "latency_ms": 126378.4128749976,
+  "medgemma_guidance_raw": "",
+  "medgemma_condition_terms": [],
+  "medgemma_eligibility_keywords": [],
+  "condition_terms_searched": [
+    "Non-small cell lung cancer",
+    "Lung Adenocarcinoma",
+    "Non-small cell lung cancer",
+    "Solid Tumor",
+    "Non-small cell lung cancer",
+    "Non-small cell lung cancer",
+    "Non-small cell lung cancer",
+    "Non-small cell lung cancer",
+    "Non-small cell lung cancer",
+    "Non-small cell lung cancer",
+    "Non-small cell lung cancer",
+    "Non-small cell lung cancer"
+  ]
 }

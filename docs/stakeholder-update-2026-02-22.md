@@ -9,7 +9,7 @@
 An AI-powered clinical trial matching system that takes a cancer patient's medical record and automatically finds + evaluates matching clinical trials from ClinicalTrials.gov.
 
 - **3-stage pipeline**: Extract patient facts -> Search trials -> Evaluate eligibility criteria
-- **3 AI models working together**: MedGemma 4B (medical terms), MedGemma 27B (clinical reasoning), Gemini 3 Pro (orchestration)
+- **3 AI models working together**: MedGemma 1.5 4B (medical terms), MedGemma 27B (clinical reasoning), Gemini 3 Pro (orchestration)
 - **Live ClinicalTrials.gov integration** via agentic search (not static data)
 - **37 real NSCLC patient cases** for demonstration
 - **183 automated tests**, zero lint errors
@@ -23,7 +23,7 @@ An AI-powered clinical trial matching system that takes a cancer patient's medic
 | **GPT-4 (gold standard)** | **75.0%** | Built into reference dataset |
 | **MedGemma 27B** | **70.0%** | Our best model, deployed on Google Cloud |
 | Gemini 3 Pro | 75.0% | General-purpose, not medical-specific |
-| MedGemma 4B | 35.0% | Limited by infrastructure bug (max 512 output tokens) |
+| MedGemma 1.5 4B | 35.0% | Limited by infrastructure bug (max 512 output tokens) |
 
 **Key takeaway**: MedGemma 27B reaches 70% accuracy on clinical criterion matching — within 5 points of GPT-4, and dramatically better than the smaller 4B model. This validates the multi-model approach.
 

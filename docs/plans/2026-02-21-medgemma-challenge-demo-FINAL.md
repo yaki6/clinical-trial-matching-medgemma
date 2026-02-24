@@ -14,7 +14,7 @@
 | **Video** | 3-minute max demo video |
 | **Writeup** | 3-page max (Kaggle Writeup format — rich markdown, inline) |
 | **Code** | Complete, reproducible source code |
-| **Model** | Must use >= 1 HAI-DEF model. We use **MedGemma 4B + 27B** |
+| **Model** | Must use >= 1 HAI-DEF model. We use **MedGemma 1.5 4B + 27B** |
 | **Prize** | $75,000 main + special awards (agent workflows, fine-tuning, edge AI) |
 | **Platform** | Kaggle Writeups (can revise before deadline) |
 
@@ -37,7 +37,7 @@
 | CLI pipeline (VALIDATE + METRICS) | 140 tests passing |
 | PRESCREEN agent (Gemini + CT.gov + MedGemma) | Ready, 33 unit tests |
 | 37 NSCLC patient profiles | `nsclc_trial_profiles.json` with key_facts |
-| MedGemma 4B endpoint | Active, smoke tests pass |
+| MedGemma 1.5 4B endpoint | Active, smoke tests pass |
 | MedGemma 27B endpoint | Active, smoke tests pass |
 | Gemini 3 Pro | API key validated |
 
@@ -45,17 +45,17 @@
 
 | Model | Accuracy | F1 Macro | Cohen's kappa | Notes |
 |-------|----------|----------|---------------|-------|
-| MedGemma 4B | 55% | 0.508 | 0.286 | Pre-prompt-fix (no inclusion/exclusion instructions) |
+| MedGemma 1.5 4B | 55% | 0.508 | 0.286 | Pre-prompt-fix (no inclusion/exclusion instructions) |
 | Gemini 3 Pro | 75% | 0.558 | 0.583 | Pre-prompt-fix |
 | GPT-4 (HF baseline) | 75% | 0.746 | — | From TrialGPT HF dataset |
 | **MedGemma 27B** | **Running** | — | — | **In separate session** (post-prompt-fix) |
-| **MedGemma 4B (re-run)** | **Running** | — | — | **In separate session** (post-prompt-fix) |
+| **MedGemma 1.5 4B (re-run)** | **Running** | — | — | **In separate session** (post-prompt-fix) |
 
 **Note**: Prompt fix added criterion-type-aware instructions (inclusion vs exclusion). 4B and 27B are being re-benchmarked with the fixed prompt. Results pending.
 
 ### Critical Fact
 
-MedGemma 4B (pre-fix) is 20 points worse than Gemini on criterion evaluation. We **cannot** claim "MedGemma outperforms general models." The narrative must be reframed. The prompt fix may improve 4B scores, and 27B is expected to perform better given 5x parameters.
+MedGemma 1.5 4B (pre-fix) is 20 points worse than Gemini on criterion evaluation. We **cannot** claim "MedGemma outperforms general models." The narrative must be reframed. The prompt fix may improve 4B scores, and 27B is expected to perform better given 5x parameters.
 
 ---
 
@@ -113,7 +113,7 @@ Streamlit App (localhost:8501)
 │                            │  └────────────────────────┘  │
 └──────────────────────────────────────────────────────────┘
          │              │              │
-     MedGemma 4B    MedGemma 27B    Gemini 3 Pro
+     MedGemma 1.5 4B    MedGemma 27B    Gemini 3 Pro
       (HF TGI)      (HF TGI)     (AI Studio)
          │
      CT.gov API v2
@@ -298,7 +298,7 @@ Loads pre-computed Phase 0 results from `runs/<run_id>/`:
 - Quantitative comparison vs GPT-4 baseline on TrialGPT expert annotations
 
 **1.3 HAI-DEF Model Utilization** (~200 words)
-- MedGemma 4B: medical term normalization (PRESCREEN search_variants)
+- MedGemma 1.5 4B: medical term normalization (PRESCREEN search_variants)
 - MedGemma 27B: criterion-level eligibility evaluation (VALIDATE)
 - Complementary roles: domain knowledge + general reasoning
 
@@ -380,7 +380,7 @@ Loads pre-computed Phase 0 results from `runs/<run_id>/`:
 
 | # | Item | Hours | Day |
 |---|------|-------|-----|
-| 14 | MedGemma 4B multimodal image support | 3h | 3 |
+| 14 | MedGemma 1.5 4B multimodal image support | 3h | 3 |
 | 15 | TxGemma or MedSigLIP quick integration (expand HAI-DEF usage) | 2h | 3 |
 | 16 | Export results as PDF report | 1h | 3 |
 

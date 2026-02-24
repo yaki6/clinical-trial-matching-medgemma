@@ -87,7 +87,7 @@ def parse_model_response(text: str) -> dict[str, str]:
     recognized section header or end of text. Recognized section headers
     are DIAGNOSIS:, FINDINGS:, and DIFFERENTIAL:.
 
-    Includes fallback strategies for models (like MedGemma 4B) that may
+    Includes fallback strategies for models (like MedGemma 1.5 4B) that may
     not follow the expected format precisely.
 
     Args:

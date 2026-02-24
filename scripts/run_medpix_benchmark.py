@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """MedPix Multimodal Benchmark Runner.
 
-Compares MedGemma 4B (HF Inference, multimodal) vs Gemini 3 Pro (AI Studio)
+Compares MedGemma 1.5 4B (HF Inference, multimodal) vs Gemini 3 Pro (AI Studio)
 on radiology diagnosis prediction and imaging findings extraction.
 
 Usage:
@@ -62,7 +62,7 @@ FINDINGS: [Detailed description of the imaging findings, including:
 
 DIFFERENTIAL: [Top 2-3 differential diagnoses if the primary diagnosis is uncertain]"""
 
-# Simplified prompt for MedGemma 4B — optimized for small model instruction-following
+# Simplified prompt for MedGemma 1.5 4B — optimized for small model instruction-following
 PROMPT_TEMPLATE_SIMPLE = """Clinical history: {history}
 
 Based on the image and clinical history, provide:
@@ -159,7 +159,7 @@ async def run_single_case(
     medgemma_response = None
     gemini_response = None
 
-    # MedGemma 4B (multimodal)
+    # MedGemma 1.5 4B (multimodal)
     try:
         logger.info("calling_medgemma", uid=case["uid"])
         # NOTE: system_message disabled — vLLM container may not support content block format
@@ -404,7 +404,7 @@ def print_comparison_table(summary: dict) -> None:
     print("\n" + "=" * 80)
     print(f"  MedPix Multimodal Benchmark — {mode_label} Results")
     print("=" * 80)
-    print(f"{'Metric':<40} {'MedGemma 4B':>15} {'Gemini Pro':>15}")
+    print(f"{'Metric':<40} {'MedGemma 1.5 4B':>15} {'Gemini Pro':>15}")
     print("-" * 80)
 
     rows = []

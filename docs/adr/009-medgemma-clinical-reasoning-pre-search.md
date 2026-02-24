@@ -12,12 +12,12 @@ Without clinical guidance, Gemini's search strategy relies only on explicit key_
 
 ## Decision
 
-Add an optional MedGemma 4B clinical reasoning call **before** the Gemini agentic loop. MedGemma generates a structured clinical guidance summary that is injected into Gemini's user prompt as a `## MedGemma Clinical Reasoning` section.
+Add an optional MedGemma 1.5 4B clinical reasoning call **before** the Gemini agentic loop. MedGemma generates a structured clinical guidance summary that is injected into Gemini's user prompt as a `## MedGemma Clinical Reasoning` section.
 
 ### Implementation
 
 - **Location**: `src/trialmatch/prescreen/agent.py` — `_get_clinical_guidance()` helper
-- **Model**: MedGemma 4B (via `medgemma_adapter` parameter)
+- **Model**: MedGemma 1.5 4B (via `medgemma_adapter` parameter)
 - **Prompt**: `CLINICAL_REASONING_PROMPT` — asks for:
   1. Standard CT.gov condition terms (2-3 best terms)
   2. Most likely molecular drivers (ranked by probability)
@@ -34,7 +34,7 @@ Add an optional MedGemma 4B clinical reasoning call **before** the Gemini agenti
 Patient Note + Key Facts
     |
     v
-[MedGemma 4B] Clinical reasoning → guidance text (12-43s, ~$0.05)
+[MedGemma 1.5 4B] Clinical reasoning → guidance text (12-43s, ~$0.05)
     |
     v
 [Gemini Flash] Agentic search loop (guided by MedGemma output)

@@ -189,7 +189,7 @@ async def main():
     print(f"\n{'='*80}")
     print(f"  MedPix Multi-Region 20-case Findings Benchmark")
     print(f"{'='*80}")
-    print(f"{'Metric':<40} {'MedGemma 4B':>15} {'Gemini Flash':>15}")
+    print(f"{'Metric':<40} {'MedGemma 1.5 4B':>15} {'Gemini Flash':>15}")
     print(f"{'-'*80}")
     rows = [
         ("Findings — LLM Judge (good)", f"{mg['findings_judge_good']:.0%}", f"{gm['findings_judge_good']:.0%}"),

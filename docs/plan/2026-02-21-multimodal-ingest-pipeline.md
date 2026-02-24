@@ -51,7 +51,7 @@ The MedGemma Impact Challenge demo (deadline Feb 24) needs realistic patient dat
 
 **AC**: The demo must use a **live MedGemma connection** to process medical images and create patient profiles. Cached results serve as fallback for demo reliability, not as the primary path.
 
-**Goal**: Create a curated SoT data harness of 5 diverse NSCLC patients (3 multimodal + 2 text-only) that flows through the full pipeline, with live MedGemma 4B multimodal image extraction during the INGEST step.
+**Goal**: Create a curated SoT data harness of 5 diverse NSCLC patients (3 multimodal + 2 text-only) that flows through the full pipeline, with live MedGemma 1.5 4B multimodal image extraction during the INGEST step.
 
 ---
 
@@ -225,7 +225,7 @@ The INGEST step becomes interactive:
 1. User selects patient from dropdown (5 curated patients)
 2. For multimodal patients:
    - Display image via `st.image()`
-   - Show "Extracting findings with MedGemma 4B..." spinner
+   - Show "Extracting findings with MedGemma 1.5 4B..." spinner
    - Call `generate_with_image()` live
    - If succeeds: display live results, save to session
    - If fails (timeout/503/CUDA): load from cache, show "(cached)" badge
