@@ -458,9 +458,13 @@ async def _generate_with_retry(
     model: str,
     contents: list,
     config: Any,
-    max_retries: int = 3,
+    max_retries: int = 6,
 ) -> Any:
-    """Wrap genai generate_content with transient-error retry."""
+    """Wrap genai generate_content with transient-error retry.
+
+    Uses longer backoff for 503 high-demand errors (base 10s)
+    vs shorter backoff for 429 rate-limit errors (base 2s).
+    """
     for attempt in range(max_retries):
         try:
             return await asyncio.to_thread(
@@ -476,7 +480,11 @@ async def _generate_with_retry(
                 for marker in ("503", "429", "UNAVAILABLE", "RESOURCE_EXHAUSTED", "high demand")
             )
             if is_transient and attempt < max_retries - 1:
-                wait = 2.0**attempt
+                # 503 high-demand: longer waits (10, 20, 40, 60, 60s)
+                # 429 rate-limit: shorter waits (2, 4, 8, 16, 32s)
+                is_503 = "503" in err_str or "high demand" in err_str
+                base = 10.0 if is_503 else 2.0
+                wait = min(base * (2.0 ** attempt), 60.0)
                 logger.warning(
                     "prescreen_gemini_transient",
                     attempt=attempt + 1,
