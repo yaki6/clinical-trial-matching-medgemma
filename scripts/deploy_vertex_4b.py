@@ -14,6 +14,7 @@ Usage:
 import argparse
 import asyncio
 import os
+import select
 import subprocess
 import sys
 import time
@@ -67,6 +68,54 @@ ENV_VARS = {
     "VLLM_USE_V1": "0",
     "HF_TOKEN": HF_TOKEN,
 }
+
+
+UNDEPLOY_COUNTDOWN_SECONDS = int(os.environ.get("VERTEX_UNDEPLOY_COUNTDOWN", "300"))  # 5 min
+
+
+def _countdown_confirm(action_desc: str, seconds: int = UNDEPLOY_COUNTDOWN_SECONDS) -> bool:
+    """Interactive countdown before destructive action. Returns True to proceed, False to cancel.
+
+    Cold start costs ~20 min, so give user time to cancel if they're still running tests.
+    If stdin is not a terminal (piped/CI), skips countdown and proceeds immediately.
+    Pass --force flag or set VERTEX_UNDEPLOY_COUNTDOWN=0 to skip.
+    """
+    if seconds <= 0:
+        return True
+
+    if not sys.stdin.isatty():
+        print(f"Non-interactive mode: proceeding with {action_desc} immediately.")
+        return True
+
+    print()
+    print("=" * 60)
+    print(f"  UNDEPLOY WARNING: {action_desc}")
+    print(f"  Cold start takes ~20 min. Cancel if you're still testing.")
+    print(f"  Auto-undeploy in {seconds}s. Type 'cancel' + Enter to abort.")
+    print("=" * 60)
+
+    start = time.time()
+    remaining = seconds
+    while remaining > 0:
+        mins, secs = divmod(int(remaining), 60)
+        print(f"\r  Undeploying in {mins:02d}:{secs:02d} ... (type 'cancel' + Enter to abort)  ", end="", flush=True)
+
+        ready, _, _ = select.select([sys.stdin], [], [], min(10, remaining))
+        if ready:
+            user_input = sys.stdin.readline().strip().lower()
+            if user_input in ("cancel", "c", "no", "n", "abort", "stop", "keep"):
+                print(f"\n\n  Undeploy CANCELLED. Endpoint stays running.")
+                return False
+            elif user_input in ("yes", "y", "now", "undeploy"):
+                print(f"\n\n  Proceeding with undeploy now.")
+                return True
+            else:
+                print(f"\n  Unknown input '{user_input}'. Type 'cancel' to abort or 'yes' to proceed now.")
+
+        remaining = seconds - (time.time() - start)
+
+    print(f"\n\n  Countdown expired. Proceeding with undeploy.")
+    return True
 
 
 def _init():
@@ -206,13 +255,19 @@ def cmd_deploy(_args):
     _run_smoke_test(dns or DEDICATED_DNS, max_attempts=20, interval=30)
 
 
-def cmd_undeploy(_args):
+def cmd_undeploy(args):
+    force = getattr(args, "force", False)
     _init()
     endpoint = _get_endpoint()
 
     deployed = _get_deployed_models(endpoint)
     if not deployed:
         print("No models deployed. Nothing to undeploy.")
+        return
+
+    countdown = 0 if force else UNDEPLOY_COUNTDOWN_SECONDS
+    if not _countdown_confirm(f"MedGemma 4B ({len(deployed)} model(s) on endpoint {ENDPOINT_ID})", countdown):
+        print("Undeploy aborted. Endpoint remains active.")
         return
 
     print(f"Undeploying {len(deployed)} model(s) from endpoint {ENDPOINT_ID}...")
@@ -282,7 +337,7 @@ def cmd_run(args):
     if not already_deployed:
         print()
         print("=" * 60)
-        print("Auto-undeploying to stop billing...")
+        print("Command finished. Starting undeploy countdown...")
         print("=" * 60)
         try:
             cmd_undeploy(args)
@@ -335,7 +390,11 @@ def main():
     )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("deploy", help="Upload model (if needed) + deploy + smoke test")
-    sub.add_parser("undeploy", help="Undeploy all models (stops billing, keeps endpoint)")
+    undeploy_parser = sub.add_parser("undeploy", help="Undeploy all models (stops billing, keeps endpoint)")
+    undeploy_parser.add_argument(
+        "--force", "-f", action="store_true",
+        help="Skip 5-min countdown and undeploy immediately",
+    )
     sub.add_parser("status", help="Show endpoint status and deployed models")
     sub.add_parser("smoke-test", help="Poll until first successful inference")
     run_parser = sub.add_parser(

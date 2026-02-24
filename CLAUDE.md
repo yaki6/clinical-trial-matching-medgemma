@@ -419,5 +419,5 @@ Two deployment approaches failed for MedGemma 27B:
 you MUST run ALL script, especially bash,python scripts in background so you can do other tasks
 API keys are already stored in .env
 MUST check the tail log in real time when running benchmark; do not use timeout or sleep
-you MUST teardown Vertex medgemma endpoints after using to avoice extra cost
+Before undeploying Vertex MedGemma endpoints (4B or 27B), ALWAYS confirm with the user first and allow a 5-minute countdown window — cold start takes ~20 min and tests may still be running. Scripts enforce this via interactive countdown (`deploy_vertex_4b.py undeploy` / `deploy_vertex_27b.py undeploy`). Use `--force` or set `VERTEX_UNDEPLOY_COUNTDOWN=0` to skip in CI/automation.
 PRESCREEN agent MUST use `gemini-3-pro-preview` (NOT Flash) — full reasoning capability required for adaptive agentic search. Always pass `model="gemini-3-pro-preview"` when creating GeminiAdapter for PRESCREEN.
