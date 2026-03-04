@@ -38,3 +38,12 @@ htmlcov/
 
 # Type checking
 .mypy_cache/
+
+# Debug artifacts
+.playwright-cli/
+e2e-evidence/
+ingest_design/
+
+# Root-level debug dumps
+/*.yaml
+/*.png

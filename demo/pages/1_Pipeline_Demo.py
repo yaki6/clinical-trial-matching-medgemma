@@ -460,10 +460,6 @@ else:
     if selected_topic:
         preview_text = profile_map[selected_topic].get("profile_text", "")[:200]
         st.sidebar.caption(f"**{selected_topic}**: {preview_text}...")
-    if cached_topic_ids:
-        st.sidebar.caption(
-            "Demo-ready cached patients: " + ", ".join(cached_topic_ids)
-        )
 
     # Set patient-mode defaults (hidden from sidebar)
     if pipeline_mode is None:
